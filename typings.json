@@ -1,0 +1,7 @@
+{
+  "globalDevDependencies": {
+    "jest": "registry:dt/jest#19.2.0+20170312200138",
+    "moment": "registry:dt/moment#2.11.1+20161010105546",
+    "react-router-dom": "registry:dt/react-router-dom#4.0.0+20170323201651"
+  }
+}
