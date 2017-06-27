@@ -4,11 +4,12 @@
   "description": "Web based media manager for Raspberry Pi.",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest --verbose",
     "test:watch": "jest --watchAll",
+    "clean:server": "rm -rf dist/server/app/*",
     "compile:react": "webpack --config webpack.config.js -d --watch",
-    "compile:server": "babel --watch src/server --out-dir dist/server",
-    "start:server": "nodemon --watch dist/server dist/server/server.js"
+    "compile:server": "npm run clean:server && babel --watch src/server --out-dir dist/server/app",
+    "start:server": "nodemon --watch dist/server dist/server/app/server.js"
   },
   "keywords": [
     "raspberry-pi",
@@ -39,6 +40,9 @@
     "webpack": "^3.0.0"
   },
   "dependencies": {
-    "express": "^4.15.3"
+    "bluebird": "^3.5.0",
+    "express": "^4.15.3",
+    "sqlite": "^2.8.0",
+    "winston": "^2.3.1"
   }
 }
