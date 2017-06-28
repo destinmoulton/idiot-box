@@ -15,8 +15,8 @@ module.exports = {
                 loader: 'babel-loader',
                 exclude: /node_modules/,
                 query: {
-                    presets: ['es2015', 'react', 'transform-object-rest-spread'],
-                    plugins: ["transform-class-properties", ["import", { libraryName: "antd" }]]
+                    presets: ['es2015', 'react'],
+                    plugins: ['transform-class-properties', 'transform-object-rest-spread', ['import', { libraryName: 'antd' }]]
                 }
             }
         ]
