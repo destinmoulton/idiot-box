@@ -13,6 +13,6 @@ export default class Settings extends DatabaseModel{
             category, key, value
         };
 
-        this._db.insert(addSetting);
+        this._db.insert(data, this._tableName);
     }
 }

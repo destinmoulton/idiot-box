@@ -2,7 +2,7 @@ import path from 'path';
 
 import logger from '../dist/server/app/logger';
 
-import { ibdb } from '../dist/server/app/db/IBDB';
+import ibdb from '../dist/server/app/db/IBDB';
 
 import { doesErrorExist } from '../dist/server/app/error';
 

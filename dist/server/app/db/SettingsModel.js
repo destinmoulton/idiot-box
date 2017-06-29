@@ -32,23 +32,13 @@ var Settings = function (_DatabaseModel) {
 
     _createClass(Settings, [{
         key: "addSetting",
-        value: function (_addSetting) {
-            function addSetting(_x, _x2, _x3) {
-                return _addSetting.apply(this, arguments);
-            }
-
-            addSetting.toString = function () {
-                return _addSetting.toString();
-            };
-
-            return addSetting;
-        }(function (category, key, value) {
+        value: function addSetting(category, key, value) {
             var data = {
                 category: category, key: key, value: value
             };
 
-            this._db.insert(addSetting);
-        })
+            this._db.insert(data, this._tableName);
+        }
     }]);
 
     return Settings;
