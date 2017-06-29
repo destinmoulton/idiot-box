@@ -93,17 +93,6 @@ class FilesystemBrowser extends Component {
         return [...directories, ...files];
     }
 
-<<<<<<< HEAD
-    _handleDirClick(e){
-        const newParentDir = e.target.getAttribute("data-directory-name");
-
-        this.props.getDirList(this.props.parentDir)
-    }
-
-    render() {
-        const {dirList} = this.props;
-        const rows = this._directoriesFirst(dirList);
-=======
     _humanFileSize(bytes, si) {
         var thresh = si ? 1000 : 1024;
         if (Math.abs(bytes) < thresh) {
@@ -144,7 +133,6 @@ class FilesystemBrowser extends Component {
     render() {
         const {currentPath, dirList} = this.state;
         const rows = this._prepareDirList(dirList);
->>>>>>> 3058bc242774c824f14886e0a60adbbb99a96106
         const columns = [{
             title: "Name",
             dataIndex: "name",
@@ -170,42 +158,27 @@ class FilesystemBrowser extends Component {
         return (
             <div>
                 <h4>File Browser</h4>
-<<<<<<< HEAD
-                <Table columns={columns} dataSource={rows} pagination={false}/>
-=======
                 <Table columns={columns} 
                        dataSource={rows} 
                        pagination={false} 
                        size="small"
                        title={()=> currentPath}/>
->>>>>>> 3058bc242774c824f14886e0a60adbbb99a96106
             </div>
         );
     }
 }
 
 const mapStateToProps = (state) => {
-<<<<<<< HEAD
-    const { filesystem } = state;
-
-    return {
-        dirList: filesystem.dirList
-=======
     const { server } = state;
 
     return {
         serverInfo: server.serverInfo
->>>>>>> 3058bc242774c824f14886e0a60adbbb99a96106
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-<<<<<<< HEAD
-        getDirList: (parentDir) => dispatch(getDirList(parentDir))
-=======
         
->>>>>>> 3058bc242774c824f14886e0a60adbbb99a96106
     }
 }
 
