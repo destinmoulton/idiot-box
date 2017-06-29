@@ -9,7 +9,7 @@
     "clean:server": "rm -rf dist/server/app/*",
     "compile:react": "webpack --config webpack.config.js -d --watch",
     "compile:server": "npm run clean:server && babel --watch src/server --out-dir dist/server/app",
-    "start:server": "nodemon --watch dist/server dist/server/app/server.js"
+    "start:server": "nodemon --watch dist/server/app dist/server/app/server.js"
   },
   "keywords": [
     "raspberry-pi",

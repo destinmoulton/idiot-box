@@ -6,13 +6,13 @@ import logger from '../logger';
 export default function filesystemIOListeners(socket){
     socket.on('filesystem.dir.list', (options)=>{
         
-        if(!fs.existsSync(options.parentDir)){
-            socket.emit('filesystem.error', { message:`${options.parentDir} does not exist.` })
+        if(!fs.existsSync(options.path)){
+            socket.emit('filesystem.error', { message:`${options.path} does not exist.` })
         }
-        const contents = fs.readdirSync(options.parentDir);
+        const contents = fs.readdirSync(options.path);
         const dirList = [];
         contents.forEach((name)=>{
-            const info = fs.statSync(path.join(options.parentDir, name));
+            const info = fs.statSync(path.join(options.path, name));
             const data = {
                 name,
                 ino: info.ino,

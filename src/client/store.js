@@ -12,7 +12,6 @@ import serverReducer from './reducers/server.reducer';
 const history = createBrowserHistory()
 const middlewareHistory = routerMiddleware(history)
 const socketClient = new SocketAPI();
-//socketClient.connect();
 const socketMiddle = socketMiddleware(socketClient);
 
 const store = createStore(

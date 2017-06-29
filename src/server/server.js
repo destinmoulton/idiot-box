@@ -23,13 +23,16 @@ Promise.resolve()
         ibdb.connect(dbconfig);
     })
     .then(()=>{
-        app.listen(PORT, ()=>{
+        return app.listen(PORT, ()=>{
             console.log("\n---------------------------------------");
             console.log("Idiot Box Server running on Port "+PORT);
             console.log("---------------------------------------");
-            setupSocketIO(app);
+            
         });
 
+    })
+    .then((server)=>{
+        setupSocketIO(server);
     })
     .catch((err)=>{
         logger.error(err);

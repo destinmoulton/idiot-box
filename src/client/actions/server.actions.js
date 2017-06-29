@@ -60,8 +60,13 @@ function waitforInfoReception(dispatch){
         type: 'socket',
         types: [IO_ON_SETUP, IO_ON_SUCCESS, IO_ON_FAILURE],
         promise: (socket) => {
+<<<<<<< HEAD
             socket.off('server.info.request');
             return socket.on('filesystem.info.ready', (recd)=>{
+=======
+            socket.off('server.info.ready');
+            return socket.on('server.info.ready', (recd)=>{
+>>>>>>> 3058bc242774c824f14886e0a60adbbb99a96106
                 dispatch(srvInfoReceived(recd));
             });
         }

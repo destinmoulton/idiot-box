@@ -1,16 +1,12 @@
-
 import React, { Component } from 'react';
-
-import io from 'socket.io-client';
 
 import { Row, Col } from 'antd';
 
+import FilesystemBrowser from './FilesystemBrowser';
 
 class Settings extends Component {
     componentDidMount(){
-        const socket = io();
-        socket.emit('settings.test', "TEST DATA");
-
+        
     }
     render() {
         return (
@@ -18,6 +14,9 @@ class Settings extends Component {
                 <Row>
                     <Col>
                         <h3>Directories</h3>
+                    </Col>
+                    <Col>
+                        <FilesystemBrowser initialPath={"/home/destin"}/>
                     </Col>
                 </Row>
             </div>

@@ -3,5 +3,10 @@
     "jest": "registry:dt/jest#19.2.0+20170312200138",
     "moment": "registry:dt/moment#2.11.1+20161010105546",
     "react-router-dom": "registry:dt/react-router-dom#4.0.0+20170323201651"
+  },
+  "globalDependencies": {
+    "redux": "registry:dt/redux#3.5.2+20160703092728",
+    "redux-thunk": "registry:dt/redux-thunk#2.1.0+20160703120921",
+    "socket.io": "registry:dt/socket.io#1.4.4+20170313110830"
   }
 }

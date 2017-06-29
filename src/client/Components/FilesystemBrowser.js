@@ -6,36 +6,94 @@ import { Icon, Table } from 'antd';
 
 import { getDirList } from '../actions/filesystem.actions';
 
+import { socketClient } from '../store';
+
 class FilesystemBrowser extends Component {
     static propTypes = {
-        parentDir: PropTypes.string.isRequired
+        dirList: PropTypes.array.isRequired,
+        initialPath: PropTypes.string.isRequired,
+        serverInfo: PropTypes.object.isRequired,
+        lockToInitialPath: PropTypes.bool.isRequired
     };
 
     static defaultProps = {
-        dirList: []
+        dirList: [],
+        lockToInitialPath: true
+    }
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+            currentPath: props.initialPath,
+            dirList: [],
+            showHidden: false
+        };
     }
 
     componentWillMount(){
-        this.props.getDirList(this.props.parentDir);
+        this._getDirFromServer(this.state.currentPath);
     }
 
-    _directoriesFirst(dirList){
+    _getDirFromServer(path){
+        const options = {
+            path
+        };
+        
+        socketClient.off('filesystem.dir.ready');
+        socketClient.on('filesystem.dir.ready', (recd)=>{
+                    this.setState({
+                        currentPath: path,
+                        dirList: recd
+                    });
+                });
+        return socketClient.emit('filesystem.dir.list', options);
+    }
+
+    _prepareDirList(dirList){
+        const { initialPath, lockToInitialPath } = this.props;
+        const { currentPath, showHidden } = this.state;
+
         let directories = [];
         let files = [];
+
+        const parentDirectory = {
+            key: 0,
+            name: "..",
+            isDirectory: true,
+            size: "0B"
+        };
+        if(lockToInitialPath){
+            if(initialPath !== currentPath){
+                directories.push(parentDirectory);
+            }
+        } else {
+            directories.push(parentDirectory);
+        }
+        
         dirList.forEach((item)=>{
-            const newItem = {
-                ...item,
-                key: item.ino
-            };
-            if(newItem.isDirectory){
-                directories.push(newItem);
-            } else {
-                files.push(newItem);
+            let includeItem = true;
+            if(!showHidden && item.name.startsWith('.')){
+                includeItem = false;
+            }
+
+            if(includeItem){
+                const newItem = {
+                    ...item,
+                    key: item.ino,
+                    size: this._humanFileSize(item.size, false)
+                };
+                if(newItem.isDirectory){
+                    directories.push(newItem);
+                } else {
+                    files.push(newItem);
+                }
             }
         });
         return [...directories, ...files];
     }
 
+<<<<<<< HEAD
     _handleDirClick(e){
         const newParentDir = e.target.getAttribute("data-directory-name");
 
@@ -45,6 +103,48 @@ class FilesystemBrowser extends Component {
     render() {
         const {dirList} = this.props;
         const rows = this._directoriesFirst(dirList);
+=======
+    _humanFileSize(bytes, si) {
+        var thresh = si ? 1000 : 1024;
+        if (Math.abs(bytes) < thresh) {
+            return bytes + ' B';
+        }
+        var units = si
+            ? ['kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
+            : ['KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB'];
+        var u = -1;
+        do {
+            bytes /= thresh;
+            ++u;
+        } while (Math.abs(bytes) >= thresh && u < units.length - 1);
+        return bytes.toFixed(1) + ' ' + units[u];
+    }
+
+    _handleDirClick(e){
+        const { serverInfo } = this.props;
+        const { pathSeparator } = serverInfo;
+        const { currentPath } = this.state;
+        const desiredDir = e.target.getAttribute("data-directory-name");
+
+        let newPath = currentPath;
+        if(desiredDir === ".."){
+            const pathParts = currentPath.split(pathSeparator);
+            pathParts.pop();
+            newPath = pathParts.join(pathSeparator);
+
+        } else {
+            newPath = currentPath + pathSeparator + desiredDir;   
+        }
+
+        
+
+        this._getDirFromServer(newPath);
+    }
+
+    render() {
+        const {currentPath, dirList} = this.state;
+        const rows = this._prepareDirList(dirList);
+>>>>>>> 3058bc242774c824f14886e0a60adbbb99a96106
         const columns = [{
             title: "Name",
             dataIndex: "name",
@@ -70,23 +170,42 @@ class FilesystemBrowser extends Component {
         return (
             <div>
                 <h4>File Browser</h4>
+<<<<<<< HEAD
                 <Table columns={columns} dataSource={rows} pagination={false}/>
+=======
+                <Table columns={columns} 
+                       dataSource={rows} 
+                       pagination={false} 
+                       size="small"
+                       title={()=> currentPath}/>
+>>>>>>> 3058bc242774c824f14886e0a60adbbb99a96106
             </div>
         );
     }
 }
 
 const mapStateToProps = (state) => {
+<<<<<<< HEAD
     const { filesystem } = state;
 
     return {
         dirList: filesystem.dirList
+=======
+    const { server } = state;
+
+    return {
+        serverInfo: server.serverInfo
+>>>>>>> 3058bc242774c824f14886e0a60adbbb99a96106
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
+<<<<<<< HEAD
         getDirList: (parentDir) => dispatch(getDirList(parentDir))
+=======
+        
+>>>>>>> 3058bc242774c824f14886e0a60adbbb99a96106
     }
 }
 

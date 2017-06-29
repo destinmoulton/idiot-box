@@ -9,16 +9,17 @@ import {
     FS_DIR_RECEIVED,
 } from './actionTypes';
 
-export function getDirList(parentDir){
+export function getDirList(requestID, path){
     return (dispatch)=>{
         dispatch(waitforDirReception(dispatch));
-        dispatch(emitDirRequest(parentDir));
+        dispatch(emitDirRequest(requestID, path));
     }
 }
 
-function emitDirRequest(parentDir){
+function emitDirRequest(requestID, path){
     const options = {
-        parentDir
+        requestID,
+        path
     };
     return {
         type: 'socket',
@@ -42,9 +43,9 @@ function waitforDirReception(dispatch){
     }
 }
 
-function fsDirAcquired(dirList){
+function fsDirAcquired(dir){
     return {
         type: FS_DIR_RECEIVED,
-        dirList
+        dir
     }
 }

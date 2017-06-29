@@ -26,13 +26,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function filesystemIOListeners(socket) {
     socket.on('filesystem.dir.list', function (options) {
 
-        if (!_fs2.default.existsSync(options.parentDir)) {
-            socket.emit('filesystem.error', { message: options.parentDir + ' does not exist.' });
+        if (!_fs2.default.existsSync(options.path)) {
+            socket.emit('filesystem.error', { message: options.path + ' does not exist.' });
         }
-        var contents = _fs2.default.readdirSync(options.parentDir);
+        var contents = _fs2.default.readdirSync(options.path);
         var dirList = [];
         contents.forEach(function (name) {
-            var info = _fs2.default.statSync(_path2.default.join(options.parentDir, name));
+            var info = _fs2.default.statSync(_path2.default.join(options.path, name));
             var data = {
                 name: name,
                 ino: info.ino,
