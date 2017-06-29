@@ -120,12 +120,9 @@ class FilesystemBrowser extends Component {
             const pathParts = currentPath.split(pathSeparator);
             pathParts.pop();
             newPath = pathParts.join(pathSeparator);
-
         } else {
             newPath = currentPath + pathSeparator + desiredDir;   
         }
-
-        
 
         this._getDirFromServer(newPath);
     }
