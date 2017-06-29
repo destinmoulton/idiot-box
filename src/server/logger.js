@@ -25,7 +25,7 @@ let config = {
 };
 
 config.transports.push(
-  new(winston.transports.Console)({
+  new (winston.transports.Console)({
     name: 'consoleLogger',
     level: 'error',
     colorize: true,
