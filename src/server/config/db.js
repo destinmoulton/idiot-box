@@ -1,3 +1,5 @@
+import path from 'path';
+
 export default {
-    filename: 'database/file.sqlite3'
+    filename: path.resolve(__dirname, '../../database/idiot-box.sqlite3')
 };
