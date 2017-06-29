@@ -8,7 +8,7 @@ import logger from '../logger';
 
 import error from '../error';
 
-export class IBDB {
+class IBDB {
     constructor(){
         this._db = {};
         this._isConnected = false;
@@ -134,4 +134,4 @@ export class IBDB {
 }
 
 let ibdb = new IBDB();
-export { ibdb };
+export default ibdb ;
