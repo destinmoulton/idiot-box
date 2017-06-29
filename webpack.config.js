@@ -24,14 +24,14 @@ module.exports = {
     plugins: [
         new webpack.DefinePlugin({ // <-- key to reducing React's size
             'process.env': {
-                'NODE_ENV': JSON.stringify('production')
+                'NODE_ENV': JSON.stringify('dev') // Change to 'production' to save space
             }
         }),
-        new webpack.optimize.UglifyJsPlugin({
-            compress: {
-                warnings: false
-            }
-        }),
+        // new webpack.optimize.UglifyJsPlugin({
+        //     compress: {
+        //         warnings: false
+        //     }
+        // }),
         new webpack.optimize.AggressiveMergingPlugin(),
         new webpack.optimize.OccurrenceOrderPlugin(),
         new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
