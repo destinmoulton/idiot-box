@@ -176,10 +176,4 @@ const mapStateToProps = (state) => {
     }
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FilesystemBrowser);
+export default connect(mapStateToProps)(FilesystemBrowser);
