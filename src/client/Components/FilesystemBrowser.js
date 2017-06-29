@@ -13,12 +13,16 @@ class FilesystemBrowser extends Component {
         dirList: PropTypes.array.isRequired,
         initialPath: PropTypes.string.isRequired,
         serverInfo: PropTypes.object.isRequired,
-        lockToInitialPath: PropTypes.bool.isRequired
+        lockToInitialPath: PropTypes.bool.isRequired,
+        showDirectories: PropTypes.bool.isRequired,
+        showFiles: PropTypes.bool.isRequired
     };
 
     static defaultProps = {
         dirList: [],
-        lockToInitialPath: true
+        lockToInitialPath: true,
+        showDirectories: true,
+        showFiles: false
     }
 
     constructor(props){
@@ -51,7 +55,7 @@ class FilesystemBrowser extends Component {
     }
 
     _prepareDirList(dirList){
-        const { initialPath, lockToInitialPath } = this.props;
+        const { initialPath, lockToInitialPath, showDirectories, showFiles } = this.props;
         const { currentPath, showHidden } = this.state;
 
         let directories = [];
@@ -61,7 +65,7 @@ class FilesystemBrowser extends Component {
             key: 0,
             name: "..",
             isDirectory: true,
-            size: "0B"
+            size: ""
         };
         if(lockToInitialPath){
             if(initialPath !== currentPath){
@@ -90,7 +94,15 @@ class FilesystemBrowser extends Component {
                 }
             }
         });
-        return [...directories, ...files];
+
+        if(showDirectories && showFiles){
+            return [...directories, ...files];
+        } else if(!showDirectories && showFiles){
+            return [...files];
+        } else if(showDirectories && !showFiles){
+            return [...directories];
+        }
+        return [];
     }
 
     _humanFileSize(bytes, si) {
