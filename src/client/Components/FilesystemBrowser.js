@@ -142,7 +142,12 @@ class FilesystemBrowser extends Component {
             pathParts.pop();
             newPath = pathParts.join(pathSeparator);
         } else {
-            newPath = currentPath + pathSeparator + desiredDir;   
+            if(currentPath === pathSeparator){
+                // Don't concat additional / when at linux root "/"
+                newPath = currentPath + desiredDir;
+            } else {
+                newPath = currentPath + pathSeparator + desiredDir;
+            }
         }
 
         this._getDirFromServer(newPath);
