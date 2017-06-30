@@ -16,7 +16,7 @@ class FilesystemBrowser extends Component {
         lockToInitialPath: PropTypes.bool.isRequired,
         showDirectories: PropTypes.bool.isRequired,
         showFiles: PropTypes.bool.isRequired,
-        onChangeDirectory: PropTypes.optionalFunc
+        onChangeDirectory: PropTypes.func
     };
 
     static defaultProps = {
@@ -82,6 +82,7 @@ class FilesystemBrowser extends Component {
             directories.push(parentDirectory);
         }
         
+        let key = 0;
         dirList.forEach((item)=>{
             let includeItem = true;
             if(!showHidden && item.name.startsWith('.')){
@@ -91,7 +92,7 @@ class FilesystemBrowser extends Component {
             if(includeItem){
                 const newItem = {
                     ...item,
-                    key: item.ino,
+                    key,
                     size: this._humanFileSize(item.size, false)
                 };
                 if(newItem.isDirectory){
@@ -99,6 +100,7 @@ class FilesystemBrowser extends Component {
                 } else {
                     files.push(newItem);
                 }
+                key++;
             }
         });
 
