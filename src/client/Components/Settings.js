@@ -2,12 +2,14 @@ import React, { Component } from 'react';
 
 import { Row, Col } from 'antd';
 
-import FilesystemBrowser from './FilesystemBrowser';
+import DirectoriesEditor from './Settings/DirectoriesEditor';
 
 class Settings extends Component {
-    componentDidMount(){
-        
+    constructor(props){
+        super(props);
+
     }
+
     render() {
         return (
             <div >
@@ -16,7 +18,7 @@ class Settings extends Component {
                         <h3>Directories</h3>
                     </Col>
                     <Col>
-                        <FilesystemBrowser initialPath={"/home/destin"}/>
+                        <DirectoriesEditor />
                     </Col>
                 </Row>
             </div>
