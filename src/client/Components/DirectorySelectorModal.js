@@ -7,11 +7,12 @@ import FilesystemBrowser from './FilesystemBrowser';
 
 class DirectorySelectorModal extends Component {
     static propTypes = {
-        handleOK: PropTypes.func.isRequired,
         initialPath: PropTypes.string.isRequired,
         title: PropTypes.string.isRequired,
         visible: PropTypes.bool.isRequired,
-        onChangeDirectory: PropTypes.optionalFunc
+        onChangeDirectory: PropTypes.func,
+        onOK: PropTypes.func.isRequired,
+        onCancel: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
@@ -21,18 +22,35 @@ class DirectorySelectorModal extends Component {
     }
 
     render() {
-        const { handleOK, initialPath, onChangeDirectory, title, visible } = this.props;
+
+        const { initialPath, onChangeDirectory, onOK, onCancel, title, visible } = this.props;
+
+        const posDim = {
+            modalTop: 30,
+            modalHeight: window.innerHeight - 180,
+            fileBrowserHeight: window.innerHeight - 200
+        }
+        
         return (
             <div>
                 <Modal
                     title={title}
                     visible={visible}
-                    onOk={handleOK}
+                    onOk={onOK}
+                    onCancel={onCancel}
+                    okText="Choose This Directory"
+                    cancelText="Cancel"
+                    style={{top: posDim.modalTop, height:posDim.modalHeight}}
                 >
+                    <div className="ib-settings-dirsel-fs-cont" 
+                         style={{height:posDim.fileBrowserHeight}}>
                     <FilesystemBrowser 
                         initialPath={initialPath} 
                         onChangeDirectory={onChangeDirectory}
+                        showDirectories={true}
+                        showFiles={false}
                     />
+                    </div>
                 </Modal>
             </div>
         );
