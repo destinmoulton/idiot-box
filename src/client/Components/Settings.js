@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import { Button, Row, Col } from 'antd';
+import { Row, Col } from 'antd';
 
-import DirectorySelectorModal from './DirectorySelectorModal';
+import DirectoriesEditor from './Settings/DirectoriesEditor';
 
 class Settings extends Component {
     constructor(props){
@@ -18,13 +18,7 @@ class Settings extends Component {
                         <h3>Directories</h3>
                     </Col>
                     <Col>
-                        <Button 
-                            onClick={this._openDirectorySelector.bind(this)}
-                            data-setting-id="new_setting">New Directory Setting</Button>
-                        <DirectorySelectorModal 
-                            initialPath="/"
-                            
-                        />
+                        <DirectoriesEditor />
                     </Col>
                 </Row>
             </div>

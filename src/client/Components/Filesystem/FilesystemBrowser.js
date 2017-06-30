@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 
 import { Icon, Table } from 'antd';
 
-import { getDirList } from '../actions/filesystem.actions';
+import { getDirList } from '../../actions/filesystem.actions';
 
-import { socketClient } from '../store';
+import { socketClient } from '../../store';
 
 class FilesystemBrowser extends Component {
     static propTypes = {
