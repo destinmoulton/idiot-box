@@ -4,6 +4,7 @@ import { Button, Col, Icon, Input, InputGroup } from 'antd';
 
 import DirectorySelectorModal from '../Filesystem/DirectorySelectorModal';
 
+const DEFAULT_INITIAL_DIR = "/";
 class DirectoriesEditor extends Component {
 
     constructor(props){
@@ -12,7 +13,11 @@ class DirectoriesEditor extends Component {
         this.state = {
             dirModalSettingID: "",
             dirModalIsVisible: false,
-            dirModalSelectedDirectory: "/",
+            dirModalSelectedDirectory: DEFAULT_INITIAL_DIR,
+            currentEditData:{
+                key: "",
+                value: DEFAULT_INITIAL_DIR
+            }
         }
     }
 
@@ -29,7 +34,11 @@ class DirectoriesEditor extends Component {
     _okDirectorySelector(){
         this.setState({
             ...this.state,
-            dirModalIsVisible: false
+            dirModalIsVisible: false,
+            currentEditData:{
+                ...this.state.currentEditData,
+                value: this.state.dirModalSelectedDirectory
+            }
         });
     }
 
@@ -48,18 +57,40 @@ class DirectoriesEditor extends Component {
         });
     }
 
+    _handleSaveButtonPress(){
+        
+    }
+
+    _handleChangeSettingName(e){
+        this.setState({
+            ...this.state,
+            currentEditData:{
+                ...this.state.currentEditData,
+                key: e.currentTarget.value
+            }
+        });
+    }
+
     _buildSettingEditorForm(settingID){
+        const { currentEditData } = this.state;
         return (
             <div>
                 <Input.Group size="large">
                     <Col span={8}>
-                        <Input />
+                        <Input 
+                            placeholder="Setting name..."
+                            onChange={this._handleChangeSettingName.bind(this)}
+                            value={currentEditData.key}
+                        />
                     </Col>
                     <Col span={8}>
-                        <Input addonAfter={<Icon type="folder" onClick={this._openDirectorySelector.bind(this)} data-setting-id={settingID} />} />
+                        <Input 
+                            addonAfter={<Icon type="folder" onClick={this._openDirectorySelector.bind(this)} data-setting-id={settingID} />} 
+                            value={currentEditData.value}
+                        />
                     </Col>
                     <Col span={2}>
-                        <Button >Save</Button>
+                        <Button onClick={this._handleSaveButtonPress.bind(this)}>Save</Button>
                     </Col>
                 </Input.Group>
             </div>
