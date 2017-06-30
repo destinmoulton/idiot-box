@@ -31,42 +31,34 @@ class DirectorySelectorModal extends Component {
 
     _handleChangeDirectory(newDir){
         this.setState({
-            directorySelector:{
-                ...this.state.directorySelector,
-                currentlySelectedDirectory: newDir
-            }
+            ...this.state,
+            currentlySelectedDirectory: newDir
         });
     }
 
     _openDirectorySelector(evt){
         const settingID = evt.currentTarget.getAttribute('data-setting-id');
         this.setState({
-            directorySelector:{
-                ...this.state.directorySelector,
-                currentlySelectingFor: settingID,
-                isVisible: true
-            }
+            ...this.state,
+            currentlySelectingFor: settingID,
+            isVisible: true
         });
         
     }
 
     _okDirectorySelector(){
         this.setState({
-            directorySelector:{
-                ...this.state.directorySelector,
-                isVisible: false
-            }
+            ...this.state,
+            isVisible: false
         });
     }
 
     _cancelDirectorySelector(){
         this.setState({
-            directorySelector:{
-                ...this.state.directorySelector,
-                currentlySelectingFor: "",
-                currentlySelectedDirectory: "",
-                isVisible: false
-            }
+            ...this.state,
+            currentlySelectingFor: "",
+            currentlySelectedDirectory: "",
+            isVisible: false
         });
     }
 
