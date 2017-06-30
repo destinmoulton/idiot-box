@@ -15,14 +15,16 @@ class FilesystemBrowser extends Component {
         serverInfo: PropTypes.object.isRequired,
         lockToInitialPath: PropTypes.bool.isRequired,
         showDirectories: PropTypes.bool.isRequired,
-        showFiles: PropTypes.bool.isRequired
+        showFiles: PropTypes.bool.isRequired,
+        onChangeDirectory: PropTypes.optionalFunc
     };
 
     static defaultProps = {
         dirList: [],
         lockToInitialPath: true,
         showDirectories: true,
-        showFiles: false
+        showFiles: true,
+        onChangeDirectory: ()=>{}
     }
 
     constructor(props){
@@ -40,12 +42,17 @@ class FilesystemBrowser extends Component {
     }
 
     _getDirFromServer(path){
+        const { onChangeDirectory } = this.props;
+
         const options = {
             path
         };
         
         socketClient.off('filesystem.dir.ready');
         socketClient.on('filesystem.dir.ready', (recd)=>{
+                    //Notify the parent components of a directory change
+                    onChangeDirectory(path);
+
                     this.setState({
                         currentPath: path,
                         dirList: recd
