@@ -2,12 +2,27 @@ import React, { Component } from 'react';
 
 import { Row, Col } from 'antd';
 
-import FilesystemBrowser from './FilesystemBrowser';
+import DirectorySelectorModal from './DirectorySelectorModal';
 
 class Settings extends Component {
+    constructor(props){
+        super(props);
+
+        this.state = {
+            currentlySelectedDirectory: ""
+        };
+    }
+
     componentDidMount(){
         
     }
+
+    handleChangeDirectory(newDir){
+        this.setState({
+            currentlySelectedDirectory: newDir
+        });
+    }
+
     render() {
         return (
             <div >
@@ -16,7 +31,12 @@ class Settings extends Component {
                         <h3>Directories</h3>
                     </Col>
                     <Col>
-                        <FilesystemBrowser initialPath={"/home/destin"}/>
+                        <DirectorySelectorModal 
+                            initialPath="/"
+                            showFiles={false}
+                            visible={false}
+                            onChangeDirectory={this.handleChangeDirectory.bind(this)}
+                        />
                     </Col>
                 </Row>
             </div>
