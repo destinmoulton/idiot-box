@@ -82,7 +82,7 @@ class FilesystemBrowser extends Component {
             directories.push(parentDirectory);
         }
         
-        let key = 0;
+        let key = 1;
         dirList.forEach((item)=>{
             let includeItem = true;
             if(!showHidden && item.name.startsWith('.')){
@@ -141,6 +141,10 @@ class FilesystemBrowser extends Component {
             const pathParts = currentPath.split(pathSeparator);
             pathParts.pop();
             newPath = pathParts.join(pathSeparator);
+            
+            if(newPath === ""){
+                newPath = pathSeparator;
+            }
         } else {
             if(currentPath === pathSeparator){
                 // Don't concat additional / when at linux root "/"
@@ -180,7 +184,6 @@ class FilesystemBrowser extends Component {
         }];
         return (
             <div>
-                <h4>File Browser</h4>
                 <Table columns={columns} 
                        dataSource={rows} 
                        pagination={false} 

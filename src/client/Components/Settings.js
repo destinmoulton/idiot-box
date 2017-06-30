@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import { Row, Col } from 'antd';
+import { Button, Row, Col } from 'antd';
 
 import DirectorySelectorModal from './DirectorySelectorModal';
 
@@ -9,7 +9,11 @@ class Settings extends Component {
         super(props);
 
         this.state = {
-            currentlySelectedDirectory: ""
+            directorySelector:{
+                currentlySelectedDirectory: "",
+                currentlySelectingFor: "",
+                isVisible: false
+            }
         };
     }
 
@@ -19,11 +23,47 @@ class Settings extends Component {
 
     handleChangeDirectory(newDir){
         this.setState({
-            currentlySelectedDirectory: newDir
+            directorySelector:{
+                ...this.state.directorySelector,
+                currentlySelectedDirectory: newDir
+            }
+        });
+    }
+
+    _openDirectorySelector(evt){
+        const settingID = evt.currentTarget.getAttribute('data-setting-id');
+        this.setState({
+            directorySelector:{
+                ...this.state.directorySelector,
+                currentlySelectingFor: settingID,
+                isVisible: true
+            }
+        });
+        
+    }
+
+    _okDirectorySelector(){
+        this.setState({
+            directorySelector:{
+                ...this.state.directorySelector,
+                isVisible: false
+            }
+        });
+    }
+
+    _cancelDirectorySelector(){
+        this.setState({
+            directorySelector:{
+                ...this.state.directorySelector,
+                currentlySelectingFor: "",
+                currentlySelectedDirectory: "",
+                isVisible: false
+            }
         });
     }
 
     render() {
+        const { directorySelector } = this.state;
         return (
             <div >
                 <Row>
@@ -31,11 +71,15 @@ class Settings extends Component {
                         <h3>Directories</h3>
                     </Col>
                     <Col>
+                        <Button 
+                            onClick={this._openDirectorySelector.bind(this)}
+                            data-setting-id="new_setting">New Directory Setting</Button>
                         <DirectorySelectorModal 
                             initialPath="/"
-                            showFiles={false}
-                            visible={false}
+                            visible={directorySelector.isVisible}
                             onChangeDirectory={this.handleChangeDirectory.bind(this)}
+                            onOK={this._okDirectorySelector.bind(this)}
+                            onCancel={this._cancelDirectorySelector.bind(this)}
                         />
                     </Col>
                 </Row>
