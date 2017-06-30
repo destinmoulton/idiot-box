@@ -11,8 +11,6 @@ class DirectorySelectorModal extends Component {
         title: PropTypes.string.isRequired,
         visible: PropTypes.bool.isRequired,
         onChangeDirectory: PropTypes.func,
-        onOK: PropTypes.func.isRequired,
-        onCancel: PropTypes.func.isRequired,
     };
 
     static defaultProps = {
@@ -21,9 +19,60 @@ class DirectorySelectorModal extends Component {
         onChangeDirectory: ()=>{}
     }
 
-    render() {
+    constructor(props){
+        super(props);
 
-        const { initialPath, onChangeDirectory, onOK, onCancel, title, visible } = this.props;
+        this.state = {
+            currentlySelectedDirectory: "",
+            currentlySelectingFor: "",
+            isVisible: false
+        };
+    }
+
+    _handleChangeDirectory(newDir){
+        this.setState({
+            directorySelector:{
+                ...this.state.directorySelector,
+                currentlySelectedDirectory: newDir
+            }
+        });
+    }
+
+    _openDirectorySelector(evt){
+        const settingID = evt.currentTarget.getAttribute('data-setting-id');
+        this.setState({
+            directorySelector:{
+                ...this.state.directorySelector,
+                currentlySelectingFor: settingID,
+                isVisible: true
+            }
+        });
+        
+    }
+
+    _okDirectorySelector(){
+        this.setState({
+            directorySelector:{
+                ...this.state.directorySelector,
+                isVisible: false
+            }
+        });
+    }
+
+    _cancelDirectorySelector(){
+        this.setState({
+            directorySelector:{
+                ...this.state.directorySelector,
+                currentlySelectingFor: "",
+                currentlySelectedDirectory: "",
+                isVisible: false
+            }
+        });
+    }
+
+    render() {
+        const { initialPath, title } = this.props;
+        const { isVisible } = this.state;
 
         const posDim = {
             modalTop: 30,
@@ -35,9 +84,9 @@ class DirectorySelectorModal extends Component {
             <div>
                 <Modal
                     title={title}
-                    visible={visible}
-                    onOk={onOK}
-                    onCancel={onCancel}
+                    visible={isVisible}
+                    onOk={this._okDirectorySelector.bind(this)}
+                    onCancel={this._cancelDirectorySelector.bind(this)}
                     okText="Choose This Directory"
                     cancelText="Cancel"
                     style={{top: posDim.modalTop, height:posDim.modalHeight}}
@@ -46,7 +95,7 @@ class DirectorySelectorModal extends Component {
                          style={{height:posDim.fileBrowserHeight}}>
                     <FilesystemBrowser 
                         initialPath={initialPath} 
-                        onChangeDirectory={onChangeDirectory}
+                        onChangeDirectory={this.handleChangeDirectory.bind(this)}
                         showDirectories={true}
                         showFiles={false}
                     />
