@@ -3,6 +3,6 @@ import io from './io';
 
 export default function errorIOListeners(socket){
     bus.on('error', (message)=>{
-        socket.emit('io.error', {message});
+        socket.emit('error', {message});
     });
 }

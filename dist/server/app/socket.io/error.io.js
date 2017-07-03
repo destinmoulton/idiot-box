@@ -17,6 +17,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function errorIOListeners(socket) {
     _eventBus2.default.on('error', function (message) {
-        socket.emit('io.error', { message: message });
+        socket.emit('error', { message: message });
     });
 }
