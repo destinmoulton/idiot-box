@@ -15,6 +15,9 @@ export const IO_ON_FAILURE = 'IO_ON_FAILURE';
 // error event
 export const ERROR_RECEIVED = 'ERROR_RECEIVED';
 
+// settings events
+export const SETTINGS_LIST_RECEIVED = 'SETTINGS_LIST_RECEIVED';
+
 // server events
 export const SRV_CONNECT_RECEIVED = 'SRV_CONNECT_RECEIVED'
 export const SRV_DISCONNECT_RECEIVED  = 'SRV_DISCONNECT_RECEIVED';
