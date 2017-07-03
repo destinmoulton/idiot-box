@@ -13,14 +13,6 @@ var _IBDB = require('../db/IBDB');
 
 var _IBDB2 = _interopRequireDefault(_IBDB);
 
-var _io = require('./io');
-
-var _io2 = _interopRequireDefault(_io);
-
-var _logger = require('../logger');
-
-var _logger2 = _interopRequireDefault(_logger);
-
 var _SettingsModel = require('../db/SettingsModel');
 
 var _SettingsModel2 = _interopRequireDefault(_SettingsModel);

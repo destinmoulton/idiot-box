@@ -1,7 +1,5 @@
 import error from '../error';
 import ibdb from '../db/IBDB';
-import io from './io';
-import logger from '../logger';
 
 import SettingsModel from '../db/SettingsModel';
 
