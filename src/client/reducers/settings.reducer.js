@@ -4,7 +4,9 @@ import {
 
 
 const INITIAL_STATE = {
-    settings:{}
+    settings:{
+        directories: []
+    }
 }
 
 export default function settingsReducer(state = INITIAL_STATE, action){
