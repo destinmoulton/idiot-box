@@ -11,7 +11,7 @@ export default class SettingsModel {
             category
         }
 
-        return this._ibdb.getAll(where);
+        return this._ibdb.getAll(where, this._tableName);
     }
 
     addSetting(category, key, value){
