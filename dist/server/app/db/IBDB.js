@@ -100,7 +100,7 @@ var IBDB = function () {
         }
     }, {
         key: 'update',
-        value: function update(dataColumnsAndValues, queryColumnsAndValues, tablename) {
+        value: function update(whereColumnsAndValues, dataColumnsAndValues, tablename) {
             this._resetParamCount();
 
             var _buildCommaDelimetedS = this._buildCommaDelimetedStatement(dataColumnsAndValues),
@@ -108,7 +108,7 @@ var IBDB = function () {
                 dataDelim = _buildCommaDelimetedS2[0],
                 dataParams = _buildCommaDelimetedS2[1];
 
-            var _buildCommaDelimetedS3 = this._buildCommaDelimetedStatement(queryColumnsAndValues, " AND "),
+            var _buildCommaDelimetedS3 = this._buildCommaDelimetedStatement(whereColumnsAndValues, " AND "),
                 _buildCommaDelimetedS4 = _slicedToArray(_buildCommaDelimetedS3, 2),
                 whereDelim = _buildCommaDelimetedS4[0],
                 whereParams = _buildCommaDelimetedS4[1];
@@ -119,10 +119,10 @@ var IBDB = function () {
         }
     }, {
         key: 'delete',
-        value: function _delete(queryColumnsAndValues, tablename) {
+        value: function _delete(whereColumnsAndValues, tablename) {
             this._resetParamCount();
 
-            var _buildCommaDelimetedS5 = this._buildCommaDelimetedStatement(queryColumnsAndValues, " AND "),
+            var _buildCommaDelimetedS5 = this._buildCommaDelimetedStatement(whereColumnsAndValues, " AND "),
                 _buildCommaDelimetedS6 = _slicedToArray(_buildCommaDelimetedS5, 2),
                 whereDelim = _buildCommaDelimetedS6[0],
                 whereParams = _buildCommaDelimetedS6[1];

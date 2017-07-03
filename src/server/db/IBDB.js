@@ -66,19 +66,19 @@ class IBDB {
         return this._db.run(query, params);
     }
 
-    update(dataColumnsAndValues, queryColumnsAndValues, tablename){
+    update(whereColumnsAndValues, dataColumnsAndValues, tablename){
         this._resetParamCount();
         const [dataDelim, dataParams] = this._buildCommaDelimetedStatement(dataColumnsAndValues);
-        const [whereDelim, whereParams] = this._buildCommaDelimetedStatement(queryColumnsAndValues, " AND ");
+        const [whereDelim, whereParams] = this._buildCommaDelimetedStatement(whereColumnsAndValues, " AND ");
 
         const update = "UPDATE "+tablename+" SET "+dataDelim+ " WHERE "+whereDelim;
         const params = Object.assign({}, dataParams, whereParams);
         return this._db.run(update, params);
     }
 
-    delete(queryColumnsAndValues, tablename){
+    delete(whereColumnsAndValues, tablename){
         this._resetParamCount();
-        const [whereDelim, whereParams] = this._buildCommaDelimetedStatement(queryColumnsAndValues, " AND ");
+        const [whereDelim, whereParams] = this._buildCommaDelimetedStatement(whereColumnsAndValues, " AND ");
 
         const update = "DELETE FROM "+tablename+" WHERE "+whereDelim;
         return this._db.run(update, whereParams);
