@@ -24,11 +24,13 @@ export default class SettingsModel {
 
     updateSetting(id, category, key, value){
         const where = {
-            id
+            id,
+            category
         };
 
         const data = {
-            category, key, value
+            key, 
+            value
         };
 
         return this._ibdb.update(where, data, this._tableName);

@@ -38,11 +38,13 @@ var SettingsModel = function () {
         key: "updateSetting",
         value: function updateSetting(id, category, key, value) {
             var where = {
-                id: id
+                id: id,
+                category: category
             };
 
             var data = {
-                category: category, key: key, value: value
+                key: key,
+                value: value
             };
 
             return this._ibdb.update(where, data, this._tableName);
