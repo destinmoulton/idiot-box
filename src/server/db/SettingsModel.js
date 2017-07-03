@@ -25,4 +25,12 @@ export default class SettingsModel {
 
         this._ibdb.update(where, data, this._tableName);
     }
+
+    deleteSetting(id){
+        const where = {
+            id
+        };
+
+        this._ibdb.delete(where, this._tableName);
+    }
 }

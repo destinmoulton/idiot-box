@@ -38,6 +38,15 @@ var SettingsModel = function () {
 
             this._ibdb.update(where, data, this._tableName);
         }
+    }, {
+        key: "deleteSetting",
+        value: function deleteSetting(id) {
+            var where = {
+                id: id
+            };
+
+            this._ibdb.delete(where, this._tableName);
+        }
     }]);
 
     return SettingsModel;
