@@ -6,12 +6,20 @@ export default class SettingsModel {
         this._tableName = "settings";
     }
 
+    getAllForCategory(category){
+        const where = {
+            category
+        }
+
+        return this._ibdb.getAll(where);
+    }
+
     addSetting(category, key, value){
         const data = {
             category, key, value
         };
 
-        this._ibdb.insert(data, this._tableName);
+        return this._ibdb.insert(data, this._tableName);
     }
 
     updateSetting(id, category, key, value){
@@ -23,7 +31,7 @@ export default class SettingsModel {
             category, key, value
         };
 
-        this._ibdb.update(where, data, this._tableName);
+        return this._ibdb.update(where, data, this._tableName);
     }
 
     deleteSetting(id){
@@ -31,6 +39,6 @@ export default class SettingsModel {
             id
         };
 
-        this._ibdb.delete(where, this._tableName);
+        return this._ibdb.delete(where, this._tableName);
     }
 }

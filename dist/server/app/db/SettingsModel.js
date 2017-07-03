@@ -17,13 +17,22 @@ var SettingsModel = function () {
     }
 
     _createClass(SettingsModel, [{
+        key: "getAllForCategory",
+        value: function getAllForCategory(category) {
+            var where = {
+                category: category
+            };
+
+            return this._ibdb.getAll(where);
+        }
+    }, {
         key: "addSetting",
         value: function addSetting(category, key, value) {
             var data = {
                 category: category, key: key, value: value
             };
 
-            this._ibdb.insert(data, this._tableName);
+            return this._ibdb.insert(data, this._tableName);
         }
     }, {
         key: "updateSetting",
@@ -36,7 +45,7 @@ var SettingsModel = function () {
                 category: category, key: key, value: value
             };
 
-            this._ibdb.update(where, data, this._tableName);
+            return this._ibdb.update(where, data, this._tableName);
         }
     }, {
         key: "deleteSetting",
@@ -45,7 +54,7 @@ var SettingsModel = function () {
                 id: id
             };
 
-            this._ibdb.delete(where, this._tableName);
+            return this._ibdb.delete(where, this._tableName);
         }
     }]);
 
