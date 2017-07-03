@@ -12,7 +12,7 @@ var SettingsModel = function () {
     function SettingsModel(db) {
         _classCallCheck(this, SettingsModel);
 
-        this._db = db;
+        this._ibdb = db;
         this._tableName = "settings";
     }
 
@@ -23,7 +23,20 @@ var SettingsModel = function () {
                 category: category, key: key, value: value
             };
 
-            this._db.insert(data, this._tableName);
+            this._ibdb.insert(data, this._tableName);
+        }
+    }, {
+        key: "updateSetting",
+        value: function updateSetting(id, category, key, value) {
+            var where = {
+                id: id
+            };
+
+            var data = {
+                category: category, key: key, value: value
+            };
+
+            this._ibdb.update(where, data, this._tableName);
         }
     }]);
 

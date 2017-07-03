@@ -2,7 +2,7 @@
 export default class SettingsModel {
     
     constructor(db){
-        this._db = db;
+        this._ibdb = db;
         this._tableName = "settings";
     }
 
@@ -11,6 +11,18 @@ export default class SettingsModel {
             category, key, value
         };
 
-        this._db.insert(data, this._tableName);
+        this._ibdb.insert(data, this._tableName);
+    }
+
+    updateSetting(id, category, key, value){
+        const where = {
+            id
+        };
+
+        const data = {
+            category, key, value
+        };
+
+        this._ibdb.update(where, data, this._tableName);
     }
 }
