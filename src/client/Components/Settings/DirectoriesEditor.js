@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import { Button, Col, Icon, Input, InputGroup } from 'antd';
 
@@ -121,4 +122,15 @@ class DirectoriesEditor extends Component {
     }
 }
 
-export default DirectoriesEditor;
+const mapStateToProps = (state)=>{
+    return {
+
+    }
+}
+
+const mapDispatchToProps = (dispatch)=>{
+    return {
+
+    }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(DirectoriesEditor);
