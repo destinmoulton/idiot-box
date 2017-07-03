@@ -1,10 +1,8 @@
-import DatabaseModel from 'DatabaseModel';
 
-export default class Settings extends DatabaseModel{
+export default class SettingsModel {
     
     constructor(db){
-        super(db);
-
+        this._db = db;
         this._tableName = "settings";
     }
 
