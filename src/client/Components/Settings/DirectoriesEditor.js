@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 
+
 import { Button, Col, Icon, Input, InputGroup } from 'antd';
 
 import DirectorySelectorModal from '../Filesystem/DirectorySelectorModal';
@@ -71,6 +72,16 @@ class DirectoriesEditor extends Component {
         });
     }
 
+    _handleChangeSettingValue(e){
+        this.setState({
+            ...this.state,
+            currentEditData:{
+                ...this.state.currentEditData,
+                value: e.currentTarget.value
+            }
+        });
+    }
+
     _buildSettingEditorForm(settingID){
         const { currentEditData } = this.state;
         return (
@@ -86,6 +97,7 @@ class DirectoriesEditor extends Component {
                     <Col span={8}>
                         <Input 
                             addonAfter={<Icon type="folder" onClick={this._openDirectorySelector.bind(this)} data-setting-id={settingID} />} 
+                            onChange={this._handleChangeSettingValue.bind(this)}
                             value={currentEditData.value}
                         />
                     </Col>
@@ -120,5 +132,6 @@ class DirectoriesEditor extends Component {
         );
     }
 }
+
 
 export default DirectoriesEditor;
