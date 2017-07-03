@@ -5,13 +5,15 @@ import { Row, Col } from 'antd';
 
 import DirectoriesEditor from './Settings/DirectoriesEditor';
 
+import { getSettingsForCategory } from '../actions/settings.actions';
+
 class Settings extends Component {
     constructor(props){
         super(props);
 
     }
 
-    componentOnMount(){
+    componentWillMount(){
         this.props.getSettingsForCategory('directories');
     }
 

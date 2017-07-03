@@ -23,7 +23,7 @@ var SettingsModel = function () {
                 category: category
             };
 
-            return this._ibdb.getAll(where);
+            return this._ibdb.getAll(where, this._tableName);
         }
     }, {
         key: "addSetting",

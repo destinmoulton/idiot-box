@@ -9,6 +9,10 @@ var _error = require('../error');
 
 var _error2 = _interopRequireDefault(_error);
 
+var _logger = require('../logger');
+
+var _logger2 = _interopRequireDefault(_logger);
+
 var _IBDB = require('../db/IBDB');
 
 var _IBDB2 = _interopRequireDefault(_IBDB);
@@ -22,7 +26,9 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function settingsIOListeners(socket) {
     var settingsModel = new _SettingsModel2.default(_IBDB2.default);
     socket.on('settings.get.category', function (options) {
+
         settingsModel.getAllForCategory(options.category).then(function (settings) {
+            _logger2.default.debug("settings.get.category getAllForCategory complete");
             socket.emit('settings.data.category', settings);
         }).catch(function (err) {
             return (0, _error2.default)(err);

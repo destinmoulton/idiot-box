@@ -1,4 +1,5 @@
 import error from '../error';
+import logger from '../logger';
 import ibdb from '../db/IBDB';
 
 import SettingsModel from '../db/SettingsModel';
@@ -6,8 +7,10 @@ import SettingsModel from '../db/SettingsModel';
 export default function settingsIOListeners(socket){
     const settingsModel = new SettingsModel(ibdb);
     socket.on('settings.get.category', (options)=>{
+        
         settingsModel.getAllForCategory(options.category)
             .then((settings)=>{
+                logger.debug("settings.get.category getAllForCategory complete");
                 socket.emit('settings.data.category', settings);
             })
             .catch((err)=> error(err));
