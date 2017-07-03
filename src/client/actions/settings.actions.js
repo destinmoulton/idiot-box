@@ -9,7 +9,7 @@ import {
 export function getSettingsForCategory(category){
     return (dispatch)=>{
         emitGetSettingsRequest(category);
-        waitforSettingsReception(dispatch);
+        waitforSettingsReception(dispatch, category);
     }
 }
 
@@ -26,21 +26,22 @@ function emitGetSettingsRequest(category){
     }
 }
 
-function waitforSettingsReception(dispatch){
+function waitforSettingsReception(dispatch, category){
     return {
         type: 'socket',
         types: [IO_EMIT_SETUP, IO_EMIT_SUCCESS, IO_EMIT_FAILURE],
         promise: (socket) => {
             return socket.on('settings.data.category', (settings)=>{
-                dispatch(settingsReceived(settings));
+                dispatch(settingsReceived(category, settings));
             });
         }
     }
 }
 
-function settingsReceived(settings){
+function settingsReceived(category, settings){
     return {
         type: SETTINGS_LIST_RECEIVED,
+        category,
         settings
     }
 }
