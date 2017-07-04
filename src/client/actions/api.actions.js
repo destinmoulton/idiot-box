@@ -65,7 +65,7 @@ export function emitAPIRequest(endpoint, params, dispatchCallback){
 
 function dispatchAPICallback(recd){
     return (dispatch)=>{
-        dispatch(apiRequests[recd.id].dispatchCallback(recd.data));
+        dispatch(apiRequests[recd.id].dispatchCallback(recd.data, recd));
         delete apiRequests[recd.id];
     };
 }
