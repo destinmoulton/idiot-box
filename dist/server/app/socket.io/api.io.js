@@ -31,26 +31,29 @@ var API_ENDPOINTS = {
         category: {
             get: {
                 params: ['category'],
-                call: function call(category) {
+                func: function func(category) {
                     return settingsModel.getAllForCategory(category);
                 }
             },
             add: {
                 params: ['category', 'key', 'value'],
-                call: function call(category, key, value) {
+                func: function func(category, key, value) {
                     return settingsModel.addSetting(category, key, value);
                 }
             },
             update: {
                 params: ['id', 'category', 'key', 'value'],
-                call: function call(id, category, key, value) {
+                func: function func(id, category, key, value) {
                     return settingsModel.updateSetting(id, category, key, value);
                 }
             }
         }
     }
 };
+
+var localSocket = {};
 function apiIOListeners(socket) {
+    localSocket = socket;
     var settingsModel = new _SettingsModel2.default(_IBDB2.default);
     socket.on('api.request', function (req) {
         if (!req.hasOwnProperty('id')) {
@@ -59,17 +62,21 @@ function apiIOListeners(socket) {
         }
 
         var endpoints = req.endpoint.split('.');
-        if (validateEndpoints(endpoints)) {
+        if (validateEndpoints(endpoints, req)) {
             var apiEndpoint = API_ENDPOINTS[endpoints[0]][endpoints[1]][endpoints[2]];
 
-            if (validateEndpointParams(apiEndpoint.params, req.params, req)) {
-                apiEndpoint.call.apply(apiEndpoint, _toConsumableArray(req.params)).then(function (data) {
+            if (validateEndpointParams(apiEndpoint.params, req)) {
+                var endpointParams = prepareEndpointParams(apiEndpoint.params, req.params);
+                return Promise.resolve(function () {
+                    // Call the endpoint function with the array of parameters
+                    apiEndpoint.func.apply(apiEndpoint, _toConsumableArray(endpointParams));
+                }).then(function (data) {
                     var resp = {
                         id: req.id,
                         data: data,
                         request: req
                     };
-                    socket.emit('api.response', data);
+                    socket.emit('api.response', resp);
                 }).catch(function (err) {
                     return apiError("There was an issue when calling the model action. Check server logs/debugging.", req);
                 });
@@ -79,15 +86,15 @@ function apiIOListeners(socket) {
 }
 
 function apiError(message, originalRequest) {
-    socket.emit('api.error', {
+    localSocket.emit('api.error', {
         message: 'API IO ERROR: ' + message,
         originalRequest: originalRequest
     });
 }
 
 function validateEndpoints(endpoints, originalRequest) {
-    if (endpoints.length !== 2) {
-        apiError("endpoint format is invalid. Must be model.section.action.", originalRequest);
+    if (endpoints.length !== 3) {
+        apiError('incorrect number of endpoints. Got ' + endpoints.length + '. Expecting model.section.action.', originalRequest);
         return false;
     }
 
@@ -101,7 +108,7 @@ function validateEndpoints(endpoints, originalRequest) {
         return false;
     }
 
-    if (!API_ENDPOINTS[endpoints[0]][endpoints[1]].hasOwnProperty(endpoints[1])) {
+    if (!API_ENDPOINTS[endpoints[0]][endpoints[1]].hasOwnProperty(endpoints[2])) {
         apiError('endpoint action \'' + endpoints[2] + '\'is invalid. Must be model.section.action.', originalRequest);
         return false;
     }
@@ -109,17 +116,25 @@ function validateEndpoints(endpoints, originalRequest) {
 }
 
 function validateEndpointParams(expectedParams, request) {
-    if (expectedParams.length !== request.params.length) {
+    if (expectedParams.length !== Object.keys(request.params).length) {
         apiError("the number of endpoint params does not match the expectation.", request);
         return false;
     }
 
     expectedParams.forEach(function (param) {
-        if (!request.params.find(param)) {
+        if (!request.params.hasOwnProperty(param)) {
             apiError('the endpoint param \'' + param + '\' was not found in the request.', request);
         }
         return false;
     });
 
     return true;
+}
+
+function prepareEndpointParams(expectedParams, providedParams) {
+    var paramArr = [];
+    expectedParams.forEach(function (param) {
+        paramArr.push(providedParams[param]);
+    });
+    return paramArr;
 }
