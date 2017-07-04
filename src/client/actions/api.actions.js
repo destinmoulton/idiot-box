@@ -11,10 +11,26 @@ let apiID = 0;
 let apiRequests = {};
 
 export function setupAPI(){
-    return 
+    return (dispatch)=>{
+        dispatch(listenForAPIErrors());
+        dispatch(listenForAPIResponse());
+    }
 }
 
-function listenForAPIReception(){
+function listenForAPIErrors(){
+    return {
+        type: 'socket',
+        types: [IO_ON_SETUP, IO_ON_SUCCESS, IO_ON_FAILURE],
+        promise: (socket) => {
+            return socket.on('api.error', (recd)=>{
+                console.error(recd.message);
+                console.error(recd.originalRequest);
+            });
+        }
+    }
+}
+
+function listenForAPIResponse(){
     return {
         type: 'socket',
         types: [IO_ON_SETUP, IO_ON_SUCCESS, IO_ON_FAILURE],
