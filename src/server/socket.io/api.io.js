@@ -40,7 +40,8 @@ export default function apiIOListeners(socket){
                     .then((data)=>{
                         const resp = {
                             id: req.id,
-                            data
+                            data,
+                            request: req
                         };
                         socket.emit('api.response', data);
                     })

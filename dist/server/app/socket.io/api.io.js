@@ -66,7 +66,8 @@ function apiIOListeners(socket) {
                 apiEndpoint.call.apply(apiEndpoint, _toConsumableArray(req.params)).then(function (data) {
                     var resp = {
                         id: req.id,
-                        data: data
+                        data: data,
+                        request: req
                     };
                     socket.emit('api.response', data);
                 }).catch(function (err) {
