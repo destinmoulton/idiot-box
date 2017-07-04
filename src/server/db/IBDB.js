@@ -21,7 +21,7 @@ class IBDB {
         if(config.hasOwnProperty('filename')){
             if(!fs.existsSync(config.filename)){
                 error("IBDB :: connect :: File does not exist.");
-                return new Promise.reject("IBDB :: connect :: File does not exist.");
+                return new Promise.reject(`IBDB :: connect :: File does not exist. ${config.filename}`);
             }
             filename = config.filename;
         } else if(config.hasOwnProperty('inMemory')){
