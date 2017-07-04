@@ -1,4 +1,4 @@
-
+import logger from '../logger';
 export default class SettingsModel {
     
     constructor(db){
