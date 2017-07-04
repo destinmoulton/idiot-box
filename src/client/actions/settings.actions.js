@@ -14,11 +14,11 @@ export function getSettingsForCategory(category){
     }
 }
 
-function settingsReceived(category, settings){
-    console.log("settingsReceived", category, settings);
+function settingsReceived(settings, recd){
+    console.log("settingsReceived", settings);
     return {
         type: SETTINGS_LIST_RECEIVED,
-        category,
+        category: recd.request.params.category,
         settings
     }
 }
