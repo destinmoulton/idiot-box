@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import IdiotBoxLayout from './Layout/IdiotBoxLayout';
 import IdiotBoxLoading from './Layout/IdiotBoxLoading';
 
+import { setupAPI } from '../actions/api.actions';
 import { srvConnect, srvGetServerInfo } from '../actions/server.actions';
 
 class IdiotBox extends Component {
@@ -15,8 +16,22 @@ class IdiotBox extends Component {
         serverInfo: PropTypes.object.isRequired
     };
 
+    constructor(props){
+        super(props);
+        this._serverIsConnected = false;
+    }
+
     componentWillMount(){
         this.props.srvConnect();
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.isServerConnected && !this._serverIsConnected){
+            // The server just connected
+            this._serverIsConnected = true;
+            console.log('setting up the api');
+            this.props.setupAPI();
+        }
     }
     
     render() {
@@ -44,6 +59,7 @@ const mapStateToProps = (state)=>{
 
 const mapDispatchToProps = (dispatch)=>{
     return {
+        setupAPI: ()=>dispatch(setupAPI()),
         srvConnect: ()=>dispatch(srvConnect()),
         srvGetServerInfo: ()=>dispatch(srvGetServerInfo())
     }

@@ -36,6 +36,7 @@ function listenForAPIResponse(){
         types: [IO_ON_SETUP, IO_ON_SUCCESS, IO_ON_FAILURE],
         promise: (socket) => {
             return socket.on('api.response', (recd)=>{
+                console.log("api.response received", recd);
                 dispatchAPICallback(recd);
             });
         }
