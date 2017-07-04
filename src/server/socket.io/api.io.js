@@ -42,7 +42,7 @@ export default function apiIOListeners(socket){
                 const endpointParams = prepareEndpointParams(apiEndpoint.params, req.params)
                 return Promise.resolve(()=>{
                         // Call the endpoint function with the array of parameters
-                        apiEndpoint.func(...endpointParams);
+                        return apiEndpoint.func(...endpointParams);
                     })
                     .then((data)=>{
                         const resp = {
