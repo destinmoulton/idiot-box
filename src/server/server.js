@@ -7,7 +7,7 @@ import ibdb from './db/IBDB';
 import { setupSocketIO } from './socket.io/io';
 import logger from './logger';
 
-import dbconfig from './config/db';
+import dbconfig from './config/db.config';
 
 const PORT = 3000;
 const PUBLIC_PATH = path.resolve(__dirname, '../public');
