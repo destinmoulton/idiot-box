@@ -3,8 +3,9 @@ import socketio from 'socket.io';
 
 import logger from '../logger';
 
+import apiIOListeners from './api.io';
 import filesystemIOListeners from './filesystem.io';
-import settingsIOListeners from './settings.io';
+
 import serverIOListeners from './server.io';
 
 let io = {}
@@ -16,8 +17,8 @@ export function setupSocketIO(server){
 function setupListeners(io){
     io.on('connection', (socket)=>{
         logger.info("socket.io :: client connected");
+        apiIOListeners(socket);
         filesystemIOListeners(socket);
-        settingsIOListeners(socket);
         serverIOListeners(socket);
     });
 }

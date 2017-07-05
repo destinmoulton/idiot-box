@@ -17,13 +17,13 @@ var _logger = require('../logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
+var _api = require('./api.io');
+
+var _api2 = _interopRequireDefault(_api);
+
 var _filesystem = require('./filesystem.io');
 
 var _filesystem2 = _interopRequireDefault(_filesystem);
-
-var _settings = require('./settings.io');
-
-var _settings2 = _interopRequireDefault(_settings);
 
 var _server = require('./server.io');
 
@@ -40,8 +40,8 @@ function setupSocketIO(server) {
 function setupListeners(io) {
     io.on('connection', function (socket) {
         _logger2.default.info("socket.io :: client connected");
+        (0, _api2.default)(socket);
         (0, _filesystem2.default)(socket);
-        (0, _settings2.default)(socket);
         (0, _server2.default)(socket);
     });
 }

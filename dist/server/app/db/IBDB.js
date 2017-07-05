@@ -50,7 +50,7 @@ var IBDB = function () {
             if (config.hasOwnProperty('filename')) {
                 if (!_fs2.default.existsSync(config.filename)) {
                     (0, _error2.default)("IBDB :: connect :: File does not exist.");
-                    return new _bluebird2.default.reject("IBDB :: connect :: File does not exist.");
+                    return new _bluebird2.default.reject('IBDB :: connect :: File does not exist. ' + config.filename);
                 }
                 filename = config.filename;
             } else if (config.hasOwnProperty('inMemory')) {

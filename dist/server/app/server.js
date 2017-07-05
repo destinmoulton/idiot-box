@@ -18,7 +18,7 @@ var _logger = require('./logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
-var _db = require('./config/db');
+var _db = require('./config/db.config');
 
 var _db2 = _interopRequireDefault(_db);
 
