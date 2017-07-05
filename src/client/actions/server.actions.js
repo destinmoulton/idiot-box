@@ -33,7 +33,7 @@ function tryReconnect(){
                     dispatch(srvConnectionReceived());
                 })
                 .catch(()=>dispatch(tryReconnect()));
-        }, 500);
+        }, 200);
     }
 }
 
