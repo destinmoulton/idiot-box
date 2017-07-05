@@ -9,13 +9,14 @@ export default class SocketAPI {
 
   connect() {
     this.socket = io.connect(host, { path: socketPath });
-    return new Promise((resolve, reject) => {
-      this.socket.on('connect', () => resolve());
-      this.socket.on('connect_error', (error) => reject(error));
-    });
+    return this._setupConnectionEvents();
   }
 
   reconnect(){
+    return this._setupConnectionEvents();
+  }
+
+  _setupConnectionEvents(){
     return new Promise((resolve, reject) => {
       this.socket.on('connect', () => resolve());
       this.socket.on('connect_error', (error) => reject(error));
