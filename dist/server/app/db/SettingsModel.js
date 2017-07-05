@@ -28,7 +28,6 @@ var SettingsModel = function () {
             var where = {
                 category: category
             };
-
             return this._ibdb.getAll(where, this._tableName);
         }
     }, {

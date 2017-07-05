@@ -10,7 +10,7 @@ const API_ENDPOINTS = {
         category: {
             get: {
                 params: ['category'],
-                func: (category)=> settingsModel.getAllForCategory(category)
+                func: (category)=>settingsModel.getAllForCategory(category)
             },
             add: {
                 params: ['category', 'key', 'value'],
@@ -40,10 +40,7 @@ export default function apiIOListeners(socket){
 
             if(validateEndpointParams(apiEndpoint.params, req)){
                 const endpointParams = prepareEndpointParams(apiEndpoint.params, req.params)
-                return Promise.resolve(()=>{
-                        // Call the endpoint function with the array of parameters
-                        return apiEndpoint.func(...endpointParams);
-                    })
+                return apiEndpoint.func(...endpointParams)
                     .then((data)=>{
                         const resp = {
                             id: req.id,
@@ -53,6 +50,7 @@ export default function apiIOListeners(socket){
                         socket.emit('api.response', resp);
                     })
                     .catch((err)=> apiError("There was an issue when calling the model action. Check server logs/debugging.", req))
+                    
             }
         }
     });

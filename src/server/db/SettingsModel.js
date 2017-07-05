@@ -10,7 +10,6 @@ export default class SettingsModel {
         const where = {
             category
         }
-
         return this._ibdb.getAll(where, this._tableName);
     }
 

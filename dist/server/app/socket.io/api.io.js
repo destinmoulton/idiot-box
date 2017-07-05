@@ -67,10 +67,7 @@ function apiIOListeners(socket) {
 
             if (validateEndpointParams(apiEndpoint.params, req)) {
                 var endpointParams = prepareEndpointParams(apiEndpoint.params, req.params);
-                return Promise.resolve(function () {
-                    // Call the endpoint function with the array of parameters
-                    return apiEndpoint.func.apply(apiEndpoint, _toConsumableArray(endpointParams));
-                }).then(function (data) {
+                return apiEndpoint.func.apply(apiEndpoint, _toConsumableArray(endpointParams)).then(function (data) {
                     var resp = {
                         id: req.id,
                         data: data,
