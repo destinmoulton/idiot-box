@@ -26,7 +26,7 @@ class Settings extends Component {
                         <h3>Directories</h3>
                     </Col>
                     <Col>
-                        <DirectoriesEditor settings={settings.directories}/>
+                        <DirectoriesEditor directories={settings.directories}/>
                     </Col>
                 </Row>
             </div>

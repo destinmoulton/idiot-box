@@ -1,5 +1,5 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-
 
 import { Button, Col, Icon, Input, InputGroup } from 'antd';
 
@@ -7,6 +7,9 @@ import DirectorySelectorModal from '../Filesystem/DirectorySelectorModal';
 
 const DEFAULT_INITIAL_DIR = "/";
 class DirectoriesEditor extends Component {
+    static propTypes = {
+        directories: PropTypes.array.isRequired
+    }
 
     constructor(props){
         super(props);
