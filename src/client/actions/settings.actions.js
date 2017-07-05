@@ -1,7 +1,7 @@
 import { emitAPIRequest } from './api.actions';
 
 import {
-    SETTING_LIST_RECEIVED
+    SETTINGS_LIST_RECEIVED
 } from './actionTypes';
 
 export function getSettingsForCategory(category){
