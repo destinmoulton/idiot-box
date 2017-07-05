@@ -17,6 +17,10 @@ var _IBDB = require('../db/IBDB');
 
 var _IBDB2 = _interopRequireDefault(_IBDB);
 
+var _FilesystemModel = require('../models/FilesystemModel');
+
+var _FilesystemModel2 = _interopRequireDefault(_FilesystemModel);
+
 var _SettingsModel = require('../db/SettingsModel');
 
 var _SettingsModel2 = _interopRequireDefault(_SettingsModel);
@@ -25,8 +29,19 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+var filesystemModel = new _FilesystemModel2.default();
 var settingsModel = new _SettingsModel2.default(_IBDB2.default);
 var API_ENDPOINTS = {
+    filesystem: {
+        dir: {
+            get: {
+                params: ['path'],
+                func: function func(pathToList) {
+                    return filesystemModel.getDirList(pathToList);
+                }
+            }
+        }
+    },
     settings: {
         category: {
             get: {
@@ -75,7 +90,7 @@ function apiIOListeners(socket) {
                     };
                     socket.emit('api.response', resp);
                 }).catch(function (err) {
-                    return apiError("There was an issue when calling the model action. Check server logs/debugging.", req);
+                    return apiError("MODEL ERROR :: " + err, req);
                 });
             }
         }
@@ -84,8 +99,8 @@ function apiIOListeners(socket) {
 
 function apiError(message, originalRequest) {
     localSocket.emit('api.error', {
-        message: 'API IO ERROR: ' + message,
-        originalRequest: originalRequest
+        message: 'API IO ERROR :: ' + message,
+        request: originalRequest
     });
 }
 
