@@ -2,10 +2,19 @@ import error from '../error';
 import logger from '../logger';
 import ibdb from '../db/IBDB';
 
-
+import FilesystemModel from '../db/FilesystemModel';
 import SettingsModel from '../db/SettingsModel';
+const filesystemModel = new FilesystemModel();
 const settingsModel = new SettingsModel(ibdb);
 const API_ENDPOINTS = {
+    filesystem: {
+        dir: {
+            get: {
+                params: ['path'],
+                func: (path)=> filesystemModel.getDirList(path)
+            }
+        }
+    },
     settings: {
         category: {
             get: {
