@@ -17,7 +17,7 @@ var _IBDB = require('../db/IBDB');
 
 var _IBDB2 = _interopRequireDefault(_IBDB);
 
-var _FilesystemModel = require('../db/FilesystemModel');
+var _FilesystemModel = require('../models/FilesystemModel');
 
 var _FilesystemModel2 = _interopRequireDefault(_FilesystemModel);
 
@@ -36,8 +36,8 @@ var API_ENDPOINTS = {
         dir: {
             get: {
                 params: ['path'],
-                func: function func(path) {
-                    return filesystemModel.getDirList(path);
+                func: function func(pathToList) {
+                    return filesystemModel.getDirList(pathToList);
                 }
             }
         }
@@ -90,7 +90,7 @@ function apiIOListeners(socket) {
                     };
                     socket.emit('api.response', resp);
                 }).catch(function (err) {
-                    return apiError("There was an issue when calling the model action. Check server logs/debugging.", req);
+                    return apiError("MODEL ERROR :: " + err, req);
                 });
             }
         }
@@ -99,8 +99,8 @@ function apiIOListeners(socket) {
 
 function apiError(message, originalRequest) {
     localSocket.emit('api.error', {
-        message: 'API IO ERROR: ' + message,
-        originalRequest: originalRequest
+        message: 'API IO ERROR :: ' + message,
+        request: originalRequest
     });
 }
 

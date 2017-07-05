@@ -25,18 +25,17 @@ var FilesystemModel = function () {
 
     _createClass(FilesystemModel, [{
         key: 'getDirList',
-        value: function getDirList(path) {
+        value: function getDirList(pathToList) {
             return new Promise(function (resolve, reject) {
-                if (!_fs2.default.existsSync(path)) {
-                    reject('FilesystemModel Error: ' + path + ' does not exist.');
+                if (!_fs2.default.existsSync(pathToList)) {
+                    reject('FilesystemModel Error: ' + pathToList + ' does not exist.');
                 }
-                var contents = _fs2.default.readdirSync(path);
+                var contents = _fs2.default.readdirSync(pathToList);
                 var dirList = [];
                 contents.forEach(function (name) {
-                    var info = _fs2.default.statSync(path.join(path, name));
+                    var info = _fs2.default.statSync(_path2.default.join(pathToList, name));
                     var data = {
                         name: name,
-                        ino: info.ino,
                         atime: info.atime,
                         birthtime: info.birthtime,
                         size: info.size,

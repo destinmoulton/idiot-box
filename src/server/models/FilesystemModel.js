@@ -2,18 +2,17 @@ import fs from 'fs';
 import path from 'path';
 
 export default class FilesystemModel {
-    getDirList(path){
+    getDirList(pathToList){
         return new Promise((resolve, reject)=>{
-            if (!fs.existsSync(path)) {
-                reject(`FilesystemModel Error: ${path} does not exist.`);
+            if (!fs.existsSync(pathToList)) {
+                reject(`FilesystemModel Error: ${pathToList} does not exist.`);
             }
-            const contents = fs.readdirSync(path);
+            const contents = fs.readdirSync(pathToList);
             const dirList = [];
             contents.forEach((name) => {
-                const info = fs.statSync(path.join(path, name));
+                const info = fs.statSync(path.join(pathToList, name));
                 const data = {
                     name,
-                    ino: info.ino,
                     atime: info.atime,
                     birthtime: info.birthtime,
                     size: info.size,
