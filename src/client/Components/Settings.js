@@ -18,7 +18,7 @@ class Settings extends Component {
     }
 
     render() {
-        const { settings } = this.props;
+        const { lastSavedSettingID, saveInProgress, settings } = this.props;
         return (
             <div >
                 <Row>
@@ -26,7 +26,10 @@ class Settings extends Component {
                         <h3>Directories</h3>
                     </Col>
                     <Col>
-                        <DirectoriesEditor directories={settings.directories}/>
+                        <DirectoriesEditor 
+                            saveInProgress={saveInProgress}
+                            lastSavedSettingID={lastSavedSettingID}
+                            directories={settings.directories}/>
                     </Col>
                 </Row>
             </div>
@@ -37,7 +40,9 @@ class Settings extends Component {
 const mapStateToProps = (state)=>{
     const { settings } = state;
     return {
-        settings:settings.settings
+        saveInProgress: settings.saveInProgress,
+        lastSavedSettingID: settings.lastSavedSettingID,
+        settings: settings.settings
     }
 }
 
