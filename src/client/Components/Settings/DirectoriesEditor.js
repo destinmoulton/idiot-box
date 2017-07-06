@@ -9,6 +9,7 @@ import {
     Input, 
     InputGroup, 
     Modal,
+    Spin,
     Table } from 'antd';
 
 import DirectorySelectorModal from '../Filesystem/DirectorySelectorModal';
@@ -28,7 +29,7 @@ class DirectoriesEditor extends Component {
             dirModalSettingID: "",
             dirModalIsVisible: false,
             dirModalSelectedDirectory: DEFAULT_INITIAL_DIR,
-            currentlyEditing: [],
+            currentlyEditing: [0],
             currentEditData:{
                 0: {
                     id:0,
@@ -39,8 +40,25 @@ class DirectoriesEditor extends Component {
         }
     }
 
+    componentWillReceiveProps(nextProps){
+        const { currentlyEditing, currentEditData } = this.state;
+        const { lastSavedSettingID } = nextProps;
+
+        const indexOfLastSave = currentlyEditing.indexOf(lastSavedSettingID);
+        if(indexOfLastSave > -1){
+            currentlyEditing.splice(indexOfLastSave, 1);
+        }
+        delete currentEditData[lastSavedSettingID];
+        
+        this.setState({
+            ...this.state,
+            currentlyEditing,
+            currentEditData
+        });
+    }
+
     _openDirectorySelector(evt) {
-        const {currentEditData} = this.state;
+        const { currentEditData } = this.state;
         const settingID = evt.currentTarget.getAttribute('data-setting-id');
         this.setState({
             ...this.state,
@@ -48,13 +66,12 @@ class DirectoriesEditor extends Component {
             dirModalIsVisible: true,
             dirModalSelectedDirectory: currentEditData[settingID].value
         });
-
     }
 
     _okDirectorySelector(){
         const { currentEditData, 
                 dirModalSelectedDirectory, 
-                dirModalSettingID} = this.state;
+                dirModalSettingID } = this.state;
 
         const settingID = dirModalSettingID;
 
@@ -63,7 +80,7 @@ class DirectoriesEditor extends Component {
         this.setState({
             ...this.state,
             dirModalSettingID: -1,
-            dirModalSelectedDirectory: "",
+            dirModalSelectedDirectory: DEFAULT_INITIAL_DIR,
             dirModalIsVisible: false,
             currentEditData:{
                 ...currentEditData,
@@ -89,16 +106,15 @@ class DirectoriesEditor extends Component {
     }
 
     _handleSaveButtonPress(e){
-        const {currentEditData} = this.state;
+        const { currentEditData } = this.state;
         
         const settingID = e.currentTarget.getAttribute("data-setting-id");
         const settingData = currentEditData[settingID];
-        this.props.saveSetting(settingID, settingData.key, settingData.value);
-        console.log("Save Button Pressed", currentEditData[settingID]);
+        this.props.saveSetting(parseInt(settingID), settingData.key, settingData.value);
     }
 
     _handleChangeSettingInput(e){
-        const {currentEditData} = this.state;
+        const { currentEditData } = this.state;
 
         const settingID = e.currentTarget.getAttribute('data-setting-id');
         const settingField = e.currentTarget.getAttribute('data-setting-field');
@@ -114,6 +130,29 @@ class DirectoriesEditor extends Component {
         });
     }
 
+    _handleEditSettingClick(e){
+        const { currentlyEditing, currentEditData } = this.state;
+        const { directories } = this.props;
+        const settingID = parseInt(e.currentTarget.getAttribute('data-setting-id'));
+        currentlyEditing.push(settingID);
+
+        for(let i = 0; i<directories.length; i++){
+            if(settingID === directories[i].id){
+                currentEditData[settingID] = directories[i];
+            }
+        }
+        
+        this.setState({
+            ...this.state,
+            currentlyEditing,
+            currentEditData
+        });
+    }
+
+    _handleDeleteSettingClick(e){
+        
+    }
+
     _buildSettingAddForm(){
         const { currentEditData } = this.state;
         return (
@@ -127,8 +166,7 @@ class DirectoriesEditor extends Component {
                         {this._buildInputValueField(0)}
                     </Col>
                     <Col span={2}>
-                        <Button onClick={this._handleSaveButtonPress.bind(this)}
-                                data-setting-id={0}>Save</Button>
+                        {this._buildSaveButton(0)}
                     </Col>
                 </Input.Group>
             </div>
@@ -136,7 +174,8 @@ class DirectoriesEditor extends Component {
     }
 
     _buildInputNameField(settingID){
-        const {currentEditData} = this.state;
+        const { saveInProgress } = this.props;
+        const { currentEditData } = this.state;
         return (
             <Input 
                 placeholder="Setting name..."
@@ -144,12 +183,14 @@ class DirectoriesEditor extends Component {
                 data-setting-field={"key"}
                 data-setting-id={settingID}
                 value={currentEditData[settingID].key}
+                disabled={saveInProgress}
             />
         );
     }
 
     _buildInputValueField(settingID, currentValue){
-        const {currentEditData} = this.state;
+        const { saveInProgress } = this.props;
+        const { currentEditData } = this.state;
         return (
             <Input 
                 addonAfter={<Icon type="folder" onClick={this._openDirectorySelector.bind(this)} data-setting-id={settingID} />} 
@@ -157,23 +198,39 @@ class DirectoriesEditor extends Component {
                 data-setting-field={"value"}
                 data-setting-id={settingID}
                 value={currentEditData[settingID].value}
+                disabled={saveInProgress}
             />
         );
     }
 
+    _buildSaveButton(settingID){
+        const { saveInProgress } = this.props;
+        if(saveInProgress){
+            return (
+                <Spin />
+            );
+        } else {
+            return (
+                <Button 
+                    data-setting-id={settingID}
+                    onClick={this._handleSaveButtonPress.bind(this)}>Save</Button>
+            )
+        }
+    }
+
     _buildDirectoriesTable(){
-        const { directories } = this.props;
+        const { directories, saveInProgress } = this.props;
         const { currentlyEditing } = this.state;
         const columns = [{
             title: "Name",
             dataIndex: "key",
             render: (text, setting)=>{
-                if(currentlyEditing.find(setting.id)){
+                if(currentlyEditing.indexOf(setting.id)>-1){
                     return (
-                        this._buildInputNameField(setting.id, setting.name)
+                        this._buildInputNameField(setting.id, setting.key)
                     )
                 } else {
-                    return (<span>{setting.name}</span>);
+                    return (<span>{setting.key}</span>);
                 }
             }
         }, 
@@ -181,12 +238,12 @@ class DirectoriesEditor extends Component {
             title: "Directory",
             dataIndex: "value",
             render: (text, setting)=>{
-                if(currentlyEditing.find(setting.id)){
+                if(currentlyEditing.indexOf(setting.id)>-1){
                     return (
-                        this._buildInputValueField(setting.id, setting.name)
+                        this._buildInputValueField(setting.id, setting.value)
                     )
                 } else {
-                    return (<span>{setting.name}</span>);
+                    return (<span>{setting.value}</span>);
                 }
             }
         },
@@ -194,10 +251,8 @@ class DirectoriesEditor extends Component {
             title: "Edit",
             dataIndex: '',
             render: (text,setting)=> {
-                if(currentlyEditing.find(setting.id)){
-                    <Button 
-                        data-setting-id={setting.id}
-                        onClick={this._handleSaveButtonPress.bind(this)}>Save</Button>        
+                if(currentlyEditing.indexOf(setting.id)>-1){
+                    return this._buildSaveButton(setting.id);
                 } else {
                     return (
                         <a onClick={this._handleEditSettingClick.bind(this)}
@@ -212,7 +267,7 @@ class DirectoriesEditor extends Component {
             title: "Delete",
             dataIndex: '',
             render: (text,setting)=> {
-                if(currentlyEditing.find(setting.id)){
+                if(currentlyEditing.indexOf(setting.id)>-1){
                     
                 } else {
                     return (
@@ -244,7 +299,7 @@ class DirectoriesEditor extends Component {
                 </div>
                 {this._buildSettingAddForm()}
                 <DirectorySelectorModal 
-                    initialPath="/"
+                    initialPath={DEFAULT_INITIAL_DIR}
                     visible={dirModalIsVisible}
                     onCancel={this._cancelDirectorySelector.bind(this)}
                     onChangeDirectory={this._handleChangeDirectory.bind(this)}
