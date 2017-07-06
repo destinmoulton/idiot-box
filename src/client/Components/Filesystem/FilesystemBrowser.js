@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { Icon, Table } from 'antd';
 
-import { getDirList } from '../../actions/filesystem.actions';
-
+import { emitAPIRequest } from '../../actions/api.actions';
 import { socketClient } from '../../store';
 
 class FilesystemBrowser extends Component {
@@ -42,23 +41,25 @@ class FilesystemBrowser extends Component {
     }
 
     _getDirFromServer(path){
-        const { onChangeDirectory } = this.props;
+        const { emitAPIRequest } = this.props;
 
         const options = {
             path
         };
         
-        socketClient.off('filesystem.dir.ready');
-        socketClient.on('filesystem.dir.ready', (recd)=>{
-                    //Notify the parent components of a directory change
-                    onChangeDirectory(path);
+        emitAPIRequest("filesystem.dir.get", options, this._dirListReceived.bind(this), false);
+    }
 
-                    this.setState({
-                        currentPath: path,
-                        dirList: recd
-                    });
-                });
-        return socketClient.emit('filesystem.dir.list', options);
+    _dirListReceived(dirList, recd){
+        const { onChangeDirectory } = this.props;
+
+        //Notify the parent components of a directory change
+        onChangeDirectory(recd.request.params.path);
+
+        this.setState({
+            currentPath: recd.request.params.path,
+            dirList
+        });
     }
 
     _prepareDirList(dirList){
@@ -202,4 +203,10 @@ const mapStateToProps = (state) => {
     }
 };
 
-export default connect(mapStateToProps)(FilesystemBrowser);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FilesystemBrowser);

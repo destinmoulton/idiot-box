@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -16,6 +17,9 @@ import { saveSetting } from '../../actions/settings.actions';
 
 const DEFAULT_INITIAL_DIR = "/";
 class DirectoriesEditor extends Component {
+    static propTypes = {
+        directories: PropTypes.array.isRequired
+    }
 
     constructor(props){
         super(props);

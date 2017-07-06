@@ -14,7 +14,7 @@ const INITIAL_STATE = {
 
 export default function settingsReducer(state = INITIAL_STATE, action){
     switch(action.type){
-        case SETTING_LIST_RECEIVED:
+        case SETTINGS_LIST_RECEIVED:
             const settings = {...state.settings};
             settings[action.category] = action.settings;
             return {

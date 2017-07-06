@@ -2,10 +2,19 @@ import error from '../error';
 import logger from '../logger';
 import ibdb from '../db/IBDB';
 
-
+import FilesystemModel from '../models/FilesystemModel';
 import SettingsModel from '../db/SettingsModel';
+const filesystemModel = new FilesystemModel();
 const settingsModel = new SettingsModel(ibdb);
 const API_ENDPOINTS = {
+    filesystem: {
+        dir: {
+            get: {
+                params: ['path'],
+                func: (pathToList)=> filesystemModel.getDirList(pathToList)
+            }
+        }
+    },
     settings: {
         category: {
             get: {
@@ -49,7 +58,7 @@ export default function apiIOListeners(socket){
                         };
                         socket.emit('api.response', resp);
                     })
-                    .catch((err)=> apiError("There was an issue when calling the model action. Check server logs/debugging.", req))
+                    .catch((err)=> apiError("MODEL ERROR :: "+err, req))
                     
             }
         }
@@ -58,8 +67,8 @@ export default function apiIOListeners(socket){
 
 function apiError(message, originalRequest){
     localSocket.emit('api.error', {
-        message: `API IO ERROR: ${message}`,
-        originalRequest
+        message: `API IO ERROR :: ${message}`,
+        request: originalRequest
     });
 }
 
