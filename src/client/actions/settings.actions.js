@@ -57,9 +57,9 @@ function settingSaveInProgress(settingID){
     }
 }
 
-function settingSaveComplete(status, recd){
+function settingSaveComplete(data, recd){
     return {
         type:SETTING_SAVE_COMPLETE,
-        settingID
+        data
     }
 }
