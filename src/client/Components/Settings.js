@@ -18,7 +18,7 @@ class Settings extends Component {
     }
 
     render() {
-        const { lastSavedSettingID, saveInProgress, settings } = this.props;
+        const { lastAPIAction, lastSavedSettingID, saveInProgress, settings } = this.props;
         return (
             <div >
                 <Row>
@@ -28,6 +28,7 @@ class Settings extends Component {
                     <Col>
                         <DirectoriesEditor 
                             saveInProgress={saveInProgress}
+                            lastAPIAction={lastAPIAction}
                             lastSavedSettingID={lastSavedSettingID}
                             directories={settings.directories}/>
                     </Col>
@@ -41,6 +42,7 @@ const mapStateToProps = (state)=>{
     const { settings } = state;
     return {
         saveInProgress: settings.saveInProgress,
+        lastAPIAction: settings.lastAPIAction,
         lastSavedSettingID: settings.lastSavedSettingID,
         settings: settings.settings
     }
