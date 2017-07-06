@@ -19,7 +19,7 @@ describe("IBDB",()=>{
                 ibdb.close();
             })
             .catch((err)=>{
-                expect(err).toBe("IBDB :: connect :: File does not exist.");
+                expect(err).toBe("IBDB :: connect :: File does not exist. nonexistingFileName");
             });
     });
 

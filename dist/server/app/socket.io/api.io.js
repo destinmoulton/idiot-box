@@ -49,7 +49,9 @@ var API_ENDPOINTS = {
                 func: function func(category) {
                     return settingsModel.getAllForCategory(category);
                 }
-            },
+            }
+        },
+        editor: {
             add: {
                 params: ['category', 'key', 'value'],
                 func: function func(category, key, value) {

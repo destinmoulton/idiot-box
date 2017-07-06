@@ -31,17 +31,32 @@ var SettingsModel = function () {
             return this._ibdb.getAll(where, this._tableName);
         }
     }, {
+        key: "getSingle",
+        value: function getSingle(category, key, value) {
+            var where = {
+                category: category, key: key, value: value
+            };
+
+            return this._ibdb.getRow(where, this._tableName);
+        }
+    }, {
         key: "addSetting",
         value: function addSetting(category, key, value) {
+            var _this = this;
+
             var data = {
                 category: category, key: key, value: value
             };
 
-            return this._ibdb.insert(data, this._tableName);
+            return this._ibdb.insert(data, this._tableName).then(function () {
+                return _this.getSingle(category, key, value);
+            });
         }
     }, {
         key: "updateSetting",
         value: function updateSetting(id, category, key, value) {
+            var _this2 = this;
+
             var where = {
                 id: id,
                 category: category
@@ -52,7 +67,9 @@ var SettingsModel = function () {
                 value: value
             };
 
-            return this._ibdb.update(where, data, this._tableName);
+            return this._ibdb.update(where, data, this._tableName).then(function () {
+                return _this2.getSingle(category, key, value);
+            });
         }
     }, {
         key: "deleteSetting",
