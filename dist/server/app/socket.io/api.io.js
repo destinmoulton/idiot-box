@@ -63,6 +63,12 @@ var API_ENDPOINTS = {
                 func: function func(id, category, key, value) {
                     return settingsModel.updateSetting(id, category, key, value);
                 }
+            },
+            delete: {
+                params: ['id'],
+                func: function func(id) {
+                    return settingsModel.deleteSetting(id);
+                }
             }
         }
     }
