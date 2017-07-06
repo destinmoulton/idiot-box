@@ -24,6 +24,19 @@ export function srvConnect(){
     }
 }
 
+
+function tryReconnect(){
+    return (dispatch)=>{
+        setTimeout(()=>{
+            return socketClient.reconnect()
+                .then(()=>{
+                    dispatch(srvConnectionReceived());
+                })
+                .catch(()=>dispatch(tryReconnect()));
+        }, 200);
+    }
+}
+
 function waitforDisconnectReception(dispatch){
     return {
         type: 'socket',
@@ -31,6 +44,7 @@ function waitforDisconnectReception(dispatch){
         promise: (socket) => {
             return socket.on('disconnect', ()=>{
                 dispatch(srvDisconnectReceived());
+                dispatch(tryReconnect());
             });
         }
     }
