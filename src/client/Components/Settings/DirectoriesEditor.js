@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { connect } from 'react-redux';
 
 import { 
     Button, 
@@ -11,6 +11,8 @@ import {
     Table } from 'antd';
 
 import DirectorySelectorModal from '../Filesystem/DirectorySelectorModal';
+
+import { saveSetting } from '../../actions/settings.actions';
 
 const DEFAULT_INITIAL_DIR = "/";
 class DirectoriesEditor extends Component {
@@ -84,9 +86,10 @@ class DirectoriesEditor extends Component {
 
     _handleSaveButtonPress(e){
         const {currentEditData} = this.state;
-
+        
         const settingID = e.currentTarget.getAttribute("data-setting-id");
-
+        const settingData = currentEditData[settingID];
+        this.props.saveSetting(settingID, settingData.key, settingData.value);
         console.log("Save Button Pressed", currentEditData[settingID]);
     }
 
@@ -249,5 +252,14 @@ class DirectoriesEditor extends Component {
     }
 }
 
+const mapStateToProps = (state)=>{
+    return {};
+}
 
-export default DirectoriesEditor;
+const mapDispatchToProps = (dispatch)=>{
+    return {
+        saveSetting: (settingID, key, value)=>dispatch(saveSetting(settingID, 'directories', key, value))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(DirectoriesEditor);
