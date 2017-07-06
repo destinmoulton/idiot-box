@@ -2,6 +2,8 @@ import { emitAPIRequest } from './api.actions';
 
 import {
     SETTINGS_LIST_RECEIVED,
+    SETTING_DELETE_START,
+    SETTING_DELETE_COMPLETE,
     SETTING_SAVE_START,
     SETTING_SAVE_COMPLETE
 } from './actionTypes';
@@ -61,5 +63,30 @@ function settingSaveComplete(data, recd){
     return {
         type:SETTING_SAVE_COMPLETE,
         data
+    }
+}
+
+export function deleteSetting(settingID, category){
+    return (dispatch)=>{
+        const endpoint = 'settings.editor.delete';
+        const params = {
+            id: settingID
+        };
+        dispatch(settingDeleteStart(settingID, category));
+        dispatch(emitAPIRequest(endpoint, params, settingDeleteComplete));
+    }
+}
+
+function settingDeleteStart(settingID, category){
+    return {
+        type: SETTING_DELETE_START,
+        settingID,
+        category
+    }
+}
+
+function settingDeleteComplete(){
+    return {
+        type: SETTING_DELETE_COMPLETE
     }
 }
