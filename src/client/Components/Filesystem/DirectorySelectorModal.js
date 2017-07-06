@@ -49,16 +49,14 @@ class DirectorySelectorModal extends Component {
                     onOk={onOk}
                     okText="Choose This Directory"
                     cancelText="Cancel"
-                    style={{top: posDim.modalTop, height:posDim.modalHeight}}
-                >
+                    style={{top: posDim.modalTop, height:posDim.modalHeight}} >
                     <div className="ib-settings-dirsel-fs-cont" 
                          style={{height:posDim.fileBrowserHeight}}>
-                    <FilesystemBrowser 
-                        initialPath={initialPath} 
-                        onChangeDirectory={onChangeDirectory}
-                        showDirectories={true}
-                        showFiles={false}
-                    />
+                        <FilesystemBrowser 
+                            initialPath={initialPath} 
+                            onChangeDirectory={onChangeDirectory}
+                            showDirectories={true}
+                            showFiles={false} />
                     </div>
                 </Modal>
             </div>
