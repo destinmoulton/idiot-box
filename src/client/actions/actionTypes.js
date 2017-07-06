@@ -1,9 +1,6 @@
 // Define the constant action types for the redux actions and reducers
 // Use ALL_CAPS
 
-export const FS_DIR_RECEIVED = 'FS_DIR_RECEIVED';
-
-
 // General Socket IO Events
 export const IO_EMIT_SETUP = 'IO_EMIT_SETUP';
 export const IO_EMIT_SUCCESS = 'IO_EMIT_SUCCESS';
@@ -17,6 +14,8 @@ export const ERROR_RECEIVED = 'ERROR_RECEIVED';
 
 // settings events
 export const SETTINGS_LIST_RECEIVED = 'SETTINGS_LIST_RECEIVED';
+export const SETTING_SAVE_START = 'SETTING_SAVE_START';
+export const SETTING_SAVE_COMPLETE = 'SETTING_SAVE_COMPLETE';
 
 // server events
 export const SRV_CONNECT_RECEIVED = 'SRV_CONNECT_RECEIVED'
