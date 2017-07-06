@@ -1,7 +1,7 @@
 import { emitAPIRequest } from './api.actions';
 
 import {
-    SETTING_LIST_RECEIVED,
+    SETTINGS_LIST_RECEIVED,
     SETTING_SAVE_START,
     SETTING_SAVE_COMPLETE
 } from './actionTypes';
