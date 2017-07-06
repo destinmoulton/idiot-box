@@ -21,6 +21,8 @@ const API_ENDPOINTS = {
                 params: ['category'],
                 func: (category)=>settingsModel.getAllForCategory(category)
             },
+        },
+        editor: {
             add: {
                 params: ['category', 'key', 'value'],
                 func: (category, key, value)=> settingsModel.addSetting(category, key, value)
