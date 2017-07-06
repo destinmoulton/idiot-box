@@ -14,9 +14,14 @@ import {
 
 import DirectorySelectorModal from '../Filesystem/DirectorySelectorModal';
 
-import { saveSetting } from '../../actions/settings.actions';
+import { deleteSetting, saveSetting } from '../../actions/settings.actions';
 
 const DEFAULT_INITIAL_DIR = "/";
+const BLANK_DATA = {
+    id:0,
+    key:"",
+    value: DEFAULT_INITIAL_DIR
+};
 class DirectoriesEditor extends Component {
     static propTypes = {
         directories: PropTypes.array.isRequired
@@ -31,24 +36,27 @@ class DirectoriesEditor extends Component {
             dirModalSelectedDirectory: DEFAULT_INITIAL_DIR,
             currentlyEditing: [0],
             currentEditData:{
-                0: {
-                    id:0,
-                    key:"",
-                    value: DEFAULT_INITIAL_DIR
-                }
+                0: BLANK_DATA
             }
         }
     }
 
     componentWillReceiveProps(nextProps){
         const { currentlyEditing, currentEditData } = this.state;
-        const { lastSavedSettingID } = nextProps;
+        const { lastAPIAction, lastSavedSettingID } = nextProps;
 
-        const indexOfLastSave = currentlyEditing.indexOf(lastSavedSettingID);
-        if(indexOfLastSave > -1){
-            currentlyEditing.splice(indexOfLastSave, 1);
+
+        if(lastAPIAction === "save"){
+            if(lastSavedSettingID===0){ 
+                currentEditData[0] = BLANK_DATA
+            } else {
+                const indexOfLastSave = currentlyEditing.indexOf(lastSavedSettingID);
+                if(indexOfLastSave > -1){
+                    currentlyEditing.splice(indexOfLastSave, 1);
+                }
+                delete currentEditData[lastSavedSettingID];
+            }
         }
-        delete currentEditData[lastSavedSettingID];
         
         this.setState({
             ...this.state,
@@ -107,10 +115,11 @@ class DirectoriesEditor extends Component {
 
     _handleSaveButtonPress(e){
         const { currentEditData } = this.state;
-        
         const settingID = e.currentTarget.getAttribute("data-setting-id");
-        const settingData = currentEditData[settingID];
-        this.props.saveSetting(parseInt(settingID), settingData.key, settingData.value);
+        if(currentEditData[settingID].key !== ""){
+            const settingData = currentEditData[settingID];
+            this.props.saveSetting(parseInt(settingID), settingData.key, settingData.value);
+        }
     }
 
     _handleChangeSettingInput(e){
@@ -150,7 +159,8 @@ class DirectoriesEditor extends Component {
     }
 
     _handleDeleteSettingClick(e){
-        
+        const settingID = parseInt(e.currentTarget.getAttribute('data-setting-id'));
+        this.props.deleteSetting(settingID);
     }
 
     _buildSettingAddForm(){
@@ -267,13 +277,11 @@ class DirectoriesEditor extends Component {
             title: "Delete",
             dataIndex: '',
             render: (text,setting)=> {
-                if(currentlyEditing.indexOf(setting.id)>-1){
-                    
-                } else {
+                if(currentlyEditing.indexOf(setting.id)===-1){
                     return (
                         <a onClick={this._handleDeleteSettingClick.bind(this)}
                             data-setting-id={setting.id}>
-                            <Icon type={"trash"} />
+                            <Icon type={"delete"} />
                         </a>
                     );
                 }
@@ -317,7 +325,8 @@ const mapStateToProps = (state)=>{
 
 const mapDispatchToProps = (dispatch)=>{
     return {
-        saveSetting: (settingID, key, value)=>dispatch(saveSetting(settingID, 'directories', key, value))
+        saveSetting: (settingID, key, value)=>dispatch(saveSetting(settingID, 'directories', key, value)),
+        deleteSetting: (settingID)=>dispatch(deleteSetting(settingID, 'directories'))
     }
 }
 
