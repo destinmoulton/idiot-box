@@ -30,6 +30,10 @@ const API_ENDPOINTS = {
             update: {
                 params: ['id', 'category', 'key', 'value'],
                 func: (id, category, key, value)=> settingsModel.updateSetting(id, category, key, value)
+            },
+            delete: {
+                params: ['id'],
+                func: (id)=>settingsModel.deleteSetting(id)
             }
         }
     }
