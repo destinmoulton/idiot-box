@@ -24,9 +24,27 @@ var MediaScrapeModel = function () {
             });
         }
     }, {
-        key: 'searchTV',
-        value: function searchTV(tvQuery) {
-            return this._trakt.search.text({});
+        key: 'searchShows',
+        value: function searchShows(tvQuery) {
+            return this._trakt.search.text({
+                query: tvQuery,
+                type: 'show'
+            });
+        }
+    }, {
+        key: 'getShowSeasonsList',
+        value: function getShowSeasonsList(id) {
+            return this._trakt.seasons.summary({
+                id: id
+            });
+        }
+    }, {
+        key: 'getEpisodesForSeason',
+        value: function getEpisodesForSeason(showID, seasonNumber) {
+            return this._trakt.seasons.season({
+                id: showID,
+                season: seasonNumber
+            });
         }
     }]);
 

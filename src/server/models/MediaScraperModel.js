@@ -12,9 +12,23 @@ export default class MediaScrapeModel {
         });
     }
 
-    searchTV(tvQuery){
+    searchShows(tvQuery){
         return this._trakt.search.text({
+            query: tvQuery,
+            type: 'show'
+        });
+    }
 
+    getShowSeasonsList(id){
+        return this._trakt.seasons.summary({
+            id
+        });
+    }
+
+    getEpisodesForSeason(showID, seasonNumber){
+        return this._trakt.seasons.season({
+            id: showID,
+            season: seasonNumber
         });
     }
 }
