@@ -28,14 +28,16 @@ var MediaScrapeModel = function () {
         value: function searchShows(tvQuery) {
             return this._trakt.search.text({
                 query: tvQuery,
-                type: 'show'
+                type: 'show',
+                extended: 'full'
             });
         }
     }, {
         key: 'getShowSeasonsList',
         value: function getShowSeasonsList(id) {
             return this._trakt.seasons.summary({
-                id: id
+                id: id,
+                extended: 'full'
             });
         }
     }, {
@@ -43,7 +45,8 @@ var MediaScrapeModel = function () {
         value: function getEpisodesForSeason(showID, seasonNumber) {
             return this._trakt.seasons.season({
                 id: showID,
-                season: seasonNumber
+                season: seasonNumber,
+                extended: 'full'
             });
         }
     }]);

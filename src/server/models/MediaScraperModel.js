@@ -15,20 +15,23 @@ export default class MediaScrapeModel {
     searchShows(tvQuery){
         return this._trakt.search.text({
             query: tvQuery,
-            type: 'show'
+            type: 'show',
+            extended: 'full'
         });
     }
 
     getShowSeasonsList(id){
         return this._trakt.seasons.summary({
-            id
+            id,
+            extended: 'full'
         });
     }
 
     getEpisodesForSeason(showID, seasonNumber){
         return this._trakt.seasons.season({
             id: showID,
-            season: seasonNumber
+            season: seasonNumber,
+            extended: 'full'
         });
     }
 }
