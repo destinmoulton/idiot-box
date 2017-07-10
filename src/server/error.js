@@ -4,7 +4,7 @@ import logger from './logger';
 let errors = [];
 bus.on("error", (msg)=>{
     errors.push(msg);
-    logger.error("ERROR::"+msg);
+    //logger.error("ERROR::"+msg);
 });
 
 export default function error(message){
