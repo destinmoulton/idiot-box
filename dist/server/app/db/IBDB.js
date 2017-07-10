@@ -140,7 +140,9 @@ var IBDB = function () {
                 query = _buildSelectQuery3[0],
                 params = _buildSelectQuery3[1];
 
-            return this._db.get(query, params);
+            return this._db.get(query, params).then(function (row) {
+                return row === undefined ? [] : row;
+            });
         }
     }, {
         key: 'getAll',
@@ -154,7 +156,12 @@ var IBDB = function () {
                 query = _buildSelectQuery5[0],
                 params = _buildSelectQuery5[1];
 
-            return this._db.all(query, params);
+            if (orderBy !== "") {
+                query = query + " ORDER BY " + orderBy;
+            }
+            return this._db.all(query, params).then(function (rows) {
+                return rows === undefined ? [] : rows;
+            });
         }
     }, {
         key: '_buildSelectQuery',
@@ -164,7 +171,11 @@ var IBDB = function () {
                 where = _buildCommaDelimetedS8[0],
                 params = _buildCommaDelimetedS8[1];
 
-            var query = "SELECT * FROM " + tablename + " WHERE " + where;
+            var query = "SELECT * FROM " + tablename;
+
+            if (where !== "") {
+                query = query + " WHERE " + where;
+            }
 
             return [query, params];
         }
