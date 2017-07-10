@@ -1,4 +1,4 @@
-export class MoviesModel {
+export default class MoviesModel {
     constructor(ibdb){
         this._ibdb = ibdb;
 
@@ -23,8 +23,12 @@ export class MoviesModel {
 
         return this._ibdb.insert(data, this._tableName)
             .then(()=>{
-                return this.getSingle(category, key, value);
+                return this.getSingleByTraktID(data.trakt_id);
             });
+    }
+
+    getAll(){
+        return this._ibdb.getAll({}, this._tableName, "title ASC");
     }
 
     getSingleByTraktID(traktID){
