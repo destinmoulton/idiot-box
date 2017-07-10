@@ -3,7 +3,7 @@ import logger from '../logger';
 import ibdb from '../db/IBDB';
 
 import FilesystemModel from '../models/FilesystemModel';
-import SettingsModel from '../db/SettingsModel';
+import SettingsModel from '../models/db/SettingsModel';
 const filesystemModel = new FilesystemModel();
 const settingsModel = new SettingsModel(ibdb);
 const API_ENDPOINTS = {

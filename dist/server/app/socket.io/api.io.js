@@ -21,7 +21,7 @@ var _FilesystemModel = require('../models/FilesystemModel');
 
 var _FilesystemModel2 = _interopRequireDefault(_FilesystemModel);
 
-var _SettingsModel = require('../db/SettingsModel');
+var _SettingsModel = require('../models/db/SettingsModel');
 
 var _SettingsModel2 = _interopRequireDefault(_SettingsModel);
 
