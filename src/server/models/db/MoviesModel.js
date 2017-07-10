@@ -26,4 +26,12 @@ export class MoviesModel {
                 return this.getSingle(category, key, value);
             });
     }
+
+    getSingleByTraktID(traktID){
+        const where = {
+            trakt_id: traktID
+        };
+
+        return this._ibdb.getRow(where, this._tableName);
+    }
 }

@@ -54,7 +54,7 @@ var ShowsModel = exports.ShowsModel = function () {
             var data = this._prepareData(apiData, imageFilename);
 
             return this._ibdb.insert(data, this._tableName).then(function () {
-                return _this.getSingle();
+                return _this.getSingleByTraktID(data.trakt_id);
             });
         }
     }, {

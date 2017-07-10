@@ -50,5 +50,11 @@
     "socket.io": "^2.0.3",
     "sqlite": "^2.8.0",
     "winston": "^2.3.1"
+  },
+  "jest": {
+    "testPathIgnorePatterns": [
+      "/node_modules/",
+      "/src/"
+    ]
   }
 }

@@ -8,49 +8,47 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var MoviesModel = exports.MoviesModel = function () {
-    function MoviesModel(ibdb) {
-        _classCallCheck(this, MoviesModel);
+var MovieToGenreModel = exports.MovieToGenreModel = function () {
+    function MovieToGenreModel(ibdb, genresModel) {
+        _classCallCheck(this, MovieToGenreModel);
 
         this._ibdb = ibdb;
-
-        this._tableName = "movies";
+        this._genresModel = genresModel;
+        this._tableName = "movie_to_genre";
     }
 
-    _createClass(MoviesModel, [{
-        key: "addMovie",
-        value: function addMovie(apiData, imageFilename) {
+    _createClass(MovieToGenreModel, [{
+        key: "addMovieToGenres",
+        value: function addMovieToGenres(movieID, genreArray) {
             var _this = this;
 
-            var data = {
-                title: apiData.title,
-                year: apiData.year,
-                tagline: apiData.tagline,
-                overview: apiData.overview,
-                released: apiData.released,
-                runtime: apiData.runtime,
-                rating: apiData.rating,
-                slug: apiData.slug,
-                trakt_id: apiData.ids.trakt,
-                imdb_id: apiData.ids.imdb,
-                tmdb_id: apiData.ids.tmdb,
-                image_filename: imageFilename
-            };
+            genreArray.forEach(function (genreSlug) {});
+            var data = {};
 
             return this._ibdb.insert(data, this._tableName).then(function () {
-                return _this.getSingle(category, key, value);
+                return _this.getSingleByTraktID(data.trakt_id);
             });
         }
     }, {
-        key: "getSingleByTraktID",
-        value: function getSingleByTraktID(traktID) {
+        key: "getAllMoviesForGenre",
+        value: function getAllMoviesForGenre(genreID) {
             var where = {
-                trakt_id: traktID
+                genre_id: genreID
+            };
+
+            return this._ibdb.getAll(where, this._tableName);
+        }
+    }, {
+        key: "getSingleByMovieAndGenre",
+        value: function getSingleByMovieAndGenre(movieID, genreID) {
+            var where = {
+                movie_id: movieID,
+                genre_id: genreID
             };
 
             return this._ibdb.getRow(where, this._tableName);
         }
     }]);
 
-    return MoviesModel;
+    return MovieToGenreModel;
 }();

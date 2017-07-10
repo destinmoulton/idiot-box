@@ -33,7 +33,7 @@ export class ShowsModel {
 
         return this._ibdb.insert(data, this._tableName)
             .then(()=>{
-                return this.getSingle();
+                return this.getSingleByTraktID(data.trakt_id);
             });
     }
 
