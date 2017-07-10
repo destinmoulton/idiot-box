@@ -90,9 +90,10 @@ class IBDB {
         return this._db.get(query, params);
     }
 
-    getAll(whereColumnsAndValues, tablename){
+    getAll(whereColumnsAndValues, tablename, orderBy = ""){
         this._resetParamCount();
         const [query, params] = this._buildSelectQuery(whereColumnsAndValues, tablename);
+        query = query + " " + orderBy;
         return this._db.all(query, params);
     }
 

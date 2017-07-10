@@ -145,6 +145,8 @@ var IBDB = function () {
     }, {
         key: 'getAll',
         value: function getAll(whereColumnsAndValues, tablename) {
+            var orderBy = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
+
             this._resetParamCount();
 
             var _buildSelectQuery4 = this._buildSelectQuery(whereColumnsAndValues, tablename),
