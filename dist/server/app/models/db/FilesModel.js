@@ -27,8 +27,28 @@ var FilesModel = function () {
             };
 
             return this._ibdb.insert(data, this._tableName).then(function () {
-                return _this.getSingle(category, key, value);
+                return _this.getSingleByDirectoryAndFilename(directory_setting_id, subpath, filename);
             });
+        }
+    }, {
+        key: "getSingleByDirectoryAndFilename",
+        value: function getSingleByDirectoryAndFilename(directory_setting_id, subpath, filename) {
+            var query = {
+                directory_setting_id: directory_setting_id,
+                subpath: subpath,
+                filename: filename
+            };
+            return this._ibdb.getRow(query, this._tableName);
+        }
+    }, {
+        key: "getAllForDirectory",
+        value: function getAllForDirectory(directory_setting_id, subpath) {
+            var query = {
+                directory_setting_id: directory_setting_id,
+                subpath: subpath,
+                filename: filename
+            };
+            return this._ibdb.getAll(query, this._tableName, "filename ASC");
         }
     }]);
 
