@@ -6,6 +6,12 @@ CREATE TABLE settings (
     value TEXT
 );
 
+CREATE TABLE genres (
+    id INTEGER PRIMARY KEY,
+    slug TEXT,
+    name TEXT
+);
+
 CREATE TABLE movies (
     id INTEGER PRIMARY KEY,
     title TEXT,
@@ -20,6 +26,13 @@ CREATE TABLE movies (
     imdb_id TEXT,
     tmdb_id INTEGER,
     image_filename TEXT
+);
+
+CREATE TABLE movie_to_genre (
+    genre_id INTEGER,
+    movie_id INTEGER,
+    FOREIGN KEY(genre_id) REFERENCES genres(id) ON DELETE CASCADE,
+    FOREIGN KEY(movie_id) REFERENCES movies(id) ON DELETE CASCADE
 );
 
 CREATE TABLE shows (
