@@ -100,7 +100,7 @@ var IBDB = function () {
         }
     }, {
         key: 'update',
-        value: function update(whereColumnsAndValues, dataColumnsAndValues, tablename) {
+        value: function update(dataColumnsAndValues, whereColumnsAndValues, tablename) {
             this._resetParamCount();
 
             var _buildCommaDelimetedS = this._buildCommaDelimetedStatement(dataColumnsAndValues),
@@ -115,6 +115,7 @@ var IBDB = function () {
 
             var update = "UPDATE " + tablename + " SET " + dataDelim + " WHERE " + whereDelim;
             var params = Object.assign({}, dataParams, whereParams);
+
             return this._db.run(update, params);
         }
     }, {
@@ -141,7 +142,7 @@ var IBDB = function () {
                 params = _buildSelectQuery3[1];
 
             return this._db.get(query, params).then(function (row) {
-                return row === undefined ? [] : row;
+                return row === undefined ? {} : row;
             });
         }
     }, {

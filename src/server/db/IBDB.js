@@ -66,13 +66,14 @@ class IBDB {
         return this._db.run(query, params);
     }
 
-    update(whereColumnsAndValues, dataColumnsAndValues, tablename){
+    update(dataColumnsAndValues, whereColumnsAndValues, tablename){
         this._resetParamCount();
         const [dataDelim, dataParams] = this._buildCommaDelimetedStatement(dataColumnsAndValues);
         const [whereDelim, whereParams] = this._buildCommaDelimetedStatement(whereColumnsAndValues, " AND ");
 
         const update = "UPDATE "+tablename+" SET "+dataDelim+ " WHERE "+whereDelim;
         const params = Object.assign({}, dataParams, whereParams);
+
         return this._db.run(update, params);
     }
 
@@ -89,7 +90,7 @@ class IBDB {
         const [query, params] = this._buildSelectQuery(whereColumnsAndValues, tablename);
         return this._db.get(query, params)
                        .then((row)=>{
-                            return (row===undefined) ? [] : row;
+                            return (row===undefined) ? {} : row;
                         });
     }
 
