@@ -100,7 +100,7 @@ var IBDB = function () {
         }
     }, {
         key: 'update',
-        value: function update(whereColumnsAndValues, dataColumnsAndValues, tablename) {
+        value: function update(dataColumnsAndValues, whereColumnsAndValues, tablename) {
             this._resetParamCount();
 
             var _buildCommaDelimetedS = this._buildCommaDelimetedStatement(dataColumnsAndValues),
@@ -115,6 +115,7 @@ var IBDB = function () {
 
             var update = "UPDATE " + tablename + " SET " + dataDelim + " WHERE " + whereDelim;
             var params = Object.assign({}, dataParams, whereParams);
+
             return this._db.run(update, params);
         }
     }, {
@@ -140,11 +141,15 @@ var IBDB = function () {
                 query = _buildSelectQuery3[0],
                 params = _buildSelectQuery3[1];
 
-            return this._db.get(query, params);
+            return this._db.get(query, params).then(function (row) {
+                return row === undefined ? {} : row;
+            });
         }
     }, {
         key: 'getAll',
         value: function getAll(whereColumnsAndValues, tablename) {
+            var orderBy = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
+
             this._resetParamCount();
 
             var _buildSelectQuery4 = this._buildSelectQuery(whereColumnsAndValues, tablename),
@@ -152,7 +157,12 @@ var IBDB = function () {
                 query = _buildSelectQuery5[0],
                 params = _buildSelectQuery5[1];
 
-            return this._db.all(query, params);
+            if (orderBy !== "") {
+                query = query + " ORDER BY " + orderBy;
+            }
+            return this._db.all(query, params).then(function (rows) {
+                return rows === undefined ? [] : rows;
+            });
         }
     }, {
         key: '_buildSelectQuery',
@@ -162,7 +172,11 @@ var IBDB = function () {
                 where = _buildCommaDelimetedS8[0],
                 params = _buildCommaDelimetedS8[1];
 
-            var query = "SELECT * FROM " + tablename + " WHERE " + where;
+            var query = "SELECT * FROM " + tablename;
+
+            if (where !== "") {
+                query = query + " WHERE " + where;
+            }
 
             return [query, params];
         }

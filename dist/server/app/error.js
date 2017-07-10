@@ -19,7 +19,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var errors = [];
 _eventBus2.default.on("error", function (msg) {
     errors.push(msg);
-    _logger2.default.error("ERROR::" + msg);
+    //logger.error("ERROR::"+msg);
 });
 
 function error(message) {

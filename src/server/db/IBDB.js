@@ -66,13 +66,14 @@ class IBDB {
         return this._db.run(query, params);
     }
 
-    update(whereColumnsAndValues, dataColumnsAndValues, tablename){
+    update(dataColumnsAndValues, whereColumnsAndValues, tablename){
         this._resetParamCount();
         const [dataDelim, dataParams] = this._buildCommaDelimetedStatement(dataColumnsAndValues);
         const [whereDelim, whereParams] = this._buildCommaDelimetedStatement(whereColumnsAndValues, " AND ");
 
         const update = "UPDATE "+tablename+" SET "+dataDelim+ " WHERE "+whereDelim;
         const params = Object.assign({}, dataParams, whereParams);
+
         return this._db.run(update, params);
     }
 
@@ -87,18 +88,31 @@ class IBDB {
     getRow(whereColumnsAndValues, tablename){
         this._resetParamCount();
         const [query, params] = this._buildSelectQuery(whereColumnsAndValues, tablename);
-        return this._db.get(query, params);
+        return this._db.get(query, params)
+                       .then((row)=>{
+                            return (row===undefined) ? {} : row;
+                        });
     }
 
-    getAll(whereColumnsAndValues, tablename){
+    getAll(whereColumnsAndValues, tablename, orderBy = ""){
         this._resetParamCount();
-        const [query, params] = this._buildSelectQuery(whereColumnsAndValues, tablename);
-        return this._db.all(query, params);
+        let [query, params] = this._buildSelectQuery(whereColumnsAndValues, tablename);
+        if(orderBy !== ""){
+            query = query + " ORDER BY " + orderBy;
+        }
+        return this._db.all(query, params)
+                        .then((rows)=>{
+                            return (rows===undefined) ? [] : rows;
+                        });
     }
 
     _buildSelectQuery(whereColumnsAndValues, tablename){
         const [where, params] = this._buildCommaDelimetedStatement(whereColumnsAndValues, " AND ");
-        const query = "SELECT * FROM "+tablename+" WHERE "+where;
+        let query = "SELECT * FROM " + tablename;
+
+        if(where !== ""){
+            query = query + " WHERE " + where;
+        }
 
         return [query, params];
     }

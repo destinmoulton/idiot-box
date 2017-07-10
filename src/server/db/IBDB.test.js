@@ -1,10 +1,10 @@
 import path from 'path';
 
-import logger from '../dist/server/app/logger';
+import logger from '../logger';
 
-import ibdb from '../dist/server/app/db/IBDB';
+import ibdb from './IBDB';
 
-import { doesErrorExist } from '../dist/server/app/error';
+import { doesErrorExist } from '../error';
 
 describe("IBDB",()=>{
     
@@ -25,7 +25,7 @@ describe("IBDB",()=>{
 
     test("connects to test database", ()=>{
         const config = {
-            filename: path.join(__dirname, '/data/idiot-box-testdb.sqlite3')
+            filename: path.resolve(__dirname, '../../../../test/data/idiot-box-testdb.sqlite3')
         }
         expect.assertions(2);
         return ibdb.connect(config)
@@ -66,7 +66,7 @@ describe("IBDB",()=>{
             };
 
             const migConfig = {
-                migrationsPath: path.resolve(__dirname, '../dist/server/migrations')
+                migrationsPath: path.resolve(__dirname, '../../migrations')
             };
 
             return ibdb.connect(dbConfig)
@@ -151,17 +151,17 @@ describe("IBDB",()=>{
                             key: "testKeyNew",
                             value: "testValueNew"
                         }
-                        const query = {
+                        const where = {
                             category: "testCat",
                             key: "testKey2"
                         };
-                        return ibdb.update(newData, query, "settings");
+                        return ibdb.update(newData, where, "settings");
                     })
                     .then(()=>{
-                        const query = {
+                        const where = {
                             category: "testCat"
                         };
-                        return ibdb.getAll(query, "settings");
+                        return ibdb.getAll(where, "settings");
                     })
                     .then((rows)=>{
                         expect(rows.length).toBe(2);
