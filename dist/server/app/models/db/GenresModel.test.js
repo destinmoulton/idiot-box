@@ -67,9 +67,21 @@ describe("GenresModel", function () {
         });
     });
 
-    it("adds unique genres", function () {
-        return genresModel.addGenreIfDoesntExist('testone').then(function (row) {
-            _logger2.default.debug("genretest", row.length);
+    it("adds only unique genres", function () {
+        expect.assertions(6);
+        return genresModel.addGenre('testone').then(function (row) {
+            expect(row.slug).toBe('testone');
+            expect(row.name).toBe('Testone');
+            return genresModel.addGenre("testone");
+        }).then(function (row) {
+            // Should return the row (even though it didn't add anything)
+            expect(row.slug).toBe('testone');
+            expect(row.name).toBe('Testone');
+            return genresModel.getAll();
+        }).then(function (rows) {
+            // Should only have one
+            expect(rows.length).toBe(1);
+            expect(rows[0].slug).toBe('testone');
         });
     });
 });

@@ -7,14 +7,6 @@ export default class GenresModel {
         this._tableName = "genres";
     }
 
-    addGenreIfDoesntExist(slug){
-        return this.getSingleBySlug(slug)
-            .then((row)=>{
-                logger.debug(typeof row);
-                return row;
-            });
-    }
-
     addGenre(slug){
         const name = slug[0].toUpperCase() + slug.slice(1);
         const data = {
@@ -22,8 +14,17 @@ export default class GenresModel {
             name
         };
 
-        return this._ibdb.insert(data, this._tableName)
-            .then(()=>{
+        return this.getSingleBySlug(slug)
+            .then((row)=>{
+                if(row.hasOwnProperty("slug")){
+                    return row;
+                }
+                return this._ibdb.insert(data, this._tableName);
+            })
+            .then((row)=>{
+                if(row.hasOwnProperty("slug")){
+                    return row;
+                }
                 return this.getSingleBySlug(slug);
             });
     }

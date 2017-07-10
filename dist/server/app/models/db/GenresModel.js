@@ -4,8 +4,6 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _logger = require("../../logger");
@@ -26,14 +24,6 @@ var GenresModel = function () {
     }
 
     _createClass(GenresModel, [{
-        key: "addGenreIfDoesntExist",
-        value: function addGenreIfDoesntExist(slug) {
-            return this.getSingleBySlug(slug).then(function (row) {
-                _logger2.default.debug(typeof row === "undefined" ? "undefined" : _typeof(row));
-                return row;
-            });
-        }
-    }, {
         key: "addGenre",
         value: function addGenre(slug) {
             var _this = this;
@@ -44,7 +34,15 @@ var GenresModel = function () {
                 name: name
             };
 
-            return this._ibdb.insert(data, this._tableName).then(function () {
+            return this.getSingleBySlug(slug).then(function (row) {
+                if (row.hasOwnProperty("slug")) {
+                    return row;
+                }
+                return _this._ibdb.insert(data, _this._tableName);
+            }).then(function (row) {
+                if (row.hasOwnProperty("slug")) {
+                    return row;
+                }
                 return _this.getSingleBySlug(slug);
             });
         }

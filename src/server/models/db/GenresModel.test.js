@@ -60,10 +60,24 @@ describe("GenresModel", ()=>{
             });
     });
 
-    it("adds unique genres", ()=>{
-        return genresModel.addGenreIfDoesntExist('testone')
-                    .then((row)=>{
-                        logger.debug("genretest", row.length);
-                    })
+    it("adds only unique genres", ()=>{
+        expect.assertions(6);
+        return genresModel.addGenre('testone')
+            .then((row) => {
+                expect(row.slug).toBe('testone');
+                expect(row.name).toBe('Testone');
+                return genresModel.addGenre("testone");
+            })
+            .then((row) => {
+                // Should return the row (even though it didn't add anything)
+                expect(row.slug).toBe('testone');
+                expect(row.name).toBe('Testone');
+                return genresModel.getAll();
+            })
+            .then((rows) => {
+                // Should only have one
+                expect(rows.length).toBe(1);
+                expect(rows[0].slug).toBe('testone');
+            });
     });
 });
