@@ -1,48 +1,11 @@
 import error from '../error';
 import logger from '../logger';
-import ibdb from '../db/IBDB';
 
-import FilesystemModel from '../models/FilesystemModel';
-import SettingsModel from '../models/db/SettingsModel';
-const filesystemModel = new FilesystemModel();
-const settingsModel = new SettingsModel(ibdb);
-const API_ENDPOINTS = {
-    filesystem: {
-        dir: {
-            get: {
-                params: ['path'],
-                func: (pathToList)=> filesystemModel.getDirList(pathToList)
-            }
-        }
-    },
-    settings: {
-        category: {
-            get: {
-                params: ['category'],
-                func: (category)=>settingsModel.getAllForCategory(category)
-            },
-        },
-        editor: {
-            add: {
-                params: ['category', 'key', 'value'],
-                func: (category, key, value)=> settingsModel.addSetting(category, key, value)
-            },
-            update: {
-                params: ['id', 'category', 'key', 'value'],
-                func: (id, category, key, value)=> settingsModel.updateSetting(id, category, key, value)
-            },
-            delete: {
-                params: ['id'],
-                func: (id)=>settingsModel.deleteSetting(id)
-            }
-        }
-    }
-}
+import APIendpoints from './apiendpoints';
 
 let localSocket = {};
 export default function apiIOListeners(socket){
     localSocket = socket;
-    const settingsModel = new SettingsModel(ibdb);
     socket.on('api.request', (req)=>{
         if(!req.hasOwnProperty('id')){
             apiError("Invalid request. No id provided.", req);
@@ -51,7 +14,7 @@ export default function apiIOListeners(socket){
 
         const endpoints = req.endpoint.split('.');
         if(validateEndpoints(endpoints, req)){
-            const apiEndpoint = API_ENDPOINTS[endpoints[0]][endpoints[1]][endpoints[2]];
+            const apiEndpoint = APIendpoints[endpoints[0]][endpoints[1]][endpoints[2]];
 
             if(validateEndpointParams(apiEndpoint.params, req)){
                 const endpointParams = prepareEndpointParams(apiEndpoint.params, req.params)
@@ -65,7 +28,6 @@ export default function apiIOListeners(socket){
                         socket.emit('api.response', resp);
                     })
                     .catch((err)=> apiError("MODEL ERROR :: "+err, req))
-                    
             }
         }
     });
@@ -84,17 +46,17 @@ function validateEndpoints(endpoints, originalRequest){
         return false;
     }
 
-    if(!API_ENDPOINTS.hasOwnProperty(endpoints[0])){
+    if(!APIendpoints.hasOwnProperty(endpoints[0])){
         apiError(`endpoint model '${endpoints[0]}' is invalid. Must be model.section.action.`, originalRequest);
         return false;
     }
 
-    if(!API_ENDPOINTS[endpoints[0]].hasOwnProperty(endpoints[1])){
+    if(!APIendpoints[endpoints[0]].hasOwnProperty(endpoints[1])){
         apiError(`endpoint section '${endpoints[1]}'is invalid. Must be model.section.action.`, originalRequest);
         return false;
     }
 
-    if(!API_ENDPOINTS[endpoints[0]][endpoints[1]].hasOwnProperty(endpoints[2])){
+    if(!APIendpoints[endpoints[0]][endpoints[1]].hasOwnProperty(endpoints[2])){
         apiError(`endpoint action '${endpoints[2]}'is invalid. Must be model.section.action.`, originalRequest);
         return false;
     }

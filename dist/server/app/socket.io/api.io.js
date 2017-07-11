@@ -13,71 +13,17 @@ var _logger = require('../logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
-var _IBDB = require('../db/IBDB');
+var _apiendpoints = require('./apiendpoints');
 
-var _IBDB2 = _interopRequireDefault(_IBDB);
-
-var _FilesystemModel = require('../models/FilesystemModel');
-
-var _FilesystemModel2 = _interopRequireDefault(_FilesystemModel);
-
-var _SettingsModel = require('../models/db/SettingsModel');
-
-var _SettingsModel2 = _interopRequireDefault(_SettingsModel);
+var _apiendpoints2 = _interopRequireDefault(_apiendpoints);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-var filesystemModel = new _FilesystemModel2.default();
-var settingsModel = new _SettingsModel2.default(_IBDB2.default);
-var API_ENDPOINTS = {
-    filesystem: {
-        dir: {
-            get: {
-                params: ['path'],
-                func: function func(pathToList) {
-                    return filesystemModel.getDirList(pathToList);
-                }
-            }
-        }
-    },
-    settings: {
-        category: {
-            get: {
-                params: ['category'],
-                func: function func(category) {
-                    return settingsModel.getAllForCategory(category);
-                }
-            }
-        },
-        editor: {
-            add: {
-                params: ['category', 'key', 'value'],
-                func: function func(category, key, value) {
-                    return settingsModel.addSetting(category, key, value);
-                }
-            },
-            update: {
-                params: ['id', 'category', 'key', 'value'],
-                func: function func(id, category, key, value) {
-                    return settingsModel.updateSetting(id, category, key, value);
-                }
-            },
-            delete: {
-                params: ['id'],
-                func: function func(id) {
-                    return settingsModel.deleteSetting(id);
-                }
-            }
-        }
-    }
-};
-
 var localSocket = {};
 function apiIOListeners(socket) {
     localSocket = socket;
-    var settingsModel = new _SettingsModel2.default(_IBDB2.default);
     socket.on('api.request', function (req) {
         if (!req.hasOwnProperty('id')) {
             apiError("Invalid request. No id provided.", req);
@@ -86,7 +32,7 @@ function apiIOListeners(socket) {
 
         var endpoints = req.endpoint.split('.');
         if (validateEndpoints(endpoints, req)) {
-            var apiEndpoint = API_ENDPOINTS[endpoints[0]][endpoints[1]][endpoints[2]];
+            var apiEndpoint = _apiendpoints2.default[endpoints[0]][endpoints[1]][endpoints[2]];
 
             if (validateEndpointParams(apiEndpoint.params, req)) {
                 var endpointParams = prepareEndpointParams(apiEndpoint.params, req.params);
@@ -118,17 +64,17 @@ function validateEndpoints(endpoints, originalRequest) {
         return false;
     }
 
-    if (!API_ENDPOINTS.hasOwnProperty(endpoints[0])) {
+    if (!_apiendpoints2.default.hasOwnProperty(endpoints[0])) {
         apiError('endpoint model \'' + endpoints[0] + '\' is invalid. Must be model.section.action.', originalRequest);
         return false;
     }
 
-    if (!API_ENDPOINTS[endpoints[0]].hasOwnProperty(endpoints[1])) {
+    if (!_apiendpoints2.default[endpoints[0]].hasOwnProperty(endpoints[1])) {
         apiError('endpoint section \'' + endpoints[1] + '\'is invalid. Must be model.section.action.', originalRequest);
         return false;
     }
 
-    if (!API_ENDPOINTS[endpoints[0]][endpoints[1]].hasOwnProperty(endpoints[2])) {
+    if (!_apiendpoints2.default[endpoints[0]][endpoints[1]].hasOwnProperty(endpoints[2])) {
         apiError('endpoint action \'' + endpoints[2] + '\'is invalid. Must be model.section.action.', originalRequest);
         return false;
     }
