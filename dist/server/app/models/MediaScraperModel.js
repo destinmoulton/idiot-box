@@ -24,7 +24,6 @@ var MediaScrapeModel = function () {
                 extended: 'full'
             };
             return this._trakt.search.text(options).then(function (results) {
-                var ret = [];
                 return results.map(function (item) {
                     return item.movie;
                 });

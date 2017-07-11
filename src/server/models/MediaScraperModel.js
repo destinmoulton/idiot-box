@@ -13,7 +13,6 @@ export default class MediaScrapeModel {
         };
         return this._trakt.search.text(options)
             .then((results)=>{
-                let ret = [];
                 return results.map((item)=>{return item.movie});
             })
     }
