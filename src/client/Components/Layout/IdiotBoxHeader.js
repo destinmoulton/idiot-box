@@ -20,8 +20,8 @@ class IdiotBoxHeader extends Component {
                     <Menu.Item key="shows">
                         <Link to="/shows">Shows</Link>
                     </Menu.Item>
-                    <Menu.Item key="movies">
-                        <Link to="/movies">Movies</Link>
+                    <Menu.Item key="movies_search">
+                        <Link to="/movies/search">Search Movies</Link>
                     </Menu.Item>
                     <Menu.Item key="settings">
                         <Link to="/settings">Settings</Link>
