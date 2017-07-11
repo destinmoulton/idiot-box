@@ -24,14 +24,35 @@ export default class MoviesModel {
         };
 
         return this._ibdb.insert(data, this._tableName)
-            .then(()=>{
+            .then(() => {
                 return this.getSingleByTraktID(data.trakt_id);
             })
-            .then((movie)=>{
+            .then((movie) => {
                 return this._movieToGenreModel.addMovieToArrayGenres(movie.id, apiData.genres)
-                            .then(()=>{
-                                return movie;
-                            });
+                    .then(() => {
+                        return movie;
+                    });
+            });
+    }
+
+    toggleHasWatched(movieID){
+        return this.getSingle(movieID)
+            .then((movie) => {
+                const where = {
+                    id: movieID
+                };
+                let data = {
+                    has_watched: 1
+                };
+                if (movie.has_watched === 1) {
+                    data.has_watched = 0;
+                }
+
+                return this._ibdb.update(data, where, this._tableName)
+
+            })
+            .then(() => {
+                return this.getSingle(movieID);
             });
     }
 
@@ -44,6 +65,13 @@ export default class MoviesModel {
             trakt_id: traktID
         };
 
+        return this._ibdb.getRow(where, this._tableName);
+    }
+
+    getSingle(movieID){
+        const where = {
+            movie_id: movieID
+        };
         return this._ibdb.getRow(where, this._tableName);
     }
 }

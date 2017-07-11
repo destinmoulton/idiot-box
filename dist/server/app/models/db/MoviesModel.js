@@ -48,6 +48,27 @@ var MoviesModel = function () {
             });
         }
     }, {
+        key: "toggleHasWatched",
+        value: function toggleHasWatched(movieID) {
+            var _this2 = this;
+
+            return this.getSingle(movieID).then(function (movie) {
+                var where = {
+                    id: movieID
+                };
+                var data = {
+                    has_watched: 1
+                };
+                if (movie.has_watched === 1) {
+                    data.has_watched = 0;
+                }
+
+                return _this2._ibdb.update(data, where, _this2._tableName);
+            }).then(function () {
+                return _this2.getSingle(movieID);
+            });
+        }
+    }, {
         key: "getAll",
         value: function getAll() {
             return this._ibdb.getAll({}, this._tableName, "title ASC");
@@ -59,6 +80,14 @@ var MoviesModel = function () {
                 trakt_id: traktID
             };
 
+            return this._ibdb.getRow(where, this._tableName);
+        }
+    }, {
+        key: "getSingle",
+        value: function getSingle(movieID) {
+            var where = {
+                movie_id: movieID
+            };
             return this._ibdb.getRow(where, this._tableName);
         }
     }]);
