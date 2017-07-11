@@ -1,6 +1,8 @@
 export default class MoviesModel {
-    constructor(ibdb){
+    constructor(ibdb, movieToGenreModel){
         this._ibdb = ibdb;
+
+        this._movieToGenreModel = movieToGenreModel;
 
         this._tableName = "movies";
     }
@@ -24,6 +26,12 @@ export default class MoviesModel {
         return this._ibdb.insert(data, this._tableName)
             .then(()=>{
                 return this.getSingleByTraktID(data.trakt_id);
+            })
+            .then((movie)=>{
+                return this._movieToGenreModel.addMovieToArrayGenres(movie.id, apiData.genres)
+                            .then(()=>{
+                                return movie;
+                            });
             });
     }
 

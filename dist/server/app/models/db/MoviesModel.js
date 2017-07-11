@@ -9,10 +9,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var MoviesModel = function () {
-    function MoviesModel(ibdb) {
+    function MoviesModel(ibdb, movieToGenreModel) {
         _classCallCheck(this, MoviesModel);
 
         this._ibdb = ibdb;
+
+        this._movieToGenreModel = movieToGenreModel;
 
         this._tableName = "movies";
     }
@@ -39,6 +41,10 @@ var MoviesModel = function () {
 
             return this._ibdb.insert(data, this._tableName).then(function () {
                 return _this.getSingleByTraktID(data.trakt_id);
+            }).then(function (movie) {
+                return _this._movieToGenreModel.addMovieToArrayGenres(movie.id, apiData.genres).then(function () {
+                    return movie;
+                });
             });
         }
     }, {

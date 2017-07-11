@@ -3,10 +3,14 @@ import path from 'path';
 import ibdb from '../../db/IBDB';
 import logger from '../../logger';
 
+import GenresModel from './GenresModel';
 import MoviesModel from './MoviesModel';
+import MovieToGenreModel from './MovieToGenreModel';
 
 describe("MoviesModel", ()=>{
+    let genresModel = {};
     let moviesModel = {};
+    let movieToGenreModel = {};
     beforeEach(() => {
 
         const dbConfig = {
@@ -22,7 +26,9 @@ describe("MoviesModel", ()=>{
                 return ibdb._db.migrate(migConfig);
             })
             .then(()=>{
-                moviesModel = new MoviesModel(ibdb);
+                genresModel = new GenresModel(ibdb);
+                movieToGenreModel = new MovieToGenreModel(ibdb, genresModel);
+                moviesModel = new MoviesModel(ibdb, movieToGenreModel);
             });
     });
 
@@ -42,12 +48,12 @@ describe("MoviesModel", ()=>{
             });
     });
 
-    it("adds multiple movies and gets them", ()=>{
+    it("adds multiple movies; verifies random fields and genres", ()=>{
         const [dataOne, expectedDataOne] = _getFirstTestData();
         const [dataTwo, expectedDataTwo] = _getSecondTestData();
         const imagefilenameOne = "independenceday.jpg";
         const imagefilenameSecond = "armageddon.jpg";
-        expect.assertions(6);
+        expect.assertions(9);
         return moviesModel.addMovie(dataOne, imagefilenameOne)
             .then((movie)=>{
                 expect(movie).toMatchObject(expectedDataOne);
@@ -61,8 +67,22 @@ describe("MoviesModel", ()=>{
             })
             .then((movies)=>{
                 expect(movies.length).toBe(2);
+                // Check a random field
                 expect(movies[1].image_filename).toBe(imagefilenameOne);
-            });
+
+                // Get the genres for the first movie
+                return movieToGenreModel.getAllGenresForMovie(movies[0].id);
+            })
+            .then((genres)=>{
+                expect(genres.length).toBe(3);
+                expect(genres[2].slug).toBe('scifi');
+
+                // Get all the genres
+                return genresModel.getAll();
+            })
+            .then((genres)=>{
+                expect(genres.length).toBe(4);
+            })
     });
 });
 
@@ -80,10 +100,12 @@ function _getFirstTestData(){
             trakt: 123456,
             imdb: "imdbtest",
             tmdb: 98765,
-        }
+        },
+        genres: ['action', 'scifi', 'comedy']
     };
 
     let expected = Object.assign({},data);
+    delete expected.genres;
     delete expected.ids;
     expected.trakt_id = data.ids.trakt;
     expected.imdb_id = data.ids.imdb;
@@ -105,11 +127,13 @@ function _getSecondTestData(){
             trakt: 112233,
             imdb: "armaimdb",
             tmdb: 998877,
-        }
+        },
+        genres: ['action', 'scifi', 'documentary']
     };
 
     let expected = Object.assign({},data);
     delete expected.ids;
+    delete expected.genres;
     expected.trakt_id = data.ids.trakt;
     expected.imdb_id = data.ids.imdb;
     expected.tmdb_id = data.ids.tmdb;
