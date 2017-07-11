@@ -7,3 +7,15 @@
 div.ib-settings-dirsel-fs-cont{
     overflow-y: scroll;
 }
+
+div.ib-movie-search-details-box {
+    height: 215px;
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #d9d9d9;
+    margin: 5px;
+}
+
+img.ib-movie-search-details-img {
+    width: 100%;
+}
