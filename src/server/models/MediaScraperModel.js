@@ -6,10 +6,15 @@ export default class MediaScrapeModel {
     }
 
     searchMovies(movieQuery){
-        return this._trakt.search.text({
+        const options = {
             query: movieQuery,
-            type: 'movie'
-        });
+            type: 'movie',
+            extended: 'full'
+        };
+        return this._trakt.search.text(options)
+            .then((results)=>{
+                return results.map((item)=>{return item.movie});
+            })
     }
 
     searchShows(tvQuery){

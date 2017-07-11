@@ -25,9 +25,9 @@ const store = createStore(
     router: routerReducer
   }),
   applyMiddleware(
-    middlewareHistory,   
-    thunk,
-    socketMiddle
+    middlewareHistory,
+    socketMiddle,
+    thunk
   )
 );
 

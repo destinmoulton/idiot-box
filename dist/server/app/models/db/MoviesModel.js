@@ -9,10 +9,12 @@ var _createClass = function () { function defineProperties(target, props) { for 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var MoviesModel = function () {
-    function MoviesModel(ibdb) {
+    function MoviesModel(ibdb, movieToGenreModel) {
         _classCallCheck(this, MoviesModel);
 
         this._ibdb = ibdb;
+
+        this._movieToGenreModel = movieToGenreModel;
 
         this._tableName = "movies";
     }
@@ -34,11 +36,32 @@ var MoviesModel = function () {
                 trakt_id: apiData.ids.trakt,
                 imdb_id: apiData.ids.imdb,
                 tmdb_id: apiData.ids.tmdb,
-                image_filename: imageFilename
+                image_filename: imageFilename,
+                has_watched: 0
             };
 
             return this._ibdb.insert(data, this._tableName).then(function () {
                 return _this.getSingleByTraktID(data.trakt_id);
+            }).then(function (movie) {
+                return _this._movieToGenreModel.addMovieToArrayGenres(movie.id, apiData.genres).then(function () {
+                    return movie;
+                });
+            });
+        }
+    }, {
+        key: "updateHasWatched",
+        value: function updateHasWatched(movieID, hasWatched) {
+            var _this2 = this;
+
+            var where = {
+                id: movieID
+            };
+            var data = {
+                has_watched: hasWatched
+            };
+
+            return this._ibdb.update(data, where, this._tableName).then(function () {
+                return _this2.getSingle(movieID);
             });
         }
     }, {
@@ -53,6 +76,14 @@ var MoviesModel = function () {
                 trakt_id: traktID
             };
 
+            return this._ibdb.getRow(where, this._tableName);
+        }
+    }, {
+        key: "getSingle",
+        value: function getSingle(movieID) {
+            var where = {
+                id: movieID
+            };
             return this._ibdb.getRow(where, this._tableName);
         }
     }]);

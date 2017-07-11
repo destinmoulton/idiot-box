@@ -25,7 +25,8 @@ CREATE TABLE movies (
     trakt_id INTEGER,
     imdb_id TEXT,
     tmdb_id INTEGER,
-    image_filename TEXT
+    image_filename TEXT,
+    has_watched INTEGER
 );
 
 CREATE TABLE movie_to_genre (
@@ -89,6 +90,7 @@ CREATE TABLE show_season_episodes (
     imdb_id TEXT,
     tmdb_id INTEGER,
     tvrage_id INTEGER,
+    has_watched INTEGER,
     FOREIGN KEY(show_id) REFERENCES shows(id) ON DELETE CASCADE,
     FOREIGN KEY(season_id) REFERENCES show_seasons(id) ON DELETE CASCADE
 );

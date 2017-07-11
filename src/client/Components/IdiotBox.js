@@ -29,7 +29,6 @@ class IdiotBox extends Component {
         if(nextProps.isServerConnected && !this._serverIsConnected){
             // The server just connected
             this._serverIsConnected = true;
-            console.log('setting up the api');
             this.props.setupAPI();
         }
     }

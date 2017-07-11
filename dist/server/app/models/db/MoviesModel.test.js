@@ -14,14 +14,24 @@ var _logger = require('../../logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
+var _GenresModel = require('./GenresModel');
+
+var _GenresModel2 = _interopRequireDefault(_GenresModel);
+
 var _MoviesModel = require('./MoviesModel');
 
 var _MoviesModel2 = _interopRequireDefault(_MoviesModel);
 
+var _MovieToGenreModel = require('./MovieToGenreModel');
+
+var _MovieToGenreModel2 = _interopRequireDefault(_MovieToGenreModel);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 describe("MoviesModel", function () {
+    var genresModel = {};
     var moviesModel = {};
+    var movieToGenreModel = {};
     beforeEach(function () {
 
         var dbConfig = {
@@ -35,7 +45,9 @@ describe("MoviesModel", function () {
         return _IBDB2.default.connect(dbConfig).then(function () {
             return _IBDB2.default._db.migrate(migConfig);
         }).then(function () {
-            moviesModel = new _MoviesModel2.default(_IBDB2.default);
+            genresModel = new _GenresModel2.default(_IBDB2.default);
+            movieToGenreModel = new _MovieToGenreModel2.default(_IBDB2.default, genresModel);
+            moviesModel = new _MoviesModel2.default(_IBDB2.default, movieToGenreModel);
         });
     });
 
@@ -57,11 +69,31 @@ describe("MoviesModel", function () {
         });
     });
 
-    it("adds multiple movies and gets them", function () {
+    it("toggles a movie to watched and unwatched", function () {
         var _getFirstTestData4 = _getFirstTestData(),
             _getFirstTestData5 = _slicedToArray(_getFirstTestData4, 2),
-            dataOne = _getFirstTestData5[0],
-            expectedDataOne = _getFirstTestData5[1];
+            data = _getFirstTestData5[0],
+            expected = _getFirstTestData5[1];
+
+        var imagefilename = "independenceday.jpg";
+        expect.assertions(4);
+        return moviesModel.addMovie(data, imagefilename).then(function (movie) {
+            expect(movie).toMatchObject(expected);
+            expect(movie.has_watched).toBe(0);
+            return moviesModel.updateHasWatched(movie.id, 1);
+        }).then(function (movie) {
+            expect(movie.has_watched).toBe(1);
+            return moviesModel.updateHasWatched(movie.id, 0);
+        }).then(function (movie) {
+            expect(movie.has_watched).toBe(0);
+        });
+    });
+
+    it("adds multiple movies; verifies random fields and genres", function () {
+        var _getFirstTestData6 = _getFirstTestData(),
+            _getFirstTestData7 = _slicedToArray(_getFirstTestData6, 2),
+            dataOne = _getFirstTestData7[0],
+            expectedDataOne = _getFirstTestData7[1];
 
         var _getSecondTestData2 = _getSecondTestData(),
             _getSecondTestData3 = _slicedToArray(_getSecondTestData2, 2),
@@ -70,7 +102,7 @@ describe("MoviesModel", function () {
 
         var imagefilenameOne = "independenceday.jpg";
         var imagefilenameSecond = "armageddon.jpg";
-        expect.assertions(6);
+        expect.assertions(9);
         return moviesModel.addMovie(dataOne, imagefilenameOne).then(function (movie) {
             expect(movie).toMatchObject(expectedDataOne);
             expect(movie.image_filename).toBe(imagefilenameOne);
@@ -81,7 +113,19 @@ describe("MoviesModel", function () {
             return moviesModel.getAll();
         }).then(function (movies) {
             expect(movies.length).toBe(2);
+            // Check a random field
             expect(movies[1].image_filename).toBe(imagefilenameOne);
+
+            // Get the genres for the first movie
+            return movieToGenreModel.getAllGenresForMovie(movies[0].id);
+        }).then(function (genres) {
+            expect(genres.length).toBe(3);
+            expect(genres[2].slug).toBe('scifi');
+
+            // Get all the genres
+            return genresModel.getAll();
+        }).then(function (genres) {
+            expect(genres.length).toBe(4);
         });
     });
 });
@@ -100,10 +144,12 @@ function _getFirstTestData() {
             trakt: 123456,
             imdb: "imdbtest",
             tmdb: 98765
-        }
+        },
+        genres: ['action', 'scifi', 'comedy']
     };
 
     var expected = Object.assign({}, data);
+    delete expected.genres;
     delete expected.ids;
     expected.trakt_id = data.ids.trakt;
     expected.imdb_id = data.ids.imdb;
@@ -125,11 +171,13 @@ function _getSecondTestData() {
             trakt: 112233,
             imdb: "armaimdb",
             tmdb: 998877
-        }
+        },
+        genres: ['action', 'scifi', 'documentary']
     };
 
     var expected = Object.assign({}, data);
     delete expected.ids;
+    delete expected.genres;
     expected.trakt_id = data.ids.trakt;
     expected.imdb_id = data.ids.imdb;
     expected.tmdb_id = data.ids.tmdb;

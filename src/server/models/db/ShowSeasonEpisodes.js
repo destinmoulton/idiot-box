@@ -36,6 +36,35 @@ export class ShowSeasonEpisodesModel {
             });
     }
 
+    toggleHasWatched(episodeID){
+        return this.getSingle(episodeID)
+            .then((episode) => {
+                const where = {
+                    id: episodeID
+                };
+                let data = {
+                    has_watched: 1
+                };
+                if (episode.has_watched === 1) {
+                    data.has_watched = 0;
+                }
+
+                return this._ibdb.update(data, where, this._tableName)
+
+            })
+            .then(() => {
+                return this.getSingle(episodeID);
+            });
+    }
+
+    getSingle(episodeID){
+        const where = {
+            id: episodeID
+        };
+
+        return this._ibdb.getRow(where, this._tableName);
+    }
+
     getSingleByShowSeasonTrakt(showID, seasonID, episodeNumber, traktID){
         const where = {
             show_id: showID,
