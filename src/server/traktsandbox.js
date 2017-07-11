@@ -2,7 +2,7 @@ import moment from 'moment';
 import Trakt from 'trakt.tv';
 import traktConfig from './config/trakt.config';
 const trakt = new Trakt(traktConfig);
-
+/**
 trakt.search.text({
             query: 'days',
             type: 'movie',
@@ -38,3 +38,27 @@ trakt.episodes.summary({
     console.log(res);
 });
 **/
+let nums = [1, 5, 12];
+
+let process = [];
+
+nums.forEach((num)=>{
+    process.push(firstPromise(num).then((second)=>{return secondPromise(second)}));
+});
+
+Promise.all(process)
+    .then((results)=>{
+        console.log(results);
+    });
+
+function firstPromise(seed){
+    return new Promise((resolve, reject)=>{
+        resolve(seed+5);
+    });
+}
+
+function secondPromise(secondSeed){
+    return new Promise((resolve, reject)=>{
+        resolve(secondSeed+2);
+    });
+}
