@@ -57,6 +57,36 @@ var ShowSeasonEpisodesModel = exports.ShowSeasonEpisodesModel = function () {
             });
         }
     }, {
+        key: 'toggleHasWatched',
+        value: function toggleHasWatched(episodeID) {
+            var _this2 = this;
+
+            return this.getSingle(episodeID).then(function (episode) {
+                var where = {
+                    id: episodeID
+                };
+                var data = {
+                    has_watched: 1
+                };
+                if (episode.has_watched === 1) {
+                    data.has_watched = 0;
+                }
+
+                return _this2._ibdb.update(data, where, _this2._tableName);
+            }).then(function () {
+                return _this2.getSingle(episodeID);
+            });
+        }
+    }, {
+        key: 'getSingle',
+        value: function getSingle(episodeID) {
+            var where = {
+                id: episodeID
+            };
+
+            return this._ibdb.getRow(where, this._tableName);
+        }
+    }, {
         key: 'getSingleByShowSeasonTrakt',
         value: function getSingleByShowSeasonTrakt(showID, seasonID, episodeNumber, traktID) {
             var where = {
