@@ -59,6 +59,14 @@ var GenresModel = function () {
             };
             return this._ibdb.getRow(where, this._tableName);
         }
+    }, {
+        key: "getSingle",
+        value: function getSingle(genreID) {
+            var where = {
+                id: genreID
+            };
+            return this._ibdb.getRow(where, this._tableName);
+        }
     }]);
 
     return GenresModel;

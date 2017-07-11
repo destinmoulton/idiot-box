@@ -39,4 +39,11 @@ export default class GenresModel {
         };
         return this._ibdb.getRow(where, this._tableName);
     }
+
+    getSingle(genreID){
+        const where = {
+            id: genreID
+        };
+        return this._ibdb.getRow(where, this._tableName);
+    }
 }
