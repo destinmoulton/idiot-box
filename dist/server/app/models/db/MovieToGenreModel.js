@@ -8,7 +8,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var MovieToGenreModel = exports.MovieToGenreModel = function () {
+var MovieToGenreModel = function () {
     function MovieToGenreModel(ibdb, genresModel) {
         _classCallCheck(this, MovieToGenreModel);
 
@@ -18,15 +18,51 @@ var MovieToGenreModel = exports.MovieToGenreModel = function () {
     }
 
     _createClass(MovieToGenreModel, [{
-        key: "addMovieToGenres",
-        value: function addMovieToGenres(movieID, genreArray) {
+        key: "addMovieToArrayGenres",
+        value: function addMovieToArrayGenres(movieID, genreArray) {
             var _this = this;
 
-            genreArray.forEach(function (genreSlug) {});
-            var data = {};
+            var toProcess = [];
+            genreArray.forEach(function (genreSlug) {
+                toProcess.push(_this._genresModel.addGenre(genreSlug).then(function (genreInfo) {
+                    return _this.addMovieToGenre(movieID, genreInfo.id);
+                }));
+            });
+
+            return Promise.all(toProcess);
+        }
+    }, {
+        key: "addMovieToGenre",
+        value: function addMovieToGenre(movieID, genreID) {
+            var _this2 = this;
+
+            var data = {
+                movie_id: movieID,
+                genre_id: genreID
+            };
 
             return this._ibdb.insert(data, this._tableName).then(function () {
-                return _this.getSingleByTraktID(data.trakt_id);
+                return _this2.getSingleByMovieAndGenre(movieID, genreID);
+            });
+        }
+    }, {
+        key: "getAllGenresForMovie",
+        value: function getAllGenresForMovie(movieID) {
+            var _this3 = this;
+
+            var where = {
+                movie_id: movieID
+            };
+
+            return this._ibdb.getAll(where, this._tableName).then(function (movieToGenres) {
+                var toProcess = [];
+                movieToGenres.forEach(function (link) {
+                    toProcess.push(_this3._genresModel.getSingle(link.genre_id));
+                });
+
+                return Promise.all(toProcess);
+            }).then(function (genres) {
+                return genres.sort(_this3._sortGenresByName);
             });
         }
     }, {
@@ -48,7 +84,23 @@ var MovieToGenreModel = exports.MovieToGenreModel = function () {
 
             return this._ibdb.getRow(where, this._tableName);
         }
+
+        // Sort the array of genres by the 'name' property
+
+    }, {
+        key: "_sortGenresByName",
+        value: function _sortGenresByName(a, b) {
+            if (a.slug < b.slug) {
+                return -1;
+            }
+            if (a.slug > b.slug) {
+                return 1;
+            }
+            return 0;
+        }
     }]);
 
     return MovieToGenreModel;
 }();
+
+exports.default = MovieToGenreModel;
