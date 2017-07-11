@@ -18,9 +18,16 @@ var MediaScrapeModel = function () {
     _createClass(MediaScrapeModel, [{
         key: 'searchMovies',
         value: function searchMovies(movieQuery) {
-            return this._trakt.search.text({
+            var options = {
                 query: movieQuery,
-                type: 'movie'
+                type: 'movie',
+                extended: 'full'
+            };
+            return this._trakt.search.text(options).then(function (results) {
+                var ret = [];
+                return results.map(function (item) {
+                    return item.movie;
+                });
             });
         }
     }, {
