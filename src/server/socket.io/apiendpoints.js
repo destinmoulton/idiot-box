@@ -4,9 +4,12 @@ import ibdb from '../db/IBDB';
 import traktConfig from '../config/trakt.config';
 
 import FilesystemModel from '../models/FilesystemModel';
+import IMDBScraperModel from '../models/IMDBScraperModel';
 import MediaScraperModel from '../models/MediaScraperModel';
 import SettingsModel from '../models/db/SettingsModel';
+
 const filesystemModel = new FilesystemModel();
+const imdbScraperModel = new IMDBScraperModel();
 const mediaScraperModel = new MediaScraperModel(new Trakt(traktConfig));
 const settingsModel = new SettingsModel(ibdb);
 
@@ -16,6 +19,22 @@ export default {
             get: {
                 params: ['path'],
                 func: (pathToList)=> filesystemModel.getDirList(pathToList)
+            }
+        }
+    },
+    imdb: {
+        image: {
+            get: {
+                params: ['imdb_id'],
+                func: (imdbID)=> imdbScraperModel.getPosterURL(imdbID)
+            }
+        }
+    },
+    mediascraper: {
+        movies: {
+            search: {
+                params: ['search_string'],
+                func: (searchString)=> mediaScraperModel.searchMovies(searchString)
             }
         }
     },
@@ -41,12 +60,5 @@ export default {
             }
         }
     },
-    mediascraper: {
-        movies: {
-            search: {
-                params: ['search_string'],
-                func: (searchString)=> mediaScraperModel.searchMovies(searchString)
-            }
-        }
-    }
+    
 }

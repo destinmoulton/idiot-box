@@ -20,6 +20,10 @@ var _FilesystemModel = require('../models/FilesystemModel');
 
 var _FilesystemModel2 = _interopRequireDefault(_FilesystemModel);
 
+var _IMDBScraperModel = require('../models/IMDBScraperModel');
+
+var _IMDBScraperModel2 = _interopRequireDefault(_IMDBScraperModel);
+
 var _MediaScraperModel = require('../models/MediaScraperModel');
 
 var _MediaScraperModel2 = _interopRequireDefault(_MediaScraperModel);
@@ -31,6 +35,7 @@ var _SettingsModel2 = _interopRequireDefault(_SettingsModel);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var filesystemModel = new _FilesystemModel2.default();
+var imdbScraperModel = new _IMDBScraperModel2.default();
 var mediaScraperModel = new _MediaScraperModel2.default(new _trakt2.default(_trakt4.default));
 var settingsModel = new _SettingsModel2.default(_IBDB2.default);
 
@@ -41,6 +46,26 @@ exports.default = {
                 params: ['path'],
                 func: function func(pathToList) {
                     return filesystemModel.getDirList(pathToList);
+                }
+            }
+        }
+    },
+    imdb: {
+        image: {
+            get: {
+                params: ['imdb_id'],
+                func: function func(imdbID) {
+                    return imdbScraperModel.getPosterURL(imdbID);
+                }
+            }
+        }
+    },
+    mediascraper: {
+        movies: {
+            search: {
+                params: ['search_string'],
+                func: function func(searchString) {
+                    return mediaScraperModel.searchMovies(searchString);
                 }
             }
         }
@@ -74,15 +99,6 @@ exports.default = {
                 }
             }
         }
-    },
-    mediascraper: {
-        movies: {
-            search: {
-                params: ['search_string'],
-                func: function func(searchString) {
-                    return mediaScraperModel.searchMovies(searchString);
-                }
-            }
-        }
     }
+
 };
