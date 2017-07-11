@@ -36,7 +36,8 @@ var MoviesModel = function () {
                 trakt_id: apiData.ids.trakt,
                 imdb_id: apiData.ids.imdb,
                 tmdb_id: apiData.ids.tmdb,
-                image_filename: imageFilename
+                image_filename: imageFilename,
+                has_watched: 0
             };
 
             return this._ibdb.insert(data, this._tableName).then(function () {
@@ -48,23 +49,18 @@ var MoviesModel = function () {
             });
         }
     }, {
-        key: "toggleHasWatched",
-        value: function toggleHasWatched(movieID) {
+        key: "updateHasWatched",
+        value: function updateHasWatched(movieID, hasWatched) {
             var _this2 = this;
 
-            return this.getSingle(movieID).then(function (movie) {
-                var where = {
-                    id: movieID
-                };
-                var data = {
-                    has_watched: 1
-                };
-                if (movie.has_watched === 1) {
-                    data.has_watched = 0;
-                }
+            var where = {
+                id: movieID
+            };
+            var data = {
+                has_watched: hasWatched
+            };
 
-                return _this2._ibdb.update(data, where, _this2._tableName);
-            }).then(function () {
+            return this._ibdb.update(data, where, this._tableName).then(function () {
                 return _this2.getSingle(movieID);
             });
         }
@@ -86,7 +82,7 @@ var MoviesModel = function () {
         key: "getSingle",
         value: function getSingle(movieID) {
             var where = {
-                movie_id: movieID
+                id: movieID
             };
             return this._ibdb.getRow(where, this._tableName);
         }

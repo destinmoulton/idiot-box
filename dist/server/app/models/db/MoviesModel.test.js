@@ -69,11 +69,31 @@ describe("MoviesModel", function () {
         });
     });
 
-    it("adds multiple movies; verifies random fields and genres", function () {
+    it("toggles a movie to watched and unwatched", function () {
         var _getFirstTestData4 = _getFirstTestData(),
             _getFirstTestData5 = _slicedToArray(_getFirstTestData4, 2),
-            dataOne = _getFirstTestData5[0],
-            expectedDataOne = _getFirstTestData5[1];
+            data = _getFirstTestData5[0],
+            expected = _getFirstTestData5[1];
+
+        var imagefilename = "independenceday.jpg";
+        expect.assertions(4);
+        return moviesModel.addMovie(data, imagefilename).then(function (movie) {
+            expect(movie).toMatchObject(expected);
+            expect(movie.has_watched).toBe(0);
+            return moviesModel.updateHasWatched(movie.id, 1);
+        }).then(function (movie) {
+            expect(movie.has_watched).toBe(1);
+            return moviesModel.updateHasWatched(movie.id, 0);
+        }).then(function (movie) {
+            expect(movie.has_watched).toBe(0);
+        });
+    });
+
+    it("adds multiple movies; verifies random fields and genres", function () {
+        var _getFirstTestData6 = _getFirstTestData(),
+            _getFirstTestData7 = _slicedToArray(_getFirstTestData6, 2),
+            dataOne = _getFirstTestData7[0],
+            expectedDataOne = _getFirstTestData7[1];
 
         var _getSecondTestData2 = _getSecondTestData(),
             _getSecondTestData3 = _slicedToArray(_getSecondTestData2, 2),

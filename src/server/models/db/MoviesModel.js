@@ -20,7 +20,8 @@ export default class MoviesModel {
             trakt_id: apiData.ids.trakt,
             imdb_id: apiData.ids.imdb,
             tmdb_id: apiData.ids.tmdb,
-            image_filename: imageFilename
+            image_filename: imageFilename,
+            has_watched: 0
         };
 
         return this._ibdb.insert(data, this._tableName)
@@ -35,22 +36,15 @@ export default class MoviesModel {
             });
     }
 
-    toggleHasWatched(movieID){
-        return this.getSingle(movieID)
-            .then((movie) => {
-                const where = {
-                    id: movieID
-                };
-                let data = {
-                    has_watched: 1
-                };
-                if (movie.has_watched === 1) {
-                    data.has_watched = 0;
-                }
+    updateHasWatched(movieID, hasWatched){
+        const where = {
+            id: movieID
+        };
+        let data = {
+            has_watched: hasWatched
+        };
 
-                return this._ibdb.update(data, where, this._tableName)
-
-            })
+        return this._ibdb.update(data, where, this._tableName)
             .then(() => {
                 return this.getSingle(movieID);
             });
@@ -70,7 +64,7 @@ export default class MoviesModel {
 
     getSingle(movieID){
         const where = {
-            movie_id: movieID
+            id: movieID
         };
         return this._ibdb.getRow(where, this._tableName);
     }

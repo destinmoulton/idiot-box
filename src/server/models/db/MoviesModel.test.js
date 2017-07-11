@@ -37,7 +37,6 @@ describe("MoviesModel", ()=>{
     });
 
     it("adds a movie", ()=>{
-        
         const [data, expected] = _getFirstTestData();
         const imagefilename = "independenceday.jpg";
         expect.assertions(2);
@@ -46,6 +45,25 @@ describe("MoviesModel", ()=>{
                 expect(movie).toMatchObject(expected);
                 expect(movie.image_filename).toBe(imagefilename);
             });
+    });
+
+    it("toggles a movie to watched and unwatched", ()=>{
+        const [data, expected] = _getFirstTestData();
+        const imagefilename = "independenceday.jpg";
+        expect.assertions(4);
+        return moviesModel.addMovie(data, imagefilename)
+            .then((movie)=>{
+                expect(movie).toMatchObject(expected);
+                expect(movie.has_watched).toBe(0);
+                return moviesModel.updateHasWatched(movie.id, 1);
+            })
+            .then((movie)=>{
+                expect(movie.has_watched).toBe(1);
+                return moviesModel.updateHasWatched(movie.id, 0);
+            })
+            .then((movie)=>{
+                expect(movie.has_watched).toBe(0);
+            })
     });
 
     it("adds multiple movies; verifies random fields and genres", ()=>{
