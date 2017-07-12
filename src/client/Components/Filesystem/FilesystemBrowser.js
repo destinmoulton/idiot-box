@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Checkbox, Icon, Table } from 'antd';
+import { Button, Checkbox, Icon, Table } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 import { socketClient } from '../../store';
@@ -12,12 +12,13 @@ class FilesystemBrowser extends Component {
         dirList: PropTypes.array.isRequired,
         hasCheckboxes: PropTypes.bool.isRequired,
         initialPath: PropTypes.string.isRequired,
-        serverInfo: PropTypes.object.isRequired,
         lockToInitialPath: PropTypes.bool.isRequired,
-        showDirectories: PropTypes.bool.isRequired,
-        showFiles: PropTypes.bool.isRequired,
         onChangeDirectory: PropTypes.func,
-        parentHandleSelectChange: PropTypes.func
+        parentHandleSelectChange: PropTypes.func,
+        selectedRowKeys: PropTypes.array,
+        serverInfo: PropTypes.object.isRequired,
+        showDirectories: PropTypes.bool.isRequired,
+        showFiles: PropTypes.bool.isRequired
     };
 
     static defaultProps = {
@@ -25,10 +26,10 @@ class FilesystemBrowser extends Component {
         dirList: [],
         hasCheckboxes: false,
         lockToInitialPath: true,
+        onChangeDirectory: ()=>{},
+        parentHandleSelectChange: ()=>{},
         showDirectories: true,
         showFiles: true,
-        onChangeDirectory: ()=>{},
-        parentHandleSelectChange: ()=>{}
     }
 
     constructor(props){
@@ -37,7 +38,6 @@ class FilesystemBrowser extends Component {
         this.state = {
             currentPath: props.initialPath,
             dirList: [],
-            selectedRowKeys: [],
             showHidden: false
         };
     }
@@ -54,6 +54,10 @@ class FilesystemBrowser extends Component {
         };
         
         emitAPIRequest("filesystem.dir.get", options, this._dirListReceived.bind(this), false);
+    }
+
+    _reloadDir(){
+        this._getDirFromServer(this.state.currentPath);
     }
 
     _dirListReceived(dirList, recd){
@@ -189,33 +193,31 @@ class FilesystemBrowser extends Component {
         ];
     }
 
-    _onSelectChange(selectedRowKeys){
-        const { parentHandleSelectChange } = this.props;
-
-        parentHandleSelectChange(selectedRowKeys);
-
-        this.setState({
-            ...this.state,
-            selectedRowKeys
-        });
-    }
-
     render() {
-        const { actionColumns, hasCheckboxes } = this.props;
-        const { currentPath, dirList, selectedRowKeys } = this.state;
+        const { 
+            actionColumns,
+            hasCheckboxes,
+            parentHandleSelectChange,
+            selectedRowKeys
+        } = this.props;
+
+        const { 
+            currentPath,
+            dirList,
+        } = this.state;
+
         const rows = this._prepareDirList(dirList);
-        
+
         let columns = [...this._buildColumns(), ...actionColumns];
-        
 
         let rowSelection = false;
         if(hasCheckboxes){
             rowSelection = {
                 selectedRowKeys,
-                onChange: this._onSelectChange.bind(this)
+                onChange: parentHandleSelectChange
             };
         }
-        
+
         return (
             <div>
                 <Table 
@@ -223,7 +225,13 @@ class FilesystemBrowser extends Component {
                     dataSource={rows} 
                     pagination={false} 
                     size="small"
-                    title={()=> currentPath}
+                    title={()=> {
+                        return (
+                            <span>
+                                <Button icon="reload" onClick={this._reloadDir.bind(this)}></Button>&nbsp;{currentPath}
+                            </span>
+                        )
+                    }}
                     rowSelection={rowSelection}
                 />
             </div>

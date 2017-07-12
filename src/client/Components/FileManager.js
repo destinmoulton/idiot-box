@@ -6,25 +6,27 @@ import { Icon, Button, Modal } from 'antd';
 import FilesystemBrowser from './Filesystem/FilesystemBrowser';
 
 class FileManager extends Component {
+    INITIAL_PATH = "/home/destin/Downloads/idiot-box-sandbox";
     constructor(props){
         super(props);
 
         this.state = {
+            currentPath: this.INITIAL_PATH,
             selectedRows: []
         };
     }
 
-    _handleChangeDirectory(evt){
+    _handleChangeDirectory(newDir){
+        
         this.setState({
-            ...this.state,
+            currentPath: newDir,
             selectedRows: []
         })
     }
 
-    _handleCheckboxSelection(selectedRows){
+    _handleSelectionChange(selectedRows){
         
         this.setState({
-            ...this.state,
             selectedRows
         });
     }
@@ -54,24 +56,28 @@ class FileManager extends Component {
 
     render() {
         const { selectedRows } = this.state;
+        console.log(selectedRows);
         const hasSelected = (selectedRows.length > 0) ? true : false;
         const buttonDisabled = !hasSelected;
-        const initialPath = "/home/destin/Downloads/idiot-box-sandbox"
+
         return (
             <div>
+                &nbsp;
                 <Button.Group>
+                    
                     <Button type="primary" icon="search" disabled={buttonDisabled}>ID</Button>
                     <Button type="danger" icon="delete" disabled={buttonDisabled}>Delete</Button>
                 </Button.Group>
                 <FilesystemBrowser 
-                            actionColumns={this._buildActionColumns()}
-                            initialPath={initialPath} 
-                            onChangeDirectory={this._handleChangeDirectory.bind(this)}
-                            showDirectories={true}
-                            showFiles={true}
-                            hasCheckboxes={true}
-                            parentHandleSelectChange={this._handleCheckboxSelection.bind(this)}
-                        />
+                    actionColumns={this._buildActionColumns()}
+                    hasCheckboxes={true}
+                    initialPath={this.INITIAL_PATH} 
+                    onChangeDirectory={this._handleChangeDirectory.bind(this)}
+                    parentHandleSelectChange={this._handleSelectionChange.bind(this)}
+                    selectedRowKeys={selectedRows}
+                    showDirectories={true}
+                    showFiles={true}
+                />
             </div>
         );
     }
