@@ -10,6 +10,7 @@ import { socketClient } from '../../store';
 class FilesystemBrowser extends Component {
     static propTypes = {
         dirList: PropTypes.array.isRequired,
+        forceReload: PropTypes.bool,
         hasCheckboxes: PropTypes.bool.isRequired,
         initialPath: PropTypes.string.isRequired,
         lockToInitialPath: PropTypes.bool.isRequired,
@@ -24,6 +25,7 @@ class FilesystemBrowser extends Component {
     static defaultProps = {
         actionColumns: [],
         dirList: [],
+        forceReload: false,
         hasCheckboxes: false,
         lockToInitialPath: true,
         onChangeDirectory: ()=>{},
@@ -45,6 +47,12 @@ class FilesystemBrowser extends Component {
 
     componentWillMount(){
         this._getDirFromServer(this.state.currentPath);
+    }
+
+    componentWillReceiveProps(nextProps){
+        if(nextProps.forceReload){
+            this._reloadDir();
+        }
     }
 
     _getDirFromServer(path){
@@ -209,7 +217,7 @@ class FilesystemBrowser extends Component {
             </div>
         );
     }
-    
+
     render() {
         const { 
             actionColumns,

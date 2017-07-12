@@ -14,15 +14,23 @@ class FileManager extends Component {
         this.state = {
             currentPath: this.INITIAL_PATH,
             dirList: [],
+            isReloading: false,
             selectedRows: []
         };
+    }
+
+    _reloadDirList(){
+        this.setState({
+            isReloading: true
+        });
     }
 
     _handleChangeDirectory(newDir, dirList){
         this.setState({
             currentPath: newDir,
             dirList,
-            selectedRows: []
+            selectedRows: [],
+            isReloading: false
         })
     }
 
@@ -34,6 +42,7 @@ class FileManager extends Component {
 
     _handleClickDelete(evt){
         const item = evt.currentTarget.getAttribute('data-item-name');
+        
         console.log("Delete Clicked", item);
     }
     
@@ -71,26 +80,29 @@ class FileManager extends Component {
     }
 
     render() {
-        const { selectedRows } = this.state;
+        const { isReloading, selectedRows } = this.state;
 
         const hasSelected = (selectedRows.length > 0) ? true : false;
         const buttonDisabled = !hasSelected;
 
         return (
             <div>
-                <Button 
-                    type="primary"
-                    icon="video-camera"
-                    onClick={this._handleSelectVideos.bind(this)}
-                >Select Videos</Button>&nbsp;&nbsp;
-                <Button.Group>
-                    <Button type="primary" icon="search" disabled={buttonDisabled}>ID</Button>
-                    <Button type="danger" icon="delete" disabled={buttonDisabled}>Delete</Button>
-                </Button.Group>
+                <div className="ib-filemanager-button-bar">
+                    <Button 
+                        type="primary"
+                        icon="video-camera"
+                        onClick={this._handleSelectVideos.bind(this)}
+                    >Select Videos</Button>&nbsp;&nbsp;
+                    <Button.Group>
+                        <Button type="primary" icon="search" disabled={buttonDisabled}>ID</Button>
+                        <Button type="danger" icon="delete" disabled={buttonDisabled}>Trash</Button>
+                    </Button.Group>
+                </div>
                 <FilesystemBrowser 
                     actionColumns={this._buildActionColumns()}
+                    forceReload={isReloading}
                     hasCheckboxes={true}
-                    initialPath={this.INITIAL_PATH} 
+                    initialPath={this.INITIAL_PATH}
                     onChangeDirectory={this._handleChangeDirectory.bind(this)}
                     parentHandleSelectChange={this._handleSelectionChange.bind(this)}
                     selectedRowKeys={selectedRows}
