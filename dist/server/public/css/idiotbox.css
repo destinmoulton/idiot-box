@@ -24,3 +24,9 @@ div.ib-movie-search-details-img-box {
 img.ib-movie-search-details-img {
     width: 100%;
 }
+
+div.ib-filebrowser-spin-box {
+    width: 100%;
+    padding-top: 30px;
+    text-align: center;
+}

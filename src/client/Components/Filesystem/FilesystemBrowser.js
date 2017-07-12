@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Checkbox, Icon, Table } from 'antd';
+import { Button, Checkbox, Icon, Spin, Table } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 import { socketClient } from '../../store';
@@ -36,6 +36,7 @@ class FilesystemBrowser extends Component {
         super(props);
 
         this.state = {
+            isLoading: false,
             currentPath: props.initialPath,
             dirList: [],
             showHidden: false
@@ -52,8 +53,12 @@ class FilesystemBrowser extends Component {
         const options = {
             path
         };
-        
+
         emitAPIRequest("filesystem.dir.get", options, this._dirListReceived.bind(this), false);
+
+        this.setState({
+            isLoading: true
+        });
     }
 
     _reloadDir(){
@@ -70,7 +75,8 @@ class FilesystemBrowser extends Component {
 
         this.setState({
             currentPath: recd.request.params.path,
-            dirList
+            dirList,
+            isLoading: false
         });
     }
 
@@ -195,6 +201,15 @@ class FilesystemBrowser extends Component {
         ];
     }
 
+    _buildLoadingBox(){
+        return (
+            <div className="ib-filebrowser-spin-box">
+                <Spin />
+                <br/>Loading directory list...
+            </div>
+        );
+    }
+    
     render() {
         const { 
             actionColumns,
@@ -206,6 +221,7 @@ class FilesystemBrowser extends Component {
         const { 
             currentPath,
             dirList,
+            isLoading
         } = this.state;
 
         const rows = dirList;
@@ -220,22 +236,27 @@ class FilesystemBrowser extends Component {
             };
         }
 
+        let displayComponent = this._buildLoadingBox();
+        if(!isLoading){
+            displayComponent = <Table 
+                                    columns={columns} 
+                                    dataSource={rows} 
+                                    pagination={false} 
+                                    size="small"
+                                    title={()=> {
+                                        return (
+                                            <span>
+                                                <Button icon="reload" onClick={this._reloadDir.bind(this)}></Button>&nbsp;&nbsp;{currentPath}
+                                            </span>
+                                        )
+                                    }}
+                                    rowSelection={rowSelection}
+                                />;
+        }
+        
         return (
             <div>
-                <Table 
-                    columns={columns} 
-                    dataSource={rows} 
-                    pagination={false} 
-                    size="small"
-                    title={()=> {
-                        return (
-                            <span>
-                                <Button icon="reload" onClick={this._reloadDir.bind(this)}></Button>&nbsp;&nbsp;{currentPath}
-                            </span>
-                        )
-                    }}
-                    rowSelection={rowSelection}
-                />
+                {displayComponent}
             </div>
         );
     }
