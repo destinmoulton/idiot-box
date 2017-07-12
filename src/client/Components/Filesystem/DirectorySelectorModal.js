@@ -56,7 +56,8 @@ class DirectorySelectorModal extends Component {
                             initialPath={initialPath} 
                             onChangeDirectory={onChangeDirectory}
                             showDirectories={true}
-                            showFiles={false} />
+                            showFiles={false}
+                        />
                     </div>
                 </Modal>
             </div>
