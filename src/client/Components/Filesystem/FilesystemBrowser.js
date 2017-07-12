@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Icon, Table } from 'antd';
+import { Button, Checkbox, Icon, Spin, Table } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 import { socketClient } from '../../store';
@@ -10,26 +10,35 @@ import { socketClient } from '../../store';
 class FilesystemBrowser extends Component {
     static propTypes = {
         dirList: PropTypes.array.isRequired,
+        forceReload: PropTypes.bool,
+        hasCheckboxes: PropTypes.bool.isRequired,
         initialPath: PropTypes.string.isRequired,
-        serverInfo: PropTypes.object.isRequired,
         lockToInitialPath: PropTypes.bool.isRequired,
+        onChangeDirectory: PropTypes.func,
+        parentHandleSelectChange: PropTypes.func,
+        selectedRowKeys: PropTypes.array,
+        serverInfo: PropTypes.object.isRequired,
         showDirectories: PropTypes.bool.isRequired,
-        showFiles: PropTypes.bool.isRequired,
-        onChangeDirectory: PropTypes.func
+        showFiles: PropTypes.bool.isRequired
     };
 
     static defaultProps = {
+        actionColumns: [],
         dirList: [],
+        forceReload: false,
+        hasCheckboxes: false,
         lockToInitialPath: true,
+        onChangeDirectory: ()=>{},
+        parentHandleSelectChange: ()=>{},
         showDirectories: true,
         showFiles: true,
-        onChangeDirectory: ()=>{}
     }
 
     constructor(props){
         super(props);
 
         this.state = {
+            isLoading: false,
             currentPath: props.initialPath,
             dirList: [],
             showHidden: false
@@ -40,25 +49,42 @@ class FilesystemBrowser extends Component {
         this._getDirFromServer(this.state.currentPath);
     }
 
+    componentWillReceiveProps(nextProps){
+        if(nextProps.forceReload){
+            this._reloadDir();
+        }
+    }
+
     _getDirFromServer(path){
         const { emitAPIRequest } = this.props;
 
         const options = {
             path
         };
-        
+
         emitAPIRequest("filesystem.dir.get", options, this._dirListReceived.bind(this), false);
+
+        this.setState({
+            isLoading: true
+        });
     }
 
-    _dirListReceived(dirList, recd){
+    _reloadDir(){
+        this._getDirFromServer(this.state.currentPath);
+    }
+
+    _dirListReceived(newDirList, recd){
         const { onChangeDirectory } = this.props;
 
+        const dirList = this._prepareDirList(newDirList);
+
         //Notify the parent components of a directory change
-        onChangeDirectory(recd.request.params.path);
+        onChangeDirectory(recd.request.params.path, dirList);
 
         this.setState({
             currentPath: recd.request.params.path,
-            dirList
+            dirList,
+            isLoading: false
         });
     }
 
@@ -83,7 +109,6 @@ class FilesystemBrowser extends Component {
             directories.push(parentDirectory);
         }
         
-        let key = 1;
         dirList.forEach((item)=>{
             let includeItem = true;
             if(!showHidden && item.name.startsWith('.')){
@@ -93,7 +118,7 @@ class FilesystemBrowser extends Component {
             if(includeItem){
                 const newItem = {
                     ...item,
-                    key,
+                    key: item.name,
                     size: this._humanFileSize(item.size, false)
                 };
                 if(newItem.isDirectory){
@@ -101,7 +126,6 @@ class FilesystemBrowser extends Component {
                 } else {
                     files.push(newItem);
                 }
-                key++;
             }
         });
 
@@ -158,38 +182,89 @@ class FilesystemBrowser extends Component {
         this._getDirFromServer(newPath);
     }
 
-    render() {
-        const {currentPath, dirList} = this.state;
-        const rows = this._prepareDirList(dirList);
-        const columns = [{
-            title: "Name",
-            dataIndex: "name",
-            render: (text, record)=>{
-                if(record.isDirectory){
-                    return (
-                        <a href="javascript:void(0);" 
-                           onClick={this._handleDirClick.bind(this)} 
-                           data-directory-name={record.name}
-                           >
-                        <Icon type={"folder"} />&nbsp;&nbsp;{record.name}
-                        </a>
-                    )
-                } else {
-                    return (<span>{record.name}</span>);
+    _buildColumns(){
+        return [
+            {
+                title: "Name",
+                dataIndex: "name",
+                render: (text, record) => {
+                    if (record.isDirectory) {
+                        return (
+                            <a href="javascript:void(0);"
+                                onClick={this._handleDirClick.bind(this)}
+                                data-directory-name={record.name}
+                            >
+                                <Icon type={"folder"} />&nbsp;&nbsp;{record.name}
+                            </a>
+                        )
+                    } else {
+                        return (<span>{record.name}</span>);
+                    }
                 }
+            },
+            {
+                title: "Size",
+                dataIndex: "size"
             }
-        }, 
-        {
-            title: "Size",
-            dataIndex: "size"
-        }];
+        ];
+    }
+
+    _buildLoadingBox(){
+        return (
+            <div className="ib-filebrowser-spin-box">
+                <Spin />
+                <br/>Loading directory list...
+            </div>
+        );
+    }
+
+    render() {
+        const { 
+            actionColumns,
+            hasCheckboxes,
+            parentHandleSelectChange,
+            selectedRowKeys
+        } = this.props;
+
+        const { 
+            currentPath,
+            dirList,
+            isLoading
+        } = this.state;
+
+        const rows = dirList;
+
+        let columns = [...this._buildColumns(), ...actionColumns];
+
+        let rowSelection = false;
+        if(hasCheckboxes){
+            rowSelection = {
+                selectedRowKeys,
+                onChange: parentHandleSelectChange
+            };
+        }
+
+        let displayComponent = this._buildLoadingBox();
+        if(!isLoading){
+            displayComponent = <Table 
+                                    columns={columns} 
+                                    dataSource={rows} 
+                                    pagination={false} 
+                                    size="small"
+                                    title={()=> {
+                                        return (
+                                            <span>
+                                                <Button icon="reload" onClick={this._reloadDir.bind(this)}></Button>&nbsp;&nbsp;{currentPath}
+                                            </span>
+                                        )
+                                    }}
+                                    rowSelection={rowSelection}
+                                />;
+        }
+        
         return (
             <div>
-                <Table columns={columns} 
-                       dataSource={rows} 
-                       pagination={false} 
-                       size="small"
-                       title={()=> currentPath}/>
+                {displayComponent}
             </div>
         );
     }

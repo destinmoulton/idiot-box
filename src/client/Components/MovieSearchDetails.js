@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Col, Spin } from 'antd';
+import { Button, Col, Spin } from 'antd';
 
 import { emitAPIRequest } from '../actions/api.actions';
 
@@ -48,11 +48,16 @@ class MovieSearchDetails extends Component {
                 span={6} 
                 key={movie.ids.trakt} 
                 className={"ib-movie-search-details-box"}>
-                {image}
-                <br/>
-                <b>{movie.title}</b>
-                <br/>
-                {movie.year}
+                <div className={"ib-movie-search-details-img-box"}>
+                    {image}
+                </div>
+                <div>
+                    <b>{movie.title}</b>
+                    <br/>
+                    {movie.year}
+                    <br/>
+                    <Button type="primary" icon="check">This Is It</Button>
+                </div>
             </Col>
         );
     }

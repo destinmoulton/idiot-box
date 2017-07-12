@@ -9,13 +9,32 @@ div.ib-settings-dirsel-fs-cont{
 }
 
 div.ib-movie-search-details-box {
-    height: 215px;
+    height: 245px;
     padding: 15px;
     border-radius: 5px;
     background-color: #d9d9d9;
     margin: 5px;
 }
 
+div.ib-movie-search-details-img-box {
+    width:100%;
+    text-align:center;
+}
+
 img.ib-movie-search-details-img {
     width: 100%;
+}
+
+div.ib-filebrowser-spin-box {
+    width: 100%;
+    padding-top: 30px;
+    text-align: center;
+}
+
+div.ib-filemanager-button-bar {
+    padding:10px;
+}
+
+div.ib-trashmodal-list-box {
+    
 }
