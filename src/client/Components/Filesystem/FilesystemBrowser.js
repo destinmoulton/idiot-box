@@ -60,11 +60,13 @@ class FilesystemBrowser extends Component {
         this._getDirFromServer(this.state.currentPath);
     }
 
-    _dirListReceived(dirList, recd){
+    _dirListReceived(newDirList, recd){
         const { onChangeDirectory } = this.props;
 
+        const dirList = this._prepareDirList(newDirList);
+        
         //Notify the parent components of a directory change
-        onChangeDirectory(recd.request.params.path);
+        onChangeDirectory(recd.request.params.path, dirList);
 
         this.setState({
             currentPath: recd.request.params.path,
@@ -206,7 +208,7 @@ class FilesystemBrowser extends Component {
             dirList,
         } = this.state;
 
-        const rows = this._prepareDirList(dirList);
+        const rows = dirList;
 
         let columns = [...this._buildColumns(), ...actionColumns];
 

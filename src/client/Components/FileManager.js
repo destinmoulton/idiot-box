@@ -7,25 +7,26 @@ import FilesystemBrowser from './Filesystem/FilesystemBrowser';
 
 class FileManager extends Component {
     INITIAL_PATH = "/home/destin/Downloads/idiot-box-sandbox";
+    VIDEO_FILE_REGX = /(\.mp4|\.mkv|\.avi)$/;
     constructor(props){
         super(props);
 
         this.state = {
             currentPath: this.INITIAL_PATH,
+            dirList: [],
             selectedRows: []
         };
     }
 
-    _handleChangeDirectory(newDir){
-        
+    _handleChangeDirectory(newDir, dirList){
         this.setState({
             currentPath: newDir,
+            dirList,
             selectedRows: []
         })
     }
 
     _handleSelectionChange(selectedRows){
-        
         this.setState({
             selectedRows
         });
@@ -34,6 +35,21 @@ class FileManager extends Component {
     _handleClickDelete(evt){
         const item = evt.currentTarget.getAttribute('data-item-name');
         console.log("Delete Clicked", item);
+    }
+    
+    _handleSelectVideos(){
+        const { dirList } = this.state;
+        
+        let selected = [];
+        dirList.forEach((item)=>{
+            if(item.name.search(this.VIDEO_FILE_REGX) > -1){
+                selected.push(item.name);
+            }
+        });
+
+        this.setState({
+            selectedRows: selected
+        });
     }
 
     _buildActionColumns(){
@@ -56,16 +72,21 @@ class FileManager extends Component {
 
     render() {
         const { selectedRows } = this.state;
-        console.log(selectedRows);
+
         const hasSelected = (selectedRows.length > 0) ? true : false;
         const buttonDisabled = !hasSelected;
 
         return (
             <div>
-                &nbsp;
+                <Button 
+                    type="primary"
+                    icon="video-camera"
+                    onClick={this._handleSelectVideos.bind(this)}
+                >Select Videos</Button>&nbsp;&nbsp;
                 <Button.Group>
                     
                     <Button type="primary" icon="search" disabled={buttonDisabled}>ID</Button>
+                    
                     <Button type="danger" icon="delete" disabled={buttonDisabled}>Delete</Button>
                 </Button.Group>
                 <FilesystemBrowser 
