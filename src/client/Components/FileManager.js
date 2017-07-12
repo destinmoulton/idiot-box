@@ -84,9 +84,7 @@ class FileManager extends Component {
                     onClick={this._handleSelectVideos.bind(this)}
                 >Select Videos</Button>&nbsp;&nbsp;
                 <Button.Group>
-                    
                     <Button type="primary" icon="search" disabled={buttonDisabled}>ID</Button>
-                    
                     <Button type="danger" icon="delete" disabled={buttonDisabled}>Delete</Button>
                 </Button.Group>
                 <FilesystemBrowser 

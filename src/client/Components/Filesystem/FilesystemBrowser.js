@@ -64,7 +64,7 @@ class FilesystemBrowser extends Component {
         const { onChangeDirectory } = this.props;
 
         const dirList = this._prepareDirList(newDirList);
-        
+
         //Notify the parent components of a directory change
         onChangeDirectory(recd.request.params.path, dirList);
 
@@ -230,7 +230,7 @@ class FilesystemBrowser extends Component {
                     title={()=> {
                         return (
                             <span>
-                                <Button icon="reload" onClick={this._reloadDir.bind(this)}></Button>&nbsp;{currentPath}
+                                <Button icon="reload" onClick={this._reloadDir.bind(this)}></Button>&nbsp;&nbsp;{currentPath}
                             </span>
                         )
                     }}
