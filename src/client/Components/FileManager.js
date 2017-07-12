@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import { Icon, Button, Modal } from 'antd';
 
 import FilesystemBrowser from './Filesystem/FilesystemBrowser';
+import TrashModal from './Filesystem/TrashModal';
 
 class FileManager extends Component {
     INITIAL_PATH = "/home/destin/Downloads/idiot-box-sandbox";
@@ -15,6 +16,8 @@ class FileManager extends Component {
             currentPath: this.INITIAL_PATH,
             dirList: [],
             isReloading: false,
+            isTrashVisible: false,
+            itemsToTrash: [],
             selectedRows: []
         };
     }
@@ -40,10 +43,27 @@ class FileManager extends Component {
         });
     }
 
-    _handleClickDelete(evt){
-        const item = evt.currentTarget.getAttribute('data-item-name');
-        
-        console.log("Delete Clicked", item);
+    _handleClickTrash(evt){
+        let itemsToTrash = [];
+        if(evt.currentTarget.tagName === "BUTTON"){
+            itemsToTrash = [...this.state.selectedRows];
+        } else {
+            const item = evt.currentTarget.getAttribute('data-item-name');
+            itemsToTrash = [item];
+        }
+        console.log(itemsToTrash);
+
+        this.setState({
+            isTrashVisible: true,
+            itemsToTrash
+        });
+    }
+
+    _handleCancelTrash(){
+        this.setState({
+            isTrashVisible: false,
+            itemsToTrash: []
+        });
     }
     
     _handleSelectVideos(){
@@ -69,7 +89,7 @@ class FileManager extends Component {
                 render: (text,record)=>{
                     return (
                         <a href="javascript:void(0);"
-                           onClick={this._handleClickDelete.bind(this)}
+                           onClick={this._handleClickTrash.bind(this)}
                            data-item-name={record.name}>
                            <Icon type="delete"/>
                         </a>
@@ -80,7 +100,7 @@ class FileManager extends Component {
     }
 
     render() {
-        const { isReloading, selectedRows } = this.state;
+        const { currentPath, isReloading, isTrashVisible, itemsToTrash, selectedRows } = this.state;
 
         const hasSelected = (selectedRows.length > 0) ? true : false;
         const buttonDisabled = !hasSelected;
@@ -95,7 +115,12 @@ class FileManager extends Component {
                     >Select Videos</Button>&nbsp;&nbsp;
                     <Button.Group>
                         <Button type="primary" icon="search" disabled={buttonDisabled}>ID</Button>
-                        <Button type="danger" icon="delete" disabled={buttonDisabled}>Trash</Button>
+                        <Button 
+                            type="danger"
+                            icon="delete"
+                            disabled={buttonDisabled}
+                            onClick={this._handleClickTrash.bind(this)}
+                        >Trash</Button>
                     </Button.Group>
                 </div>
                 <FilesystemBrowser 
@@ -108,6 +133,13 @@ class FileManager extends Component {
                     selectedRowKeys={selectedRows}
                     showDirectories={true}
                     showFiles={true}
+                />
+                <TrashModal
+                    currentPath={currentPath}
+                    isVisible={isTrashVisible}
+                    itemsToTrash={itemsToTrash}
+                    onTrashComplete={()=>{}}
+                    onCancel={this._handleCancelTrash.bind(this)}
                 />
             </div>
         );
