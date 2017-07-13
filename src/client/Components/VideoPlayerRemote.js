@@ -29,7 +29,7 @@ class VideoPlayerRemote extends Component {
                 cmd: "fwd30"
             }
         ]
-    }
+    };
 
     BUTTON_ACTIVE_CLASS = "ib-remote-button-active";
 
