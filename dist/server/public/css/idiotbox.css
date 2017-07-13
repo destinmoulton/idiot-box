@@ -38,3 +38,7 @@ div.ib-filemanager-button-bar {
 div.ib-trashmodal-list-box {
     
 }
+
+button.ib-remote-button-active {
+    color: green;
+}

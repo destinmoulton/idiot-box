@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { Layout, Menu } from 'antd';
+
+import { Icon, Layout, Menu } from 'antd';
 const { Header } = Layout;
 
 class IdiotBoxHeader extends Component {
@@ -26,8 +27,13 @@ class IdiotBoxHeader extends Component {
                     <Menu.Item key="movies_search">
                         <Link to="/movies/search">Search Movies</Link>
                     </Menu.Item>
+                    <Menu.Item key="remote">
+                        <Link to="/remote">Remote</Link>
+                    </Menu.Item>
                     <Menu.Item key="settings">
-                        <Link to="/settings">Settings</Link>
+                        <Link to="/settings">
+                            <Icon type="setting"/>
+                        </Link>
                     </Menu.Item>
                 </Menu>
             </Header>
