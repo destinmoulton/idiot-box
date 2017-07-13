@@ -31,72 +31,81 @@ var VideoPlayerModel = function () {
             });
         }
     }, {
-        key: "play",
-        value: function play() {
+        key: "isRunning",
+        value: function isRunning() {
             var _this2 = this;
 
             return new Promise(function (resolve, reject) {
-                _this2.player.play();
+                resolve(_this2.player.running);
+            });
+        }
+    }, {
+        key: "play",
+        value: function play() {
+            var _this3 = this;
+
+            return new Promise(function (resolve, reject) {
+                _this3.player.play();
                 resolve(true);
             });
         }
     }, {
         key: "pause",
         value: function pause() {
-            var _this3 = this;
+            var _this4 = this;
 
             return new Promise(function (resolve, reject) {
-                _this3.player.pause();
+                _this4.player.pause();
                 resolve(true);
             });
         }
     }, {
         key: "fastFwd",
         value: function fastFwd() {
-            var _this4 = this;
+            var _this5 = this;
 
             return new Promise(function (resolve, reject) {
-                _this4.player.fastFwd();
+                _this5.player.fastFwd();
                 resolve(true);
             });
         }
     }, {
         key: "rewind",
         value: function rewind() {
-            var _this5 = this;
+            var _this6 = this;
 
             return new Promise(function (resolve, reject) {
-                _this5.player.rewind();
+                _this6.player.rewind();
                 resolve(true);
             });
         }
     }, {
         key: "fwd30",
         value: function fwd30() {
-            var _this6 = this;
+            var _this7 = this;
 
             return new Promise(function (resolve, reject) {
-                _this6.player.fwd30();
+                _this7.player.fwd30();
                 resolve(true);
             });
         }
     }, {
         key: "back30",
         value: function back30() {
-            var _this7 = this;
+            var _this8 = this;
 
             return new Promise(function (resolve, reject) {
-                _this7.player.back30();
+                _this8.player.back30();
                 resolve(true);
             });
         }
     }, {
         key: "toggleSubtitles",
         value: function toggleSubtitles() {
-            var _this8 = this;
+            var _this9 = this;
 
             return new Promise(function (resolve, reject) {
-                _this8.player.subtitles();
+                _this9.player.subtitles();
                 resolve(true);
             });
         }
