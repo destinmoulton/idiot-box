@@ -20,11 +20,16 @@ var _settings = require('./settings.api');
 
 var _settings2 = _interopRequireDefault(_settings);
 
+var _videoplayer = require('./videoplayer.api');
+
+var _videoplayer2 = _interopRequireDefault(_videoplayer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = {
     filesystem: _filesystem2.default,
     imdb: _imdb2.default,
     mediascraper: _mediascraper2.default,
-    settings: _settings2.default
+    settings: _settings2.default,
+    videoplayer: _videoplayer2.default
 };
