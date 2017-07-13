@@ -10,6 +10,7 @@ import errorReducer from './reducers/error.reducer';
 import filesystemReducer from './reducers/filesystem.reducer';
 import serverReducer from './reducers/server.reducer';
 import settingsReducer from './reducers/settings.reducer';
+import videoplayerReducer from './reducers/videoplayer.reducer';
 
 const history = createBrowserHistory()
 const middlewareHistory = routerMiddleware(history)
@@ -22,7 +23,8 @@ const store = createStore(
     filesystem: filesystemReducer,
     server: serverReducer,
     settings: settingsReducer,
-    router: routerReducer
+    router: routerReducer,
+    videoplayer: videoplayerReducer
   }),
   applyMiddleware(
     middlewareHistory,
