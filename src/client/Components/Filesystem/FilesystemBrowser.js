@@ -8,6 +8,8 @@ import { emitAPIRequest } from '../../actions/api.actions';
 import { socketClient } from '../../store';
 
 class FilesystemBrowser extends Component {
+    PARENT_DIR_NAME = "..";
+
     static propTypes = {
         dirList: PropTypes.array.isRequired,
         forceReload: PropTypes.bool,
@@ -76,36 +78,37 @@ class FilesystemBrowser extends Component {
     _dirListReceived(newDirList, recd){
         const { onChangeDirectory } = this.props;
 
-        const dirList = this._prepareDirList(newDirList);
+        const newPath = recd.request.params.path;
+
+        const dirList = this._prepareDirList(newDirList, newPath);
 
         //Notify the parent components of a directory change
-        onChangeDirectory(recd.request.params.path, dirList);
+        onChangeDirectory(newPath, dirList);
 
         this.setState({
-            currentPath: recd.request.params.path,
+            currentPath: newPath,
             dirList,
             isLoading: false
         });
+
+        
     }
 
-    _prepareDirList(dirList){
+    _prepareDirList(dirList, newPath){
         const { initialPath, lockToInitialPath, showDirectories, showFiles } = this.props;
-        const { currentPath, showHidden } = this.state;
+        const { showHidden } = this.state;
 
         let directories = [];
         let files = [];
 
         const parentDirectory = {
             key: 0,
-            name: "..",
+            name: this.PARENT_DIR_NAME,
             isDirectory: true,
             size: ""
         };
-        if(lockToInitialPath){
-            if(initialPath !== currentPath){
-                directories.push(parentDirectory);
-            }
-        } else {
+
+        if( !lockToInitialPath || ( lockToInitialPath && (initialPath !== newPath) ) ){
             directories.push(parentDirectory);
         }
         
@@ -159,10 +162,10 @@ class FilesystemBrowser extends Component {
         const { serverInfo } = this.props;
         const { pathSeparator } = serverInfo;
         const { currentPath } = this.state;
-        const desiredDir = e.target.getAttribute("data-directory-name");
+        const desiredDir = e.currentTarget.getAttribute("data-directory-name");
 
         let newPath = currentPath;
-        if(desiredDir === ".."){
+        if(desiredDir === this.PARENT_DIR_NAME){
             const pathParts = currentPath.split(pathSeparator);
             pathParts.pop();
             newPath = pathParts.join(pathSeparator);
@@ -189,12 +192,15 @@ class FilesystemBrowser extends Component {
                 dataIndex: "name",
                 render: (text, record) => {
                     if (record.isDirectory) {
+                        let iconType = "folder";
+                        if(record.name === this.PARENT_DIR_NAME){
+                            iconType = "arrow-up";
+                        }
                         return (
                             <a href="javascript:void(0);"
                                 onClick={this._handleDirClick.bind(this)}
-                                data-directory-name={record.name}
-                            >
-                                <Icon type={"folder"} />&nbsp;&nbsp;{record.name}
+                                data-directory-name={record.name} >
+                                <Icon type={iconType} />&nbsp;&nbsp;{record.name}
                             </a>
                         )
                     } else {
