@@ -242,7 +242,7 @@ class FilesystemBrowser extends Component {
 
         let columns = [...this._buildColumns(), ...actionColumns];
 
-        let rowSelection = false;
+        let rowSelection = {};
         if(hasCheckboxes){
             rowSelection = {
                 selectedRowKeys,
