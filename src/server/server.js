@@ -10,10 +10,11 @@ import logger from './logger';
 import dbconfig from './config/db.config';
 
 const PORT = 3000;
-const PUBLIC_PATH = path.resolve(__dirname, '../public');
 
+const PUBLIC_PATH = path.resolve(__dirname, '../public');
 app.use(express.static(PUBLIC_PATH));
 
+// Allow all URI's; handle by react router
 app.get('*', (req, res)=>{
     res.sendFile(path.join(PUBLIC_PATH, '/index.html'));
 });
@@ -23,13 +24,16 @@ Promise.resolve()
         ibdb.connect(dbconfig);
     })
     .then(()=>{
-        return app.listen(PORT, ()=>{
-            console.log("\n---------------------------------------");
-            console.log("Idiot Box Server running on Port "+PORT);
-            console.log("---------------------------------------");
-            
-        });
-
+        try {
+            return app.listen(PORT, ()=>{
+                console.log("\n---------------------------------------");
+                console.log("Idiot Box Server running on Port "+PORT);
+                console.log("---------------------------------------");
+            });
+        }
+        catch(err){
+            return Promise.reject(err);
+        }
     })
     .then((server)=>{
         setupSocketIO(server);
