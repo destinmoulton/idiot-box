@@ -12,7 +12,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var filesystemModel = new _FilesystemModel2.default();
 
-exports.default = filesystem = {
+var filesystem = {
     dir: {
         get: {
             params: ['path'],
@@ -22,3 +22,5 @@ exports.default = filesystem = {
         }
     }
 };
+
+exports.default = filesystem;

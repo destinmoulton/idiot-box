@@ -67,8 +67,8 @@ var SettingsModel = function () {
                 value: value
             };
 
-            return this._ibdb.update(where, data, this._tableName).then(function () {
-                return _this2.getSingle(category, key, value);
+            return this._ibdb.update(data, where, this._tableName).then(function () {
+                return _this2.getSingle(category, key, data.value);
             });
         }
     }, {

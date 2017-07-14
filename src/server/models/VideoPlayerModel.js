@@ -16,6 +16,13 @@ export default class VideoPlayerModel {
         });
     }
 
+    close(){
+        return new Promise((resolve, reject)=>{
+            this.player.quit();
+            resolve(true);
+        });
+    }
+
     isRunning(){
         return new Promise((resolve, reject)=>{
             resolve(this.player.running);

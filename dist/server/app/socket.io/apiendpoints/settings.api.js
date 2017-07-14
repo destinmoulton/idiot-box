@@ -16,7 +16,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var settingsModel = new _SettingsModel2.default(_IBDB2.default);
 
-exports.default = settings = {
+var settings = {
     category: {
         get: {
             params: ['category'],
@@ -46,3 +46,5 @@ exports.default = settings = {
         }
     }
 };
+
+exports.default = settings;

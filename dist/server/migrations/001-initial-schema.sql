@@ -6,6 +6,12 @@ CREATE TABLE settings (
     value TEXT
 );
 
+INSERT INTO settings (category, key, value) VALUES ("directories", "downloads", "");
+INSERT INTO settings (category, key, value) VALUES ("directories", "movies", "");
+INSERT INTO settings (category, key, value) VALUES ("directories", "shows", "");
+INSERT INTO settings (category, key, value) VALUES ("directories", "trash", "");
+INSERT INTO settings (category, key, value) VALUES ("directories", "youtube", "");
+
 CREATE TABLE genres (
     id INTEGER PRIMARY KEY,
     slug TEXT,

@@ -43,9 +43,9 @@ export default class SettingsModel {
             value
         };
 
-        return this._ibdb.update(where, data, this._tableName)
+        return this._ibdb.update(data, where, this._tableName)
             .then(() => {
-                return this.getSingle(category, key, value);
+                return this.getSingle(category, key, data.value);
             });
     }
 

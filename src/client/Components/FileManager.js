@@ -1,25 +1,32 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
 import { Icon, Button, Modal } from 'antd';
 
 import FilesystemBrowser from './Filesystem/FilesystemBrowser';
 import TrashModal from './Filesystem/TrashModal';
 
+import { getSettingsForCategory } from '../actions/settings.actions';
+
 class FileManager extends Component {
-    INITIAL_PATH = "/home/destin/Downloads/idiot-box-sandbox";
     VIDEO_FILE_REGX = /(\.mp4|\.mkv|\.avi)$/;
     constructor(props){
         super(props);
 
         this.state = {
-            currentPath: this.INITIAL_PATH,
+            currentToplevelDirectory: "",
+            currentPath: "",
             dirList: [],
             isReloading: false,
             isTrashVisible: false,
             itemsToTrash: [],
             selectedRows: []
         };
+    }
+
+    componentWillMount(){
+        this.props.getSettingsForCategory('directories');
     }
 
     _reloadDirList(){
@@ -35,6 +42,17 @@ class FileManager extends Component {
             selectedRows: [],
             isReloading: false
         })
+    }
+
+    _handleSelectTopLevelDir(dir) {
+        this.setState({
+            currentToplevelDirectory: "",
+            currentPath: ""
+        });
+        this.setState({
+            currentToplevelDirectory: dir.value,
+            currentPath: dir.value
+        });
     }
 
     _handleSelectionChange(selectedRows){
@@ -99,8 +117,14 @@ class FileManager extends Component {
         ];
     }
 
-    render() {
-        const { currentPath, isReloading, isTrashVisible, itemsToTrash, selectedRows } = this.state;
+    _buildFileManager(){
+        const { 
+            currentPath, 
+            currentToplevelDirectory,
+            isReloading,
+            isTrashVisible,
+            itemsToTrash,
+            selectedRows } = this.state;
 
         const hasSelected = (selectedRows.length > 0) ? true : false;
         const buttonDisabled = !hasSelected;
@@ -127,7 +151,7 @@ class FileManager extends Component {
                     actionColumns={this._buildActionColumns()}
                     forceReload={isReloading}
                     hasCheckboxes={true}
-                    initialPath={this.INITIAL_PATH}
+                    initialPath={currentToplevelDirectory}
                     onChangeDirectory={this._handleChangeDirectory.bind(this)}
                     parentHandleSelectChange={this._handleSelectionChange.bind(this)}
                     selectedRowKeys={selectedRows}
@@ -144,6 +168,49 @@ class FileManager extends Component {
             </div>
         );
     }
+
+    _buildDirectoryButtons(){
+        const { toplevelDirectories } = this.props;
+
+        const buttonList = [];
+        toplevelDirectories.forEach((dir)=>{
+            buttonList.push(<Button key={dir.key} onClick={this._handleSelectTopLevelDir.bind(this, dir)}>{dir.key}</Button>);
+        });
+
+        return (<Button.Group>{buttonList}</Button.Group>);
+    }
+
+    render() {
+        const { currentToplevelDirectory } = this.state;
+        
+        let directoryButtons = this._buildDirectoryButtons();
+        let output = "";
+        if(currentToplevelDirectory){
+            output = this._buildFileManager();
+        } 
+        return (
+            <div>
+                <div>
+                    {directoryButtons}
+                </div>
+                {output}
+            </div>
+        );
+    }
 }
 
-export default FileManager;
+const mapStateToProps = (state)=>{
+    const { settings } = state;
+    
+    return {
+        toplevelDirectories: settings.settings.directories
+    };
+}
+
+const mapDispatchToProps = (dispatch)=>{
+    return {
+        getSettingsForCategory: (category)=>dispatch(getSettingsForCategory(category))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(FileManager);

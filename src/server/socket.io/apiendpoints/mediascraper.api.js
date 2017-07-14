@@ -6,7 +6,7 @@ import MediaScraperModel from '../../models/MediaScraperModel';
 
 const mediaScraperModel = new MediaScraperModel(new Trakt(traktConfig));
 
-export default mediascraper = {
+const mediascraper = {
     movies: {
         search: {
             params: ['search_string'],
@@ -14,3 +14,5 @@ export default mediascraper = {
         }
     }
 };
+
+export default mediascraper;

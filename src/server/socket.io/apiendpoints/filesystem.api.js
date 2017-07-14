@@ -2,7 +2,7 @@ import FilesystemModel from '../../models/FilesystemModel';
 
 const filesystemModel = new FilesystemModel();
 
-export default filesystem = {
+const filesystem = {
     dir: {
         get: {
             params: ['path'],
@@ -10,3 +10,5 @@ export default filesystem = {
         }
     }
 };
+
+export default filesystem;

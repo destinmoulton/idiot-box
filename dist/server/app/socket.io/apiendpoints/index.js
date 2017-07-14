@@ -26,10 +26,12 @@ var _videoplayer2 = _interopRequireDefault(_videoplayer);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-exports.default = {
+var endpoints = {
     filesystem: _filesystem2.default,
     imdb: _imdb2.default,
     mediascraper: _mediascraper2.default,
     settings: _settings2.default,
     videoplayer: _videoplayer2.default
 };
+
+exports.default = endpoints;

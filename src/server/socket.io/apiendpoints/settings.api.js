@@ -4,7 +4,7 @@ import SettingsModel from '../../models/db/SettingsModel';
 
 const settingsModel = new SettingsModel(ibdb);
     
-export default settings = {
+const settings = {
     category: {
         get: {
             params: ['category'],
@@ -26,3 +26,5 @@ export default settings = {
         }
     }
 };
+
+export default settings;

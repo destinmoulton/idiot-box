@@ -1,41 +1,44 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+    value: true
 });
 var winston = require('winston');
 
-var customColors = {
-  trace: 'white',
-  debug: 'blue',
-  info: 'green',
-  warn: 'yellow',
-  crit: 'red',
-  error: 'red'
-};
+winston.setLevels({
+    trace: 9,
+    input: 8,
+    verbose: 7,
+    prompt: 6,
+    debug: 5,
+    info: 4,
+    data: 3,
+    help: 2,
+    warn: 1,
+    error: 0
+});
 
-var config = {
-  colors: customColors,
+winston.addColors({
+    trace: 'magenta',
+    input: 'grey',
+    verbose: 'cyan',
+    prompt: 'grey',
+    debug: 'blue',
+    info: 'green',
+    data: 'grey',
+    help: 'cyan',
+    warn: 'yellow',
+    error: 'red'
+});
 
-  levels: {
-    trace: 0,
-    debug: 1,
-    info: 2,
-    warn: 3,
-    crit: 4,
-    error: 5
-  },
-  transports: []
-};
+winston.remove(winston.transports.Console);
+winston.add(winston.transports.Console, {
+    level: 'trace',
+    prettyPrint: true,
+    colorize: true,
+    silent: false,
+    timestamp: false
+});
 
-config.transports.push(new winston.transports.Console({
-  name: 'consoleLogger',
-  level: 'error',
-  colorize: true,
-  timestamp: true
-}));
-
-var logger = new winston.Logger(config);
-winston.addColors(customColors);
-
+var logger = winston;
 exports.default = logger;
