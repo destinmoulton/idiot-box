@@ -1,10 +1,12 @@
 
 import {
-    VP_CHANGE_STATE
+    VP_CHANGE_STATE,
+    VP_RECEIVED_INFO
 } from '../actions/actionTypes';
 
 const INITIAL_STATE = {
-    videoPlayerIsActive: false
+    playerIsActive: false,
+    videoInfo: {}
 };
 
 export default function videoplayerReducer(state = INITIAL_STATE, action){
@@ -12,7 +14,12 @@ export default function videoplayerReducer(state = INITIAL_STATE, action){
         case VP_CHANGE_STATE:
             return {
                 ...state,
-                videoPlayerIsActive: action.playerState
+                playerIsActive: action.playerState
+            }
+        case VP_RECEIVED_INFO:
+            return {
+                ...state,
+                videoInfo: action.videoInfo
             }
         default:
             return state;
