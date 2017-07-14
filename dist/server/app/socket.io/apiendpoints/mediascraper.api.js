@@ -20,7 +20,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var mediaScraperModel = new _MediaScraperModel2.default(new _trakt2.default(_trakt4.default));
 
-exports.default = mediascraper = {
+var mediascraper = {
     movies: {
         search: {
             params: ['search_string'],
@@ -30,3 +30,5 @@ exports.default = mediascraper = {
         }
     }
 };
+
+exports.default = mediascraper;

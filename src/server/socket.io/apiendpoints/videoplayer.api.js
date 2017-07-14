@@ -3,11 +3,16 @@ import OmxPlayer from 'node-omxplayer';
 import VideoPlayerModel from '../../models/VideoPlayerModel';
 
 const videoPlayerModel = new VideoPlayerModel(new OmxPlayer(), 'hdmi');
-export default videoplayer = {
+
+const videoplayer = {
     cmd: {
         start: {
             params: ['filename'],
             func: (filename) => videoPlayerModel.start(filename)
+        },
+        close: {
+            params: [],
+            func: () => videoPlayerModel.close()
         },
         isRunning: {
             params: [],
@@ -43,3 +48,5 @@ export default videoplayer = {
         }
     }
 }
+
+export default videoplayer;

@@ -4,10 +4,12 @@ import mediascraper from './mediascraper.api';
 import settings from './settings.api';
 import videoplayer from './videoplayer.api';
 
-export default {
+const endpoints = {
     filesystem,
     imdb,
     mediascraper,
     settings,
     videoplayer
 }
+
+export default endpoints;

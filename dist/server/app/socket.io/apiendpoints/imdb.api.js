@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _IMDBScraperModel = require('../models/IMDBScraperModel');
+var _IMDBScraperModel = require('../../models/IMDBScraperModel');
 
 var _IMDBScraperModel2 = _interopRequireDefault(_IMDBScraperModel);
 
@@ -12,7 +12,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var imdbScraperModel = new _IMDBScraperModel2.default();
 
-exports.default = imdb = {
+var imdb = {
     image: {
         get: {
             params: ['imdb_id'],
@@ -22,3 +22,5 @@ exports.default = imdb = {
         }
     }
 };
+
+exports.default = imdb;

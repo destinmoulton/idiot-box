@@ -15,12 +15,19 @@ var _VideoPlayerModel2 = _interopRequireDefault(_VideoPlayerModel);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var videoPlayerModel = new _VideoPlayerModel2.default(new _nodeOmxplayer2.default(), 'hdmi');
-exports.default = videoplayer = {
+
+var videoplayer = {
     cmd: {
         start: {
             params: ['filename'],
             func: function func(filename) {
                 return videoPlayerModel.start(filename);
+            }
+        },
+        close: {
+            params: [],
+            func: function func() {
+                return videoPlayerModel.close();
             }
         },
         isRunning: {
@@ -73,3 +80,5 @@ exports.default = videoplayer = {
         }
     }
 };
+
+exports.default = videoplayer;

@@ -1,8 +1,8 @@
-import IMDBScraperModel from '../models/IMDBScraperModel';
+import IMDBScraperModel from '../../models/IMDBScraperModel';
 
 const imdbScraperModel = new IMDBScraperModel();
 
-export default imdb = {
+const imdb = {
     image: {
         get: {
             params: ['imdb_id'],
@@ -10,3 +10,5 @@ export default imdb = {
         }
     }
 };
+
+export default imdb;
