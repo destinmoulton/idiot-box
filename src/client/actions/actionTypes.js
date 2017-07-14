@@ -26,3 +26,4 @@ export const SRV_INFO_RECEIVED = 'SRV_INFO_RECEIVED';
 
 // Video Player Events
 export const VP_CHANGE_STATE = 'VP_CHANGE_STATE';
+export const VP_RECEIVED_INFO = 'VP_RECEIVED_INFO';
