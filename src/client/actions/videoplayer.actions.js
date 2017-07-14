@@ -4,16 +4,17 @@ import {
     VP_CHANGE_STATE
 } from './actionTypes';
 
-export function isVideoPlaying(category){
+export function isVideoRunning(){
     return (dispatch)=>{
         setTimeout(()=>{
             const endpoint = 'videoplayer.cmd.isRunning';
-            dispatch(emitAPIRequest(endpoint, {}, videoPlayerChangeState));
+            dispatch(emitAPIRequest(endpoint, {}, videoRunningChangeState));
+            isVideoRunning();
         }, 200);
     }
 }
 
-function videoPlayerChangeState(playerState){
+function videoRunningChangeState(playerState){
     return {
         type: VP_CHANGE_STATE,
         playerState
