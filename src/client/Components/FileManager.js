@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Icon, Button, Modal } from 'antd';
 
 import FilesystemBrowser from './Filesystem/FilesystemBrowser';
+import IDFileModal from './IDFileModal';
 import TrashModal from './Filesystem/TrashModal';
 
 import { getSettingsForCategory } from '../actions/settings.actions';
@@ -18,8 +19,10 @@ class FileManager extends Component {
             currentToplevelDirectory: "",
             currentPath: "",
             dirList: [],
+            idModalFilename: "",
             isReloading: false,
             isTrashVisible: false,
+            isIDModalVisible: false,
             itemsToTrash: [],
             selectedRows: []
         };
@@ -86,6 +89,27 @@ class FileManager extends Component {
             itemsToTrash: []
         });
     }
+
+    _handleClickIDFile(filename){
+        this.setState({
+            idModalFilename: filename,
+            isIDModalVisible: true
+        });
+    }
+
+    _handleIDModalCancel(){
+        this.setState({
+            isIDModalVisible: false,
+            idModalFilename: ""
+        });
+    }
+
+    _handleIDModalComplete(){
+        this.setState({
+            isIDModalVisible: false,
+            idModalFilename: ""
+        });
+    }
     
     _handleSelectVideos(){
         const { dirList } = this.state;
@@ -102,6 +126,8 @@ class FileManager extends Component {
         });
     }
 
+    
+
     _buildActionColumns(){
         return [
             {
@@ -109,11 +135,17 @@ class FileManager extends Component {
                 dataIndex: "",
                 render: (text,record)=>{
                     return (
+                        <span>
                         <a href="javascript:void(0);"
                            onClick={this._handleClickTrash.bind(this)}
                            data-item-name={record.name}>
                            <Icon type="delete"/>
+                        </a>&nbsp;
+                        <a href="javascript:void(0);"
+                            onClick={this._handleClickIDFile.bind(this, record.name)}>
+                            <Icon type="tag"/>
                         </a>
+                        </span>
                     );
                 }
             }
@@ -124,7 +156,9 @@ class FileManager extends Component {
         const { 
             currentPath, 
             currentToplevelDirectory,
+            idModalFilename,
             isReloading,
+            isIDModalVisible,
             isTrashVisible,
             itemsToTrash,
             selectedRows } = this.state;
@@ -167,6 +201,12 @@ class FileManager extends Component {
                     itemsToTrash={itemsToTrash}
                     onTrashComplete={this._handleTrashComplete.bind(this)}
                     onCancel={this._handleCancelTrash.bind(this)}
+                />
+                <IDFileModal
+                    isVisible={isIDModalVisible}
+                    onOk={this._handleIDModalComplete.bind(this)}
+                    onCancel={this._handleIDModalCancel.bind(this)}
+                    currentFilename={idModalFilename}
                 />
             </div>
         );
