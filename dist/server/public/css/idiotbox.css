@@ -35,6 +35,22 @@ div.ib-filemanager-button-bar {
     padding:10px;
 }
 
+span.ib-filebrowser-current-path {
+    padding-left: 10px;
+}
+
+button.ib-filemanager-button:hover, button.ib-filemanager-button:focus {
+    color: green;
+    border-color: green;
+}
+
+button.ib-filemanager-button-active {
+    font-weight: bold;
+    color: green;
+    border-color: green;
+    border-width: 2px;
+}
+
 div.ib-trashmodal-list-box {
     
 }
