@@ -171,10 +171,18 @@ class FileManager extends Component {
 
     _buildDirectoryButtons(){
         const { toplevelDirectories } = this.props;
+        const { currentToplevelDirectory } = this.state;
 
         const buttonList = [];
         toplevelDirectories.forEach((dir)=>{
-            buttonList.push(<Button key={dir.key} onClick={this._handleSelectTopLevelDir.bind(this, dir)}>{dir.key}</Button>);
+            const activeClass = (dir.value === currentToplevelDirectory) ? "ib-filemanager-button ib-filemanager-button-active" : "ib-filemanager-button";
+            buttonList.push(
+                <Button 
+                    key={dir.key} 
+                    onClick={this._handleSelectTopLevelDir.bind(this, dir)}
+                    className={activeClass}
+                >{dir.key}</Button>
+            );
         });
 
         return (<Button.Group>{buttonList}</Button.Group>);

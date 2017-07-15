@@ -55,6 +55,10 @@ class FilesystemBrowser extends Component {
         if(nextProps.forceReload){
             this._reloadDir();
         }
+
+        if(nextProps.initialPath !== this.props.initialPath){
+            this._getDirFromServer(nextProps.initialPath);
+        }
     }
 
     _getDirFromServer(path){
@@ -224,7 +228,7 @@ class FilesystemBrowser extends Component {
         );
     }
 
-    render() {
+    _buildTable(){
         const { 
             actionColumns,
             hasCheckboxes,
@@ -250,23 +254,35 @@ class FilesystemBrowser extends Component {
             };
         }
 
-        let displayComponent = this._buildLoadingBox();
-        if(!isLoading){
-            displayComponent = <Table 
-                                    columns={columns} 
-                                    dataSource={rows} 
-                                    pagination={false} 
-                                    size="small"
-                                    title={()=> {
-                                        return (
-                                            <span>
-                                                <Button icon="reload" onClick={this._reloadDir.bind(this)}></Button>&nbsp;&nbsp;{currentPath}
-                                            </span>
-                                        )
-                                    }}
-                                    rowSelection={rowSelection}
-                                />;
+        const locale = {
+            emptyText: "Empty directory."
         }
+
+        
+        return (
+            <Table 
+                columns={columns} 
+                dataSource={rows} 
+                pagination={false} 
+                size="small"
+                title={()=> {
+                    return (
+                        <span>
+                            <Button icon="reload" onClick={this._reloadDir.bind(this)}></Button>
+                            <span className="ib-filebrowser-current-path">{currentPath}</span>
+                        </span>
+                    )
+                }}
+                rowSelection={rowSelection}
+                locale={locale}
+            />
+        );
+        
+    }
+
+    render() {
+        const { isLoading } = this.state;
+        let displayComponent = ( isLoading ) ? this._buildLoadingBox() : this._buildTable();
         
         return (
             <div>
