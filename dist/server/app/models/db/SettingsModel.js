@@ -32,10 +32,16 @@ var SettingsModel = function () {
         }
     }, {
         key: "getSingle",
-        value: function getSingle(category, key, value) {
+        value: function getSingle(category, key) {
+            var value = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";
+
             var where = {
-                category: category, key: key, value: value
+                category: category, key: key
             };
+
+            if (value) {
+                where['value'] = value;
+            }
 
             return this._ibdb.getRow(where, this._tableName);
         }

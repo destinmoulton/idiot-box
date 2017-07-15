@@ -6,11 +6,11 @@ CREATE TABLE settings (
     value TEXT
 );
 
-INSERT INTO settings (category, key, value) VALUES ("directories", "downloads", "");
-INSERT INTO settings (category, key, value) VALUES ("directories", "movies", "");
-INSERT INTO settings (category, key, value) VALUES ("directories", "shows", "");
-INSERT INTO settings (category, key, value) VALUES ("directories", "trash", "");
-INSERT INTO settings (category, key, value) VALUES ("directories", "youtube", "");
+INSERT INTO settings (category, key, value) VALUES ("directories", "Downloads", "");
+INSERT INTO settings (category, key, value) VALUES ("directories", "Movies", "");
+INSERT INTO settings (category, key, value) VALUES ("directories", "Shows", "");
+INSERT INTO settings (category, key, value) VALUES ("directories", "Trash", "");
+INSERT INTO settings (category, key, value) VALUES ("directories", "Youtube", "");
 
 CREATE TABLE genres (
     id INTEGER PRIMARY KEY,
