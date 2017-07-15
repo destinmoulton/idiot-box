@@ -46,10 +46,6 @@ class FileManager extends Component {
 
     _handleSelectTopLevelDir(dir) {
         this.setState({
-            currentToplevelDirectory: "",
-            currentPath: ""
-        });
-        this.setState({
             currentToplevelDirectory: dir.value,
             currentPath: dir.value
         });
@@ -69,11 +65,18 @@ class FileManager extends Component {
             const item = evt.currentTarget.getAttribute('data-item-name');
             itemsToTrash = [item];
         }
-        console.log(itemsToTrash);
 
         this.setState({
             isTrashVisible: true,
             itemsToTrash
+        });
+    }
+
+    _handleTrashComplete(){
+        this.setState({
+            isReloading: true,
+            isTrashVisible: false,
+            itemsToTrash: []
         });
     }
 
@@ -162,7 +165,7 @@ class FileManager extends Component {
                     currentPath={currentPath}
                     isVisible={isTrashVisible}
                     itemsToTrash={itemsToTrash}
-                    onTrashComplete={()=>{}}
+                    onTrashComplete={this._handleTrashComplete.bind(this)}
                     onCancel={this._handleCancelTrash.bind(this)}
                 />
             </div>
