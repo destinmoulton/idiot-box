@@ -1,12 +1,22 @@
-import FilesystemModel from '../../models/FilesystemModel';
+import ibdb from '../../db/IBDB';
 
-const filesystemModel = new FilesystemModel();
+import FilesystemModel from '../../models/FilesystemModel';
+import SettingsModel from '../../models/db/SettingsModel';
+
+const settingsModel = new SettingsModel(ibdb);
+const filesystemModel = new FilesystemModel(settingsModel);
 
 const filesystem = {
     dir: {
         get: {
             params: ['path'],
             func: (pathToList)=> filesystemModel.getDirList(pathToList)
+        }
+    },
+    trash: {
+        execute: {
+            params: ['source_path', 'filenames'],
+            func: (sourcePath, filenames)=> filesystemModel.trash(sourcePath, filenames)
         }
     }
 };
