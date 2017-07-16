@@ -1,13 +1,19 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { Input, Row } from 'antd';
 
-import { emitAPIRequest } from '../actions/api.actions';
+import { emitAPIRequest } from '../../actions/api.actions';
 
 import MovieSearchDetails from './MovieSearchDetails';
 
 class MovieSearchResults extends Component {
+
+    static propTypes = {
+        currentFilename: PropTypes.string.isRequired,
+        searchString: PropTypes.string.isRequired
+    };
 
     constructor(props){
         super(props);
@@ -15,6 +21,10 @@ class MovieSearchResults extends Component {
         this.state = {
             movies: []
         };
+    }
+
+    componentWillMount(){
+        this._getSearchResultsFromServer(this.props.searchString);
     }
 
     _handleSearchPress(searchString){
@@ -38,6 +48,7 @@ class MovieSearchResults extends Component {
     }
 
     render() {
+        const { currentFilename, searchString } = this.props;
         const { movies } = this.state;
 
         let movieList = [];
@@ -46,9 +57,10 @@ class MovieSearchResults extends Component {
         });
         return (
             <div>
-                <h3>Movies</h3>
+                <h4>Movie - Search Results</h4>
+                <h5>{currentFilename}</h5>
                 <Input.Search
-                    placeholder="Search movies..."
+                    value={searchString}
                     style={{ width: 400 }}
                     onSearch={this._handleSearchPress.bind(this)}
                 />
