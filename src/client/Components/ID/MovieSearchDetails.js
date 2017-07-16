@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 
 import { Button, Col, Spin } from 'antd';
 
-import { emitAPIRequest } from '../actions/api.actions';
+import { emitAPIRequest } from '../../actions/api.actions';
 
 class MovieSearchDetails extends Component {
 
