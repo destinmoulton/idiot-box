@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Icon, Button, Modal } from 'antd';
 
 import FilesystemBrowser from './Filesystem/FilesystemBrowser';
-import IDFileModal from './IDFileModal';
+import IDFileModal from './ID/IDFileModal';
 import TrashModal from './Filesystem/TrashModal';
 
 import { getSettingsForCategory } from '../actions/settings.actions';
