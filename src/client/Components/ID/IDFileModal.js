@@ -12,6 +12,7 @@ import {
 } from 'antd';
 
 import MovieCheckForm from './MovieCheckForm';
+import MovieSearchResults from './MovieSearchResults';
 
 class IDFileModal extends Component {
     static propTypes = {
@@ -25,7 +26,8 @@ class IDFileModal extends Component {
         super(props);
 
         this.state = {
-            isIDing: false
+            currentView: 'two_column_single_id',
+            movieSearchString: ""
         };
     }
 
@@ -33,28 +35,73 @@ class IDFileModal extends Component {
 
     }
 
+    _handleCancel(){
+        const { onCancel } = this.props;
+        this.setState({
+            currentView: 'two_column_single_id',
+            movieSearchString: ""
+        });
+        onCancel();
+    }
+
+    _handleClickSearchMovies(movieSearchString){
+        this.setState({
+            currentView: 'movie_search_results',
+            movieSearchString
+        });
+    }
+
+    _buildTwoColumnSingleID(){
+        const { currentFilename } = this.props;
+        return (
+            <div>
+                <Col span={8}>
+                    <MovieCheckForm
+                        currentFilename={currentFilename}
+                        onSearchMovies={this._handleClickSearchMovies.bind(this)}
+                    />
+                </Col>
+                <Col span={8} offset={2}>
+                    <h4>ID Episode Here</h4>
+                </Col>
+            </div>
+        );
+    }
+
+    _buildMovieSearchResults(){
+        const { movieSearchString } = this.state;
+        const { currentFilename } = this.props;
+
+        return <MovieSearchResults searchString={movieSearchString} currentFilename={currentFilename}/>;
+    }
+
+    _selectCurrentView(){
+        const { currentView } = this.state;
+        switch(currentView){
+            case 'two_column_single_id':
+                return this._buildTwoColumnSingleID();
+            case 'movie_search_results':
+                return this._buildMovieSearchResults();
+        }
+    }
+
     render() {
-        const { currentFilename, isVisible, onCancel } = this.props;
-        const { isIDing } = this.state;
+        const { currentFilename, isVisible } = this.props;
+
+        const contents = this._selectCurrentView();
 
         return (
             <div>
                 <Modal
                     title="ID File"
                     visible={isVisible}
-                    onCancel={onCancel}
+                    onCancel={this._handleCancel.bind(this)}
                     onOk={this._handlePressOk.bind(this)}
                     footer={[
-                        <Button key="cancel" size="large" onClick={onCancel}>Cancel</Button>,
-                        <Button key="submit" type="primary" size="large" loading={isIDing} onClick={this._handlePressOk.bind(this)}>
-                        Confirm ID
-                        </Button>,
-                    ]}
-                >
+                        <Button key="cancel" size="large" onClick={this._handleCancel.bind(this)}>Cancel</Button>,
+                    ]} >
                     <Row>
-                        <Col span={8}>
-                            <MovieCheckForm currentFilename={currentFilename}/>
-                        </Col>
+                        {contents}
                     </Row>
                 </Modal>
             </div>
