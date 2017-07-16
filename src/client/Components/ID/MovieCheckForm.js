@@ -31,7 +31,7 @@ class MovieCheckForm extends Component {
     }
 
     render() {
-        const { currentFilename } = this.props;
+        const { currentFilename, onSearchMovies } = this.props;
         const { checkedMovieNames } = this.state;
 
         const possibleNames = currentFilename.split(".");
@@ -45,7 +45,11 @@ class MovieCheckForm extends Component {
         return (
             <div>
                 <div><h5>{currentFilename}</h5></div>
-                <Input placeholder="Movie search..." value={checkedMovieNames.join(" ")} />
+                <Input.Search 
+                    placeholder="Movie search..." 
+                    value={checkedMovieNames.join(" ")}
+                    onSearch={onSearchMovies}
+                />
                 <div>
                     {possibleChecks}
                 </div>
