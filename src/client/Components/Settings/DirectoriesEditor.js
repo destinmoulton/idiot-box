@@ -24,7 +24,8 @@ const BLANK_DATA = {
 };
 class DirectoriesEditor extends Component {
     static propTypes = {
-        directories: PropTypes.array.isRequired
+        settingCategory: PropTypes.string.isRequired,
+        settings: PropTypes.array.isRequired
     }
 
     constructor(props){
@@ -108,11 +109,12 @@ class DirectoriesEditor extends Component {
     }
 
     _handleSaveButtonPress(e){
+        const { settingCategory } = this.props;
         const { currentEditData } = this.state;
         const settingID = e.currentTarget.getAttribute("data-setting-id");
         if(currentEditData[settingID].key !== ""){
             const settingData = currentEditData[settingID];
-            this.props.saveSetting(parseInt(settingID), settingData.key, settingData.value);
+            this.props.saveSetting(parseInt(settingID), settingCategory, settingData.key, settingData.value);
         }
     }
 
@@ -135,13 +137,13 @@ class DirectoriesEditor extends Component {
 
     _handleEditSettingClick(e){
         const { currentlyEditing, currentEditData } = this.state;
-        const { directories } = this.props;
+        const { settings } = this.props;
         const settingID = parseInt(e.currentTarget.getAttribute('data-setting-id'));
         currentlyEditing.push(settingID);
 
-        for(let i = 0; i<directories.length; i++){
-            if(settingID === directories[i].id){
-                currentEditData[settingID] = directories[i];
+        for(let i = 0; i<settings.length; i++){
+            if(settingID === settings[i].id){
+                currentEditData[settingID] = settings[i];
             }
         }
         
@@ -202,7 +204,7 @@ class DirectoriesEditor extends Component {
     }
 
     _buildDirectoriesTable(){
-        const { directories, saveInProgress } = this.props;
+        const { settings, saveInProgress } = this.props;
         const { currentlyEditing } = this.state;
         const columns = [{
             title: "Name",
@@ -249,7 +251,7 @@ class DirectoriesEditor extends Component {
 
         return (
             <Table columns={columns} 
-                       dataSource={directories} 
+                       dataSource={settings} 
                        pagination={false} 
                        size="small"
                        />
@@ -283,7 +285,7 @@ const mapStateToProps = (state)=>{
 
 const mapDispatchToProps = (dispatch)=>{
     return {
-        saveSetting: (settingID, key, value)=>dispatch(saveSetting(settingID, 'directories', key, value))
+        saveSetting: (settingID, category, key, value)=>dispatch(saveSetting(settingID, category, key, value))
     }
 }
 
