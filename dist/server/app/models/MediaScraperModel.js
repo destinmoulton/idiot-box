@@ -6,13 +6,28 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _nodeFetch = require('node-fetch');
+
+var _nodeFetch2 = _interopRequireDefault(_nodeFetch);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var MediaScrapeModel = function () {
-    function MediaScrapeModel(traktInstance) {
+    function MediaScrapeModel(traktInstance, settingsModel) {
         _classCallCheck(this, MediaScrapeModel);
 
         this._trakt = traktInstance;
+        this._settingsModel = settingsModel;
     }
 
     _createClass(MediaScrapeModel, [{
@@ -53,6 +68,25 @@ var MediaScrapeModel = function () {
                 id: showID,
                 season: seasonNumber,
                 extended: 'full'
+            });
+        }
+    }, {
+        key: 'downloadThumbnail',
+        value: function downloadThumbnail(typeOfMedia, fileURL, destFilenameMinusExt) {
+            var origFilename = fileURL.split("/").pop();
+            var origFileExt = origFilename.split(".").pop();
+            var destFilename = destFilenameMinusExt + "." + origFileExt;
+
+            this._settingsModel.getSingle("thumbpaths", typeOfMedia).then(function (setting) {
+                if (!_fs2.default.existsSync(setting.value)) {
+                    return Promise.reject('MediaScrapeModel :: downloadThumbnail :: The path for ' + typeOfMedia + ' ' + setting.value + ' does not exist.');
+                }
+                return (0, _nodeFetch2.default)(fileURL), setting;
+            }).then(function (res, thumbPath) {
+                var finalPath = _path2.default.join(thumbPath, destFilename);
+                var dest = _fs2.default.createWriteStream(finalPath);
+                res.body.pipe(dest);
+                return destFilename;
             });
         }
     }]);
