@@ -1,8 +1,13 @@
+import fs from 'fs';
+import path from 'path';
+
+import fetch from 'node-fetch';
+
 export default class MediaScrapeModel {
     
-    constructor(traktInstance){
+    constructor(traktInstance, settingsModel){
         this._trakt = traktInstance;
-        
+        this._settingsModel = settingsModel;
     }
 
     searchMovies(movieQuery){
@@ -38,5 +43,25 @@ export default class MediaScrapeModel {
             season: seasonNumber,
             extended: 'full'
         });
+    }
+
+    downloadThumbnail(typeOfMedia, fileURL, destFilenameMinusExt){
+        const origFilename = fileURL.split("/").pop();
+        const origFileExt = origFilename.split(".").pop();
+        const destFilename = destFilenameMinusExt + "." + origFileExt;
+
+        this._settingsModel.getSingle("thumbpaths", typeOfMedia)
+            .then((setting)=>{
+                if(!fs.existsSync(setting.value)){
+                    return Promise.reject(`MediaScrapeModel :: downloadThumbnail :: The path for ${typeOfMedia} ${setting.value} does not exist.`);
+                }
+                return fetch(fileURL)
+                        .then((res)=>{
+                            const finalPath = path.join(setting.value, destFilename);
+                            const dest = fs.createWriteStream(finalPath);
+                            res.body.pipe(dest);
+                            return destFilename;
+                        });
+            })
     }
 }
