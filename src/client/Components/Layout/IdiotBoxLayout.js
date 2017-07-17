@@ -7,7 +7,7 @@ const { Header, Content, Footer } = Layout;
 
 import FileManager from '../FileManager';
 import IdiotBoxHeader from './IdiotBoxHeader';
-import Settings from '../Settings';
+import Settings from '../Settings/Settings';
 import VideoPlayerRemote from '../VideoPlayerRemote';
 
 class IdiotBoxLayout extends Component {
