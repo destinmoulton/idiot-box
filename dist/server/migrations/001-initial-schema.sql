@@ -11,6 +11,8 @@ INSERT INTO settings (category, key, value) VALUES ("directories", "Movies", "")
 INSERT INTO settings (category, key, value) VALUES ("directories", "Shows", "");
 INSERT INTO settings (category, key, value) VALUES ("directories", "Trash", "");
 INSERT INTO settings (category, key, value) VALUES ("directories", "Youtube", "");
+INSERT INTO settings (category, key, value) VALUES ("thumbpaths", "Show", "");
+INSERT INTO settings (category, key, value) VALUES ("thumbpaths", "Movie", "");
 
 CREATE TABLE genres (
     id INTEGER PRIMARY KEY,
