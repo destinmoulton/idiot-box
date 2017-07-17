@@ -204,7 +204,7 @@ class FileManager extends Component {
                 />
                 <IDFileModal
                     isVisible={isIDModalVisible}
-                    onOk={this._handleIDModalComplete.bind(this)}
+                    onIDComplete={this._handleIDModalComplete.bind(this)}
                     onCancel={this._handleIDModalCancel.bind(this)}
                     currentFilename={idModalFilename}
                 />
