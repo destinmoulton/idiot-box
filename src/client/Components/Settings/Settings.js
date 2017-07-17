@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 
 import { Row, Col } from 'antd';
 
-import DirectoriesEditor from './Settings/DirectoriesEditor';
+import DirectoriesEditor from './DirectoriesEditor';
 
-import { getSettingsForCategory } from '../actions/settings.actions';
+import { getSettingsForCategory } from '../../actions/settings.actions';
 
 class Settings extends Component {
     constructor(props){
@@ -15,6 +15,7 @@ class Settings extends Component {
 
     componentWillMount(){
         this.props.getSettingsForCategory('directories');
+        this.props.getSettingsForCategory('thumbpaths');
     }
 
     render() {
@@ -23,14 +24,28 @@ class Settings extends Component {
             <div >
                 <Row>
                     <Col>
-                        <h3>Directories</h3>
+                        <h3>Media Directories</h3>
                     </Col>
                     <Col>
                         <DirectoriesEditor 
                             saveInProgress={saveInProgress}
                             lastAPIAction={lastAPIAction}
                             lastSavedSettingID={lastSavedSettingID}
-                            directories={settings.directories}/>
+                            settings={settings.directories}
+                            settingCategory={"directories"} />
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <h3>Thumbnail Paths</h3>
+                    </Col>
+                    <Col>
+                        <DirectoriesEditor 
+                            saveInProgress={saveInProgress}
+                            lastAPIAction={lastAPIAction}
+                            lastSavedSettingID={lastSavedSettingID}
+                            settings={settings.thumbpaths}
+                            settingCategory={"thumbpaths"} />
                     </Col>
                 </Row>
             </div>
