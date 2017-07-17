@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -6,6 +7,10 @@ import { Button, Col, Spin } from 'antd';
 import { emitAPIRequest } from '../../actions/api.actions';
 
 class MovieSearchDetails extends Component {
+
+    static propTypes = {
+        onSelectMovie: PropTypes.func.isRequired
+    };
 
     constructor(props){
         super(props);
@@ -29,6 +34,11 @@ class MovieSearchDetails extends Component {
         emitAPIRequest("imdb.image.get", options, this._imageReceived.bind(this), false);
     }
 
+    _handleSelectMovie(movie){
+        const { onSelectMovie } = this.props;
+        onSelectMovie(movie);
+    }
+
     _imageReceived(imageURL){
         this.setState({
             imageURL
@@ -37,7 +47,7 @@ class MovieSearchDetails extends Component {
 
     render() {
         const { imageURL } = this.state;
-        const { movie } = this.props;
+        const { movie, onSelectMovie } = this.props;
 
         let image = <Spin />;
         if(imageURL){
@@ -56,7 +66,7 @@ class MovieSearchDetails extends Component {
                     <br/>
                     {movie.year}
                     <br/>
-                    <Button type="primary" icon="check">This Is It</Button>
+                    <Button type="primary" icon="check" onClick={this._handleSelectMovie.bind(this, movie)}>This Is It</Button>
                 </div>
             </Col>
         );

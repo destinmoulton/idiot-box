@@ -19,7 +19,7 @@ class IDFileModal extends Component {
         currentFilename: PropTypes.string.isRequired,
         isVisible: PropTypes.bool.isRequired,
         onCancel: PropTypes.func.isRequired,
-        onOk: PropTypes.func.isRequired
+        onIDComplete: PropTypes.func.isRequired
     };
 
     constructor(props){
@@ -29,10 +29,6 @@ class IDFileModal extends Component {
             currentView: 'two_column_single_id',
             movieSearchString: ""
         };
-    }
-
-    _handlePressOk(){
-
     }
 
     _handleCancel(){
@@ -70,9 +66,12 @@ class IDFileModal extends Component {
 
     _buildMovieSearchResults(){
         const { movieSearchString } = this.state;
-        const { currentFilename } = this.props;
+        const { currentFilename, onIDComplete } = this.props;
 
-        return <MovieSearchResults searchString={movieSearchString} currentFilename={currentFilename}/>;
+        return <MovieSearchResults 
+                    initialSearchString={movieSearchString}
+                    currentFilename={currentFilename}
+                    onIDComplete={onIDComplete}/>;
     }
 
     _selectCurrentView(){
@@ -96,7 +95,7 @@ class IDFileModal extends Component {
                     title="ID File"
                     visible={isVisible}
                     onCancel={this._handleCancel.bind(this)}
-                    onOk={this._handlePressOk.bind(this)}
+                    onOk={()=>{}}
                     footer={[
                         <Button key="cancel" size="large" onClick={this._handleCancel.bind(this)}>Cancel</Button>,
                     ]} >
