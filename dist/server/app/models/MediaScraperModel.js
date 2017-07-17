@@ -81,12 +81,12 @@ var MediaScrapeModel = function () {
                 if (!_fs2.default.existsSync(setting.value)) {
                     return Promise.reject('MediaScrapeModel :: downloadThumbnail :: The path for ' + typeOfMedia + ' ' + setting.value + ' does not exist.');
                 }
-                return (0, _nodeFetch2.default)(fileURL), setting;
-            }).then(function (res, thumbPath) {
-                var finalPath = _path2.default.join(thumbPath, destFilename);
-                var dest = _fs2.default.createWriteStream(finalPath);
-                res.body.pipe(dest);
-                return destFilename;
+                return (0, _nodeFetch2.default)(fileURL).then(function (res) {
+                    var finalPath = _path2.default.join(setting.value, destFilename);
+                    var dest = _fs2.default.createWriteStream(finalPath);
+                    res.body.pipe(dest);
+                    return destFilename;
+                });
             });
         }
     }]);
