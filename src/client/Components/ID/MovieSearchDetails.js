@@ -36,7 +36,9 @@ class MovieSearchDetails extends Component {
 
     _handleSelectMovie(movie){
         const { onSelectMovie } = this.props;
-        onSelectMovie(movie);
+        const { imageURL } = this.state;
+
+        onSelectMovie(movie, imageURL);
     }
 
     _imageReceived(imageURL){

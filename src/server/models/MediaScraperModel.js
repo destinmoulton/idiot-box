@@ -3,7 +3,9 @@ import path from 'path';
 
 import fetch from 'node-fetch';
 
-export default class MediaScrapeModel {
+import logger from '../logger';
+
+export default class MediaScraperModel {
     
     constructor(traktInstance, settingsModel){
         this._trakt = traktInstance;
@@ -50,8 +52,10 @@ export default class MediaScrapeModel {
         const origFileExt = origFilename.split(".").pop();
         const destFilename = destFilenameMinusExt + "." + origFileExt;
 
-        this._settingsModel.getSingle("thumbpaths", typeOfMedia)
+        const camelCaseType = typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
+        return this._settingsModel.getSingle("thumbpaths", camelCaseType)
             .then((setting)=>{
+                logger.debug(setting);
                 if(!fs.existsSync(setting.value)){
                     return Promise.reject(`MediaScrapeModel :: downloadThumbnail :: The path for ${typeOfMedia} ${setting.value} does not exist.`);
                 }

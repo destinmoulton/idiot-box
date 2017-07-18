@@ -1,4 +1,4 @@
-class FileToMovieModel {
+export default class FileToMovieModel {
     constructor(ibdb){
         this._ibdb = ibdb;
         this._tableName = "file_to_movie";

@@ -8,6 +8,10 @@ var _filesystem = require('./filesystem.api');
 
 var _filesystem2 = _interopRequireDefault(_filesystem);
 
+var _id = require('./id.api');
+
+var _id2 = _interopRequireDefault(_id);
+
 var _imdb = require('./imdb.api');
 
 var _imdb2 = _interopRequireDefault(_imdb);
@@ -28,6 +32,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var endpoints = {
     filesystem: _filesystem2.default,
+    id: _id2.default,
     imdb: _imdb2.default,
     mediascraper: _mediascraper2.default,
     settings: _settings2.default,
