@@ -16,8 +16,10 @@ class FileManager extends Component {
         super(props);
 
         this.state = {
+            currentToplevelDirSetting: {},
             currentToplevelDirectory: "",
             currentPath: "",
+            currentPathInfo: {},
             dirList: [],
             idModalFilename: "",
             isReloading: false,
@@ -39,7 +41,12 @@ class FileManager extends Component {
     }
 
     _handleChangeDirectory(newDir, dirList){
+        const { currentToplevelDirectory, currentPathInfo } = this.state;
+
+        const subpath = newDir.slice(currentToplevelDirectory.length + 1);
+        currentPathInfo.subpath = subpath;
         this.setState({
+            currentPathInfo,
             currentPath: newDir,
             dirList,
             selectedRows: [],
@@ -48,7 +55,12 @@ class FileManager extends Component {
     }
 
     _handleSelectTopLevelDir(dir) {
+        const pathInfo = {
+            setting_id: dir.id,
+            subpath: ""
+        };
         this.setState({
+            currentPathInfo: pathInfo,
             currentToplevelDirectory: dir.value,
             currentPath: dir.value
         });
@@ -126,8 +138,6 @@ class FileManager extends Component {
         });
     }
 
-    
-
     _buildActionColumns(){
         return [
             {
@@ -155,6 +165,7 @@ class FileManager extends Component {
     _buildFileManager(){
         const { 
             currentPath, 
+            currentPathInfo,
             currentToplevelDirectory,
             idModalFilename,
             isReloading,
@@ -207,6 +218,7 @@ class FileManager extends Component {
                     onIDComplete={this._handleIDModalComplete.bind(this)}
                     onCancel={this._handleIDModalCancel.bind(this)}
                     currentFilename={idModalFilename}
+                    currentPathInfo={currentPathInfo}
                 />
             </div>
         );
