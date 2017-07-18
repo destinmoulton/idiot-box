@@ -17,6 +17,7 @@ import MovieSearchResults from './MovieSearchResults';
 class IDFileModal extends Component {
     static propTypes = {
         currentFilename: PropTypes.string.isRequired,
+        currentPathInfo: PropTypes.object.isRequired,
         isVisible: PropTypes.bool.isRequired,
         onCancel: PropTypes.func.isRequired,
         onIDComplete: PropTypes.func.isRequired
@@ -66,11 +67,12 @@ class IDFileModal extends Component {
 
     _buildMovieSearchResults(){
         const { movieSearchString } = this.state;
-        const { currentFilename, onIDComplete } = this.props;
+        const { currentFilename, currentPathInfo, onIDComplete } = this.props;
 
         return <MovieSearchResults 
                     initialSearchString={movieSearchString}
                     currentFilename={currentFilename}
+                    currentPathInfo={currentPathInfo}
                     onIDComplete={onIDComplete}/>;
     }
 

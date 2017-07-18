@@ -18,19 +18,23 @@ var _nodeFetch = require('node-fetch');
 
 var _nodeFetch2 = _interopRequireDefault(_nodeFetch);
 
+var _logger = require('../logger');
+
+var _logger2 = _interopRequireDefault(_logger);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var MediaScrapeModel = function () {
-    function MediaScrapeModel(traktInstance, settingsModel) {
-        _classCallCheck(this, MediaScrapeModel);
+var MediaScraperModel = function () {
+    function MediaScraperModel(traktInstance, settingsModel) {
+        _classCallCheck(this, MediaScraperModel);
 
         this._trakt = traktInstance;
         this._settingsModel = settingsModel;
     }
 
-    _createClass(MediaScrapeModel, [{
+    _createClass(MediaScraperModel, [{
         key: 'searchMovies',
         value: function searchMovies(movieQuery) {
             var options = {
@@ -77,7 +81,9 @@ var MediaScrapeModel = function () {
             var origFileExt = origFilename.split(".").pop();
             var destFilename = destFilenameMinusExt + "." + origFileExt;
 
-            this._settingsModel.getSingle("thumbpaths", typeOfMedia).then(function (setting) {
+            var camelCaseType = typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
+            return this._settingsModel.getSingle("thumbpaths", camelCaseType).then(function (setting) {
+                _logger2.default.debug(setting);
                 if (!_fs2.default.existsSync(setting.value)) {
                     return Promise.reject('MediaScrapeModel :: downloadThumbnail :: The path for ' + typeOfMedia + ' ' + setting.value + ' does not exist.');
                 }
@@ -91,7 +97,7 @@ var MediaScrapeModel = function () {
         }
     }]);
 
-    return MediaScrapeModel;
+    return MediaScraperModel;
 }();
 
-exports.default = MediaScrapeModel;
+exports.default = MediaScraperModel;

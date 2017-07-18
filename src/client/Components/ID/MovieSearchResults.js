@@ -12,6 +12,7 @@ class MovieSearchResults extends Component {
 
     static propTypes = {
         currentFilename: PropTypes.string.isRequired,
+        currentPathInfo: PropTypes.object.isRequired,
         initialSearchString: PropTypes.string.isRequired,
         onIDComplete: PropTypes.func.isRequired
     };
@@ -29,9 +30,28 @@ class MovieSearchResults extends Component {
         this._getSearchResultsFromServer();
     }
 
-    _handleSelectMovie(movie){
+    _handleSelectMovie(movie, imageURL){
+        const { emitAPIRequest, currentFilename, currentPathInfo } = this.props;
+        const options = {
+            movie_info: movie,
+            image_info: {
+                url: imageURL
+            },
+            file_info: {
+                setting_id: currentPathInfo.setting_id,
+                subpath: currentPathInfo.subpath,
+                filename: currentFilename
+            }
+        };
+        
+        emitAPIRequest("id.movie.run", options, this._idMovieComplete.bind(this), false);
+    }
+
+    _idMovieComplete(recd){
         const { onIDComplete } = this.props;
-        console.log("Selected movie", movie);
+
+        console.log(recd);
+
         onIDComplete();
     }
 
