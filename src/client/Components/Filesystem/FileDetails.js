@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Spin } from 'antd';
+import { Icon, Spin } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 
@@ -49,13 +49,33 @@ class FileDetails extends Component {
         }
     }
 
+    _startPlayback(){
+
+        const { emitAPIRequest, filename, fullPath } = this.props;
+        const options = {
+            path: fullPath,
+            filename: filename
+        }
+        emitAPIRequest("videoplayer.cmd.start", options, this._playbackStarted.bind(this), false);
+    }
+
+    _playbackStarted(){
+
+    }
+
     render() {
         const { filename } = this.props;
         const { idInfo } = this.state;
 
         let mediaDetails = "";
         if('title' in idInfo){
-            mediaDetails = <div className="ib-filebrowser-media-title">{idInfo.title}</div>
+            mediaDetails = <div className="ib-filebrowser-media-title">
+                {idInfo.title}
+                <a href="javascript:void(0)"
+                    onClick={this._startPlayback.bind(this)}>
+                    <Icon type="play-circle" />
+                </a>
+            </div>;
         }
         return (
             <div>
