@@ -7,8 +7,8 @@ const videoPlayerModel = new VideoPlayerModel(new OmxPlayer(), 'hdmi');
 const videoplayer = {
     cmd: {
         start: {
-            params: ['filename'],
-            func: (filename) => videoPlayerModel.start(filename)
+            params: ['path', 'filename'],
+            func: (path, filename) => videoPlayerModel.start(path, filename)
         },
         close: {
             params: [],

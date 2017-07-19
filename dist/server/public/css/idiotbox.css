@@ -61,5 +61,14 @@ div.ib-trashmodal-list-box {
 }
 
 button.ib-remote-button-active {
-    color: green;
+    color: #6C3778;
+}
+
+button.ib-remote-button:hover, button.ib-remote-button:focus {
+    color: #6C3778;
+    border-color: #6C3778
+}
+
+i.ib-remote-icon {
+    font-size:1.2em;
 }
