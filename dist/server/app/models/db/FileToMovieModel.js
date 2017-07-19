@@ -52,6 +52,14 @@ var FileToMovieModel = function () {
             };
             return this._ibdb.getRow(where, this._tableName);
         }
+    }, {
+        key: "getSingleForFile",
+        value: function getSingleForFile(fileID) {
+            var where = {
+                file_id: fileID
+            };
+            return this._ibdb.getRow(where, this._tableName);
+        }
     }]);
 
     return FileToMovieModel;
