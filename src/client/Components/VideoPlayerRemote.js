@@ -1,10 +1,25 @@
 import React, { Component } from 'react';
 
-import { Button } from 'antd';
+import { Button, Icon } from 'antd';
 
+import { connect } from 'react-redux';
+
+import { emitAPIRequest } from '../actions/api.actions';
 class VideoPlayerRemote extends Component {
 
     BUTTONS = {
+        playpause: [
+            {
+                title: "Play",
+                icon: "caret-right",
+                cmd: "play"
+            },
+            {
+                title: "Pause",
+                icon: "pause",
+                cmd: "pause"
+            }
+        ],
         reverse: [
             {
                 title: "Back 30s",
@@ -42,10 +57,17 @@ class VideoPlayerRemote extends Component {
     }
 
     _handlePressCmd(cmd){
+        const { emitAPIRequest } = this.props;
+
+        emitAPIRequest("videoplayer.cmd." + cmd, {}, this._sendCommandComplete.bind(this), false);
+
         this.setState({
             activeCmd: cmd
         });
-        console.log(cmd+" pressed!");
+    }
+
+    _sendCommandComplete(){
+        console.log(this.state.activeCmd+" sent!");
     }
 
     _buildButtonSet(buttonSection){
@@ -55,17 +77,16 @@ class VideoPlayerRemote extends Component {
 
         let buttons = [];
         buttonSet.forEach((but)=>{
-            let className = "";
+            let className = "ib-remote-button ";
             if(activeCmd === but.cmd){
-                className = this.BUTTON_ACTIVE_CLASS;
+                className += this.BUTTON_ACTIVE_CLASS;
             }
 
             buttons.push(
                 <Button 
                     className={className}
-                    icon={but.icon}
                     key={but.cmd}
-                    onClick={this._handlePressCmd.bind(this, but.cmd)}></Button>
+                    onClick={this._handlePressCmd.bind(this, but.cmd)}>&nbsp;<Icon className="ib-remote-icon" type={but.icon}/></Button>
             );
         });
         return buttons;
@@ -73,16 +94,27 @@ class VideoPlayerRemote extends Component {
 
     render() {
         let revButtons = this._buildButtonSet('reverse');
+        let playpauseButtons = this._buildButtonSet('playpause');
         let forwardButtons = this._buildButtonSet('forward');
         return (
             <div>
                 <Button.Group>
                     {revButtons}
+                    {playpauseButtons}
                     {forwardButtons}
                 </Button.Group>
             </div>
         );
     }
 }
+const mapStateToProps = (state) => {
+    return { }
+};
 
-export default VideoPlayerRemote;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(VideoPlayerRemote);
