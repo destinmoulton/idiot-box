@@ -8,18 +8,6 @@ import { emitAPIRequest } from '../actions/api.actions';
 class VideoPlayerRemote extends Component {
 
     BUTTONS = {
-        playpause: [
-            {
-                title: "Play",
-                icon: "caret-right",
-                cmd: "play"
-            },
-            {
-                title: "Pause",
-                icon: "pause",
-                cmd: "pause"
-            }
-        ],
         reverse: [
             {
                 title: "Back 30s",
@@ -42,6 +30,13 @@ class VideoPlayerRemote extends Component {
                 title: "Forward 30s",
                 icon: "step-forward",
                 cmd: "fwd30"
+            }
+        ],
+        close: [
+            {
+                title: "Close",
+                icon: "close",
+                cmd: "close"
             }
         ]
     };
@@ -92,10 +87,21 @@ class VideoPlayerRemote extends Component {
         return buttons;
     }
 
+    _buildPlayPauseButton(){
+        return (<Button 
+                    className="ib-remote-button"
+                    key="playpause"
+                    onClick={this._handlePressCmd.bind(this, "play")}>
+                    &nbsp;<Icon className="ib-remote-icon" type="caret-right"/>
+                    &nbsp;/&nbsp;<Icon className="ib-remote-icon" type="pause"/>
+                </Button>);
+    }
+
     render() {
         let revButtons = this._buildButtonSet('reverse');
-        let playpauseButtons = this._buildButtonSet('playpause');
+        let playpauseButtons = this._buildPlayPauseButton();
         let forwardButtons = this._buildButtonSet('forward');
+        let closeButton = this._buildButtonSet('close');
         return (
             <div>
                 <Button.Group>
@@ -103,6 +109,7 @@ class VideoPlayerRemote extends Component {
                     {playpauseButtons}
                     {forwardButtons}
                 </Button.Group>
+                &nbsp;{closeButton}
             </div>
         );
     }

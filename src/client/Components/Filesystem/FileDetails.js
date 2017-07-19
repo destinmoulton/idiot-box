@@ -82,7 +82,7 @@ class FileDetails extends Component {
         return (
             <div>
                 {mediaDetails}
-                <div>{filename}{play}</div>
+                <div>{play}{filename}</div>
             </div>
         );
     }
