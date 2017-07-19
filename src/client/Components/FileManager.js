@@ -144,6 +144,14 @@ class FileManager extends Component {
                 title: "",
                 dataIndex: "",
                 render: (text,record)=>{
+                    let videoActions = "";
+                    if(record.name.search(this.VIDEO_FILE_REGX) > -1){
+                        // Video file
+                        videoActions = <a href="javascript:void(0);"
+                            onClick={this._handleClickIDFile.bind(this, record.name)}>
+                            <Icon type="tag"/>
+                        </a>;
+                    }
                     return (
                         <span>
                         <a href="javascript:void(0);"
@@ -151,10 +159,7 @@ class FileManager extends Component {
                            data-item-name={record.name}>
                            <Icon type="delete"/>
                         </a>&nbsp;
-                        <a href="javascript:void(0);"
-                            onClick={this._handleClickIDFile.bind(this, record.name)}>
-                            <Icon type="tag"/>
-                        </a>
+                        {videoActions}
                         </span>
                     );
                 }
