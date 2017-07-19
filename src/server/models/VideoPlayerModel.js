@@ -1,4 +1,4 @@
-
+import path from 'path';
 export default class VideoPlayerModel {
     player = {};
     audioOutput = "";
@@ -9,9 +9,10 @@ export default class VideoPlayerModel {
         this.audioOutput = audioOutput;
     }
 
-    start(filename){
+    start(basePath, filename){
         return new Promise((resolve, reject)=>{
-            this.player.newSource(filename, this.audioOutput);
+            const source = path.join(basePath, filename);
+            this.player.newSource(source, this.audioOutput);
             resolve(true);
         });
     }

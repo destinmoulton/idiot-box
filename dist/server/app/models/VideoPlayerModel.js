@@ -6,6 +6,12 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _path = require("path");
+
+var _path2 = _interopRequireDefault(_path);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var VideoPlayerModel = function () {
@@ -22,11 +28,12 @@ var VideoPlayerModel = function () {
 
     _createClass(VideoPlayerModel, [{
         key: "start",
-        value: function start(filename) {
+        value: function start(basePath, filename) {
             var _this = this;
 
             return new Promise(function (resolve, reject) {
-                _this.player.newSource(filename, _this.audioOutput);
+                var source = _path2.default.join(basePath, filename);
+                _this.player.newSource(source, _this.audioOutput);
                 resolve(true);
             });
         }
