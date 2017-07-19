@@ -20,9 +20,9 @@ var _logger = require('../../logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
-var _IDMovieModel = require('../../models/IDMovieModel');
+var _IDModel = require('../../models/IDModel');
 
-var _IDMovieModel2 = _interopRequireDefault(_IDMovieModel);
+var _IDModel2 = _interopRequireDefault(_IDModel);
 
 var _FilesModel = require('../../models/db/FilesModel');
 
@@ -61,14 +61,30 @@ var genresModel = new _GenresModel2.default(_IBDB2.default);
 var mediaScraperModel = new _MediaScraperModel2.default(new _trakt2.default(_trakt4.default), settingsModel);
 var movieToGenreModel = new _MovieToGenreModel2.default(_IBDB2.default, genresModel);
 var moviesModel = new _MoviesModel2.default(_IBDB2.default, movieToGenreModel);
-var idMovieModel = new _IDMovieModel2.default(mediaScraperModel, moviesModel, filesModel, fileToMovieModel);
+
+var models = {
+    filesModel: filesModel,
+    fileToMovieModel: fileToMovieModel,
+    mediaScraperModel: mediaScraperModel,
+    moviesModel: moviesModel,
+    settingsModel: settingsModel
+};
+var idModel = new _IDModel2.default(models);
 
 var id = {
+    file: {
+        search: {
+            params: ['file_info'],
+            func: function func(fileInfo) {
+                return idModel.findID(fileInfo);
+            }
+        }
+    },
     movie: {
         run: {
             params: ['movie_info', 'file_info', 'image_info'],
             func: function func(movieInfo, fileInfo, imageInfo) {
-                return idMovieModel.runID(movieInfo, fileInfo, imageInfo);
+                return idModel.idMovie(movieInfo, fileInfo, imageInfo);
             }
         }
     }
