@@ -19,9 +19,9 @@ var videoPlayerModel = new _VideoPlayerModel2.default(new _nodeOmxplayer2.defaul
 var videoplayer = {
     cmd: {
         start: {
-            params: ['filename'],
-            func: function func(filename) {
-                return videoPlayerModel.start(filename);
+            params: ['path', 'filename'],
+            func: function func(path, filename) {
+                return videoPlayerModel.start(path, filename);
             }
         },
         close: {
