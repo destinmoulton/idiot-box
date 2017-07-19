@@ -39,6 +39,11 @@ span.ib-filebrowser-current-path {
     padding-left: 10px;
 }
 
+div.ib-filebrowser-media-title {
+    font-weight: bold;
+    font-size: #3E3E3E;
+}
+
 button.ib-filemanager-button:hover, button.ib-filemanager-button:focus {
     color: green;
     border-color: green;

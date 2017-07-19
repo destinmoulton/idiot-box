@@ -25,6 +25,13 @@ export default class SettingsModel {
         return this._ibdb.getRow(where, this._tableName);
     }
 
+    getSingleByCatAndVal(category, value){
+        const where = {
+            category, value
+        };
+        return this._ibdb.getRow(where, this._tableName);
+    }
+
     addSetting(category, key, value){
         const data = {
             category, key, value

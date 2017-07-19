@@ -37,4 +37,11 @@ export default class FileToMovieModel {
         };
         return this._ibdb.getRow(where, this._tableName);
     }
+
+    getSingleForFile(fileID){
+        const where = {
+            file_id: fileID
+        };
+        return this._ibdb.getRow(where, this._tableName);
+    }
 }

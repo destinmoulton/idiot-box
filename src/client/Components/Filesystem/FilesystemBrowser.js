@@ -7,6 +7,8 @@ import { Button, Checkbox, Icon, Spin, Table } from 'antd';
 import { emitAPIRequest } from '../../actions/api.actions';
 import { socketClient } from '../../store';
 
+import FileDetails from './FileDetails';
+
 class FilesystemBrowser extends Component {
     PARENT_DIR_NAME = "..";
 
@@ -94,8 +96,6 @@ class FilesystemBrowser extends Component {
             dirList,
             isLoading: false
         });
-
-        
     }
 
     _prepareDirList(dirList, newPath){
@@ -162,14 +162,13 @@ class FilesystemBrowser extends Component {
         return bytes.toFixed(1) + ' ' + units[u];
     }
 
-    _handleDirClick(e){
+    _handleDirClick(nextDirName){
         const { serverInfo } = this.props;
         const { pathSeparator } = serverInfo;
         const { currentPath } = this.state;
-        const desiredDir = e.currentTarget.getAttribute("data-directory-name");
 
         let newPath = currentPath;
-        if(desiredDir === this.PARENT_DIR_NAME){
+        if(nextDirName === this.PARENT_DIR_NAME){
             const pathParts = currentPath.split(pathSeparator);
             pathParts.pop();
             newPath = pathParts.join(pathSeparator);
@@ -180,9 +179,9 @@ class FilesystemBrowser extends Component {
         } else {
             if(currentPath === pathSeparator){
                 // Don't concat additional / when at linux root "/"
-                newPath = currentPath + desiredDir;
+                newPath = currentPath + nextDirName;
             } else {
-                newPath = currentPath + pathSeparator + desiredDir;
+                newPath = currentPath + pathSeparator + nextDirName;
             }
         }
 
@@ -190,6 +189,9 @@ class FilesystemBrowser extends Component {
     }
 
     _buildColumns(){
+        const { initialPath } = this.props;
+        const { currentPath } = this.state;
+
         return [
             {
                 title: "Name",
@@ -202,13 +204,12 @@ class FilesystemBrowser extends Component {
                         }
                         return (
                             <a href="javascript:void(0);"
-                                onClick={this._handleDirClick.bind(this)}
-                                data-directory-name={record.name} >
+                                onClick={this._handleDirClick.bind(this, record.name)}>
                                 <Icon type={iconType} />&nbsp;&nbsp;{record.name}
                             </a>
                         )
                     } else {
-                        return (<span>{record.name}</span>);
+                        return (<FileDetails filename={record.name} basePath={initialPath} fullPath={currentPath} />);
                     }
                 }
             },

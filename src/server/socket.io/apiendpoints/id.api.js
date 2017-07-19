@@ -5,7 +5,7 @@ import traktConfig from '../../config/trakt.config';
 import ibdb from '../../db/IBDB';
 import logger from '../../logger';
 
-import IDMovieModel from '../../models/IDMovieModel';
+import IDModel from '../../models/IDModel';
 import FilesModel from '../../models/db/FilesModel';
 import FileToMovieModel from '../../models/db/FileToMovieModel';
 import GenresModel from '../../models/db/GenresModel';
@@ -21,13 +21,27 @@ const genresModel = new GenresModel(ibdb);
 const mediaScraperModel = new MediaScraperModel(new Trakt(traktConfig), settingsModel);
 const movieToGenreModel = new MovieToGenreModel(ibdb, genresModel);
 const moviesModel = new MoviesModel(ibdb, movieToGenreModel);
-const idMovieModel = new IDMovieModel(mediaScraperModel, moviesModel, filesModel, fileToMovieModel);
+
+const models = {
+    filesModel,
+    fileToMovieModel,
+    mediaScraperModel,
+    moviesModel,
+    settingsModel
+};
+const idModel = new IDModel(models);
 
 const id = {
+    file: {
+        search: {
+            params: ['file_info'],
+            func: (fileInfo) => idModel.findID(fileInfo)
+        }
+    },
     movie: {
         run: {
             params: ['movie_info', 'file_info', 'image_info'],
-            func: (movieInfo, fileInfo, imageInfo)=> idMovieModel.runID(movieInfo, fileInfo, imageInfo)
+            func: (movieInfo, fileInfo, imageInfo)=> idModel.idMovie(movieInfo, fileInfo, imageInfo)
         }
     }
 };
