@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { Icon, Layout, Menu } from 'antd';
 const { Header } = Layout;
 
+import VideoPlayerRemote from '../VideoPlayerRemote';
+
 class IdiotBoxHeader extends Component {
     render() {
         return (
@@ -24,13 +26,14 @@ class IdiotBoxHeader extends Component {
                     <Menu.Item key="shows">
                         <Link to="/shows">Shows</Link>
                     </Menu.Item>
-                    <Menu.Item key="remote">
-                        <Link to="/remote">Remote</Link>
-                    </Menu.Item>
+                    
                     <Menu.Item key="settings">
                         <Link to="/settings">
                             <Icon type="setting"/>
                         </Link>
+                    </Menu.Item>
+                    <Menu.Item key="remote">
+                        <VideoPlayerRemote />
                     </Menu.Item>
                 </Menu>
             </Header>
