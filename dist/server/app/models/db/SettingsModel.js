@@ -46,6 +46,14 @@ var SettingsModel = function () {
             return this._ibdb.getRow(where, this._tableName);
         }
     }, {
+        key: "getSingleByCatAndVal",
+        value: function getSingleByCatAndVal(category, value) {
+            var where = {
+                category: category, value: value
+            };
+            return this._ibdb.getRow(where, this._tableName);
+        }
+    }, {
         key: "addSetting",
         value: function addSetting(category, key, value) {
             var _this = this;
