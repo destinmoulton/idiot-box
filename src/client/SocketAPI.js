@@ -1,7 +1,10 @@
 import io from 'socket.io-client';
 
 // Example conf. You can move this to your config file.
-const host = 'http://localhost:3000';
+const protocol = location.protocol;
+const slashes = protocol.concat("//");
+const host = slashes.concat(window.location.hostname, ":3000");
+
 const socketPath = '/socket.io';
 
 export default class SocketAPI {
