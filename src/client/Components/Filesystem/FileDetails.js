@@ -69,18 +69,20 @@ class FileDetails extends Component {
 
         let mediaDetails = "";
         if('title' in idInfo){
-            mediaDetails = <div className="ib-filebrowser-media-title">
-                {idInfo.title}
-                <a href="javascript:void(0)"
+            mediaDetails = <div className="ib-filebrowser-media-title">{idInfo.title}</div>;
+        }
+
+        let play = "";
+        if(filename.search(this.VIDEO_FILE_REGX) > -1){
+            play = <a href="javascript:void(0)"
                     onClick={this._startPlayback.bind(this)}>
                     <Icon type="play-circle" />
-                </a>
-            </div>;
+                </a>;
         }
         return (
             <div>
                 {mediaDetails}
-                <div>{filename}</div>
+                <div>{filename}{play}</div>
             </div>
         );
     }
