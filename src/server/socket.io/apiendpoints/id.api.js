@@ -13,6 +13,9 @@ import MediaScraperModel from '../../models/MediaScraperModel';
 import MoviesModel from '../../models/db/MoviesModel';
 import MovieToGenreModel from '../../models/db/MovieToGenreModel';
 import SettingsModel from '../../models/db/SettingsModel';
+import ShowsModel from '../../models/db/ShowsModel';
+import ShowSeasonsModel from '../../models/db/ShowSeasonsModel';
+import ShowSeasonEpisodesModel from '../../models/db/ShowSeasonEpisodesModel';
 
 const filesModel = new FilesModel(ibdb);
 const fileToMovieModel = new FileToMovieModel(ibdb);
@@ -21,13 +24,19 @@ const genresModel = new GenresModel(ibdb);
 const mediaScraperModel = new MediaScraperModel(new Trakt(traktConfig), settingsModel);
 const movieToGenreModel = new MovieToGenreModel(ibdb, genresModel);
 const moviesModel = new MoviesModel(ibdb, movieToGenreModel);
+const showsModel = new ShowsModel(ibdb);
+const showSeasonsModel = new ShowSeasonsModel(ibdb);
+const showSeasonEpisodesModel = new ShowSeasonEpisodesModel(ibdb);
 
 const models = {
     filesModel,
     fileToMovieModel,
     mediaScraperModel,
     moviesModel,
-    settingsModel
+    settingsModel,
+    showsModel,
+    showSeasonsModel,
+    showSeasonEpisodesModel
 };
 const idModel = new IDModel(models);
 
@@ -39,9 +48,21 @@ const id = {
         }
     },
     movie: {
-        run: {
+        add: {
             params: ['movie_info', 'file_info', 'image_info'],
             func: (movieInfo, fileInfo, imageInfo)=> idModel.idMovie(movieInfo, fileInfo, imageInfo)
+        }
+    },
+    show: {
+        add: {
+            params: ['show_info', 'image_info'],
+            func: (showInfo, imageInfo)=> idModel.addShow(showInfo, imageInfo)
+        }
+    },
+    episode: {
+        id: {
+            params: ['ep_info', 'file_info'],
+            func: (epInfo, fileInfo)=> idModel.idEpisode(epInfo, fileInfo)
         }
     }
 };

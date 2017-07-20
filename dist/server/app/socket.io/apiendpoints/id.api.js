@@ -52,6 +52,18 @@ var _SettingsModel = require('../../models/db/SettingsModel');
 
 var _SettingsModel2 = _interopRequireDefault(_SettingsModel);
 
+var _ShowsModel = require('../../models/db/ShowsModel');
+
+var _ShowsModel2 = _interopRequireDefault(_ShowsModel);
+
+var _ShowSeasonsModel = require('../../models/db/ShowSeasonsModel');
+
+var _ShowSeasonsModel2 = _interopRequireDefault(_ShowSeasonsModel);
+
+var _ShowSeasonEpisodesModel = require('../../models/db/ShowSeasonEpisodesModel');
+
+var _ShowSeasonEpisodesModel2 = _interopRequireDefault(_ShowSeasonEpisodesModel);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var filesModel = new _FilesModel2.default(_IBDB2.default);
@@ -61,13 +73,19 @@ var genresModel = new _GenresModel2.default(_IBDB2.default);
 var mediaScraperModel = new _MediaScraperModel2.default(new _trakt2.default(_trakt4.default), settingsModel);
 var movieToGenreModel = new _MovieToGenreModel2.default(_IBDB2.default, genresModel);
 var moviesModel = new _MoviesModel2.default(_IBDB2.default, movieToGenreModel);
+var showsModel = new _ShowsModel2.default(_IBDB2.default);
+var showSeasonsModel = new _ShowSeasonsModel2.default(_IBDB2.default);
+var showSeasonEpisodesModel = new _ShowSeasonEpisodesModel2.default(_IBDB2.default);
 
 var models = {
     filesModel: filesModel,
     fileToMovieModel: fileToMovieModel,
     mediaScraperModel: mediaScraperModel,
     moviesModel: moviesModel,
-    settingsModel: settingsModel
+    settingsModel: settingsModel,
+    showsModel: showsModel,
+    showSeasonsModel: showSeasonsModel,
+    showSeasonEpisodesModel: showSeasonEpisodesModel
 };
 var idModel = new _IDModel2.default(models);
 
@@ -81,10 +99,26 @@ var id = {
         }
     },
     movie: {
-        run: {
+        add: {
             params: ['movie_info', 'file_info', 'image_info'],
             func: function func(movieInfo, fileInfo, imageInfo) {
                 return idModel.idMovie(movieInfo, fileInfo, imageInfo);
+            }
+        }
+    },
+    show: {
+        add: {
+            params: ['show_info', 'image_info'],
+            func: function func(showInfo, imageInfo) {
+                return idModel.addShow(showInfo, imageInfo);
+            }
+        }
+    },
+    episode: {
+        id: {
+            params: ['ep_info', 'file_info'],
+            func: function func(epInfo, fileInfo) {
+                return idModel.idEpisode(epInfo, fileInfo);
             }
         }
     }
