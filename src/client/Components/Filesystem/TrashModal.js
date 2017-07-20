@@ -88,7 +88,7 @@ class TrashModal extends Component {
                 >
                     <div className="ib-trashmodal-list-box" >
                         <h4>{currentPath}</h4>
-                        <ul>{list}</ul>
+                        <ul className="ib-trashmodal-list">{list}</ul>
                     </div>
                 </Modal>
             </div>
