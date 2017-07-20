@@ -6,10 +6,10 @@ import { Button, Col, Spin } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 
-class MovieSearchDetails extends Component {
+class MediaItemSearchDetails extends Component {
 
     static propTypes = {
-        onSelectMovie: PropTypes.func.isRequired
+        onSelectItem: PropTypes.func.isRequired
     };
 
     constructor(props){
@@ -25,20 +25,20 @@ class MovieSearchDetails extends Component {
     }
 
     _getImageFromServer(){
-        const { emitAPIRequest, movie } = this.props;
+        const { emitAPIRequest, item } = this.props;
 
         const options = {
-            imdb_id: movie.ids.imdb
+            imdb_id: item.ids.imdb
         };
         
         emitAPIRequest("imdb.image.get", options, this._imageReceived.bind(this), false);
     }
 
-    _handleSelectMovie(movie){
-        const { onSelectMovie } = this.props;
+    _handleSelectMovie(item){
+        const { onSelectItem } = this.props;
         const { imageURL } = this.state;
 
-        onSelectMovie(movie, imageURL);
+        onSelectItem(item, imageURL);
     }
 
     _imageReceived(imageURL){
@@ -49,26 +49,26 @@ class MovieSearchDetails extends Component {
 
     render() {
         const { imageURL } = this.state;
-        const { movie, onSelectMovie } = this.props;
+        const { item, onSelectItem } = this.props;
 
         let image = <Spin />;
         if(imageURL){
-            image = <img src={imageURL} className={"ib-movie-search-details-img"} />
+            image = <img src={imageURL} className={"ib-idmodal-item-search-details-img"} />
         }
         return (
             <Col 
                 span={6} 
-                key={movie.ids.trakt} 
-                className={"ib-movie-search-details-box"}>
-                <div className={"ib-movie-search-details-img-box"}>
+                key={item.ids.trakt} 
+                className={"ib-idmodal-item-search-details-box"}>
+                <div className={"ib-idmodal-item-search-details-img-box"}>
                     {image}
                 </div>
                 <div>
-                    <b>{movie.title}</b>
+                    <b>{item.title}</b>
                     <br/>
-                    {movie.year}
+                    {item.year}
                     <br/>
-                    <Button type="primary" icon="check" onClick={this._handleSelectMovie.bind(this, movie)}>This Is It</Button>
+                    <Button type="primary" icon="check" onClick={this._handleSelectMovie.bind(this, item)}>This Is It</Button>
                 </div>
             </Col>
         );
@@ -84,4 +84,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MovieSearchDetails);
+export default connect(mapStateToProps, mapDispatchToProps)(MediaItemSearchDetails);
