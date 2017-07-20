@@ -38,6 +38,14 @@ var mediascraper = {
                 return mediaScraperModel.searchMovies(searchString);
             }
         }
+    },
+    shows: {
+        search: {
+            params: ['search_string'],
+            func: function func(searchString) {
+                return mediaScraperModel.searchShows(searchString);
+            }
+        }
     }
 };
 

@@ -16,6 +16,12 @@ const mediascraper = {
             params: ['search_string'],
             func: (searchString)=> mediaScraperModel.searchMovies(searchString)
         }
+    },
+    shows: {
+        search: {
+            params: ['search_string'],
+            func: (searchString)=> mediaScraperModel.searchShows(searchString)
+        }
     }
 };
 
