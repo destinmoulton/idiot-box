@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.ShowsModel = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -15,7 +14,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ShowsModel = exports.ShowsModel = function () {
+var ShowsModel = function () {
     function ShowsModel(ibdb) {
         _classCallCheck(this, ShowsModel);
 
@@ -53,7 +52,12 @@ var ShowsModel = exports.ShowsModel = function () {
 
             var data = this._prepareData(apiData, imageFilename);
 
-            return this._ibdb.insert(data, this._tableName).then(function () {
+            return this.getSingleByTraktID(data.trakt_id).then(function (show) {
+                if ('id' in show) {
+                    return show;
+                }
+                return _this._ibdb.insert(data, _this._tableName);
+            }).then(function () {
                 return _this.getSingleByTraktID(data.trakt_id);
             });
         }
@@ -66,7 +70,14 @@ var ShowsModel = exports.ShowsModel = function () {
 
             return this._ibdb.getRow(where, this._tableName);
         }
+    }, {
+        key: 'getAll',
+        value: function getAll() {
+            return this._ibdb.getAll({}, this._tableName, "title ASC");
+        }
     }]);
 
     return ShowsModel;
 }();
+
+exports.default = ShowsModel;

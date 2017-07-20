@@ -76,7 +76,7 @@ class FileDetails extends Component {
         if(filename.search(this.VIDEO_FILE_REGX) > -1){
             play = <a href="javascript:void(0)"
                     onClick={this._startPlayback.bind(this)}>
-                    <Icon type="play-circle" />
+                    <Icon type="play-circle" className="ib-filebrowser-media-play"/>
                 </a>;
         }
         return (

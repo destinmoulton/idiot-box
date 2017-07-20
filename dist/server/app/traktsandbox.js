@@ -25,13 +25,13 @@ trakt.search.text({
             console.log(moment(res[1].movie.updated_at).format('X'));
         });
         
-/**
+**/
 trakt.seasons.summary({
-            id: 107460,
-            extended: 'full'
-        }).then((res)=>{
-            console.log(res);
-        });
+    id: 107460,
+    extended: 'full'
+}).then(function (res) {
+    console.log(res);
+});
 
 /**
 trakt.seasons.season({
@@ -51,28 +51,3 @@ trakt.episodes.summary({
     console.log(res);
 });
 **/
-var nums = [1, 5, 12];
-
-var process = [];
-
-nums.forEach(function (num) {
-    process.push(firstPromise(num).then(function (second) {
-        return secondPromise(second);
-    }));
-});
-
-Promise.all(process).then(function (results) {
-    console.log(results);
-});
-
-function firstPromise(seed) {
-    return new Promise(function (resolve, reject) {
-        resolve(seed + 5);
-    });
-}
-
-function secondPromise(secondSeed) {
-    return new Promise(function (resolve, reject) {
-        resolve(secondSeed + 2);
-    });
-}

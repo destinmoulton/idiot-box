@@ -7,11 +7,17 @@ import {
 } from 'antd';
 
 class MovieCheckForm extends Component {
+    static propTypes = {
+        currentFilename: PropTypes.string.isRequired,
+        onSearchMovies: PropTypes.func.isRequired
+    };
+
     constructor(props){
         super(props);
 
         this.state = {
-            checkedMovieNames: []
+            checkedMovieNames: [],
+            searchString: ""
         };
     }
 
@@ -26,13 +32,20 @@ class MovieCheckForm extends Component {
         }
 
         this.setState({
-            checkedMovieNames
+            checkedMovieNames,
+            searchString: checkedMovieNames.join(" ")
         });
+    }
+
+    _handleChangeSearchText(evt){
+        this.setState({
+            searchString: evt.target.value
+        })
     }
 
     render() {
         const { currentFilename, onSearchMovies } = this.props;
-        const { checkedMovieNames } = this.state;
+        const { checkedMovieNames, searchString } = this.state;
 
         const possibleNames = currentFilename.split(".");
 
@@ -47,8 +60,9 @@ class MovieCheckForm extends Component {
                 <div><h5>{currentFilename}</h5></div>
                 <Input.Search 
                     placeholder="Movie search..." 
-                    value={checkedMovieNames.join(" ")}
+                    value={searchString}
                     onSearch={onSearchMovies}
+                    onChange={this._handleChangeSearchText.bind(this)}
                 />
                 <div>
                     {possibleChecks}

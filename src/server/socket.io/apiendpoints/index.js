@@ -3,6 +3,7 @@ import id from './id.api';
 import imdb from './imdb.api';
 import mediascraper from './mediascraper.api';
 import settings from './settings.api';
+import shows from './shows.api';
 import videoplayer from './videoplayer.api';
 
 const endpoints = {
@@ -11,6 +12,7 @@ const endpoints = {
     imdb,
     mediascraper,
     settings,
+    shows,
     videoplayer
 }
 

@@ -11,10 +11,16 @@ import {
     Row
 } from 'antd';
 
+import AddShow from './AddShow';
+import EpisodeIDSelector from './EpisodeIDSelector';
 import MovieCheckForm from './MovieCheckForm';
 import MovieSearchResults from './MovieSearchResults';
 
 class IDFileModal extends Component {
+    INITIAL_VIEW = "two_column_single_id";
+    MOVIE_SEARCH_VIEW = "movie_search_results";
+    ADD_SHOW_VIEW = "add_show";
+
     static propTypes = {
         currentFilename: PropTypes.string.isRequired,
         currentPathInfo: PropTypes.object.isRequired,
@@ -59,10 +65,20 @@ class IDFileModal extends Component {
                     />
                 </Col>
                 <Col span={8} offset={2}>
-                    <h4>ID Episode Here</h4>
+                    <Button onClick={this._changeCurrentView.bind(this, this.ADD_SHOW_VIEW)}>Add New Show</Button>
+                    <h4>ID Episode</h4>
+                    <EpisodeIDSelector />
                 </Col>
             </div>
         );
+    }
+
+    _buildAddShowView(){
+        const { currentFilename, onIDComplete } = this.props;
+
+        return <AddShow
+                    currentFilename={currentFilename}
+                    onIDComplete={onIDComplete}/>;
     }
 
     _buildMovieSearchResults(){
@@ -76,21 +92,35 @@ class IDFileModal extends Component {
                     onIDComplete={onIDComplete}/>;
     }
 
+    _changeCurrentView(newView){
+        this.setState({
+           currentView: newView 
+        });
+    }
+
     _selectCurrentView(){
         const { currentView } = this.state;
         switch(currentView){
-            case 'two_column_single_id':
+            case this.INITIAL_VIEW:
                 return this._buildTwoColumnSingleID();
-            case 'movie_search_results':
+            case this.MOVIE_SEARCH_VIEW:
                 return this._buildMovieSearchResults();
+            case this.ADD_SHOW_VIEW:
+                return this._buildAddShowView();
         }
     }
 
     render() {
         const { currentFilename, isVisible } = this.props;
+        const { currentView } = this.state;
 
         const contents = this._selectCurrentView();
 
+        let backButton = "";
+        if(currentView !== this.INITIAL_VIEW){
+            backButton = <Button onClick={this._changeCurrentView.bind(this, this.INITIAL_VIEW)} icon="caret-left">Back</Button>
+        }
+            
         return (
             <div>
                 <Modal
@@ -101,6 +131,9 @@ class IDFileModal extends Component {
                     footer={[
                         <Button key="cancel" size="large" onClick={this._handleCancel.bind(this)}>Cancel</Button>,
                     ]} >
+                    <Row>
+                        {backButton}
+                    </Row>
                     <Row>
                         {contents}
                     </Row>

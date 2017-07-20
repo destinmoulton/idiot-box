@@ -6,7 +6,7 @@ import { Input, Row } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 
-import MovieSearchDetails from './MovieSearchDetails';
+import MediaItemSearchDetails from './MediaItemSearchDetails';
 
 class MovieSearchResults extends Component {
 
@@ -44,7 +44,7 @@ class MovieSearchResults extends Component {
             }
         };
         
-        emitAPIRequest("id.movie.run", options, this._idMovieComplete.bind(this), false);
+        emitAPIRequest("id.movie.add", options, this._idMovieComplete.bind(this), false);
     }
 
     _idMovieComplete(recd){
@@ -88,10 +88,10 @@ class MovieSearchResults extends Component {
 
         let movieList = [];
         movies.forEach((movie)=>{
-            const movieDetails = <MovieSearchDetails 
+            const movieDetails = <MediaItemSearchDetails 
                                     key={movie.ids.trakt} 
-                                    movie={movie}
-                                    onSelectMovie={this._handleSelectMovie.bind(this)}/>
+                                    item={movie}
+                                    onSelectItem={this._handleSelectMovie.bind(this)}/>
 
             movieList.push(movieDetails);
         });
