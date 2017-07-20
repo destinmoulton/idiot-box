@@ -51,10 +51,15 @@ var MediaScraperModel = function () {
     }, {
         key: 'searchShows',
         value: function searchShows(tvQuery) {
-            return this._trakt.search.text({
+            var options = {
                 query: tvQuery,
                 type: 'show',
                 extended: 'full'
+            };
+            return this._trakt.search.text(options).then(function (results) {
+                return results.map(function (item) {
+                    return item.show;
+                });
             });
         }
     }, {
