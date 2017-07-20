@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export class ShowSeasonsModel {
+export default class ShowSeasonsModel {
     constructor(ibdb){
         this._ibdb = ibdb;
 
@@ -24,10 +24,24 @@ export class ShowSeasonsModel {
         };
     }
 
+    addArrayOfSeasons(arrSeasons, showID){
+        let promisesToRun = [];
+        arrSeasons.forEach((season)=>{
+            promisesToRun.push(this.addShowSeason(showID, season))
+        })
+        return Promise.all(promisesToRun);
+    }
+
     addShowSeason(showID, apiData){
         const data = this._prepareData(showID, apiData);
-
-        return this._ibdb.insert(data, this._tableName)
+        return this.getSingleByShowSeasonTrakt(showID, apiData.number, apiData.ids.trakt)
+            .then((season)=>{
+                if('id' in season){
+                    return season;
+                }
+                
+                return this._ibdb.insert(data, this._tableName);
+            })        
             .then(()=>{
                 return this.getSingleByShowSeasonTrakt(showID, data.season_number, data.trakt_id);
             });

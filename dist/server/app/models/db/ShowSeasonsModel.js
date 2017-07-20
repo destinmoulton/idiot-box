@@ -3,7 +3,6 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.ShowSeasonsModel = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
@@ -15,7 +14,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var ShowSeasonsModel = exports.ShowSeasonsModel = function () {
+var ShowSeasonsModel = function () {
     function ShowSeasonsModel(ibdb) {
         _classCallCheck(this, ShowSeasonsModel);
 
@@ -43,14 +42,30 @@ var ShowSeasonsModel = exports.ShowSeasonsModel = function () {
             };
         }
     }, {
-        key: 'addShowSeason',
-        value: function addShowSeason(showID, apiData) {
+        key: 'addArrayOfSeasons',
+        value: function addArrayOfSeasons(arrSeasons, showID) {
             var _this = this;
 
-            var data = this._prepareData(showID, apiData);
+            var promisesToRun = [];
+            arrSeasons.forEach(function (season) {
+                promisesToRun.push(_this.addShowSeason(showID, season));
+            });
+            return Promise.all(promisesToRun);
+        }
+    }, {
+        key: 'addShowSeason',
+        value: function addShowSeason(showID, apiData) {
+            var _this2 = this;
 
-            return this._ibdb.insert(data, this._tableName).then(function () {
-                return _this.getSingleByShowSeasonTrakt(showID, data.season_number, data.trakt_id);
+            var data = this._prepareData(showID, apiData);
+            return this.getSingleByShowSeasonTrakt(showID, apiData.number, apiData.ids.trakt).then(function (season) {
+                if ('id' in season) {
+                    return season;
+                }
+
+                return _this2._ibdb.insert(data, _this2._tableName);
+            }).then(function () {
+                return _this2.getSingleByShowSeasonTrakt(showID, data.season_number, data.trakt_id);
             });
         }
     }, {
@@ -76,3 +91,5 @@ var ShowSeasonsModel = exports.ShowSeasonsModel = function () {
 
     return ShowSeasonsModel;
 }();
+
+exports.default = ShowSeasonsModel;
