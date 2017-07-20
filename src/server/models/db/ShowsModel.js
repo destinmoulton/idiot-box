@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export class ShowsModel {
+export default class ShowsModel {
     constructor(ibdb){
         this._ibdb = ibdb;
 
@@ -31,10 +31,16 @@ export class ShowsModel {
     addShow(apiData, imageFilename){
         const data = this._prepareData(apiData, imageFilename);
 
-        return this._ibdb.insert(data, this._tableName)
-            .then(()=>{
-                return this.getSingleByTraktID(data.trakt_id);
-            });
+        return this.getSingleByTraktID(data.trakt_id)
+                .then((show)=>{
+                    if('id' in show){
+                        return show;
+                    }
+                    return this._ibdb.insert(data, this._tableName);
+                })
+                .then(()=>{
+                    return this.getSingleByTraktID(data.trakt_id);
+                });
     }
 
     getSingleByTraktID(traktID){
@@ -45,4 +51,7 @@ export class ShowsModel {
         return this._ibdb.getRow(where, this._tableName);
     }
 
+    getAll(){
+        return this._ibdb.getAll({}, this._tableName, "title ASC");
+    }
 }
