@@ -1,6 +1,6 @@
 import moment from 'moment';
 
-export class ShowSeasonEpisodesModel {
+export default class ShowSeasonEpisodesModel {
     constructor(ibdb){
         this._ibdb = ibdb;
 
@@ -30,10 +30,26 @@ export class ShowSeasonEpisodesModel {
     addEpisode(showID, seasonID, apiData){
         const data = this._prepareData(showID, seasonID, apiData);
 
-        return this._ibdb.insert(data, this._tableName)
+        return this.getSingleByShowSeasonTrakt(showID, seasonID, data.episode_number, data.trakt_id)
+            .then((episode)=>{
+                if('id' in episode){
+                    return episode;
+                }
+                return this._ibdb.insert(data, this._tableName);
+            })
             .then(()=>{
                 return this.getSingleByShowSeasonTrakt(showID, seasonID, data.episode_number, data.trakt_id);
             });
+    }
+
+    addArrEpisodes(showID, seasonID, episodes){
+        const promisesToRun = [];
+
+        episodes.forEach((episode)=>{
+            promisesToRun.push(this.addEpisode(showID, seasonID, episode));
+        });
+
+        return Promise.all(promisesToRun);
     }
 
     toggleHasWatched(episodeID){
