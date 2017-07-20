@@ -8,7 +8,7 @@ div.ib-settings-dirsel-fs-cont{
     overflow-y: scroll;
 }
 
-div.ib-movie-search-details-box {
+div.ib-idmodal-item-search-details-box {
     height: 245px;
     padding: 15px;
     border-radius: 5px;
@@ -16,12 +16,12 @@ div.ib-movie-search-details-box {
     margin: 5px;
 }
 
-div.ib-movie-search-details-img-box {
+div.ib-idmodal-item-search-details-img-box {
     width:100%;
     text-align:center;
 }
 
-img.ib-movie-search-details-img {
+img.ib-idmodal-item-search-details-img {
     width: 100%;
 }
 
@@ -44,6 +44,11 @@ div.ib-filebrowser-media-title {
     font-size: #3E3E3E;
 }
 
+i.ib-filebrowser-media-play {
+    font-size: 1.2em;
+    padding-right: 5px;
+}
+
 button.ib-filemanager-button:hover, button.ib-filemanager-button:focus {
     color: green;
     border-color: green;
@@ -58,6 +63,11 @@ button.ib-filemanager-button-active {
 
 div.ib-trashmodal-list-box {
     
+}
+
+ul.ib-trashmodal-list {
+    list-style-type: disc;
+    padding-left: 15px;
 }
 
 button.ib-remote-button-active {
