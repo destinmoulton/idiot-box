@@ -10,6 +10,10 @@ var _moment = require('moment');
 
 var _moment2 = _interopRequireDefault(_moment);
 
+var _logger = require('../../logger');
+
+var _logger2 = _interopRequireDefault(_logger);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -123,6 +127,29 @@ var ShowSeasonEpisodesModel = function () {
                 season_id: seasonID
             };
             return this._ibdb.getAll(where, this._tableName, "episode_number ASC");
+        }
+    }, {
+        key: 'collateEpisodeInfo',
+        value: function collateEpisodeInfo(episodeInfo, showsModel, showSeasonsModel) {
+            var _this4 = this;
+
+            var show = {};
+            var season = {};
+
+            return showsModel.getSingle(episodeInfo.show_id).then(function (showInfo) {
+                _logger2.default.debug(showInfo);
+                show = showInfo;
+                return showSeasonsModel.getSingle(episodeInfo.season_id);
+            }).then(function (seasonInfo) {
+                season = seasonInfo;
+                return _this4.getSingle(episodeInfo.episode_id);
+            }).then(function (episode) {
+                return {
+                    show: show,
+                    season: season,
+                    episode: episode
+                };
+            });
         }
     }]);
 
