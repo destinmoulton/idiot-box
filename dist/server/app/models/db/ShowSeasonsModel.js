@@ -69,6 +69,15 @@ var ShowSeasonsModel = function () {
             });
         }
     }, {
+        key: 'getSingle',
+        value: function getSingle(seasonID) {
+            var where = {
+                id: seasonID
+            };
+
+            return this._ibdb.getRow(where, this._tableName);
+        }
+    }, {
         key: 'getSingleByShowSeasonTrakt',
         value: function getSingleByShowSeasonTrakt(showID, seasonNumber, traktID) {
             var where = {

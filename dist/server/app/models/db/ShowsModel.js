@@ -62,6 +62,15 @@ var ShowsModel = function () {
             });
         }
     }, {
+        key: 'getSingle',
+        value: function getSingle(showID) {
+            var where = {
+                id: showID
+            };
+
+            return this._ibdb.getRow(where, this._tableName);
+        }
+    }, {
         key: 'getSingleByTraktID',
         value: function getSingleByTraktID(traktID) {
             var where = {

@@ -27,6 +27,12 @@ const shows = {
             params: ['show_id', 'season_id'],
             func: (showID, seasonID)=> showSeasonEpisodesModel.getEpisodesForSeason(showID, seasonID)
         }
+    },
+    episode: {
+        collate: {
+            params: ['episode_info'],
+            func: (episodeInfo)=> showSeasonEpisodesModel.collateEpisodeInfo(episodeInfo, showsModel, showSeasonsModel)
+        }
     }
 };
 

@@ -1,5 +1,7 @@
 import moment from 'moment';
 
+import logger from '../../logger';
+
 export default class ShowSeasonEpisodesModel {
     constructor(ibdb){
         this._ibdb = ibdb;
@@ -98,5 +100,28 @@ export default class ShowSeasonEpisodesModel {
             season_id: seasonID
         };
         return this._ibdb.getAll(where, this._tableName, "episode_number ASC");
+    }
+
+    collateEpisodeInfo(episodeInfo, showsModel, showSeasonsModel){
+        let show = {};
+        let season = {};
+
+        return showsModel.getSingle(episodeInfo.show_id)
+                .then((showInfo)=>{
+                    logger.debug(showInfo);
+                    show = showInfo;
+                    return showSeasonsModel.getSingle(episodeInfo.season_id);
+                })
+                .then((seasonInfo)=>{
+                    season = seasonInfo;
+                    return this.getSingle(episodeInfo.episode_id);
+                })
+                .then((episode)=>{
+                    return {
+                        show,
+                        season,
+                        episode
+                    };
+                });
     }
 }

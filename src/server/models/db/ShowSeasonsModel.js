@@ -47,6 +47,14 @@ export default class ShowSeasonsModel {
             });
     }
 
+    getSingle(seasonID){
+        const where = {
+            id: seasonID
+        };
+
+        return this._ibdb.getRow(where, this._tableName);
+    }
+
     getSingleByShowSeasonTrakt(showID, seasonNumber, traktID){
         const where = {
             show_id: showID,

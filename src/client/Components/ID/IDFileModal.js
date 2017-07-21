@@ -12,6 +12,7 @@ import {
 } from 'antd';
 
 import AddShow from './AddShow';
+import ArchiveSingleEpisode from './ArchiveSingleEpisode';
 import EpisodeIDSelector from './EpisodeIDSelector';
 import MovieCheckForm from './MovieCheckForm';
 import MovieSearchResults from './MovieSearchResults';
@@ -20,6 +21,7 @@ class IDFileModal extends Component {
     INITIAL_VIEW = "two_column_single_id";
     MOVIE_SEARCH_VIEW = "movie_search_results";
     ADD_SHOW_VIEW = "add_show";
+    ARCHIVE_EPISODE_VIEW = "archive_episode";
 
     static propTypes = {
         currentFilename: PropTypes.string.isRequired,
@@ -34,6 +36,7 @@ class IDFileModal extends Component {
 
         this.state = {
             currentView: 'two_column_single_id',
+            episodeInfo: {},
             movieSearchString: ""
         };
     }
@@ -54,6 +57,13 @@ class IDFileModal extends Component {
         });
     }
 
+    _handleClickIDEpisode(episodeInfo){
+        this.setState({
+            currentView: 'archive_episode',
+            episodeInfo
+        });
+    }
+
     _buildTwoColumnSingleID(){
         const { currentFilename } = this.props;
         return (
@@ -66,8 +76,9 @@ class IDFileModal extends Component {
                 </Col>
                 <Col span={8} offset={2}>
                     <Button onClick={this._changeCurrentView.bind(this, this.ADD_SHOW_VIEW)}>Add New Show</Button>
+                    <hr/>
                     <h4>ID Episode</h4>
-                    <EpisodeIDSelector />
+                    <EpisodeIDSelector onIDEpisode={this._handleClickIDEpisode.bind(this)}/>
                 </Col>
             </div>
         );
@@ -92,6 +103,11 @@ class IDFileModal extends Component {
                     onIDComplete={onIDComplete}/>;
     }
 
+    _buildArchiveEpisodeView(){
+        const { episodeInfo } = this.state;
+        return <ArchiveSingleEpisode episodeInfo={episodeInfo} />
+    }
+
     _changeCurrentView(newView){
         this.setState({
            currentView: newView 
@@ -107,6 +123,8 @@ class IDFileModal extends Component {
                 return this._buildMovieSearchResults();
             case this.ADD_SHOW_VIEW:
                 return this._buildAddShowView();
+            case this.ARCHIVE_EPISODE_VIEW:
+                return this._buildArchiveEpisodeView();
         }
     }
 
