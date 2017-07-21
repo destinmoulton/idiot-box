@@ -54,6 +54,14 @@ var shows = {
                 return showSeasonEpisodesModel.getEpisodesForSeason(showID, seasonID);
             }
         }
+    },
+    episode: {
+        collate: {
+            params: ['episode_info'],
+            func: function func(episodeInfo) {
+                return showSeasonEpisodesModel.collateEpisodeInfo(episodeInfo, showsModel, showSeasonsModel);
+            }
+        }
     }
 };
 
