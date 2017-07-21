@@ -43,6 +43,14 @@ export default class ShowsModel {
                 });
     }
 
+    getSingle(showID){
+        const where = {
+            id: showID
+        };
+
+        return this._ibdb.getRow(where, this._tableName);
+    }
+
     getSingleByTraktID(traktID){
         const where = {
             trakt_id: traktID
