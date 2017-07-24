@@ -75,7 +75,9 @@ class IDFileModal extends Component {
                     />
                 </Col>
                 <Col span={8} offset={2}>
-                    <Button onClick={this._changeCurrentView.bind(this, this.ADD_SHOW_VIEW)}>Add New Show</Button>
+                    <Button 
+                        className="ib-button-green"
+                        onClick={this._changeCurrentView.bind(this, this.ADD_SHOW_VIEW)}>Add New Show</Button>
                     <hr/>
                     <h4>ID Episode</h4>
                     <EpisodeIDSelector onIDEpisode={this._handleClickIDEpisode.bind(this)}/>
@@ -105,7 +107,18 @@ class IDFileModal extends Component {
 
     _buildArchiveEpisodeView(){
         const { episodeInfo } = this.state;
-        return <ArchiveSingleEpisode episodeInfo={episodeInfo} />
+        const { 
+            currentFilename,
+            currentPathInfo,
+            currentToplevelDirectory,
+            onIDComplete
+        } = this.props;
+
+        return <ArchiveSingleEpisode 
+                    episodeInfo={episodeInfo}
+                    currentFilename={currentFilename}
+                    currentPathInfo={currentPathInfo}
+                    onIDComplete={onIDComplete}/>
     }
 
     _changeCurrentView(newView){
