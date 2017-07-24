@@ -4,6 +4,18 @@
     font-size: 1.1em;
 }
 
+button.ib-button-green {
+    color: #fff;
+    background-color: #099200;
+    border-color: #099200;
+}
+
+button.ib-button-green:hover {
+    color: #fff;
+    background-color: #3ab532;
+    border-color: #3ab532;
+}
+
 div.ib-settings-dirsel-fs-cont{
     overflow-y: scroll;
 }

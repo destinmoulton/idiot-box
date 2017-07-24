@@ -119,6 +119,7 @@ class FileManager extends Component {
     _handleIDModalComplete(){
         this.setState({
             isIDModalVisible: false,
+            isReloading: true,
             idModalFilename: ""
         });
     }
@@ -224,6 +225,7 @@ class FileManager extends Component {
                     onCancel={this._handleIDModalCancel.bind(this)}
                     currentFilename={idModalFilename}
                     currentPathInfo={currentPathInfo}
+                    currentToplevelDirectory={currentToplevelDirectory}
                 />
             </div>
         );

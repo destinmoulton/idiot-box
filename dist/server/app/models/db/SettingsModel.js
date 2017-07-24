@@ -31,6 +31,14 @@ var SettingsModel = function () {
             return this._ibdb.getAll(where, this._tableName);
         }
     }, {
+        key: "getSingleByID",
+        value: function getSingleByID(settingID) {
+            var where = {
+                id: settingID
+            };
+            return this._ibdb.getRow(where, this._tableName);
+        }
+    }, {
         key: "getSingle",
         value: function getSingle(category, key) {
             var value = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : "";

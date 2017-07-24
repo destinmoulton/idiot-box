@@ -24,9 +24,17 @@ var _IDModel = require('../../models/IDModel');
 
 var _IDModel2 = _interopRequireDefault(_IDModel);
 
+var _FilesystemModel = require('../../models/FilesystemModel');
+
+var _FilesystemModel2 = _interopRequireDefault(_FilesystemModel);
+
 var _FilesModel = require('../../models/db/FilesModel');
 
 var _FilesModel2 = _interopRequireDefault(_FilesModel);
+
+var _FileToEpisodeModel = require('../../models/db/FileToEpisodeModel');
+
+var _FileToEpisodeModel2 = _interopRequireDefault(_FileToEpisodeModel);
 
 var _FileToMovieModel = require('../../models/db/FileToMovieModel');
 
@@ -66,9 +74,12 @@ var _ShowSeasonEpisodesModel2 = _interopRequireDefault(_ShowSeasonEpisodesModel)
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var filesModel = new _FilesModel2.default(_IBDB2.default);
-var fileToMovieModel = new _FileToMovieModel2.default(_IBDB2.default);
 var settingsModel = new _SettingsModel2.default(_IBDB2.default);
+
+var filesystemModel = new _FilesystemModel2.default(settingsModel);
+var filesModel = new _FilesModel2.default(_IBDB2.default);
+var fileToEpisodeModel = new _FileToEpisodeModel2.default(_IBDB2.default);
+var fileToMovieModel = new _FileToMovieModel2.default(_IBDB2.default);
 var genresModel = new _GenresModel2.default(_IBDB2.default);
 var mediaScraperModel = new _MediaScraperModel2.default(new _trakt2.default(_trakt4.default), settingsModel);
 var movieToGenreModel = new _MovieToGenreModel2.default(_IBDB2.default, genresModel);
@@ -78,7 +89,9 @@ var showSeasonsModel = new _ShowSeasonsModel2.default(_IBDB2.default);
 var showSeasonEpisodesModel = new _ShowSeasonEpisodesModel2.default(_IBDB2.default);
 
 var models = {
+    filesystemModel: filesystemModel,
     filesModel: filesModel,
+    fileToEpisodeModel: fileToEpisodeModel,
     fileToMovieModel: fileToMovieModel,
     mediaScraperModel: mediaScraperModel,
     moviesModel: moviesModel,
@@ -115,10 +128,10 @@ var id = {
         }
     },
     episode: {
-        id: {
-            params: ['ep_info', 'file_info'],
-            func: function func(epInfo, fileInfo) {
-                return idModel.idEpisode(epInfo, fileInfo);
+        id_and_archive: {
+            params: ['episode_info', 'source_info', 'dest_info'],
+            func: function func(epInfo, sourceInfo, destInfo) {
+                return idModel.idAndArchiveEpisode(epInfo, sourceInfo, destInfo);
             }
         }
     }

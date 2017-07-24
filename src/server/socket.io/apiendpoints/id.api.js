@@ -6,7 +6,9 @@ import ibdb from '../../db/IBDB';
 import logger from '../../logger';
 
 import IDModel from '../../models/IDModel';
+import FilesystemModel from '../../models/FilesystemModel';
 import FilesModel from '../../models/db/FilesModel';
+import FileToEpisodeModel from '../../models/db/FileToEpisodeModel';
 import FileToMovieModel from '../../models/db/FileToMovieModel';
 import GenresModel from '../../models/db/GenresModel';
 import MediaScraperModel from '../../models/MediaScraperModel';
@@ -17,9 +19,12 @@ import ShowsModel from '../../models/db/ShowsModel';
 import ShowSeasonsModel from '../../models/db/ShowSeasonsModel';
 import ShowSeasonEpisodesModel from '../../models/db/ShowSeasonEpisodesModel';
 
-const filesModel = new FilesModel(ibdb);
-const fileToMovieModel = new FileToMovieModel(ibdb);
 const settingsModel = new SettingsModel(ibdb);
+
+const filesystemModel = new FilesystemModel(settingsModel);
+const filesModel = new FilesModel(ibdb);
+const fileToEpisodeModel = new FileToEpisodeModel(ibdb);
+const fileToMovieModel = new FileToMovieModel(ibdb);
 const genresModel = new GenresModel(ibdb);
 const mediaScraperModel = new MediaScraperModel(new Trakt(traktConfig), settingsModel);
 const movieToGenreModel = new MovieToGenreModel(ibdb, genresModel);
@@ -29,7 +34,9 @@ const showSeasonsModel = new ShowSeasonsModel(ibdb);
 const showSeasonEpisodesModel = new ShowSeasonEpisodesModel(ibdb);
 
 const models = {
+    filesystemModel,
     filesModel,
+    fileToEpisodeModel,
     fileToMovieModel,
     mediaScraperModel,
     moviesModel,
@@ -60,9 +67,9 @@ const id = {
         }
     },
     episode: {
-        id: {
-            params: ['ep_info', 'file_info'],
-            func: (epInfo, fileInfo)=> idModel.idEpisode(epInfo, fileInfo)
+        id_and_archive: {
+            params: ['episode_info', 'source_info', 'dest_info'],
+            func: (epInfo, sourceInfo, destInfo)=> idModel.idAndArchiveEpisode(epInfo, sourceInfo, destInfo)
         }
     }
 };
