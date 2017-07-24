@@ -1,5 +1,6 @@
 export default class IDModel {
     constructor(models){
+        this._filesystemModel = models.filesystemModel,
         this._filesModel = models.filesModel;
         this._fileToEpisodeModel = models.fileToEpisodeModel;
         this._fileToMovieModel = models.fileToMovieModel;
@@ -25,11 +26,17 @@ export default class IDModel {
                 })
     }
 
-    idEpisode(epInfo, fileInfo){
-        return this._filesModel.addFile(fileInfo.setting_id, fileInfo.subpath, fileInfo.filename, "show")
-                    .then((fileRow)=>{
-                        return this._fileToEpisodeModel.add(fileRow.id, epInfo.show_id, epInfo.season_id, epInfo.episode_id);
-                    })
+    idAndArchiveEpisode(epInfo, sourceInfo, destInfo){
+        return this._filesystemModel.move(sourceInfo, destInfo)
+                .then(()=>{
+                    return this._settingsModel.getSingle("directories", "Shows")
+                })
+                .then((destSetting)=>{
+                    return this._filesModel.addFile(destSetting.id, destInfo.subpath, destInfo.filename, "show");
+                })
+                .then((fileRow)=>{
+                    return this._fileToEpisodeModel.add(fileRow.id, epInfo.show_id, epInfo.season_id, epInfo.episode_id);
+                })
     }
 
     addShow(showInfo, imageInfo){

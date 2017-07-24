@@ -12,7 +12,7 @@ var IDModel = function () {
     function IDModel(models) {
         _classCallCheck(this, IDModel);
 
-        this._filesModel = models.filesModel;
+        this._filesystemModel = models.filesystemModel, this._filesModel = models.filesModel;
         this._fileToEpisodeModel = models.fileToEpisodeModel;
         this._fileToMovieModel = models.fileToMovieModel;
         this._mediaScraperModel = models.mediaScraperModel;
@@ -38,11 +38,15 @@ var IDModel = function () {
             });
         }
     }, {
-        key: "idEpisode",
-        value: function idEpisode(epInfo, fileInfo) {
+        key: "idAndArchiveEpisode",
+        value: function idAndArchiveEpisode(epInfo, sourceInfo, destInfo) {
             var _this2 = this;
 
-            return this._filesModel.addFile(fileInfo.setting_id, fileInfo.subpath, fileInfo.filename, "show").then(function (fileRow) {
+            return this._filesystemModel.move(sourceInfo, destInfo).then(function () {
+                return _this2._settingsModel.getSingle("directories", "Shows");
+            }).then(function (destSetting) {
+                return _this2._filesModel.addFile(destSetting.id, destInfo.subpath, destInfo.filename, "show");
+            }).then(function (fileRow) {
                 return _this2._fileToEpisodeModel.add(fileRow.id, epInfo.show_id, epInfo.season_id, epInfo.episode_id);
             });
         }
