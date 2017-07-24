@@ -13,6 +13,13 @@ export default class SettingsModel {
         return this._ibdb.getAll(where, this._tableName);
     }
 
+    getSingleByID(settingID){
+        const where = {
+            id: settingID
+        };
+        return this._ibdb.getRow(where, this._tableName);
+    }
+
     getSingle(category, key, value = ""){
         const where = {
             category, key
