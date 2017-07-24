@@ -45,7 +45,7 @@ export default class FilesystemModel {
      * @param object sourceInfo 
      * @param object destInfo 
      */
-    move(sourceInfo, destInfo){
+    move(sourceInfo, destInfo, destDirType){
         return this._settingsModel.getSingleByID(sourceInfo.setting_id)
                 .then((sourceSetting)=>{
                     const fullSourcePath = path.join(sourceSetting.value, sourceInfo.subpath, sourceInfo.filename);
@@ -53,7 +53,7 @@ export default class FilesystemModel {
                         return Promise.reject(`FilesystemModel :: move() :: source path ${fullSourcePath} does not exist`);
                     }
 
-                    return this._settingsModel.getSingle("directories", "Shows")
+                    return this._settingsModel.getSingle("directories", destDirType)
                             .then((destSetting)=>{
                                 const baseDestDir = destSetting.value;
                                 if (!fs.existsSync(baseDestDir)) {

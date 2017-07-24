@@ -27,7 +27,7 @@ export default class IDModel {
     }
 
     idAndArchiveEpisode(epInfo, sourceInfo, destInfo){
-        return this._filesystemModel.move(sourceInfo, destInfo)
+        return this._filesystemModel.move(sourceInfo, destInfo, "Shows")
                 .then(()=>{
                     return this._settingsModel.getSingle("directories", "Shows")
                 })

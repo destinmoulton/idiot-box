@@ -42,7 +42,7 @@ var IDModel = function () {
         value: function idAndArchiveEpisode(epInfo, sourceInfo, destInfo) {
             var _this2 = this;
 
-            return this._filesystemModel.move(sourceInfo, destInfo).then(function () {
+            return this._filesystemModel.move(sourceInfo, destInfo, "Shows").then(function () {
                 return _this2._settingsModel.getSingle("directories", "Shows");
             }).then(function (destSetting) {
                 return _this2._filesModel.addFile(destSetting.id, destInfo.subpath, destInfo.filename, "show");

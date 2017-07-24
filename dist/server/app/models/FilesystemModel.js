@@ -71,7 +71,7 @@ var FilesystemModel = function () {
 
     }, {
         key: 'move',
-        value: function move(sourceInfo, destInfo) {
+        value: function move(sourceInfo, destInfo, destDirType) {
             var _this = this;
 
             return this._settingsModel.getSingleByID(sourceInfo.setting_id).then(function (sourceSetting) {
@@ -80,7 +80,7 @@ var FilesystemModel = function () {
                     return Promise.reject('FilesystemModel :: move() :: source path ' + fullSourcePath + ' does not exist');
                 }
 
-                return _this._settingsModel.getSingle("directories", "Shows").then(function (destSetting) {
+                return _this._settingsModel.getSingle("directories", destDirType).then(function (destSetting) {
                     var baseDestDir = destSetting.value;
                     if (!_fs2.default.existsSync(baseDestDir)) {
                         return Promise.reject('FilesystemModel :: move() :: destination path ' + baseDestDir + ' does not exist');
