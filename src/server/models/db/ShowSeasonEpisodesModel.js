@@ -108,7 +108,6 @@ export default class ShowSeasonEpisodesModel {
 
         return showsModel.getSingle(episodeInfo.show_id)
                 .then((showInfo)=>{
-                    logger.debug(showInfo);
                     show = showInfo;
                     return showSeasonsModel.getSingle(episodeInfo.season_id);
                 })

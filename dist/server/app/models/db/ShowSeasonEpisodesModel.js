@@ -137,7 +137,6 @@ var ShowSeasonEpisodesModel = function () {
             var season = {};
 
             return showsModel.getSingle(episodeInfo.show_id).then(function (showInfo) {
-                _logger2.default.debug(showInfo);
                 show = showInfo;
                 return showSeasonsModel.getSingle(episodeInfo.season_id);
             }).then(function (seasonInfo) {
