@@ -68,19 +68,20 @@ class IDFileModal extends Component {
         const { currentFilename } = this.props;
         return (
             <div>
-                <Col span={8}>
+                <Col span={10}>
                     <MovieCheckForm
                         currentFilename={currentFilename}
                         onSearchMovies={this._handleClickSearchMovies.bind(this)}
                     />
                 </Col>
-                <Col span={8} offset={2}>
+                <Col span={12} offset={2}>
                     <Button 
                         className="ib-button-green"
                         onClick={this._changeCurrentView.bind(this, this.ADD_SHOW_VIEW)}>Add New Show</Button>
-                    <hr/>
+                    <div className="ib-idmodal-idepisode-box">
                     <h4>ID Episode</h4>
                     <EpisodeIDSelector onIDEpisode={this._handleClickIDEpisode.bind(this)}/>
+                    </div>
                 </Col>
             </div>
         );
@@ -163,7 +164,7 @@ class IDFileModal extends Component {
                         <Button key="cancel" size="large" onClick={this._handleCancel.bind(this)}>Cancel</Button>,
                     ]} >
                     <Row>
-                        {backButton}
+                        <div className='ib-idmodal-filename'>{backButton}&nbsp;&nbsp;{currentFilename}</div>
                     </Row>
                     <Row>
                         {contents}

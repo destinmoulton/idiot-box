@@ -166,19 +166,22 @@ class ArchiveSingleEpisode extends Component {
         
         return (
             <div>
-                <div>{show.title}</div>
-                <div>{season.title}</div>
-                <div>Episode {episode.episode_number}</div>
-                <div>
+                <div className="ib-idmodal-archivesingle-episodeinfo">
+                    <div>{show.title}</div>
+                    <div>{season.title}</div>
+                    <div>Episode {episode.episode_number}</div>
+                </div>
+                <div className="ib-idmodal-archivesingle-form-box">
                     Directory: <Input onChange={this._handleChangeDirectory.bind(this)}
                                     value={newDirectory}/>
                     Filename: <Input onChange={this._handleChangeFilename.bind(this)}
                                     value={newFilename}/>
+                    <div className="ib-idmodal-button-box">
+                        <Button className="ib-button-green"
+                                onClick={this._idAndArchiveEpisode.bind(this)}>Archive Episode</Button>
+                    </div>
                 </div>
-                <div>
-                    <Button className="ib-button-green"
-                            onClick={this._idAndArchiveEpisode.bind(this)}>Archive Episode</Button>
-                </div>
+                
             </div>
         );
     }

@@ -57,7 +57,6 @@ class MovieCheckForm extends Component {
 
         return (
             <div>
-                <div><h5>{currentFilename}</h5></div>
                 <Input.Search 
                     placeholder="Movie search..." 
                     value={searchString}

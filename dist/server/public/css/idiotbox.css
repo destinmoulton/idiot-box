@@ -20,12 +20,34 @@ div.ib-settings-dirsel-fs-cont{
     overflow-y: scroll;
 }
 
+div.ib-idmodal-button-box {
+    width: 100%;
+    padding:5px;
+    text-align: right;
+}
+
+div.ib-idmodal-filename {
+    font-size: 1.3em;
+    font-weight: bold;
+    padding-bottom: 5px;
+    width: 100%;
+    border-bottom: 2px solid black;
+    margin-bottom: 10px;
+}
+
 div.ib-idmodal-item-search-details-box {
     height: 245px;
     padding: 15px;
     border-radius: 5px;
     background-color: #d9d9d9;
     margin: 5px;
+}
+
+div.ib-idmodal-idepisode-box {
+    margin-top: 5px;
+    padding: 10px;
+    border: 1px solid gray;
+    width: 100%;
 }
 
 div.ib-idmodal-item-search-details-img-box {
@@ -35,6 +57,20 @@ div.ib-idmodal-item-search-details-img-box {
 
 img.ib-idmodal-item-search-details-img {
     width: 100%;
+}
+
+div.ib-idmodal-archivesingle-episodeinfo {
+    font-size: 1.1em;
+    font-weight: bold;
+    border: 1px solid gray;
+    padding: 5px;
+    margin: 5px;
+}
+
+div.ib-idmodal-archivesingle-form-box {
+    border: 1px solid gray;
+    padding: 5px;
+    margin: 5px;
 }
 
 div.ib-filebrowser-spin-box {
