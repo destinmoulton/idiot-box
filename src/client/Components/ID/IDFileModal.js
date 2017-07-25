@@ -41,6 +41,15 @@ class IDFileModal extends Component {
         };
     }
 
+    componentWillMount(){
+        console.log("IDFileModal willmount");
+        this.setState({
+            currentView: 'two_column_single_id',
+            episodeInfo: {},
+            movieSearchString: ""
+        });
+    }
+
     _handleCancel(){
         const { onCancel } = this.props;
         this.setState({

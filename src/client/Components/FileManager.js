@@ -220,6 +220,7 @@ class FileManager extends Component {
                     onCancel={this._handleCancelTrash.bind(this)}
                 />
                 <IDFileModal
+                    key={idModalFilename}
                     isVisible={isIDModalVisible}
                     onIDComplete={this._handleIDModalComplete.bind(this)}
                     onCancel={this._handleIDModalCancel.bind(this)}
