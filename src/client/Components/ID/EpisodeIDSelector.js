@@ -135,11 +135,11 @@ class EpisodeIDSelector extends Component {
             shows } = this.state;
 
         const showSelector = this._buildSelect(shows, 'title', this._getSeasons.bind(this), currentShowID);
-        let seasonsSelector = "";
+        let seasonsSelector = "Select a show...";
         if(currentShowID > 0){
             seasonsSelector = this._buildSelect(seasons, 'title', this._getEpisodes.bind(this), currentSeasonID);
         }
-        let episodesSelector = "";
+        let episodesSelector = "Select a season...";
         if(currentSeasonID > 0){
             episodesSelector = this._buildSelect(episodes, 'episode_number', this._handleSelectEpisode.bind(this), currentEpisodeID, "Episode ");
         }
@@ -159,7 +159,9 @@ class EpisodeIDSelector extends Component {
                 <div key="episode">
                 {episodesSelector}
                 </div>
-                <Button onClick={this._handleClickIDButton.bind(this)} disabled={buttonDisabled}>ID Episode</Button>
+                <div key="button" className="ib-idmodal-button-box">
+                    <Button onClick={this._handleClickIDButton.bind(this)} disabled={buttonDisabled}>ID Episode</Button>
+                </div>
             </div>
         );
     }

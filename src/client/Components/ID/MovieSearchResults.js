@@ -98,7 +98,6 @@ class MovieSearchResults extends Component {
         return (
             <div>
                 <h4>Movie - Search Results</h4>
-                <h5>{currentFilename}</h5>
                 <Input.Search
                     value={currentSearchString}
                     onChange={this._handleChangeSearchInput.bind(this)}

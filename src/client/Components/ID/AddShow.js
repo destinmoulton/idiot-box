@@ -71,7 +71,6 @@ class AddShow extends Component {
     }
 
     render() {
-        const { currentFilename } = this.props;
         const { currentSearchString, shows } = this.state;
 
         let showList = [];
@@ -86,7 +85,6 @@ class AddShow extends Component {
         return (
             <div>
                 <h4>Add a Show</h4>
-                <h5>{currentFilename}</h5>
                 <Input.Search
                     value={currentSearchString}
                     onChange={this._handleChangeSearchInput.bind(this)}
