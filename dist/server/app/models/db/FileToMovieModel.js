@@ -60,6 +60,15 @@ var FileToMovieModel = function () {
             };
             return this._ibdb.getRow(where, this._tableName);
         }
+    }, {
+        key: "deleteSingle",
+        value: function deleteSingle(fileID, movieID) {
+            var where = {
+                file_id: fileID,
+                movie_id: movieID
+            };
+            return this._ibdb.delete(where, this._tableName);
+        }
     }]);
 
     return FileToMovieModel;
