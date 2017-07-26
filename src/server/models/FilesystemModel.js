@@ -47,24 +47,28 @@ export default class FilesystemModel {
         
         return this._settingsModel.getSingleByCatAndVal("directories", basePath)
                 .then((setting)=>{
-                    if(!'id' in setting){
-                        return fileData;
+                    if(!setting.hasOwnProperty('id')){
+                        return Promise.resolve(fileData);
                     }
                     return this._filesModel.getSingleByDirectoryAndFilename(setting.id, subpath, filename)
                 })
                 .then((file)=>{
-                    if(!'id' in file){
-                        return fileData;
+                    if(!file.hasOwnProperty('id')){
+                        return Promise.resolve(fileData);
                     }
                     
                     if(file.mediatype === "movie"){
                         return this._fileToMovieModel.getSingleForFile(file.id)
                                 .then((fileToMovie)=>{
+                                    if(!fileToMovie.hasOwnProperty('movie_id')){
+                                        return Promise.resolve(fileData);
+                                    }
                                     return this._moviesModel.getSingle(fileToMovie.movie_id);
                                 })
                                 .then((movieInfo)=>{
                                     const assocData = {
-                                        id: movieInfo.id,
+                                        movie_id: movieInfo.id,
+                                        file_id: file.id,
                                         title: movieInfo.title,
                                         type: "movie"
                                     }
@@ -74,11 +78,16 @@ export default class FilesystemModel {
                     } else {
                         return this._fileToEpisodeModel.getSingleForFile(file.id)
                                 .then((fileToEpisode)=>{
+                                    if(!fileToEpisode.hasOwnProperty('episode_id')){
+                                        return Promise.resolve(fileData);
+                                    }
                                     return this._showSeasonEpisodesModel.getSingle(fileToEpisode.episode_id);
                                 })
                                 .then((episodeInfo)=>{
+                                    
                                     const assocData = {
-                                        id: episodeInfo.id,
+                                        episode_id: episodeInfo.id,
+                                        file_id: file.id,
                                         title: episodeInfo.title,
                                         type: "show"
                                     };
