@@ -63,11 +63,16 @@ class FilesystemBrowser extends Component {
         }
     }
 
+    _reloadDir(){
+        this._getDirFromServer(this.state.currentPath);
+    }
+
     _getDirFromServer(path){
-        const { emitAPIRequest } = this.props;
+        const { emitAPIRequest, initialPath } = this.props;
 
         const options = {
-            path
+            base_path: initialPath,
+            full_path: path
         };
 
         emitAPIRequest("filesystem.dir.get", options, this._dirListReceived.bind(this), false);
@@ -77,14 +82,10 @@ class FilesystemBrowser extends Component {
         });
     }
 
-    _reloadDir(){
-        this._getDirFromServer(this.state.currentPath);
-    }
-
     _dirListReceived(newDirList, recd){
         const { onChangeDirectory } = this.props;
 
-        const newPath = recd.request.params.path;
+        const newPath = recd.request.params.full_path;
 
         const dirList = this._prepareDirList(newDirList, newPath);
 
@@ -109,7 +110,8 @@ class FilesystemBrowser extends Component {
             key: 0,
             name: this.PARENT_DIR_NAME,
             isDirectory: true,
-            size: ""
+            size: "",
+            assocData: {}
         };
 
         if( !lockToInitialPath || ( lockToInitialPath && (initialPath !== newPath) ) ){
@@ -126,7 +128,8 @@ class FilesystemBrowser extends Component {
                 const newItem = {
                     ...item,
                     key: item.name,
-                    size: this._humanFileSize(item.size, false)
+                    size: this._humanFileSize(item.size, false),
+                    assocData: item.assocData
                 };
                 if(newItem.isDirectory){
                     directories.push(newItem);
@@ -209,7 +212,11 @@ class FilesystemBrowser extends Component {
                             </a>
                         )
                     } else {
-                        return (<FileDetails filename={record.name} basePath={initialPath} fullPath={currentPath} />);
+                        return (<FileDetails 
+                                    assocData={record.assocData}
+                                    filename={record.name} 
+                                    basePath={initialPath} 
+                                    fullPath={currentPath} />);
                     }
                 }
             },

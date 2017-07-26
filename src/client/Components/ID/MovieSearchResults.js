@@ -14,7 +14,7 @@ class MovieSearchResults extends Component {
         currentFilename: PropTypes.string.isRequired,
         currentPathInfo: PropTypes.object.isRequired,
         initialSearchString: PropTypes.string.isRequired,
-        onIDComplete: PropTypes.func.isRequired
+        onSelectMovie: PropTypes.func.isRequired
     };
 
     constructor(props){
@@ -31,28 +31,9 @@ class MovieSearchResults extends Component {
     }
 
     _handleSelectMovie(movie, imageURL){
-        const { emitAPIRequest, currentFilename, currentPathInfo } = this.props;
-        const options = {
-            movie_info: movie,
-            image_info: {
-                url: imageURL
-            },
-            file_info: {
-                setting_id: currentPathInfo.setting_id,
-                subpath: currentPathInfo.subpath,
-                filename: currentFilename
-            }
-        };
-        
-        emitAPIRequest("id.movie.add", options, this._idMovieComplete.bind(this), false);
-    }
+        const { onSelectMovie } = this.props;
 
-    _idMovieComplete(recd){
-        const { onIDComplete } = this.props;
-
-        console.log(recd);
-
-        onIDComplete();
+        onSelectMovie(movie, imageURL);
     }
 
     _handleSearchPress(){
