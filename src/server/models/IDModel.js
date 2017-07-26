@@ -48,6 +48,35 @@ export default class IDModel {
                 })
     }
 
+    removeMultipleIDs(itemsToRemove){
+        let promisesToRun = [];
+        itemsToRemove.forEach((item)=>{
+            promisesToRun.push(this.removeSingleID(item));
+        });
+
+        return Promise.all(promisesToRun);
+    }
+
+    removeSingleID(idInfo){
+        if(idInfo.type === "movie"){
+            return this._filesModel.deleteSingle(idInfo.file_id)
+                    .then(()=>{
+                        return  this._fileToMovieModel.deleteSingle(idInfo.file_id, idInfo.movie_id);
+                    })
+                    .then(()=>{
+                        return this._moviesModel.deleteSingle(idInfo.movie_id);
+                    })
+        } else if (inInfo.type === "show"){
+            return this._filesModel.deleteSingle(idInfo.file_id)
+                    .then(()=>{
+                        return this._fileToEpisodeModel.deleteSingle(idInfo.file_id, idInfo.episode_id);
+                    })
+                    .then(()=>{
+                        return this._showSeasonEpisodesModel.deleteSingle(idInfo.episode_id);
+                    })
+        }
+    }
+
     addShow(showInfo, imageInfo){
         const imageFilename = this._buildThumbFilename(showInfo);
         return this._mediaScraperModel.downloadThumbnail("Show", imageInfo.url, imageFilename)
