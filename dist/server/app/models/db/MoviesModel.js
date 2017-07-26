@@ -86,6 +86,15 @@ var MoviesModel = function () {
             };
             return this._ibdb.getRow(where, this._tableName);
         }
+    }, {
+        key: "deleteSingle",
+        value: function deleteSingle(movieID) {
+            var where = {
+                id: movieID
+            };
+
+            return this._ibdb.delete(where, this._tableName);
+        }
     }]);
 
     return MoviesModel;
