@@ -16,6 +16,14 @@ export default class FilesModel {
             });
     }
 
+    getSingle(fileID){
+        const where = {
+            id: fileID
+        };
+
+        return this._ibdb.getRow(where, this._tableName);
+    }
+
     getSingleByDirectoryAndFilename(directory_setting_id, subpath, filename){
         const query = {
             directory_setting_id,
@@ -32,5 +40,13 @@ export default class FilesModel {
             filename
         };
         return this._ibdb.getAll(query, this._tableName, "filename ASC");
+    }
+
+    deleteSingle(fileID){
+        const where = {
+            id: fileID
+        };
+
+        return this._ibdb.delete(where, this._tableName);
     }
 }
