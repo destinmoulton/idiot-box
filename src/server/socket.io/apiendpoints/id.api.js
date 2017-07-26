@@ -62,6 +62,12 @@ const id = {
             func: (fileInfo) => idModel.findID(fileInfo)
         }
     },
+    movie_or_episode: {
+        remove_ids: {
+            params: ['items_to_remove'],
+            func: (itemsToRemove)=> idModel.removeMultipleIDs(itemsToRemove)
+        }
+    },
     movie: {
         id_and_archive: {
             params: ['movie_info', 'image_url', 'source_info', 'dest_info'],
