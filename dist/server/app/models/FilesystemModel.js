@@ -77,21 +77,25 @@ var FilesystemModel = function () {
             }
 
             return this._settingsModel.getSingleByCatAndVal("directories", basePath).then(function (setting) {
-                if (!'id' in setting) {
-                    return fileData;
+                if (!setting.hasOwnProperty('id')) {
+                    return Promise.resolve(fileData);
                 }
                 return _this2._filesModel.getSingleByDirectoryAndFilename(setting.id, subpath, filename);
             }).then(function (file) {
-                if (!'id' in file) {
-                    return fileData;
+                if (!file.hasOwnProperty('id')) {
+                    return Promise.resolve(fileData);
                 }
 
                 if (file.mediatype === "movie") {
                     return _this2._fileToMovieModel.getSingleForFile(file.id).then(function (fileToMovie) {
+                        if (!fileToMovie.hasOwnProperty('movie_id')) {
+                            return Promise.resolve(fileData);
+                        }
                         return _this2._moviesModel.getSingle(fileToMovie.movie_id);
                     }).then(function (movieInfo) {
                         var assocData = {
-                            id: movieInfo.id,
+                            movie_id: movieInfo.id,
+                            file_id: file.id,
                             title: movieInfo.title,
                             type: "movie"
                         };
@@ -100,10 +104,15 @@ var FilesystemModel = function () {
                     });
                 } else {
                     return _this2._fileToEpisodeModel.getSingleForFile(file.id).then(function (fileToEpisode) {
+                        if (!fileToEpisode.hasOwnProperty('episode_id')) {
+                            return Promise.resolve(fileData);
+                        }
                         return _this2._showSeasonEpisodesModel.getSingle(fileToEpisode.episode_id);
                     }).then(function (episodeInfo) {
+
                         var assocData = {
-                            id: episodeInfo.id,
+                            episode_id: episodeInfo.id,
+                            file_id: file.id,
                             title: episodeInfo.title,
                             type: "show"
                         };

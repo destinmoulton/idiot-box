@@ -7,6 +7,7 @@ import { Icon, Button, Modal } from 'antd';
 import FilesystemBrowser from './Filesystem/FilesystemBrowser';
 import IDFileModal from './ID/IDFileModal';
 import TrashModal from './Filesystem/TrashModal';
+import UntagModal from './ID/UntagModal';
 
 import { getSettingsForCategory } from '../actions/settings.actions';
 
@@ -26,7 +27,9 @@ class FileManager extends Component {
             isTrashVisible: false,
             isIDModalVisible: false,
             itemsToTrash: [],
-            selectedRows: []
+            selectedRows: [],
+            untagIsModalVisible: false,
+            untagIDinfo: []
         };
     }
 
@@ -67,6 +70,7 @@ class FileManager extends Component {
     }
 
     _handleSelectionChange(selectedRows){
+        console.log(selectedRows);
         this.setState({
             selectedRows
         });
@@ -139,9 +143,48 @@ class FileManager extends Component {
         });
     }
 
-    _handleClickUntag(id, mediaType){
+    _handleClickUntag(evt){
+        const { dirList } = this.state;
 
-    }    
+        let filenamesToUntag = [];
+        if(evt.currentTarget.tagName === "BUTTON"){
+            filenamesToUntag = [...this.state.selectedRows];
+        } else {
+            const item = evt.currentTarget.getAttribute('data-item-name');
+            filenamesToUntag = [item];
+        }
+
+        const untagItems = [];
+        filenamesToUntag.forEach((filename)=>{
+            dirList.forEach((item)=>{
+                if(item.name === filename && item.assocData.hasOwnProperty('type')){
+                    untagItems.push(item);
+                }
+            })
+        });
+
+        if(untagItems.length > 0){
+            this.setState({
+                untagIsModalVisible: true,
+                untagIDinfo: untagItems
+            });
+        }
+    }
+
+    _handleUntagModalComplete(){
+        this.setState({
+            isReloading: true,
+            untagIsModalVisible: false,
+            untagIDinfo: []
+        });
+    }
+
+    _handleUntagCancel(){
+        this.setState({
+            untagIsModalVisible: false,
+            untagIDinfo: []
+        });
+    }
 
     _buildActionColumns(){
         
@@ -154,8 +197,8 @@ class FileManager extends Component {
                     
                     let tag = "";
                     if(record.name.search(this.VIDEO_FILE_REGX) > -1){
-                        if(!'id' in assocData){
-                            tag = <a href="javascript:void(0);"
+                        if(!('type' in assocData)){
+                            tag =   <a  href="javascript:void(0);"
                                         onClick={this._handleClickIDFile.bind(this, record.name)}>
                                         <Icon type="tag"/>
                                     </a>;
@@ -163,9 +206,10 @@ class FileManager extends Component {
                     }
                     
                     let untag = "";
-                    if('id' in assocData){
-                        untag = <a href="javascript:void(0)"
-                                onClick={this._handleClickUntag.bind(this, assocData.id, assocData.type)}>
+                    if('type' in assocData){
+                        untag = <a  href="javascript:void(0);"
+                                    onClick={this._handleClickUntag.bind(this)}
+                                    data-item-name={record.name}>
                                     <Icon type="disconnect" className="ib-filebrowser-media-play"/>
                                 </a>;
                     }
@@ -193,7 +237,10 @@ class FileManager extends Component {
             isIDModalVisible,
             isTrashVisible,
             itemsToTrash,
-            selectedRows } = this.state;
+            selectedRows,
+            untagIDinfo,
+            untagIsModalVisible
+        } = this.state;
 
         const hasSelected = (selectedRows.length > 0) ? true : false;
         const buttonDisabled = !hasSelected;
@@ -214,6 +261,12 @@ class FileManager extends Component {
                             disabled={buttonDisabled}
                             onClick={this._handleClickTrash.bind(this)}
                         >Trash</Button>
+                        <Button 
+                            type="danger"
+                            icon="disconnect"
+                            disabled={buttonDisabled}
+                            onClick={this._handleClickUntag.bind(this)}
+                        >Remove ID</Button>
                     </Button.Group>
                 </div>
                 <FilesystemBrowser 
@@ -242,6 +295,12 @@ class FileManager extends Component {
                     currentFilename={idModalFilename}
                     currentPathInfo={currentPathInfo}
                     currentToplevelDirectory={currentToplevelDirectory}
+                />
+                <UntagModal
+                    isVisible={untagIsModalVisible}
+                    onUntagComplete={this._handleUntagModalComplete.bind(this)}
+                    onCancel={this._handleUntagCancel.bind(this)}
+                    itemsToUntag={untagIDinfo}
                 />
             </div>
         );

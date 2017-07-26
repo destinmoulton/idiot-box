@@ -58,21 +58,52 @@ var IDModel = function () {
             });
         }
     }, {
+        key: "removeMultipleIDs",
+        value: function removeMultipleIDs(itemsToRemove) {
+            var _this3 = this;
+
+            var promisesToRun = [];
+            itemsToRemove.forEach(function (item) {
+                promisesToRun.push(_this3.removeSingleID(item));
+            });
+
+            return Promise.all(promisesToRun);
+        }
+    }, {
+        key: "removeSingleID",
+        value: function removeSingleID(idInfo) {
+            var _this4 = this;
+
+            if (idInfo.type === "movie") {
+                return this._filesModel.deleteSingle(idInfo.file_id).then(function () {
+                    return _this4._fileToMovieModel.deleteSingle(idInfo.file_id, idInfo.movie_id);
+                }).then(function () {
+                    return _this4._moviesModel.deleteSingle(idInfo.movie_id);
+                });
+            } else if (inInfo.type === "show") {
+                return this._filesModel.deleteSingle(idInfo.file_id).then(function () {
+                    return _this4._fileToEpisodeModel.deleteSingle(idInfo.file_id, idInfo.episode_id);
+                }).then(function () {
+                    return _this4._showSeasonEpisodesModel.deleteSingle(idInfo.episode_id);
+                });
+            }
+        }
+    }, {
         key: "addShow",
         value: function addShow(showInfo, imageInfo) {
-            var _this3 = this;
+            var _this5 = this;
 
             var imageFilename = this._buildThumbFilename(showInfo);
             return this._mediaScraperModel.downloadThumbnail("Show", imageInfo.url, imageFilename).then(function (imageFilename) {
-                return _this3._showsModel.addShow(showInfo, imageFilename);
+                return _this5._showsModel.addShow(showInfo, imageFilename);
             }).then(function (show) {
-                return _this3._mediaScraperModel.getShowSeasonsList(show.trakt_id).then(function (seasons) {
-                    return _this3._showSeasonsModel.addArrayOfSeasons(seasons, show.id);
+                return _this5._mediaScraperModel.getShowSeasonsList(show.trakt_id).then(function (seasons) {
+                    return _this5._showSeasonsModel.addArrayOfSeasons(seasons, show.id);
                 }).then(function (addedSeasons) {
                     var promisesToRun = [];
                     addedSeasons.forEach(function (season) {
-                        var prom = _this3._mediaScraperModel.getEpisodesForSeason(show.trakt_id, season.season_number).then(function (episodesArr) {
-                            return _this3._showSeasonEpisodesModel.addArrEpisodes(show.id, season.id, episodesArr);
+                        var prom = _this5._mediaScraperModel.getEpisodesForSeason(show.trakt_id, season.season_number).then(function (episodesArr) {
+                            return _this5._showSeasonEpisodesModel.addArrEpisodes(show.id, season.id, episodesArr);
                         });
                         promisesToRun.push(prom);
                     });

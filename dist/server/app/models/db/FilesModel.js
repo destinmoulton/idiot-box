@@ -31,6 +31,15 @@ var FilesModel = function () {
             });
         }
     }, {
+        key: "getSingle",
+        value: function getSingle(fileID) {
+            var where = {
+                id: fileID
+            };
+
+            return this._ibdb.getRow(where, this._tableName);
+        }
+    }, {
         key: "getSingleByDirectoryAndFilename",
         value: function getSingleByDirectoryAndFilename(directory_setting_id, subpath, filename) {
             var query = {
@@ -49,6 +58,15 @@ var FilesModel = function () {
                 filename: filename
             };
             return this._ibdb.getAll(query, this._tableName, "filename ASC");
+        }
+    }, {
+        key: "deleteSingle",
+        value: function deleteSingle(fileID) {
+            var where = {
+                id: fileID
+            };
+
+            return this._ibdb.delete(where, this._tableName);
         }
     }]);
 

@@ -44,4 +44,12 @@ export default class FileToMovieModel {
         };
         return this._ibdb.getRow(where, this._tableName);
     }
+
+    deleteSingle(fileID, movieID){
+        const where = {
+            file_id: fileID,
+            movie_id: movieID
+        };
+        return this._ibdb.delete(where, this._tableName);
+    }
 }

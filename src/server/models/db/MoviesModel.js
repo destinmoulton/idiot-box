@@ -68,4 +68,12 @@ export default class MoviesModel {
         };
         return this._ibdb.getRow(where, this._tableName);
     }
+
+    deleteSingle(movieID){
+        const where = {
+            id: movieID
+        };
+
+        return this._ibdb.delete(where, this._tableName);
+    }
 }

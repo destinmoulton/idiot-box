@@ -64,6 +64,16 @@ var FileToEpisodeModel = function () {
             };
             return this._ibdb.getRow(where, this._tableName);
         }
+    }, {
+        key: "deleteSingle",
+        value: function deleteSingle(fileID, episodeID) {
+            var where = {
+                file_id: fileID,
+                episode_id: episodeID
+            };
+
+            return this._ibdb.delete(where, this._tableName);
+        }
     }]);
 
     return FileToEpisodeModel;
