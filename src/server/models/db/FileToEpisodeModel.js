@@ -48,4 +48,13 @@ export default class FileToEpisodeModel {
         };
         return this._ibdb.getRow(where, this._tableName);
     }
+
+    deleteSingle(fileID, episodeID){
+        const where = {
+            file_id: fileID,
+            episode_id: episodeID
+        };
+
+        return this._ibdb.delete(where, this._tableName);
+    }
 }
