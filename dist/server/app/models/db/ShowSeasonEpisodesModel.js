@@ -129,6 +129,15 @@ var ShowSeasonEpisodesModel = function () {
             return this._ibdb.getAll(where, this._tableName, "episode_number ASC");
         }
     }, {
+        key: 'deleteSingle',
+        value: function deleteSingle(episodeID) {
+            var where = {
+                id: episodeID
+            };
+
+            return this._ibdb.delete(where, this._tableName);
+        }
+    }, {
         key: 'collateEpisodeInfo',
         value: function collateEpisodeInfo(episodeInfo, showsModel, showSeasonsModel) {
             var _this4 = this;

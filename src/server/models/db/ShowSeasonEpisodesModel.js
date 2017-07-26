@@ -102,6 +102,14 @@ export default class ShowSeasonEpisodesModel {
         return this._ibdb.getAll(where, this._tableName, "episode_number ASC");
     }
 
+    deleteSingle(episodeID){
+        const where = {
+            id: episodeID
+        };
+
+        return this._ibdb.delete(where, this._tableName);
+    }
+
     collateEpisodeInfo(episodeInfo, showsModel, showSeasonsModel){
         let show = {};
         let season = {};
@@ -123,4 +131,6 @@ export default class ShowSeasonEpisodesModel {
                     };
                 });
     }
+
+    
 }
