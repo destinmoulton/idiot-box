@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Input, Row } from 'antd';
+import { Input, Row, Spin } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 
@@ -19,12 +19,26 @@ class AddShow extends Component {
 
         this.state = {
             currentSearchString: "",
+            isIDing: false,
             shows: []
         };
     }
 
+    componentWillMount(){
+        this.setState({
+            currentSearchString: "",
+            isIDing: false,
+            shows: []
+        });
+    }
+
     _handleSelectMovie(show, imageURL){
         const { emitAPIRequest, currentFilename } = this.props;
+
+        this.setState({
+            isIDing: true
+        });
+
         const options = {
             show_info: show,
             image_info: {
@@ -37,9 +51,7 @@ class AddShow extends Component {
 
     _idShowComplete(recd){
         const { onIDComplete } = this.props;
-
-        console.log(recd);
-
+        
         onIDComplete();
     }
 
@@ -70,7 +82,7 @@ class AddShow extends Component {
         });
     }
 
-    render() {
+    _buildSearchResults(){
         const { currentSearchString, shows } = this.state;
 
         let showList = [];
@@ -82,9 +94,9 @@ class AddShow extends Component {
 
             showList.push(showDetails);
         });
+
         return (
             <div>
-                <h4>Add a Show</h4>
                 <Input.Search
                     value={currentSearchString}
                     onChange={this._handleChangeSearchInput.bind(this)}
@@ -94,6 +106,34 @@ class AddShow extends Component {
                 <Row>
                     {showList}
                 </Row>
+            </div>
+        );
+    }
+
+    _buildAddingShow(){
+        return (
+            <div>
+                <Spin />
+                Adding show. This could take a while...
+            </div>
+        );
+    }
+
+    render() {
+        const { isIDing } = this.state;
+        
+        let contents = "";
+        
+        if(isIDing){
+            contents = this._buildAddingShow();
+        } else {
+            contents = this._buildSearchResults();
+        }
+
+        return (
+            <div>
+                <h4>Add a Show</h4>
+                {contents}        
             </div>
         );
     }

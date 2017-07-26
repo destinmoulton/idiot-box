@@ -18,38 +18,99 @@ var _mkdirp = require('mkdirp');
 
 var _mkdirp2 = _interopRequireDefault(_mkdirp);
 
+var _logger = require('../logger');
+
+var _logger2 = _interopRequireDefault(_logger);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var FilesystemModel = function () {
-    function FilesystemModel(settingsModel) {
+    function FilesystemModel(models) {
         _classCallCheck(this, FilesystemModel);
 
-        this._settingsModel = settingsModel;
+        this._filesModel = models.filesModel;
+        this._fileToEpisodeModel = models.fileToEpisodeModel;
+        this._fileToMovieModel = models.fileToMovieModel;
+        this._moviesModel = models.moviesModel;
+        this._settingsModel = models.settingsModel;
+        this._showSeasonEpisodesModel = models.showSeasonEpisodesModel;
     }
 
     _createClass(FilesystemModel, [{
         key: 'getDirList',
-        value: function getDirList(pathToList) {
-            return new Promise(function (resolve, reject) {
-                if (!_fs2.default.existsSync(pathToList)) {
-                    reject('FilesystemModel Error: ' + pathToList + ' does not exist.');
+        value: function getDirList(basePath, fullPath) {
+            var _this = this;
+
+            if (!_fs2.default.existsSync(fullPath)) {
+                return Promise.reject('FilesystemModel Error: ' + fullPath + ' does not exist.');
+            }
+            var contents = _fs2.default.readdirSync(fullPath);
+            var dirList = [];
+            var promisesToRun = [];
+            contents.forEach(function (filename) {
+                promisesToRun.push(_this._collateFileInformation(basePath, fullPath, filename));
+            });
+            return Promise.all(promisesToRun);
+        }
+    }, {
+        key: '_collateFileInformation',
+        value: function _collateFileInformation(basePath, fullPath, filename) {
+            var _this2 = this;
+
+            var subpath = fullPath.slice(basePath.length + 1);
+
+            var info = _fs2.default.statSync(_path2.default.join(fullPath, filename));
+            var isDirectory = info.isDirectory();
+            var fileData = {
+                name: filename,
+                atime: info.atime,
+                birthtime: info.birthtime,
+                size: info.size,
+                isDirectory: isDirectory,
+                assocData: {}
+            };
+
+            if (isDirectory) {
+                return Promise.resolve(fileData);
+            }
+
+            return this._settingsModel.getSingleByCatAndVal("directories", basePath).then(function (setting) {
+                if (!'id' in setting) {
+                    return fileData;
                 }
-                var contents = _fs2.default.readdirSync(pathToList);
-                var dirList = [];
-                contents.forEach(function (name) {
-                    var info = _fs2.default.statSync(_path2.default.join(pathToList, name));
-                    var data = {
-                        name: name,
-                        atime: info.atime,
-                        birthtime: info.birthtime,
-                        size: info.size,
-                        isDirectory: info.isDirectory()
-                    };
-                    dirList.push(data);
-                });
-                resolve(dirList);
+                return _this2._filesModel.getSingleByDirectoryAndFilename(setting.id, subpath, filename);
+            }).then(function (file) {
+                if (!'id' in file) {
+                    return fileData;
+                }
+
+                if (file.mediatype === "movie") {
+                    return _this2._fileToMovieModel.getSingleForFile(file.id).then(function (fileToMovie) {
+                        return _this2._moviesModel.getSingle(fileToMovie.movie_id);
+                    }).then(function (movieInfo) {
+                        var assocData = {
+                            id: movieInfo.id,
+                            title: movieInfo.title,
+                            type: "movie"
+                        };
+                        fileData.assocData = assocData;
+                        return Promise.resolve(fileData);
+                    });
+                } else {
+                    return _this2._fileToEpisodeModel.getSingleForFile(file.id).then(function (fileToEpisode) {
+                        return _this2._showSeasonEpisodesModel.getSingle(fileToEpisode.episode_id);
+                    }).then(function (episodeInfo) {
+                        var assocData = {
+                            id: episodeInfo.id,
+                            title: episodeInfo.title,
+                            type: "show"
+                        };
+                        fileData.assocData = assocData;
+                        return Promise.resolve(fileData);
+                    });
+                }
             });
         }
 
@@ -72,7 +133,7 @@ var FilesystemModel = function () {
     }, {
         key: 'move',
         value: function move(sourceInfo, destInfo, destDirType) {
-            var _this = this;
+            var _this3 = this;
 
             return this._settingsModel.getSingleByID(sourceInfo.setting_id).then(function (sourceSetting) {
                 var fullSourcePath = _path2.default.join(sourceSetting.value, sourceInfo.subpath, sourceInfo.filename);
@@ -80,7 +141,7 @@ var FilesystemModel = function () {
                     return Promise.reject('FilesystemModel :: move() :: source path ' + fullSourcePath + ' does not exist');
                 }
 
-                return _this._settingsModel.getSingle("directories", destDirType).then(function (destSetting) {
+                return _this3._settingsModel.getSingle("directories", destDirType).then(function (destSetting) {
                     var baseDestDir = destSetting.value;
                     if (!_fs2.default.existsSync(baseDestDir)) {
                         return Promise.reject('FilesystemModel :: move() :: destination path ' + baseDestDir + ' does not exist');
@@ -108,14 +169,14 @@ var FilesystemModel = function () {
     }, {
         key: 'trash',
         value: function trash(sourcePath, filenames) {
-            var _this2 = this;
+            var _this4 = this;
 
             return new Promise(function (resolve, reject) {
                 if (!_fs2.default.existsSync(sourcePath)) {
                     reject('FilesystemModel :: trash() :: sourcePath: ' + sourcePath + ' does not exist.');
                 }
 
-                return _this2._settingsModel.getSingle("directories", "Trash").then(function (row) {
+                return _this4._settingsModel.getSingle("directories", "Trash").then(function (row) {
                     var trashPath = row.value;
                     if (!_fs2.default.existsSync(trashPath)) {
                         reject('FilesystemModel :: trash() :: trash directory: ' + trashPath + ' does not exist.');

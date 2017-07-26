@@ -12,18 +12,27 @@ export default class IDModel {
         this._showSeasonEpisodesModel = models.showSeasonEpisodesModel;
     }
 
-    idMovie(movieInfo, fileInfo, imageInfo){
+    idAndArchiveMovie(movieInfo, imageURL, sourceInfo, destInfo){
         const imageFilename = this._buildThumbFilename(movieInfo);
-        return this._mediaScraperModel.downloadThumbnail("Movie", imageInfo.url, imageFilename)
+        return this._filesystemModel.move(sourceInfo, destInfo, "Movies")
+                .then(()=>{
+                    if( imageURL !== ""){
+                        return this._mediaScraperModel.downloadThumbnail("Movie", imageURL, imageFilename)
+                    }
+                    return Promise.resolve("");
+                })
                 .then((imageFilename)=>{
                     return this._moviesModel.addMovie(movieInfo, imageFilename)
                 })
                 .then((movieRow)=>{
-                    return this._filesModel.addFile(fileInfo.setting_id, fileInfo.subpath, fileInfo.filename, "movie")
-                        .then((fileRow)=>{
-                            return this._fileToMovieModel.add(fileRow.id, movieRow.id);
-                        })
-                })
+                    return this._settingsModel.getSingle("directories", "Movies")
+                            .then((destSetting)=>{
+                                return this._filesModel.addFile(destSetting.id, destInfo.subpath, destInfo.filename, "movie");
+                            })
+                            .then((fileRow)=>{
+                                return this._fileToMovieModel.add(fileRow.id, movieRow.id);
+                            });
+                });
     }
 
     idAndArchiveEpisode(epInfo, sourceInfo, destInfo){
@@ -67,30 +76,4 @@ export default class IDModel {
     _buildThumbFilename(mediaInfo){
         return mediaInfo.title + "." + mediaInfo.year;
     }
-
-    findID(fileInfo){
-        const subpath = fileInfo.fullPath.slice(fileInfo.basePath.length + 1);
-        return this._settingsModel.getSingleByCatAndVal("directories", fileInfo.basePath)
-                .then((setting)=>{
-                    if(!'id' in setting){
-                        return {}
-                    }
-                    return this._filesModel.getSingleByDirectoryAndFilename(setting.id, subpath, fileInfo.filename)
-                })
-                .then((file)=>{
-                    if(!'id' in file){
-                        return {};
-                    }
-
-                    if(file.mediatype === "movie"){
-                        return this._fileToMovieModel.getSingleForFile(file.id)
-                                .then((fileToMovie)=>{
-                                    return this._moviesModel.getSingle(fileToMovie.movie_id);
-                                });
-                    } else {
-                        return {};
-                    }
-                })
-    }
-
 }

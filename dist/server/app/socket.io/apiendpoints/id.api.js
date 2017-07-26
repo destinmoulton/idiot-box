@@ -75,8 +75,6 @@ var _ShowSeasonEpisodesModel2 = _interopRequireDefault(_ShowSeasonEpisodesModel)
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var settingsModel = new _SettingsModel2.default(_IBDB2.default);
-
-var filesystemModel = new _FilesystemModel2.default(settingsModel);
 var filesModel = new _FilesModel2.default(_IBDB2.default);
 var fileToEpisodeModel = new _FileToEpisodeModel2.default(_IBDB2.default);
 var fileToMovieModel = new _FileToMovieModel2.default(_IBDB2.default);
@@ -88,7 +86,17 @@ var showsModel = new _ShowsModel2.default(_IBDB2.default);
 var showSeasonsModel = new _ShowSeasonsModel2.default(_IBDB2.default);
 var showSeasonEpisodesModel = new _ShowSeasonEpisodesModel2.default(_IBDB2.default);
 
-var models = {
+var filesystemConstructionModels = {
+    filesModel: filesModel,
+    fileToEpisodeModel: fileToEpisodeModel,
+    fileToMovieModel: fileToMovieModel,
+    moviesModel: moviesModel,
+    settingsModel: settingsModel,
+    showSeasonEpisodesModel: showSeasonEpisodesModel
+};
+var filesystemModel = new _FilesystemModel2.default(filesystemConstructionModels);
+
+var idConstructionModels = {
     filesystemModel: filesystemModel,
     filesModel: filesModel,
     fileToEpisodeModel: fileToEpisodeModel,
@@ -100,7 +108,7 @@ var models = {
     showSeasonsModel: showSeasonsModel,
     showSeasonEpisodesModel: showSeasonEpisodesModel
 };
-var idModel = new _IDModel2.default(models);
+var idModel = new _IDModel2.default(idConstructionModels);
 
 var id = {
     file: {
@@ -112,10 +120,10 @@ var id = {
         }
     },
     movie: {
-        add: {
-            params: ['movie_info', 'file_info', 'image_info'],
-            func: function func(movieInfo, fileInfo, imageInfo) {
-                return idModel.idMovie(movieInfo, fileInfo, imageInfo);
+        id_and_archive: {
+            params: ['movie_info', 'image_url', 'source_info', 'dest_info'],
+            func: function func(movieInfo, imageURL, sourceInfo, destInfo) {
+                return idModel.idAndArchiveMovie(movieInfo, imageURL, sourceInfo, destInfo);
             }
         }
     },

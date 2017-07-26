@@ -20,8 +20,6 @@ import ShowSeasonsModel from '../../models/db/ShowSeasonsModel';
 import ShowSeasonEpisodesModel from '../../models/db/ShowSeasonEpisodesModel';
 
 const settingsModel = new SettingsModel(ibdb);
-
-const filesystemModel = new FilesystemModel(settingsModel);
 const filesModel = new FilesModel(ibdb);
 const fileToEpisodeModel = new FileToEpisodeModel(ibdb);
 const fileToMovieModel = new FileToMovieModel(ibdb);
@@ -33,7 +31,17 @@ const showsModel = new ShowsModel(ibdb);
 const showSeasonsModel = new ShowSeasonsModel(ibdb);
 const showSeasonEpisodesModel = new ShowSeasonEpisodesModel(ibdb);
 
-const models = {
+const filesystemConstructionModels = {
+    filesModel,
+    fileToEpisodeModel,
+    fileToMovieModel,
+    moviesModel,
+    settingsModel,
+    showSeasonEpisodesModel
+};
+const filesystemModel = new FilesystemModel(filesystemConstructionModels);
+
+const idConstructionModels = {
     filesystemModel,
     filesModel,
     fileToEpisodeModel,
@@ -45,7 +53,7 @@ const models = {
     showSeasonsModel,
     showSeasonEpisodesModel
 };
-const idModel = new IDModel(models);
+const idModel = new IDModel(idConstructionModels);
 
 const id = {
     file: {
@@ -55,9 +63,9 @@ const id = {
         }
     },
     movie: {
-        add: {
-            params: ['movie_info', 'file_info', 'image_info'],
-            func: (movieInfo, fileInfo, imageInfo)=> idModel.idMovie(movieInfo, fileInfo, imageInfo)
+        id_and_archive: {
+            params: ['movie_info', 'image_url', 'source_info', 'dest_info'],
+            func: (movieInfo, imageURL, sourceInfo, destInfo)=> idModel.idAndArchiveMovie(movieInfo, imageURL, sourceInfo, destInfo)
         }
     },
     show: {

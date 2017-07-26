@@ -2,32 +2,91 @@ import fs from 'fs';
 import path from 'path';
 import mkdirp from 'mkdirp';
 
+import logger from '../logger';
+
 export default class FilesystemModel {
-    constructor(settingsModel){
-        this._settingsModel = settingsModel;
+    constructor(models){
+        this._filesModel = models.filesModel;
+        this._fileToEpisodeModel = models.fileToEpisodeModel;
+        this._fileToMovieModel = models.fileToMovieModel;
+        this._moviesModel = models.moviesModel;
+        this._settingsModel = models.settingsModel;
+        this._showSeasonEpisodesModel = models.showSeasonEpisodesModel;
     }
 
-    getDirList(pathToList){
-        return new Promise((resolve, reject)=>{
-            if (!fs.existsSync(pathToList)) {
-                reject(`FilesystemModel Error: ${pathToList} does not exist.`);
-            }
-            const contents = fs.readdirSync(pathToList);
-            const dirList = [];
-            contents.forEach((name) => {
-                const info = fs.statSync(path.join(pathToList, name));
-                const data = {
-                    name,
-                    atime: info.atime,
-                    birthtime: info.birthtime,
-                    size: info.size,
-                    isDirectory: info.isDirectory()
-                };
-                dirList.push(data);
-
-            });
-            resolve(dirList);
+    getDirList(basePath, fullPath){
+        if (!fs.existsSync(fullPath)) {
+            return Promise.reject(`FilesystemModel Error: ${fullPath} does not exist.`);
+        }
+        const contents = fs.readdirSync(fullPath);
+        const dirList = [];
+        let promisesToRun = [];
+        contents.forEach((filename) => {
+            promisesToRun.push(this._collateFileInformation(basePath, fullPath, filename));
         });
+        return Promise.all(promisesToRun);
+    }
+
+    _collateFileInformation(basePath, fullPath, filename){
+        const subpath = fullPath.slice(basePath.length + 1);
+
+        const info = fs.statSync(path.join(fullPath, filename));
+        const isDirectory = info.isDirectory();
+        const fileData = {
+            name: filename,
+            atime: info.atime,
+            birthtime: info.birthtime,
+            size: info.size,
+            isDirectory,
+            assocData: {}
+        };
+
+        if(isDirectory){
+            return Promise.resolve(fileData);
+        }
+        
+        return this._settingsModel.getSingleByCatAndVal("directories", basePath)
+                .then((setting)=>{
+                    if(!'id' in setting){
+                        return fileData;
+                    }
+                    return this._filesModel.getSingleByDirectoryAndFilename(setting.id, subpath, filename)
+                })
+                .then((file)=>{
+                    if(!'id' in file){
+                        return fileData;
+                    }
+                    
+                    if(file.mediatype === "movie"){
+                        return this._fileToMovieModel.getSingleForFile(file.id)
+                                .then((fileToMovie)=>{
+                                    return this._moviesModel.getSingle(fileToMovie.movie_id);
+                                })
+                                .then((movieInfo)=>{
+                                    const assocData = {
+                                        id: movieInfo.id,
+                                        title: movieInfo.title,
+                                        type: "movie"
+                                    }
+                                    fileData.assocData = assocData;
+                                    return Promise.resolve(fileData);
+                                })
+                    } else {
+                        return this._fileToEpisodeModel.getSingleForFile(file.id)
+                                .then((fileToEpisode)=>{
+                                    return this._showSeasonEpisodesModel.getSingle(fileToEpisode.episode_id);
+                                })
+                                .then((episodeInfo)=>{
+                                    const assocData = {
+                                        id: episodeInfo.id,
+                                        title: episodeInfo.title,
+                                        type: "show"
+                                    };
+                                    fileData.assocData = assocData;
+                                    return Promise.resolve(fileData);
+                                });
+                    }
+                })
     }
 
     /**

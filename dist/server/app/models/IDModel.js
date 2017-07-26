@@ -24,15 +24,22 @@ var IDModel = function () {
     }
 
     _createClass(IDModel, [{
-        key: "idMovie",
-        value: function idMovie(movieInfo, fileInfo, imageInfo) {
+        key: "idAndArchiveMovie",
+        value: function idAndArchiveMovie(movieInfo, imageURL, sourceInfo, destInfo) {
             var _this = this;
 
             var imageFilename = this._buildThumbFilename(movieInfo);
-            return this._mediaScraperModel.downloadThumbnail("Movie", imageInfo.url, imageFilename).then(function (imageFilename) {
+            return this._filesystemModel.move(sourceInfo, destInfo, "Movies").then(function () {
+                if (imageURL !== "") {
+                    return _this._mediaScraperModel.downloadThumbnail("Movie", imageURL, imageFilename);
+                }
+                return Promise.resolve("");
+            }).then(function (imageFilename) {
                 return _this._moviesModel.addMovie(movieInfo, imageFilename);
             }).then(function (movieRow) {
-                return _this._filesModel.addFile(fileInfo.setting_id, fileInfo.subpath, fileInfo.filename, "movie").then(function (fileRow) {
+                return _this._settingsModel.getSingle("directories", "Movies").then(function (destSetting) {
+                    return _this._filesModel.addFile(destSetting.id, destInfo.subpath, destInfo.filename, "movie");
+                }).then(function (fileRow) {
                     return _this._fileToMovieModel.add(fileRow.id, movieRow.id);
                 });
             });
@@ -77,31 +84,6 @@ var IDModel = function () {
         key: "_buildThumbFilename",
         value: function _buildThumbFilename(mediaInfo) {
             return mediaInfo.title + "." + mediaInfo.year;
-        }
-    }, {
-        key: "findID",
-        value: function findID(fileInfo) {
-            var _this4 = this;
-
-            var subpath = fileInfo.fullPath.slice(fileInfo.basePath.length + 1);
-            return this._settingsModel.getSingleByCatAndVal("directories", fileInfo.basePath).then(function (setting) {
-                if (!'id' in setting) {
-                    return {};
-                }
-                return _this4._filesModel.getSingleByDirectoryAndFilename(setting.id, subpath, fileInfo.filename);
-            }).then(function (file) {
-                if (!'id' in file) {
-                    return {};
-                }
-
-                if (file.mediatype === "movie") {
-                    return _this4._fileToMovieModel.getSingleForFile(file.id).then(function (fileToMovie) {
-                        return _this4._moviesModel.getSingle(fileToMovie.movie_id);
-                    });
-                } else {
-                    return {};
-                }
-            });
         }
     }]);
 

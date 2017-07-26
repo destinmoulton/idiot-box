@@ -10,6 +10,7 @@ class FileDetails extends Component {
     VIDEO_FILE_REGX = /(\.mp4|\.mkv|\.avi)$/;
 
     static propTypes = {
+        assocData: PropTypes.object.isRequired,
         basePath: PropTypes.string.isRequired,
         filename: PropTypes.string.isRequired,
         fullPath: PropTypes.string.isRequired
@@ -17,36 +18,6 @@ class FileDetails extends Component {
 
     constructor(props) {
         super(props);
-
-        this.state = {
-            idInfo: {}
-        }
-    }
-
-    componentWillMount(){
-        const { basePath,
-                emitAPIRequest,
-                filename,
-                fullPath} = this.props;
-        if(filename.search(this.VIDEO_FILE_REGX) > -1){
-            const options = {
-                file_info: {
-                    basePath,
-                    filename,
-                    fullPath
-                }
-            };
-
-            emitAPIRequest("id.file.search", options, this._idComplete.bind(this), false);
-        }
-    }
-
-    _idComplete(data){
-        if('id' in data){
-            this.setState({
-                idInfo: data
-            });
-        }
     }
 
     _startPlayback(){
@@ -64,25 +35,25 @@ class FileDetails extends Component {
     }
 
     render() {
-        const { filename } = this.props;
-        const { idInfo } = this.state;
+        const { assocData, filename } = this.props;
 
         let mediaDetails = "";
-        if('title' in idInfo){
-            mediaDetails = <div className="ib-filebrowser-media-title">{idInfo.title}</div>;
+        if('title' in assocData){
+            mediaDetails = <div className="ib-filebrowser-media-title">{assocData.title}</div>;
         }
 
-        let play = "";
+        let actions = "";
         if(filename.search(this.VIDEO_FILE_REGX) > -1){
-            play = <a href="javascript:void(0)"
-                    onClick={this._startPlayback.bind(this)}>
-                    <Icon type="play-circle" className="ib-filebrowser-media-play"/>
-                </a>;
+            actions = <a href="javascript:void(0)"
+                            onClick={this._startPlayback.bind(this)}>
+                            <Icon type="play-circle" className="ib-filebrowser-media-play"/>
+                        </a>;
         }
+        
         return (
             <div>
                 {mediaDetails}
-                <div>{play}{filename}</div>
+                <div>{actions}{filename}</div>
             </div>
         );
     }

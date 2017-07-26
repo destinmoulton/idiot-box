@@ -15,7 +15,7 @@ import AddShow from './AddShow';
 import ArchiveSingleEpisode from './ArchiveSingleEpisode';
 import EpisodeIDSelector from './EpisodeIDSelector';
 import MovieCheckForm from './MovieCheckForm';
-import MovieSearchResults from './MovieSearchResults';
+import MovieID from './MovieID';
 
 class IDFileModal extends Component {
     INITIAL_VIEW = "two_column_single_id";
@@ -39,6 +39,14 @@ class IDFileModal extends Component {
             episodeInfo: {},
             movieSearchString: ""
         };
+    }
+
+    componentWillMount(){
+        this.setState({
+            currentView: 'two_column_single_id',
+            episodeInfo: {},
+            movieSearchString: ""
+        });
     }
 
     _handleCancel(){
@@ -95,14 +103,14 @@ class IDFileModal extends Component {
                     onIDComplete={onIDComplete}/>;
     }
 
-    _buildMovieSearchResults(){
+    _buildMovieIDView(){
         const { movieSearchString } = this.state;
         const { currentFilename, currentPathInfo, onIDComplete } = this.props;
 
-        return <MovieSearchResults 
-                    initialSearchString={movieSearchString}
+        return <MovieID 
                     currentFilename={currentFilename}
                     currentPathInfo={currentPathInfo}
+                    movieSearchString={movieSearchString}
                     onIDComplete={onIDComplete}/>;
     }
 
@@ -134,7 +142,7 @@ class IDFileModal extends Component {
             case this.INITIAL_VIEW:
                 return this._buildTwoColumnSingleID();
             case this.MOVIE_SEARCH_VIEW:
-                return this._buildMovieSearchResults();
+                return this._buildMovieIDView();
             case this.ADD_SHOW_VIEW:
                 return this._buildAddShowView();
             case this.ARCHIVE_EPISODE_VIEW:

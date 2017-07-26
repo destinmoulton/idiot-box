@@ -42,7 +42,7 @@ class FileManager extends Component {
 
     _handleChangeDirectory(newDir, dirList){
         const { currentToplevelDirectory, currentPathInfo } = this.state;
-
+        
         const subpath = newDir.slice(currentToplevelDirectory.length + 1);
         currentPathInfo.subpath = subpath;
         this.setState({
@@ -139,28 +139,43 @@ class FileManager extends Component {
         });
     }
 
+    _handleClickUntag(id, mediaType){
+
+    }    
+
     _buildActionColumns(){
+        
         return [
             {
                 title: "",
                 dataIndex: "",
                 render: (text,record)=>{
-                    let videoActions = "";
+                    const { assocData } = record;
+                    
+                    let tag = "";
                     if(record.name.search(this.VIDEO_FILE_REGX) > -1){
-                        // Video file
-                        videoActions = <a href="javascript:void(0);"
-                            onClick={this._handleClickIDFile.bind(this, record.name)}>
-                            <Icon type="tag"/>
-                        </a>;
+                        if(!'id' in assocData){
+                            tag = <a href="javascript:void(0);"
+                                        onClick={this._handleClickIDFile.bind(this, record.name)}>
+                                        <Icon type="tag"/>
+                                    </a>;
+                        }
+                    }
+                    
+                    let untag = "";
+                    if('id' in assocData){
+                        untag = <a href="javascript:void(0)"
+                                onClick={this._handleClickUntag.bind(this, assocData.id, assocData.type)}>
+                                    <Icon type="disconnect" className="ib-filebrowser-media-play"/>
+                                </a>;
                     }
                     return (
                         <span>
-                        <a href="javascript:void(0);"
-                           onClick={this._handleClickTrash.bind(this)}
-                           data-item-name={record.name}>
-                           <Icon type="delete"/>
-                        </a>&nbsp;
-                        {videoActions}
+                            <a  href="javascript:void(0);"
+                                onClick={this._handleClickTrash.bind(this)}
+                                data-item-name={record.name}>
+                                <Icon type="delete"/>
+                            </a>&nbsp;{tag}{untag}
                         </span>
                     );
                 }
@@ -220,6 +235,7 @@ class FileManager extends Component {
                     onCancel={this._handleCancelTrash.bind(this)}
                 />
                 <IDFileModal
+                    key={idModalFilename}
                     isVisible={isIDModalVisible}
                     onIDComplete={this._handleIDModalComplete.bind(this)}
                     onCancel={this._handleIDModalCancel.bind(this)}
