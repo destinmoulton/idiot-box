@@ -6,6 +6,7 @@ import { Icon, Button, Modal } from 'antd';
 
 import FilesystemBrowser from './Filesystem/FilesystemBrowser';
 import IDFileModal from './ID/IDFileModal';
+import IDMultipleEpisodesModal from './ID/IDMultipleEpisodesModal';
 import TrashModal from './Filesystem/TrashModal';
 import UntagModal from './ID/UntagModal';
 
@@ -22,10 +23,12 @@ class FileManager extends Component {
             currentPath: "",
             currentPathInfo: {},
             dirList: [],
-            idModalFilename: "",
+            idmultipleIsModalVisible: false,
+            idmultipleEpisodes: [],
+            idsingleFilename: "",
+            idsingleIsModalVisible: false,
             isReloading: false,
             isTrashVisible: false,
-            isIDModalVisible: false,
             itemsToTrash: [],
             selectedRows: [],
             untagIsModalVisible: false,
@@ -70,7 +73,6 @@ class FileManager extends Component {
     }
 
     _handleSelectionChange(selectedRows){
-        console.log(selectedRows);
         this.setState({
             selectedRows
         });
@@ -108,23 +110,61 @@ class FileManager extends Component {
 
     _handleClickIDFile(filename){
         this.setState({
-            idModalFilename: filename,
-            isIDModalVisible: true
+            idsingleFilename: filename,
+            idsingleIsModalVisible: true
         });
     }
 
     _handleIDModalCancel(){
         this.setState({
-            isIDModalVisible: false,
-            idModalFilename: ""
+            idsingleIsModalVisible: false,
+            idsingleFilename: ""
         });
     }
 
     _handleIDModalComplete(){
         this.setState({
-            isIDModalVisible: false,
             isReloading: true,
-            idModalFilename: ""
+            idsingleIsModalVisible: false,
+            idsingleFilename: ""
+        });
+    }
+
+    _handleClickIDMultipleEpisodes(){
+        const { dirList } = this.state;
+
+        const filenamesToID = [...this.state.selectedRows];
+
+        const idItems = [];
+        filenamesToID.forEach((filename)=>{
+            dirList.forEach((item)=>{
+                if(item.name === filename &&
+                    item.name.search(this.VIDEO_FILE_REGX) > -1){
+                    idItems.push(item);
+                }
+            })
+        });
+
+        if(idItems.length > 0){
+            this.setState({
+                idmultipleIsModalVisible: true,
+                idmultipleEpisodes: idItems
+            });
+        }
+    }
+
+    _handleIDMultipleCancel(){
+        this.setState({
+            idmultipleIsModalVisible: false,
+            idmultipleEpisodes: []
+        });
+    }
+
+    _handleIDMultipleComplete(){
+        this.setState({
+            isReloading: true,
+            idmultipleIsModalVisible: false,
+            idmultipleEpisodes: []
         });
     }
     
@@ -232,9 +272,11 @@ class FileManager extends Component {
             currentPath, 
             currentPathInfo,
             currentToplevelDirectory,
-            idModalFilename,
+            idmultipleIsModalVisible,
+            idmultipleEpisodes,
+            idsingleFilename,
+            idsingleIsModalVisible,
             isReloading,
-            isIDModalVisible,
             isTrashVisible,
             itemsToTrash,
             selectedRows,
@@ -254,7 +296,10 @@ class FileManager extends Component {
                         onClick={this._handleSelectVideos.bind(this)}
                     >Select Videos</Button>&nbsp;&nbsp;
                     <Button.Group>
-                        <Button type="primary" icon="search" disabled={buttonDisabled}>ID</Button>
+                        <Button 
+                            icon="tag"
+                            disabled={buttonDisabled}
+                            onClick={this._handleClickIDMultipleEpisodes.bind(this)}>ID</Button>
                         <Button 
                             type="danger"
                             icon="delete"
@@ -288,13 +333,20 @@ class FileManager extends Component {
                     onCancel={this._handleCancelTrash.bind(this)}
                 />
                 <IDFileModal
-                    key={idModalFilename}
-                    isVisible={isIDModalVisible}
+                    key={idsingleFilename}
+                    isVisible={idsingleIsModalVisible}
                     onIDComplete={this._handleIDModalComplete.bind(this)}
                     onCancel={this._handleIDModalCancel.bind(this)}
-                    currentFilename={idModalFilename}
+                    currentFilename={idsingleFilename}
                     currentPathInfo={currentPathInfo}
                     currentToplevelDirectory={currentToplevelDirectory}
+                />
+                <IDMultipleEpisodesModal
+                    currentPathInfo={currentPathInfo}
+                    episodesToID={idmultipleEpisodes}
+                    isVisible={idmultipleIsModalVisible}
+                    onCancel={this._handleIDMultipleCancel.bind(this)}
+                    onIDComplete={this._handleIDMultipleComplete.bind(this)}
                 />
                 <UntagModal
                     isVisible={untagIsModalVisible}

@@ -73,6 +73,12 @@ div.ib-idmodal-archivesingle-form-box {
     margin: 5px;
 }
 
+div.ib-idmultiplemodal-episode-box {
+    border: 1px solid gray;
+    padding: 5px;
+    margin: 5px;
+}
+
 div.ib-filebrowser-spin-box {
     width: 100%;
     padding-top: 30px;

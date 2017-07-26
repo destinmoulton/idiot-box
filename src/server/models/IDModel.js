@@ -66,7 +66,7 @@ export default class IDModel {
                     .then(()=>{
                         return this._moviesModel.deleteSingle(idInfo.movie_id);
                     })
-        } else if (inInfo.type === "show"){
+        } else if (idInfo.type === "show"){
             return this._filesModel.deleteSingle(idInfo.file_id)
                     .then(()=>{
                         return this._fileToEpisodeModel.deleteSingle(idInfo.file_id, idInfo.episode_id);

@@ -80,7 +80,7 @@ var IDModel = function () {
                 }).then(function () {
                     return _this4._moviesModel.deleteSingle(idInfo.movie_id);
                 });
-            } else if (inInfo.type === "show") {
+            } else if (idInfo.type === "show") {
                 return this._filesModel.deleteSingle(idInfo.file_id).then(function () {
                     return _this4._fileToEpisodeModel.deleteSingle(idInfo.file_id, idInfo.episode_id);
                 }).then(function () {

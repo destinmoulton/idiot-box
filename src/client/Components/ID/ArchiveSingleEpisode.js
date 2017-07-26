@@ -6,6 +6,8 @@ import { Button, Input, Spin } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 
+import Regex from '../../lib/Regex.lib';
+
 class ArchiveSingleEpisode extends Component {
     static propTypes = {
         currentFilename: PropTypes.string.isRequired,
@@ -99,7 +101,7 @@ class ArchiveSingleEpisode extends Component {
     
 
     _getDirectory(show, episode){
-        const showTitle = this._getShowName(show);
+        const showTitle = Regex.getShowName(show.title);
         const seasonID = this._getSeasonID(episode.season_number);
         return showTitle + "/" + seasonID;
     }
@@ -112,20 +114,11 @@ class ArchiveSingleEpisode extends Component {
         const episodeID = this._getEpisodeID(episode.episode_number);
         const seasonID = this._getSeasonID(episode.season_number);
         
-        const showTitle = this._getShowName(show);
+        const showTitle = Regex.getShowName(show.title);
         return showTitle + "." + seasonID + episodeID + "." + ext;
     }
 
-    _getShowName(show){
-        // Replace current periods
-        let newTitle = show.title.replace(/\./g, "");
-
-        // Replace spaces and dashes with periods
-        newTitle = newTitle.replace(/(\s|\-)/g, ".");
-
-        // Replace everything else with blank
-        return newTitle.replace(/[^\.a-zA-Z0-9]/g, "");
-    }
+    
 
     _getEpisodeID(episodeNumber){
         let episodeID = "E";
