@@ -50,7 +50,7 @@ class FilesystemBrowser extends Component {
     }
 
     componentWillMount(){
-        this._getDirFromServer(this.state.currentPath);
+        this._getDirFromServer(this.state.currentPath, this.props.initialPath);
     }
 
     componentWillReceiveProps(nextProps){
@@ -59,20 +59,20 @@ class FilesystemBrowser extends Component {
         }
 
         if(nextProps.initialPath !== this.props.initialPath){
-            this._getDirFromServer(nextProps.initialPath);
+            this._getDirFromServer(nextProps.initialPath, nextProps.initialPath);
         }
     }
 
     _reloadDir(){
-        this._getDirFromServer(this.state.currentPath);
+        this._getDirFromServer(this.state.currentPath, this.props.initialPath);
     }
 
-    _getDirFromServer(path){
-        const { emitAPIRequest, initialPath } = this.props;
+    _getDirFromServer(fullPath, basePath){
+        const { emitAPIRequest } = this.props;
 
         const options = {
-            base_path: initialPath,
-            full_path: path
+            base_path: basePath,
+            full_path: fullPath
         };
 
         emitAPIRequest("filesystem.dir.get", options, this._dirListReceived.bind(this), false);
@@ -166,7 +166,7 @@ class FilesystemBrowser extends Component {
     }
 
     _handleDirClick(nextDirName){
-        const { serverInfo } = this.props;
+        const { serverInfo, initialPath } = this.props;
         const { pathSeparator } = serverInfo;
         const { currentPath } = this.state;
 
@@ -188,7 +188,7 @@ class FilesystemBrowser extends Component {
             }
         }
 
-        this._getDirFromServer(newPath);
+        this._getDirFromServer(newPath, initialPath);
     }
 
     _buildColumns(){
