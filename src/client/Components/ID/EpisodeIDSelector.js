@@ -137,7 +137,7 @@ class EpisodeIDSelector extends Component {
         const showSelector = this._buildSelect(shows, 'title', this._getSeasons.bind(this), currentShowID);
         let seasonsSelector = "Select a show...";
         if(currentShowID > 0){
-            seasonsSelector = this._buildSelect(seasons, 'title', this._getEpisodes.bind(this), currentSeasonID);
+            seasonsSelector = this._buildSelect(seasons, 'season_number', this._getEpisodes.bind(this), currentSeasonID, "Season ");
         }
         let episodesSelector = "Select a season...";
         if(currentSeasonID > 0){
