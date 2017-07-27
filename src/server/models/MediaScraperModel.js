@@ -59,7 +59,6 @@ export default class MediaScraperModel {
         const camelCaseType = typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
         return this._settingsModel.getSingle("thumbpaths", camelCaseType)
             .then((setting)=>{
-                logger.debug(setting);
                 if(!fs.existsSync(setting.value)){
                     return Promise.reject(`MediaScrapeModel :: downloadThumbnail :: The path for ${typeOfMedia} ${setting.value} does not exist.`);
                 }

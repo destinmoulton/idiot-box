@@ -88,7 +88,6 @@ var MediaScraperModel = function () {
 
             var camelCaseType = typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
             return this._settingsModel.getSingle("thumbpaths", camelCaseType).then(function (setting) {
-                _logger2.default.debug(setting);
                 if (!_fs2.default.existsSync(setting.value)) {
                     return Promise.reject('MediaScrapeModel :: downloadThumbnail :: The path for ' + typeOfMedia + ' ' + setting.value + ' does not exist.');
                 }
