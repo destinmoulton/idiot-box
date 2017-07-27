@@ -1,3 +1,5 @@
+import logger from '../logger';
+
 export default class IDModel {
     constructor(models){
         this._filesystemModel = models.filesystemModel,
@@ -82,7 +84,7 @@ export default class IDModel {
     removeMultipleIDs(itemsToRemove){
         let promisesToRun = [];
         itemsToRemove.forEach((item)=>{
-            promisesToRun.push(this.removeSingleID(item));
+            promisesToRun.push(this.removeSingleID(item.assocData));
         });
 
         return Promise.all(promisesToRun);
@@ -92,7 +94,7 @@ export default class IDModel {
         if(idInfo.type === "movie"){
             return this._filesModel.deleteSingle(idInfo.file_id)
                     .then(()=>{
-                        return  this._fileToMovieModel.deleteSingle(idInfo.file_id, idInfo.movie_id);
+                        return this._fileToMovieModel.deleteSingle(idInfo.file_id, idInfo.movie_id);
                     })
                     .then(()=>{
                         return this._moviesModel.deleteSingle(idInfo.movie_id);
@@ -101,9 +103,6 @@ export default class IDModel {
             return this._filesModel.deleteSingle(idInfo.file_id)
                     .then(()=>{
                         return this._fileToEpisodeModel.deleteSingle(idInfo.file_id, idInfo.episode_id);
-                    })
-                    .then(()=>{
-                        return this._showSeasonEpisodesModel.deleteSingle(idInfo.episode_id);
                     })
         }
     }

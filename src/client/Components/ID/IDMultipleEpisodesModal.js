@@ -44,12 +44,10 @@ class IDMultipleEpisodesModal extends Component {
 
         let currentEpisodesInfo = {};
         episodesToID.forEach((ep)=>{
-            
             currentEpisodesInfo[ep.name] = {
                 info: ep,
                 newFilename: "",
-                selectedEpisodeID: 0,
-                
+                selectedEpisodeID: 0
             };
         });
 
@@ -118,7 +116,7 @@ class IDMultipleEpisodesModal extends Component {
 
         const options = {
             show_id: this.state.currentShowID,
-            season_id: seasonID
+            season_id: parseInt(seasonID)
         };
         emitAPIRequest("shows.episodes.get", options, this._episodesReceived.bind(this), false);
     }
@@ -133,10 +131,10 @@ class IDMultipleEpisodesModal extends Component {
             const seasEp = Regex.parseSeasonEpisodeDoublet(filename);
             if(seasEp !== ""){
                 const episodeNumber = parseInt(seasEp.split("E").pop());
-
                 const ep = episodes.find((ep)=>ep.episode_number === episodeNumber);
+                const episodeID = (ep !== undefined) ? ep.id : 0;
 
-                currentEpisodesInfo[filename] = this._constructEpisodeInfo(episodes, filename, ep.id);
+                currentEpisodesInfo[filename] = this._constructEpisodeInfo(episodes, filename, episodeID);
             }
         });
         
@@ -156,8 +154,8 @@ class IDMultipleEpisodesModal extends Component {
 
         const showSelector = this._buildSelect(shows, 'title', this._getSeasons.bind(this), currentShowID);
         let seasonsSelector = "Select a show...";
-        if(currentShowID > 0){
-            seasonsSelector = this._buildSelect(seasons, 'title', this._getEpisodes.bind(this), currentSeasonID);
+        if(seasons.length > 0){
+            seasonsSelector = this._buildSelect(seasons, 'season_number', this._getEpisodes.bind(this), currentSeasonID, "Season ");
         }
         
         return (
@@ -174,27 +172,28 @@ class IDMultipleEpisodesModal extends Component {
 
     _buildEpisodeSelectors(){
         const {
-            episodesToID
-        } = this.props;
-
-        const {
             currentEpisodesInfo,
             episodes
         } = this.state;
 
+        const filenames = Object.keys(currentEpisodesInfo);
         let editorList = [];
-        episodesToID.forEach((ep)=>{
+        filenames.forEach((filename)=>{
+            const episodeInfo = currentEpisodesInfo[filename];
+
             let episodesSelector = "";
             if(episodes.length > 0){
-                episodesSelector = this._buildSelect(episodes, 'episode_number', this._handleSelectEpisode.bind(this, ep.name), currentEpisodesInfo[ep.name].selectedEpisodeID, "Episode ");
+                episodesSelector = this._buildSelect(episodes, 'episode_number', this._handleSelectEpisode.bind(this, filename), episodeInfo.selectedEpisodeID, "Episode ");
             }
-            const episodeEditor = <div key={ep.name} className="ib-idmultiplemodal-episode-box">
-                                        <h4>{ep.name}</h4>
+
+            const episodeEditor = <div key={filename} className="ib-idmultiplemodal-episode-box">
+                                        <h4>{filename}</h4>
                                         {episodesSelector}
-                                        <Input value={currentEpisodesInfo[ep.name].newFilename} onChange={this._handleChangeEpisodeFilename.bind(this, ep.name)}/>
+                                        <Input value={episodeInfo.newFilename} onChange={this._handleChangeEpisodeFilename.bind(this, filename)}/>
                                   </div>;
             editorList.push(episodeEditor);
         });
+        
         return editorList;
     }
 
@@ -205,7 +204,7 @@ class IDMultipleEpisodesModal extends Component {
         });
 
         return (
-            <Select onChange={onChange} style={{ width: 200}} defaultValue={defaultValue.toString()}>
+            <Select key={Math.random()} onChange={onChange} style={{ width: 200}} defaultValue={defaultValue.toString()}>
                 {options}
             </Select>
         );
@@ -223,18 +222,13 @@ class IDMultipleEpisodesModal extends Component {
 
     _constructEpisodeInfo(episodes, originalFilename, episodeIDString){
         const {
-            currentShowID,
             currentShowInfo,
-            currentSeasonID,
             currentSeasonInfo,
-            currentEpisodesInfo,
-            seasons,
-            shows
+            currentEpisodesInfo
         } = this.state;
-        
-        const episodeID = parseInt(episodeIDString);
         let newEpisodeInfo = currentEpisodesInfo[originalFilename];
 
+        const episodeID = parseInt(episodeIDString);
         let currentEpisode = episodes.find((ep)=>ep.id === episodeID);
         if(currentEpisode === undefined){
             newEpisodeInfo.newFilename = originalFilename;
@@ -357,9 +351,16 @@ class IDMultipleEpisodesModal extends Component {
             onCancel,
         } = this.props;
 
+        const {
+            episodes
+        } = this.state;
+
         const showSeasonSelectors = this._buildShowSeasonSelectors();
         const pathInput = this._buildShowSeasonPathInput();
-        const episodesSelectors = this._buildEpisodeSelectors();
+        let episodesSelectors = "";
+        if(episodes.length > 0){
+            episodesSelectors = this._buildEpisodeSelectors();
+        }
 
         const buttonDisabled = !(this._areAllEpisodesSelected());
 
