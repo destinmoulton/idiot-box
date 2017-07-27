@@ -48,6 +48,37 @@ export default class IDModel {
                 })
     }
 
+    idAndArchiveMultipleEpisodes(sourcePathInfo, destSubpath, idInfo){
+        const episodesToMove = idInfo.episodes;
+        const filenames = Object.keys(episodesToMove);
+
+        let promisesToRun = [];
+
+        filenames.forEach((filename)=>{
+            const episode = episodesToMove[filename];
+            const dest = {
+                filename: episode.newFilename,
+                subpath: destSubpath
+            };
+
+            const source = {
+                setting_id: sourcePathInfo.setting_id,
+                subpath: sourcePathInfo.subpath,
+                filename
+            };
+
+            const epInfo = {
+                show_id: idInfo.show_id,
+                season_id: idInfo.season_id,
+                episode_id: episode.selectedEpisodeID
+            }
+
+            promisesToRun.push(this.idAndArchiveEpisode(epInfo, source, dest));
+        });
+
+        return Promise.all(promisesToRun);
+    }
+
     removeMultipleIDs(itemsToRemove){
         let promisesToRun = [];
         itemsToRemove.forEach((item)=>{
