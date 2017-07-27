@@ -150,6 +150,14 @@ var id = {
                 return idModel.idAndArchiveEpisode(epInfo, sourceInfo, destInfo);
             }
         }
+    },
+    multiple_episodes: {
+        id_and_archive: {
+            params: ['source_path_info', 'dest_subpath', 'id_info'],
+            func: function func(sourcePathInfo, destSubpath, idInfo) {
+                return idModel.idAndArchiveMultipleEpisodes(sourcePathInfo, destSubpath, idInfo);
+            }
+        }
     }
 };
 

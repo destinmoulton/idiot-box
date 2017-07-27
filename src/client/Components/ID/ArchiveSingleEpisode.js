@@ -101,7 +101,7 @@ class ArchiveSingleEpisode extends Component {
     
 
     _getDirectory(show, episode){
-        const showTitle = Regex.getShowName(show.title);
+        const showTitle = Regex.sanitizeShowTitle(show.title);
         const seasonID = this._getSeasonID(episode.season_number);
         return showTitle + "/" + seasonID;
     }
@@ -114,7 +114,7 @@ class ArchiveSingleEpisode extends Component {
         const episodeID = this._getEpisodeID(episode.episode_number);
         const seasonID = this._getSeasonID(episode.season_number);
         
-        const showTitle = Regex.getShowName(show.title);
+        const showTitle = Regex.sanitizeShowTitle(show.title);
         return showTitle + "." + seasonID + episodeID + "." + ext;
     }
 

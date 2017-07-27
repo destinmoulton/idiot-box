@@ -19,7 +19,6 @@ export function getSettingsForCategory(category){
 }
 
 function settingsReceived(settings, recd){
-    console.log("settingsReceived", settings);
     return {
         type: SETTINGS_LIST_RECEIVED,
         category: recd.request.params.category,

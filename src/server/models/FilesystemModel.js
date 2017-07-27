@@ -106,7 +106,6 @@ export default class FilesystemModel {
      *     filename
      * 
      * destInfo:
-     *     setting_id
      *     subpath
      *     filename
      * 

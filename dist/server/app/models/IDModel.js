@@ -58,13 +58,47 @@ var IDModel = function () {
             });
         }
     }, {
+        key: "idAndArchiveMultipleEpisodes",
+        value: function idAndArchiveMultipleEpisodes(sourcePathInfo, destSubpath, idInfo) {
+            var _this3 = this;
+
+            var episodesToMove = idInfo.episodes;
+            var filenames = Object.keys(episodesToMove);
+
+            var promisesToRun = [];
+
+            filenames.forEach(function (filename) {
+                var episode = episodesToMove[filename];
+                var dest = {
+                    filename: episode.newFilename,
+                    subpath: destSubpath
+                };
+
+                var source = {
+                    setting_id: sourcePathInfo.setting_id,
+                    subpath: sourcePathInfo.subpath,
+                    filename: filename
+                };
+
+                var epInfo = {
+                    show_id: idInfo.show_id,
+                    season_id: idInfo.season_id,
+                    episode_id: episode.selectedEpisodeID
+                };
+
+                promisesToRun.push(_this3.idAndArchiveEpisode(epInfo, source, dest));
+            });
+
+            return Promise.all(promisesToRun);
+        }
+    }, {
         key: "removeMultipleIDs",
         value: function removeMultipleIDs(itemsToRemove) {
-            var _this3 = this;
+            var _this4 = this;
 
             var promisesToRun = [];
             itemsToRemove.forEach(function (item) {
-                promisesToRun.push(_this3.removeSingleID(item));
+                promisesToRun.push(_this4.removeSingleID(item));
             });
 
             return Promise.all(promisesToRun);
@@ -72,38 +106,38 @@ var IDModel = function () {
     }, {
         key: "removeSingleID",
         value: function removeSingleID(idInfo) {
-            var _this4 = this;
+            var _this5 = this;
 
             if (idInfo.type === "movie") {
                 return this._filesModel.deleteSingle(idInfo.file_id).then(function () {
-                    return _this4._fileToMovieModel.deleteSingle(idInfo.file_id, idInfo.movie_id);
+                    return _this5._fileToMovieModel.deleteSingle(idInfo.file_id, idInfo.movie_id);
                 }).then(function () {
-                    return _this4._moviesModel.deleteSingle(idInfo.movie_id);
+                    return _this5._moviesModel.deleteSingle(idInfo.movie_id);
                 });
             } else if (idInfo.type === "show") {
                 return this._filesModel.deleteSingle(idInfo.file_id).then(function () {
-                    return _this4._fileToEpisodeModel.deleteSingle(idInfo.file_id, idInfo.episode_id);
+                    return _this5._fileToEpisodeModel.deleteSingle(idInfo.file_id, idInfo.episode_id);
                 }).then(function () {
-                    return _this4._showSeasonEpisodesModel.deleteSingle(idInfo.episode_id);
+                    return _this5._showSeasonEpisodesModel.deleteSingle(idInfo.episode_id);
                 });
             }
         }
     }, {
         key: "addShow",
         value: function addShow(showInfo, imageInfo) {
-            var _this5 = this;
+            var _this6 = this;
 
             var imageFilename = this._buildThumbFilename(showInfo);
             return this._mediaScraperModel.downloadThumbnail("Show", imageInfo.url, imageFilename).then(function (imageFilename) {
-                return _this5._showsModel.addShow(showInfo, imageFilename);
+                return _this6._showsModel.addShow(showInfo, imageFilename);
             }).then(function (show) {
-                return _this5._mediaScraperModel.getShowSeasonsList(show.trakt_id).then(function (seasons) {
-                    return _this5._showSeasonsModel.addArrayOfSeasons(seasons, show.id);
+                return _this6._mediaScraperModel.getShowSeasonsList(show.trakt_id).then(function (seasons) {
+                    return _this6._showSeasonsModel.addArrayOfSeasons(seasons, show.id);
                 }).then(function (addedSeasons) {
                     var promisesToRun = [];
                     addedSeasons.forEach(function (season) {
-                        var prom = _this5._mediaScraperModel.getEpisodesForSeason(show.trakt_id, season.season_number).then(function (episodesArr) {
-                            return _this5._showSeasonEpisodesModel.addArrEpisodes(show.id, season.id, episodesArr);
+                        var prom = _this6._mediaScraperModel.getEpisodesForSeason(show.trakt_id, season.season_number).then(function (episodesArr) {
+                            return _this6._showSeasonEpisodesModel.addArrEpisodes(show.id, season.id, episodesArr);
                         });
                         promisesToRun.push(prom);
                     });
