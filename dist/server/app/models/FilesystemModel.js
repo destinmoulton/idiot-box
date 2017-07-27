@@ -131,7 +131,6 @@ var FilesystemModel = function () {
          *     filename
          * 
          * destInfo:
-         *     setting_id
          *     subpath
          *     filename
          * 
