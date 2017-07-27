@@ -85,6 +85,12 @@ const id = {
             params: ['episode_info', 'source_info', 'dest_info'],
             func: (epInfo, sourceInfo, destInfo)=> idModel.idAndArchiveEpisode(epInfo, sourceInfo, destInfo)
         }
+    },
+    multiple_episodes: {
+        id_and_archive: {
+            params: ['source_path_info', 'dest_subpath', 'id_info'],
+            func: (sourcePathInfo, destSubpath, idInfo)=> idModel.idAndArchiveMultipleEpisodes(sourcePathInfo, destSubpath, idInfo)
+        }
     }
 };
 
