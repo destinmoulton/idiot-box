@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Icon, Button, Modal } from 'antd';
+import { Icon, Button, Menu, Modal } from 'antd';
 
 import FilesystemBrowser from './Filesystem/FilesystemBrowser';
 import IDFileModal from './ID/IDFileModal';
@@ -358,29 +358,31 @@ class FileManager extends Component {
         );
     }
 
-    _buildDirectoryButtons(){
+    _buildDirectoryMenu(){
         const { toplevelDirectories } = this.props;
         const { currentToplevelDirectory } = this.state;
 
-        const buttonList = [];
+        const menuList = [];
         toplevelDirectories.forEach((dir)=>{
             const activeClass = (dir.value === currentToplevelDirectory) ? "ib-filemanager-button ib-filemanager-button-active" : "ib-filemanager-button";
-            buttonList.push(
-                <Button 
-                    key={dir.key} 
-                    onClick={this._handleSelectTopLevelDir.bind(this, dir)}
-                    className={activeClass}
-                >{dir.key}</Button>
+            menuList.push(
+                <Menu.Item 
+                    key={dir.value}>
+                    <a href="javascript:void(0);"
+                        onClick={this._handleSelectTopLevelDir.bind(this, dir)}>
+                        {dir.key}
+                    </a>
+                </Menu.Item>
             );
         });
 
-        return (<Button.Group>{buttonList}</Button.Group>);
+        return (<Menu mode="horizontal" selectedKeys={[currentToplevelDirectory]}>{menuList}</Menu>);
     }
 
     render() {
         const { currentToplevelDirectory } = this.state;
         
-        let directoryButtons = this._buildDirectoryButtons();
+        let directoryMenu = this._buildDirectoryMenu();
         let output = "";
         if(currentToplevelDirectory){
             output = this._buildFileManager();
@@ -388,7 +390,7 @@ class FileManager extends Component {
         return (
             <div>
                 <div>
-                    {directoryButtons}
+                    {directoryMenu}
                 </div>
                 {output}
             </div>
