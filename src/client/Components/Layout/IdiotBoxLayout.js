@@ -8,6 +8,7 @@ const { Header, Content, Footer } = Layout;
 import FileManager from '../FileManager';
 import IdiotBoxHeader from './IdiotBoxHeader';
 import Settings from '../Settings/Settings';
+import ShowsList from '../Shows/ShowsList';
 
 
 class IdiotBoxLayout extends Component {
@@ -21,6 +22,7 @@ class IdiotBoxLayout extends Component {
                     <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
                         <Route path='/filemanager' component={FileManager}/>
                         <Route path='/settings' component={Settings}/>
+                        <Route path='/shows' component={ShowsList}/>
                     </div>
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>
