@@ -15,7 +15,6 @@ class Settings extends Component {
 
     componentWillMount(){
         this.props.getSettingsForCategory('directories');
-        this.props.getSettingsForCategory('thumbpaths');
     }
 
     render() {
@@ -33,19 +32,6 @@ class Settings extends Component {
                             lastSavedSettingID={lastSavedSettingID}
                             settings={settings.directories}
                             settingCategory={"directories"} />
-                    </Col>
-                </Row>
-                <Row>
-                    <Col>
-                        <h3>Thumbnail Paths</h3>
-                    </Col>
-                    <Col>
-                        <DirectoriesEditor 
-                            saveInProgress={saveInProgress}
-                            lastAPIAction={lastAPIAction}
-                            lastSavedSettingID={lastSavedSettingID}
-                            settings={settings.thumbpaths}
-                            settingCategory={"thumbpaths"} />
                     </Col>
                 </Row>
             </div>
