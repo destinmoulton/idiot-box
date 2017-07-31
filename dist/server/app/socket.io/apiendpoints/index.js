@@ -20,6 +20,10 @@ var _mediascraper = require('./mediascraper.api');
 
 var _mediascraper2 = _interopRequireDefault(_mediascraper);
 
+var _movies = require('./movies.api');
+
+var _movies2 = _interopRequireDefault(_movies);
+
 var _settings = require('./settings.api');
 
 var _settings2 = _interopRequireDefault(_settings);
@@ -39,6 +43,7 @@ var endpoints = {
     id: _id2.default,
     imdb: _imdb2.default,
     mediascraper: _mediascraper2.default,
+    movies: _movies2.default,
     settings: _settings2.default,
     shows: _shows2.default,
     videoplayer: _videoplayer2.default
