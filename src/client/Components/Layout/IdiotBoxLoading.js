@@ -8,8 +8,10 @@ const IdiotBoxLoading = () => {
         <div>
             <Layout>
                 <Content>
-                    <Spin /><br/>
-                    <span>Loading Idiot Box...</span>
+                    <div id="ib-loading-box">
+                    <Spin /><br/><br/>
+                    <span >Loading Idiot Box...</span>
+                    </div>
                 </Content>
             </Layout>
         </div>
