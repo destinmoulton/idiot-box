@@ -7,6 +7,10 @@ import { emitAPIRequest } from '../../actions/api.actions';
 
 class ShowsList extends Component {
 
+    static propTypes = {
+        onSelectShow: PropTypes.func.isRequired
+    };
+
     constructor(props){
         super(props);
 
@@ -15,6 +19,7 @@ class ShowsList extends Component {
             shows: []
         };
     }
+
     componentWillMount(){
         this._getShows();
     }
@@ -36,7 +41,14 @@ class ShowsList extends Component {
         });
     }
 
+    _handleSelectShow(show){
+        const { onSelectShow } = this.props;
+
+        onSelectShow(show);
+    }
+
     _buildShowList(){
+        
         const { shows } = this.state;
 
         let showList = [];
@@ -45,10 +57,13 @@ class ShowsList extends Component {
                                 key={show.id}
                                 span={4}>
                                 <div className="ib-shows-thumbnail-box">
-                                    <img
-                                        className="ib-shows-thumbnail" 
-                                        src={"/images/shows/" + show.image_filename}/>
-                                    {show.title}
+                                    <a  href="javascript:void(0)"
+                                        onClick={this._handleSelectShow.bind(this, show)}>
+                                        <img
+                                            className="ib-shows-thumbnail" 
+                                            src={"/images/shows/" + show.image_filename}/>
+                                        {show.title}
+                                    </a>
                                 </div>
                             </Col>;
             showList.push(details);
@@ -70,7 +85,10 @@ class ShowsList extends Component {
         return (
             <div>
                 <Row>
-                {content}
+                    <h2>Shows</h2>
+                </Row>
+                <Row>
+                    {content}
                 </Row>
             </div>
         );

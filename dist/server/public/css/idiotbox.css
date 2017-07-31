@@ -115,14 +115,38 @@ button.ib-filemanager-button-active {
     border-width: 2px;
 }
 
+div#ib-loading-box {
+    width: 100%;
+    text-align: center;
+    padding: 50px;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+
 div.ib-shows-thumbnail-box {
     width: 100%;
-    height: 250px;
+    height: 225px;
     padding: 5px;
 }
 
 img.ib-shows-thumbnail {
     width: 100%;
+}
+
+div.ib-shows-seasonlist-row {
+    border: 1px solid black;
+    margin-bottom: 5px;
+    padding: 5px;
+}
+
+div.ib-shows-seasonlist-seasontitle {
+    font-size: 1.1em;
+}
+
+div.ib-shows-seasonlist-episode-row {
+    margin-left: 5px;
+    margin-top: 2px;
+    border-bottom: 1px solid #ebebeb;
 }
 
 div.ib-trashmodal-list-box {
