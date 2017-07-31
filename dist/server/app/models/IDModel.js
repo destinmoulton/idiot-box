@@ -37,7 +37,7 @@ var IDModel = function () {
             var imageFilename = this._buildThumbFilename(movieInfo);
             return this._filesystemModel.move(sourceInfo, destInfo, "Movies").then(function () {
                 if (imageURL !== "") {
-                    return _this._mediaScraperModel.downloadThumbnail("Movie", imageURL, imageFilename);
+                    return _this._mediaScraperModel.downloadThumbnail("movies", imageURL, imageFilename);
                 }
                 return Promise.resolve("");
             }).then(function (imageFilename) {
@@ -132,7 +132,7 @@ var IDModel = function () {
             var _this6 = this;
 
             var imageFilename = this._buildThumbFilename(showInfo);
-            return this._mediaScraperModel.downloadThumbnail("Show", imageInfo.url, imageFilename).then(function (imageFilename) {
+            return this._mediaScraperModel.downloadThumbnail("shows", imageInfo.url, imageFilename).then(function (imageFilename) {
                 return _this6._showsModel.addShow(showInfo, imageFilename);
             }).then(function (show) {
                 return _this6._mediaScraperModel.getShowSeasonsList(show.trakt_id).then(function (seasons) {

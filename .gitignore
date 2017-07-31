@@ -3,3 +3,6 @@ typings
 dist/server/database/idiot-box.sqlite3
 src/server/config/trakt.config.js
 dist/server/app/config/trakt.config.js
+
+dist/server/public/images/movies
+dist/server/public/images/shows

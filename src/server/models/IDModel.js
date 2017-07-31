@@ -19,7 +19,7 @@ export default class IDModel {
         return this._filesystemModel.move(sourceInfo, destInfo, "Movies")
                 .then(()=>{
                     if( imageURL !== ""){
-                        return this._mediaScraperModel.downloadThumbnail("Movie", imageURL, imageFilename)
+                        return this._mediaScraperModel.downloadThumbnail("movies", imageURL, imageFilename)
                     }
                     return Promise.resolve("");
                 })
@@ -109,7 +109,7 @@ export default class IDModel {
 
     addShow(showInfo, imageInfo){
         const imageFilename = this._buildThumbFilename(showInfo);
-        return this._mediaScraperModel.downloadThumbnail("Show", imageInfo.url, imageFilename)
+        return this._mediaScraperModel.downloadThumbnail("shows", imageInfo.url, imageFilename)
                 .then((imageFilename)=>{
                     return this._showsModel.addShow(showInfo, imageFilename)
                 })

@@ -5,6 +5,8 @@ import fetch from 'node-fetch';
 
 import logger from '../logger';
 
+import thumbConf from '../config/thumbnails.config';
+
 export default class MediaScraperModel {
     
     constructor(traktInstance, settingsModel){
@@ -57,18 +59,13 @@ export default class MediaScraperModel {
         const destFilename = destFilenameMinusExt + "." + origFileExt;
 
         const camelCaseType = typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
-        return this._settingsModel.getSingle("thumbpaths", camelCaseType)
-            .then((setting)=>{
-                if(!fs.existsSync(setting.value)){
-                    return Promise.reject(`MediaScrapeModel :: downloadThumbnail :: The path for ${typeOfMedia} ${setting.value} does not exist.`);
-                }
-                return fetch(fileURL)
-                        .then((res)=>{
-                            const finalPath = path.join(setting.value, destFilename);
-                            const dest = fs.createWriteStream(finalPath);
-                            res.body.pipe(dest);
-                            return destFilename;
-                        });
-            })
+        
+        return fetch(fileURL)
+                .then((res)=>{
+                    const finalPath = path.join(thumbConf[typeOfMedia], destFilename);
+                    const dest = fs.createWriteStream(finalPath);
+                    res.body.pipe(dest);
+                    return destFilename;
+                });
     }
 }

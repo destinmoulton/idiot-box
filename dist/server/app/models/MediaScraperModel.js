@@ -22,6 +22,10 @@ var _logger = require('../logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
+var _thumbnails = require('../config/thumbnails.config');
+
+var _thumbnails2 = _interopRequireDefault(_thumbnails);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -87,16 +91,12 @@ var MediaScraperModel = function () {
             var destFilename = destFilenameMinusExt + "." + origFileExt;
 
             var camelCaseType = typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
-            return this._settingsModel.getSingle("thumbpaths", camelCaseType).then(function (setting) {
-                if (!_fs2.default.existsSync(setting.value)) {
-                    return Promise.reject('MediaScrapeModel :: downloadThumbnail :: The path for ' + typeOfMedia + ' ' + setting.value + ' does not exist.');
-                }
-                return (0, _nodeFetch2.default)(fileURL).then(function (res) {
-                    var finalPath = _path2.default.join(setting.value, destFilename);
-                    var dest = _fs2.default.createWriteStream(finalPath);
-                    res.body.pipe(dest);
-                    return destFilename;
-                });
+
+            return (0, _nodeFetch2.default)(fileURL).then(function (res) {
+                var finalPath = _path2.default.join(_thumbnails2.default[typeOfMedia], destFilename);
+                var dest = _fs2.default.createWriteStream(finalPath);
+                res.body.pipe(dest);
+                return destFilename;
             });
         }
     }]);
