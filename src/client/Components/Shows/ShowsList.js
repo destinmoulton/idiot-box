@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -7,10 +6,6 @@ import { Col, Row, Spin } from 'antd';
 import { emitAPIRequest } from '../../actions/api.actions';
 
 class ShowsList extends Component {
-
-    static propTypes = {
-        onSelectShow: PropTypes.func.isRequired
-    };
 
     constructor(props){
         super(props);
@@ -40,12 +35,6 @@ class ShowsList extends Component {
             isLoadingShows: false,
             shows
         });
-    }
-
-    _handleSelectShow(show){
-        const { onSelectShow } = this.props;
-
-        onSelectShow(show);
     }
 
     _buildShowList(){
