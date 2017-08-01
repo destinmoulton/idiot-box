@@ -101,7 +101,7 @@ class SeasonsList extends Component {
             season_id: seasonID
         };
 
-        emitAPIRequest("shows.episodes.get", options, this._episodesReceived.bind(this, seasonID), false);
+        emitAPIRequest("shows.episodes.get_all_with_file_info", options, this._episodesReceived.bind(this, seasonID), false);
     }
 
     _episodesReceived(seasonID, episodeList){
@@ -206,7 +206,10 @@ class SeasonsList extends Component {
 }
 
 const mapStateToProps = (state)=>{
-    return {};
+    const { settings } = state;
+    return {
+        directories: settings.settings.directories
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {

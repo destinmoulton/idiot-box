@@ -98,10 +98,6 @@ div.ib-filebrowser-media-title {
     font-size: #3E3E3E;
 }
 
-i.ib-filebrowser-media-play {
-    font-size: 1.2em;
-    padding-right: 5px;
-}
 
 button.ib-filemanager-button:hover, button.ib-filemanager-button:focus {
     color: green;
@@ -133,6 +129,11 @@ div.ib-movies-thumbnail-box {
 
 img.ib-movies-thumbnail {
     width: 100%;
+}
+
+i.ib-playbutton-icon {
+    font-size: 1.2em;
+    padding-right: 5px;
 }
 
 div.ib-shows-thumbnail-box {
