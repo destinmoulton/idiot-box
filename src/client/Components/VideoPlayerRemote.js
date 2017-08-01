@@ -62,7 +62,7 @@ class VideoPlayerRemote extends Component {
     }
 
     _sendCommandComplete(){
-        console.log(this.state.activeCmd+" sent!");
+        console.log("VideoPlayerRemote :: command sent :: " + this.state.activeCmd);
     }
 
     _buildButtonSet(buttonSection){
