@@ -1,27 +1,25 @@
 import { emitAPIRequest } from './api.actions';
 
 import {
-    SETTINGS_LIST_RECEIVED,
+    SETTINGS_ALL_RECEIVED,
     SETTING_DELETE_START,
     SETTING_DELETE_COMPLETE,
     SETTING_SAVE_START,
     SETTING_SAVE_COMPLETE
 } from './actionTypes';
 
-export function getSettingsForCategory(category){
+
+export function getAllSettings(){
     return (dispatch)=>{
-        const endpoint = 'settings.category.get';
-        const params = {
-            category
-        };
-        dispatch(emitAPIRequest(endpoint, params, settingsReceived));
+        const endpoint = 'settings.all.get';
+        
+        dispatch(emitAPIRequest(endpoint, {}, settingsAllReceived));
     }
 }
 
-function settingsReceived(settings, recd){
+function settingsAllReceived(settings){
     return {
-        type: SETTINGS_LIST_RECEIVED,
-        category: recd.request.params.category,
+        type: SETTINGS_ALL_RECEIVED,
         settings
     }
 }

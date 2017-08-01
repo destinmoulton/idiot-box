@@ -10,8 +10,6 @@ import IDMultipleEpisodesModal from './ID/IDMultipleEpisodesModal';
 import TrashModal from './Filesystem/TrashModal';
 import UntagModal from './ID/UntagModal';
 
-import { getSettingsForCategory } from '../actions/settings.actions';
-
 class FileManager extends Component {
     VIDEO_FILE_REGX = /(\.mp4|\.mkv|\.avi)$/;
     constructor(props){
@@ -34,10 +32,6 @@ class FileManager extends Component {
             untagIsModalVisible: false,
             untagIDinfo: []
         };
-    }
-
-    componentWillMount(){
-        this.props.getSettingsForCategory('directories');
     }
 
     _reloadDirList(){
@@ -406,10 +400,4 @@ const mapStateToProps = (state)=>{
     };
 }
 
-const mapDispatchToProps = (dispatch)=>{
-    return {
-        getSettingsForCategory: (category)=>dispatch(getSettingsForCategory(category))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FileManager);
+export default connect(mapStateToProps)(FileManager);
