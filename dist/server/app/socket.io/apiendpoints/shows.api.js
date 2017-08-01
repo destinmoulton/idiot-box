@@ -12,6 +12,18 @@ var _logger = require('../../logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
+var _EpisodeAPIModel = require('../../models/EpisodeAPIModel');
+
+var _EpisodeAPIModel2 = _interopRequireDefault(_EpisodeAPIModel);
+
+var _FilesModel = require('../../models/db/FilesModel');
+
+var _FilesModel2 = _interopRequireDefault(_FilesModel);
+
+var _FileToEpisodeModel = require('../../models/db/FileToEpisodeModel');
+
+var _FileToEpisodeModel2 = _interopRequireDefault(_FileToEpisodeModel);
+
 var _ShowsModel = require('../../models/db/ShowsModel');
 
 var _ShowsModel2 = _interopRequireDefault(_ShowsModel);
@@ -26,9 +38,19 @@ var _ShowSeasonEpisodesModel2 = _interopRequireDefault(_ShowSeasonEpisodesModel)
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+var filesModel = new _FilesModel2.default(_IBDB2.default);
+var fileToEpisodeModel = new _FileToEpisodeModel2.default(_IBDB2.default);
 var showsModel = new _ShowsModel2.default(_IBDB2.default);
 var showSeasonsModel = new _ShowSeasonsModel2.default(_IBDB2.default);
 var showSeasonEpisodesModel = new _ShowSeasonEpisodesModel2.default(_IBDB2.default);
+
+var episodeAPIConfig = {
+    filesModel: filesModel,
+    fileToEpisodeModel: fileToEpisodeModel,
+    showSeasonEpisodesModel: showSeasonEpisodesModel
+};
+
+var episodeAPIModel = new _EpisodeAPIModel2.default(episodeAPIConfig);
 
 var shows = {
     shows: {
@@ -52,6 +74,12 @@ var shows = {
             params: ['show_id', 'season_id'],
             func: function func(showID, seasonID) {
                 return showSeasonEpisodesModel.getEpisodesForSeason(showID, seasonID);
+            }
+        },
+        get_all_with_file_info: {
+            params: ['show_id', 'season_id'],
+            func: function func(showID, seasonID) {
+                return episodeAPIModel.getAllEpisodesWithFileInfo(showID, seasonID);
             }
         }
     },
