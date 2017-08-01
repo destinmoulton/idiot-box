@@ -25,7 +25,7 @@ class ShowsList extends Component {
     }
 
     _getShows(){
-        const { emitAPIRequest, getSettingsForCategory } = this.props;
+        const { emitAPIRequest } = this.props;
 
         this.setState({
             isLoadingShows: true
