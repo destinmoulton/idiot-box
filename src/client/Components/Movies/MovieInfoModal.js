@@ -16,7 +16,7 @@ class MovieInfoModal extends Component {
             movie,
             onClose
         } = this.props;
-        console.log(movie);
+        
         return (
             <Modal
                     title="Movie Info"

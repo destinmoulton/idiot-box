@@ -1,5 +1,5 @@
 import {
-    SETTINGS_LIST_RECEIVED,
+    SETTINGS_ALL_RECEIVED,
     SETTING_DELETE_START,
     SETTING_DELETE_COMPLETE,
     SETTING_SAVE_START,
@@ -8,26 +8,34 @@ import {
 
 
 const INITIAL_STATE = {
-    settings:{
-        directories: []
-    },
-    saveInProgress: false,
-    currentlySavingSettingID: -1,
-    lastSavedSettingID: -1,
-    deleteInProgress: false,
     currentlyDeletingSettingID: -1,
     currentlyDeletingSettingCategory: "",
-    lastAPIAction: ""
+    currentlySavingSettingID: -1,
+    deleteInProgress: false,
+    hasAllSettings: false,
+    lastAPIAction: "",
+    lastSavedSettingID: -1,
+    saveInProgress: false,
+    settings:{
+        directories: []
+    }
 }
 
 export default function settingsReducer(state = INITIAL_STATE, action){
     switch(action.type){
-        case SETTINGS_LIST_RECEIVED:
-            const settings = {...state.settings};
-            settings[action.category] = action.settings;
+        case SETTINGS_ALL_RECEIVED:
+            const nextSettings = {};
+            action.settings.forEach((setting)=>{
+                const category = setting.category;
+                if(!nextSettings.hasOwnProperty(category)){
+                    nextSettings[category] = [];
+                }
+                nextSettings[category].push(setting);
+            });
             return {
                 ...state,
-                settings
+                settings: nextSettings,
+                hasAllSettings: true
             }
         case SETTING_SAVE_START:
             return {

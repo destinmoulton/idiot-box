@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { Col, Row, Spin } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
@@ -25,7 +26,7 @@ class ShowsList extends Component {
     }
 
     _getShows(){
-        const { emitAPIRequest, getSettingsForCategory } = this.props;
+        const { emitAPIRequest } = this.props;
 
         this.setState({
             isLoadingShows: true
@@ -48,7 +49,6 @@ class ShowsList extends Component {
     }
 
     _buildShowList(){
-        
         const { shows } = this.state;
 
         let showList = [];
@@ -57,13 +57,12 @@ class ShowsList extends Component {
                                 key={show.id}
                                 span={4}>
                                 <div className="ib-shows-thumbnail-box">
-                                    <a  href="javascript:void(0)"
-                                        onClick={this._handleSelectShow.bind(this, show)}>
+                                    <Link to={"/show/" + show.slug}>
                                         <img
                                             className="ib-shows-thumbnail" 
                                             src={"/images/shows/" + show.image_filename}/>
                                         {show.title}
-                                    </a>
+                                    </Link>
                                 </div>
                             </Col>;
             showList.push(details);

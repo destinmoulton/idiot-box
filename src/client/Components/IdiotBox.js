@@ -8,6 +8,7 @@ import IdiotBoxLoading from './Layout/IdiotBoxLoading';
 
 import { setupAPI } from '../actions/api.actions';
 import { srvConnect, srvGetServerInfo } from '../actions/server.actions';
+import { getAllSettings } from '../actions/settings.actions';
 
 class IdiotBox extends Component {
     static propTypes = {
@@ -19,6 +20,7 @@ class IdiotBox extends Component {
     constructor(props){
         super(props);
         this._serverIsConnected = false;
+        this._hasSettings = false;
     }
 
     componentWillMount(){
@@ -26,17 +28,28 @@ class IdiotBox extends Component {
     }
 
     componentWillReceiveProps(nextProps){
+        const { getAllSettings, setupAPI } = this.props;
+
         if(nextProps.isServerConnected && !this._serverIsConnected){
             // The server just connected
             this._serverIsConnected = true;
-            this.props.setupAPI();
+
+            // Setup the API listeners
+            setupAPI();
+
+            // Get all of the settings
+            getAllSettings();
         }
     }
     
     render() {
-        const { isServerConnected, hasServerInfo } = this.props;
+        const {
+            isServerConnected,
+            hasAllSettings,
+            hasServerInfo
+        } = this.props;
 
-        const displayComponent = (isServerConnected && hasServerInfo) ? <IdiotBoxLayout /> : <IdiotBoxLoading />;
+        const displayComponent = (isServerConnected && hasAllSettings && hasServerInfo) ? <IdiotBoxLayout /> : <IdiotBoxLoading />;
         
         return (
             <div>
@@ -47,10 +60,12 @@ class IdiotBox extends Component {
 }
 
 const mapStateToProps = (state)=>{
-    const { server } = state;
+    const { server, settings } = state;
     const { isServerConnected, hasServerInfo, serverInfo } = server;
+    const { hasAllSettings } = settings;
     return {
         isServerConnected,
+        hasAllSettings,
         hasServerInfo,
         serverInfo
     }
@@ -58,6 +73,7 @@ const mapStateToProps = (state)=>{
 
 const mapDispatchToProps = (dispatch)=>{
     return {
+        getAllSettings: ()=>dispatch(getAllSettings()),
         setupAPI: ()=>dispatch(setupAPI()),
         srvConnect: ()=>dispatch(srvConnect()),
         srvGetServerInfo: ()=>dispatch(srvGetServerInfo())

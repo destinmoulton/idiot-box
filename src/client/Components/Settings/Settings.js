@@ -5,20 +5,20 @@ import { Row, Col } from 'antd';
 
 import DirectoriesEditor from './DirectoriesEditor';
 
-import { getSettingsForCategory } from '../../actions/settings.actions';
-
 class Settings extends Component {
     constructor(props){
         super(props);
 
     }
 
-    componentWillMount(){
-        this.props.getSettingsForCategory('directories');
-    }
-
     render() {
-        const { lastAPIAction, lastSavedSettingID, saveInProgress, settings } = this.props;
+        const {
+            lastAPIAction,
+            lastSavedSettingID,
+            saveInProgress,
+            settings
+        } = this.props;
+        
         return (
             <div >
                 <Row>
@@ -49,10 +49,4 @@ const mapStateToProps = (state)=>{
     }
 }
 
-const mapDispatchToProps = (dispatch)=>{
-    return {
-        getSettingsForCategory: (category)=>dispatch(getSettingsForCategory(category))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+export default connect(mapStateToProps)(Settings);

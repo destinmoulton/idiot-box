@@ -36,7 +36,7 @@ var ShowsModel = function () {
                 status: apiData.status,
                 rating: apiData.rating,
                 updated_at: (0, _moment2.default)(apiData.updated_at).format('X'),
-                slug: apiData.slug,
+                slug: apiData.ids.slug,
                 trakt_id: apiData.ids.trakt,
                 tvdb_id: apiData.ids.tvdb,
                 imdb_id: apiData.ids.imdb,
@@ -66,6 +66,15 @@ var ShowsModel = function () {
         value: function getSingle(showID) {
             var where = {
                 id: showID
+            };
+
+            return this._ibdb.getRow(where, this._tableName);
+        }
+    }, {
+        key: 'getSingleBySlug',
+        value: function getSingleBySlug(slug) {
+            var where = {
+                slug: slug
             };
 
             return this._ibdb.getRow(where, this._tableName);

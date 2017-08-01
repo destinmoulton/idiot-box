@@ -17,6 +17,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var settingsModel = new _SettingsModel2.default(_IBDB2.default);
 
 var settings = {
+    all: {
+        get: {
+            params: [],
+            func: function func() {
+                return settingsModel.getAll();
+            }
+        }
+    },
     category: {
         get: {
             params: ['category'],

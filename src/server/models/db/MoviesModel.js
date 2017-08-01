@@ -16,7 +16,7 @@ export default class MoviesModel {
             released: apiData.released,
             runtime: apiData.runtime,
             rating: apiData.rating,
-            slug: apiData.slug,
+            slug: apiData.ids.slug,
             trakt_id: apiData.ids.trakt,
             imdb_id: apiData.ids.imdb,
             tmdb_id: apiData.ids.tmdb,
