@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
@@ -6,11 +5,9 @@ import { Col, Icon, Row, Spin } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 
-class SeasonsList extends Component {
+import PlayButton from '../PlayButton';
 
-    static propTypes = {
-        show: PropTypes.object.isRequired
-    }
+class ShowInfo extends Component {
 
     constructor(props){
         super(props);
@@ -20,27 +17,39 @@ class SeasonsList extends Component {
             loadingEpisodes: [],
             episodes: {},
             seasons: [],
+            show: {},
             visibleSeasons: []
         };
     }
 
     componentWillMount(){
+        this._getShowInfo();
+    }
+
+    _getShowInfo(){
+        const { emitAPIRequest } = this.props;
+
+        const params = {
+            slug: this.props.match.params.slug
+        };
+
+        emitAPIRequest("shows.show.get_for_slug", params, this._showInfoReceived.bind(this), false);
+    }
+
+    _showInfoReceived(show){
+        this.setState({
+            episodes: {},
+            seasons: [],
+            show,
+            visibleSeasons: []
+        });
+
         this._getSeasons();
     }
 
-    componentWillReceiveProps(nextProps){
-        if(nextProps.show.id !== this.props.show.id){
-            this.setState({
-                episodes: {},
-                seasons: []
-            });
-
-            this._getSeasons();
-        }
-    }
-
     _getSeasons(){
-        const { emitAPIRequest, show } = this.props;
+        const { emitAPIRequest } = this.props;
+        const { show } = this.state;
 
         this.setState({
             isLoadingSeasons: true
@@ -61,7 +70,6 @@ class SeasonsList extends Component {
     }
 
     _handleClickSeason(seasonID){
-        
         const { episodes, loadingEpisodes } = this.state;
         
         if(episodes.hasOwnProperty(seasonID)){
@@ -86,8 +94,13 @@ class SeasonsList extends Component {
     }
 
     _getEpisodes(seasonID){
-        const { emitAPIRequest, show } = this.props;
-        const { episodes, loadingEpisodes, visibleSeasons } = this.state;
+        const { emitAPIRequest } = this.props;
+        const { 
+            episodes,
+            loadingEpisodes,
+            show,
+            visibleSeasons
+        } = this.state;
 
         loadingEpisodes.push(seasonID);
 
@@ -120,7 +133,7 @@ class SeasonsList extends Component {
     }
 
     _buildShowInfo(){
-        const { show } = this.props;
+        const { show } = this.state;
 
         return (
             <div>
@@ -132,8 +145,12 @@ class SeasonsList extends Component {
                         />
                     </div>
                 </Col>
-                <Col span={8}>
+                <Col span={14} offset={1}>
                     <h3>{show.title}</h3>
+                    <h4>{show.year}</h4>
+                    <a href={"http://imdb.com/title/" + show.imdb_id} target="_blank">IMDB</a>
+                    <br/><br/>
+                    <p>{show.overview}</p>
                 </Col>
             </div>
         );
@@ -173,13 +190,20 @@ class SeasonsList extends Component {
 
     _buildEpisodesList(seasonID){
         const { episodes } = this.state;
+        const { directories } = this.props;
 
         let episodeList = [];
 
         episodes[seasonID].forEach((episode)=>{
+            let playButton = "";
+
+            if(episode.file_info.hasOwnProperty('id')){
+                const fullPath = directories.Shows + "/" + episode.file_info.subpath;
+                playButton = <PlayButton filename={episode.file_info.filename} fullPath={fullPath} />;
+            }
             const el = <div key={episode.id}
                             className="ib-shows-seasonlist-episode-row">
-                            {episode.episode_number}. {episode.title}
+                            {episode.episode_number}. {playButton}{episode.title}
                         </div>;
             episodeList.push(el);
         });
@@ -218,4 +242,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(SeasonsList);
+export default connect(mapStateToProps, mapDispatchToProps)(ShowInfo);
