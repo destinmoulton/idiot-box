@@ -23,6 +23,12 @@ const episodeAPIConfig = {
 const episodeAPIModel = new EpisodeAPIModel(episodeAPIConfig);
 
 const shows = {
+    show: {
+        get_for_slug: {
+            params: ['slug'],
+            func: (slug)=> showsModel.getSingleBySlug(slug)
+        }
+    },
     shows: {
         get: {
             params: [],

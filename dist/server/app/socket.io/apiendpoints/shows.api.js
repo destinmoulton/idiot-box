@@ -53,6 +53,14 @@ var episodeAPIConfig = {
 var episodeAPIModel = new _EpisodeAPIModel2.default(episodeAPIConfig);
 
 var shows = {
+    show: {
+        get_for_slug: {
+            params: ['slug'],
+            func: function func(slug) {
+                return showsModel.getSingleBySlug(slug);
+            }
+        }
+    },
     shows: {
         get: {
             params: [],
