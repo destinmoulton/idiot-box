@@ -18,7 +18,7 @@ export default class ShowsModel {
             status: apiData.status,
             rating: apiData.rating,
             updated_at: moment(apiData.updated_at).format('X'),
-            slug: apiData.slug,
+            slug: apiData.ids.slug,
             trakt_id: apiData.ids.trakt,
             tvdb_id: apiData.ids.tvdb,
             imdb_id: apiData.ids.imdb,
@@ -46,6 +46,14 @@ export default class ShowsModel {
     getSingle(showID){
         const where = {
             id: showID
+        };
+
+        return this._ibdb.getRow(where, this._tableName);
+    }
+
+    getSingleBySlug(slug){
+        const where = {
+            slug
         };
 
         return this._ibdb.getRow(where, this._tableName);
