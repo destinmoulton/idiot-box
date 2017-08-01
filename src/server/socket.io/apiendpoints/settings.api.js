@@ -5,6 +5,12 @@ import SettingsModel from '../../models/db/SettingsModel';
 const settingsModel = new SettingsModel(ibdb);
     
 const settings = {
+    all: {
+        get: {
+            params: [],
+            func: ()=>settingsModel.getAll()
+        }
+    },
     category: {
         get: {
             params: ['category'],
