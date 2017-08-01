@@ -1,10 +1,9 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
 
 import { Icon, Spin } from 'antd';
 
-import { emitAPIRequest } from '../../actions/api.actions';
+import PlayButton from '../PlayButton';
 
 class FileDetails extends Component {
     VIDEO_FILE_REGX = /(\.mp4|\.mkv|\.avi)$/;
@@ -20,22 +19,8 @@ class FileDetails extends Component {
         super(props);
     }
 
-    _startPlayback(){
-
-        const { emitAPIRequest, filename, fullPath } = this.props;
-        const options = {
-            path: fullPath,
-            filename: filename
-        }
-        emitAPIRequest("videoplayer.cmd.start", options, this._playbackStarted.bind(this), false);
-    }
-
-    _playbackStarted(){
-
-    }
-
     render() {
-        const { assocData, filename } = this.props;
+        const { assocData, filename, fullPath } = this.props;
 
         let mediaDetails = "";
         if('title' in assocData){
@@ -44,10 +29,7 @@ class FileDetails extends Component {
 
         let actions = "";
         if(filename.search(this.VIDEO_FILE_REGX) > -1){
-            actions = <a href="javascript:void(0)"
-                            onClick={this._startPlayback.bind(this)}>
-                            <Icon type="play-circle" className="ib-filebrowser-media-play"/>
-                        </a>;
+            actions = <PlayButton filename={filename} fullPath={fullPath} />;
         }
         
         return (
@@ -59,14 +41,4 @@ class FileDetails extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return { }
-};
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(FileDetails);
+export default FileDetails;
