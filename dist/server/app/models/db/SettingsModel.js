@@ -23,6 +23,11 @@ var SettingsModel = function () {
     }
 
     _createClass(SettingsModel, [{
+        key: "getAll",
+        value: function getAll() {
+            return this._ibdb.getAll({}, this._tableName);
+        }
+    }, {
         key: "getAllForCategory",
         value: function getAllForCategory(category) {
             var where = {

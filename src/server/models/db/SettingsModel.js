@@ -6,6 +6,10 @@ export default class SettingsModel {
         this._tableName = "settings";
     }
 
+    getAll(){
+        return this._ibdb.getAll({}, this._tableName);
+    }
+    
     getAllForCategory(category){
         const where = {
             category
