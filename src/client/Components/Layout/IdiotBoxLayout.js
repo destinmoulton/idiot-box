@@ -1,4 +1,3 @@
-
 import React, { Component } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
 
@@ -9,8 +8,8 @@ import FileManager from '../FileManager';
 import IdiotBoxHeader from './IdiotBoxHeader';
 import MoviesList from '../Movies/MoviesList';
 import Settings from '../Settings/Settings';
-import ShowsRouter from '../Shows/ShowsRouter';
-
+import ShowInfo from '../Shows/ShowInfo';
+import ShowsList from '../Shows/ShowsList';
 
 class IdiotBoxLayout extends Component {
     
@@ -24,7 +23,8 @@ class IdiotBoxLayout extends Component {
                         <Route path='/filemanager' component={FileManager}/>
                         <Route path='/movies' component={MoviesList}/>
                         <Route path='/settings' component={Settings}/>
-                        <Route path='/shows' component={ShowsRouter}/>
+                        <Route path='/shows' component={ShowsList}/>
+                        <Route path={`/show/:slug`} component={ShowInfo}/>
                     </div>
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>
