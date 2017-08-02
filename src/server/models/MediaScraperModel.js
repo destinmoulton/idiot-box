@@ -38,6 +38,14 @@ export default class MediaScraperModel {
                 })
     }
 
+    getShowByTraktID(traktID){
+        const options = {
+            id: traktID,
+            extended: 'full'
+        };
+        return this._trakt.shows.summary(options);
+    }
+
     getShowSeasonsList(id){
         return this._trakt.seasons.summary({
             id,

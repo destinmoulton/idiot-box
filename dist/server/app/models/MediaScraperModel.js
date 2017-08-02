@@ -67,6 +67,15 @@ var MediaScraperModel = function () {
             });
         }
     }, {
+        key: 'getShowByTraktID',
+        value: function getShowByTraktID(traktID) {
+            var options = {
+                id: traktID,
+                extended: 'full'
+            };
+            return this._trakt.shows.summary(options);
+        }
+    }, {
         key: 'getShowSeasonsList',
         value: function getShowSeasonsList(id) {
             return this._trakt.seasons.summary({
