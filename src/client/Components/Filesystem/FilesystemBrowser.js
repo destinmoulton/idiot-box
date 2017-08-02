@@ -55,7 +55,7 @@ class FilesystemBrowser extends Component {
         if(this.props.currentPath !== ""){
             currentPath = this.props.currentPath;
         } 
-        
+
         this._getDirFromServer(currentPath, this.props.basePath);
     }
 
@@ -64,7 +64,7 @@ class FilesystemBrowser extends Component {
             this._reloadDir();
         }
 
-        if(nextProps.currentPath !== this.state.currentPath){
+        if(nextProps.currentPath !== "" && nextProps.currentPath !== this.state.currentPath){
             this._getDirFromServer(nextProps.currentPath, this.props.basePath);
         } else if(nextProps.basePath !== this.props.basePath){
             this._getDirFromServer(nextProps.basePath, nextProps.basePath);
