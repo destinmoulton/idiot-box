@@ -20,7 +20,7 @@ class IdiotBoxLayout extends Component {
                     <IdiotBoxHeader />
                     <Content style={{ padding: '0 50px' }}>
                     <div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
-                        <Route path='/filemanager' component={FileManager}/>
+                        <Route path='/filemanager/:setting_key?/:subpath?' component={FileManager}/>
                         <Route path='/movies' component={MoviesList}/>
                         <Route path='/settings' component={Settings}/>
                         <Route path='/shows' component={ShowsList}/>
