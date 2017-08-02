@@ -13,27 +13,28 @@ class FilesystemBrowser extends Component {
     PARENT_DIR_NAME = "..";
 
     static propTypes = {
-        dirList: PropTypes.array.isRequired,
         forceReload: PropTypes.bool,
-        hasCheckboxes: PropTypes.bool.isRequired,
-        initialPath: PropTypes.string.isRequired,
-        lockToInitialPath: PropTypes.bool.isRequired,
+        hasCheckboxes: PropTypes.bool,
+        basePath: PropTypes.string.isRequired,
+        currentPath: PropTypes.string,
+        lockToBasePath: PropTypes.bool,
         onChangeDirectory: PropTypes.func,
         parentHandleSelectChange: PropTypes.func,
         selectedRowKeys: PropTypes.array,
         serverInfo: PropTypes.object.isRequired,
-        showDirectories: PropTypes.bool.isRequired,
-        showFiles: PropTypes.bool.isRequired
+        showDirectories: PropTypes.bool,
+        showFiles: PropTypes.bool
     };
 
     static defaultProps = {
         actionColumns: [],
-        dirList: [],
+        currentPath: "",
         forceReload: false,
         hasCheckboxes: false,
-        lockToInitialPath: true,
+        lockToBasePath: true,
         onChangeDirectory: ()=>{},
         parentHandleSelectChange: ()=>{},
+        selectedRowKeys: [],
         showDirectories: true,
         showFiles: true,
     }
@@ -43,14 +44,19 @@ class FilesystemBrowser extends Component {
 
         this.state = {
             isLoading: false,
-            currentPath: props.initialPath,
+            currentPath: "",
             dirList: [],
             showHidden: false
         };
     }
 
     componentWillMount(){
-        this._getDirFromServer(this.state.currentPath, this.props.initialPath);
+        let currentPath = this.props.basePath;
+        if(this.props.currentPath !== ""){
+            currentPath = this.props.currentPath;
+        } 
+        
+        this._getDirFromServer(currentPath, this.props.basePath);
     }
 
     componentWillReceiveProps(nextProps){
@@ -58,13 +64,15 @@ class FilesystemBrowser extends Component {
             this._reloadDir();
         }
 
-        if(nextProps.initialPath !== this.props.initialPath){
-            this._getDirFromServer(nextProps.initialPath, nextProps.initialPath);
+        if(nextProps.currentPath !== this.state.currentPath){
+            this._getDirFromServer(nextProps.currentPath, this.props.basePath);
+        } else if(nextProps.basePath !== this.props.basePath){
+            this._getDirFromServer(nextProps.basePath, nextProps.basePath);
         }
     }
 
     _reloadDir(){
-        this._getDirFromServer(this.state.currentPath, this.props.initialPath);
+        this._getDirFromServer(this.state.currentPath, this.props.basePath);
     }
 
     _getDirFromServer(fullPath, basePath){
@@ -100,7 +108,7 @@ class FilesystemBrowser extends Component {
     }
 
     _prepareDirList(dirList, newPath){
-        const { initialPath, lockToInitialPath, showDirectories, showFiles } = this.props;
+        const { basePath, lockToBasePath, showDirectories, showFiles } = this.props;
         const { showHidden } = this.state;
 
         let directories = [];
@@ -114,7 +122,7 @@ class FilesystemBrowser extends Component {
             assocData: {}
         };
 
-        if( !lockToInitialPath || ( lockToInitialPath && (initialPath !== newPath) ) ){
+        if( !lockToBasePath || ( lockToBasePath && (basePath !== newPath) ) ){
             directories.push(parentDirectory);
         }
         
@@ -166,7 +174,7 @@ class FilesystemBrowser extends Component {
     }
 
     _handleDirClick(nextDirName){
-        const { serverInfo, initialPath } = this.props;
+        const { serverInfo, basePath } = this.props;
         const { pathSeparator } = serverInfo;
         const { currentPath } = this.state;
 
@@ -188,11 +196,11 @@ class FilesystemBrowser extends Component {
             }
         }
 
-        this._getDirFromServer(newPath, initialPath);
+        this._getDirFromServer(newPath, basePath);
     }
 
     _buildColumns(){
-        const { initialPath } = this.props;
+        const { basePath } = this.props;
         const { currentPath } = this.state;
 
         return [
@@ -215,7 +223,7 @@ class FilesystemBrowser extends Component {
                         return (<FileDetails 
                                     assocData={record.assocData}
                                     filename={record.name} 
-                                    basePath={initialPath} 
+                                    basePath={basePath} 
                                     fullPath={currentPath} />);
                     }
                 }
