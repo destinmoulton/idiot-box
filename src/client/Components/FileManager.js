@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
+import { Link } from 'react-router-dom';
 import { Icon, Button, Menu, Modal } from 'antd';
 
 import FilesystemBrowser from './Filesystem/FilesystemBrowser';
@@ -16,7 +16,6 @@ class FileManager extends Component {
         super(props);
 
         this.state = {
-            currentToplevelDirSetting: {},
             currentToplevelDirectory: "",
             currentPath: "",
             currentPathInfo: {},
@@ -26,12 +25,77 @@ class FileManager extends Component {
             idsingleFilename: "",
             idsingleIsModalVisible: false,
             isReloading: false,
-            isTrashVisible: false,
-            itemsToTrash: [],
+            trashIsModalVisible: false,
+            trashSelectedItems: [],
             selectedRows: [],
             untagIsModalVisible: false,
             untagIDinfo: []
         };
+    }
+
+    componentWillMount(){
+        this._parseURL(this.props);
+    }
+
+    componentWillReceiveProps(nextProps){
+        this._parseURL(nextProps);
+    }
+
+    _parseURL(props) {
+        const { toplevelDirectories } = this.props;
+
+        const settingKey = props.match.params.setting_key;
+        
+        if(settingKey === undefined){
+            this.setState({
+                currentPath: "",
+                currentPathInfo: {},
+                currentToplevelDirecory: "",
+                selectedRows: [],
+                isReloading: false
+            });
+            return;
+        }
+
+        const newSubpath = props.match.params.subpath;
+
+        let subpath = "";
+        if(newSubpath !== undefined){
+            subpath = decodeURIComponent(newSubpath);
+        }
+
+        const dir = toplevelDirectories.find((dir)=> dir.key === settingKey);
+
+        const pathInfo = {
+            setting_id: dir.id,
+            setting_key: settingKey,
+            subpath
+        };
+        this.setState({
+            currentPath: dir.value + "/" + subpath,
+            currentPathInfo: pathInfo,
+            currentToplevelDirectory: dir.value,
+            selectedRows: [],
+            isReloading: false
+        });
+    }
+
+    _handleChangeDirectory(newDir, dirList){
+        const { currentPathInfo, currentToplevelDirectory } = this.state;
+        const subpath = newDir.slice(currentToplevelDirectory.length + 1);
+
+        this.setState({
+            dirList,
+            isReloading: false
+        });
+
+        if(currentPathInfo.subpath !== subpath){
+            // The subpath has changed so go there
+            const location = {
+                pathname: "/filemanager/" + currentPathInfo.setting_key + "/" + encodeURIComponent(subpath)
+            };
+            this.props.history.push(location);
+        }
     }
 
     _reloadDirList(){
@@ -39,33 +103,7 @@ class FileManager extends Component {
             isReloading: true
         });
     }
-
-    _handleChangeDirectory(newDir, dirList){
-        const { currentToplevelDirectory, currentPathInfo } = this.state;
-        
-        const subpath = newDir.slice(currentToplevelDirectory.length + 1);
-        currentPathInfo.subpath = subpath;
-        this.setState({
-            currentPathInfo,
-            currentPath: newDir,
-            dirList,
-            selectedRows: [],
-            isReloading: false
-        })
-    }
-
-    _handleSelectTopLevelDir(dir) {
-        const pathInfo = {
-            setting_id: dir.id,
-            subpath: ""
-        };
-        this.setState({
-            currentPathInfo: pathInfo,
-            currentToplevelDirectory: dir.value,
-            currentPath: dir.value
-        });
-    }
-
+    
     _handleSelectionChange(selectedRows){
         this.setState({
             selectedRows
@@ -73,32 +111,32 @@ class FileManager extends Component {
     }
 
     _handleClickTrash(evt){
-        let itemsToTrash = [];
+        let trashSelectedItems = [];
         if(evt.currentTarget.tagName === "BUTTON"){
-            itemsToTrash = [...this.state.selectedRows];
+            trashSelectedItems = [...this.state.selectedRows];
         } else {
             const item = evt.currentTarget.getAttribute('data-item-name');
-            itemsToTrash = [item];
+            trashSelectedItems = [item];
         }
 
         this.setState({
-            isTrashVisible: true,
-            itemsToTrash
+            trashIsModalVisible: true,
+            trashSelectedItems
         });
     }
 
     _handleTrashComplete(){
         this.setState({
             isReloading: true,
-            isTrashVisible: false,
-            itemsToTrash: []
+            trashIsModalVisible: false,
+            trashSelectedItems: []
         });
     }
 
     _handleCancelTrash(){
         this.setState({
-            isTrashVisible: false,
-            itemsToTrash: []
+            trashIsModalVisible: false,
+            trashSelectedItems: []
         });
     }
 
@@ -271,8 +309,8 @@ class FileManager extends Component {
             idsingleFilename,
             idsingleIsModalVisible,
             isReloading,
-            isTrashVisible,
-            itemsToTrash,
+            trashIsModalVisible,
+            trashSelectedItems,
             selectedRows,
             untagIDinfo,
             untagIsModalVisible
@@ -310,9 +348,10 @@ class FileManager extends Component {
                 </div>
                 <FilesystemBrowser 
                     actionColumns={this._buildActionColumns()}
+                    basePath={currentToplevelDirectory}
+                    currentPath={currentPath}
                     forceReload={isReloading}
                     hasCheckboxes={true}
-                    initialPath={currentToplevelDirectory}
                     onChangeDirectory={this._handleChangeDirectory.bind(this)}
                     parentHandleSelectChange={this._handleSelectionChange.bind(this)}
                     selectedRowKeys={selectedRows}
@@ -321,8 +360,8 @@ class FileManager extends Component {
                 />
                 <TrashModal
                     currentPath={currentPath}
-                    isVisible={isTrashVisible}
-                    itemsToTrash={itemsToTrash}
+                    isVisible={trashIsModalVisible}
+                    itemsToTrash={trashSelectedItems}
                     onTrashComplete={this._handleTrashComplete.bind(this)}
                     onCancel={this._handleCancelTrash.bind(this)}
                 />
@@ -362,10 +401,9 @@ class FileManager extends Component {
             menuList.push(
                 <Menu.Item 
                     key={dir.value}>
-                    <a href="javascript:void(0);"
-                        onClick={this._handleSelectTopLevelDir.bind(this, dir)}>
+                    <Link to={"/filemanager/" + dir.key}>
                         {dir.key}
-                    </a>
+                    </Link>
                 </Menu.Item>
             );
         });

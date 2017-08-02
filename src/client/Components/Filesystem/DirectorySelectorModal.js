@@ -53,7 +53,7 @@ class DirectorySelectorModal extends Component {
                     <div className="ib-settings-dirsel-fs-cont" 
                          style={{height:posDim.fileBrowserHeight}}>
                         <FilesystemBrowser 
-                            initialPath={initialPath} 
+                            basePath={initialPath}
                             onChangeDirectory={onChangeDirectory}
                             showDirectories={true}
                             showFiles={false}
