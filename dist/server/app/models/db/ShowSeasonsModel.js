@@ -97,6 +97,19 @@ var ShowSeasonsModel = function () {
             };
             return this._ibdb.getAll(where, this._tableName, "season_number ASC");
         }
+    }, {
+        key: 'updateLock',
+        value: function updateLock(seasonID, lockStatus) {
+            var data = {
+                locked: lockStatus
+            };
+
+            var where = {
+                id: seasonID
+            };
+
+            return this._ibdb.update(data, where, this._tableName);
+        }
     }]);
 
     return ShowSeasonsModel;

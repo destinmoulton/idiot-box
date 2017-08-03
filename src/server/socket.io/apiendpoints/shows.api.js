@@ -35,6 +35,12 @@ const shows = {
             func: ()=> showsModel.getAll()
         }
     },
+    season: {
+        toggle_lock: {
+            params: ['season_id', 'lock_status'],
+            func: (seasonID, lockStatus)=> showSeasonsModel.updateLock(seasonID, lockStatus)
+        }
+    },
     seasons: {
         get: {
             params: ['show_id'],
@@ -49,6 +55,10 @@ const shows = {
         get_all_with_file_info: {
             params: ['show_id', 'season_number'],
             func: (showID, seasonNum)=> episodeAPIModel.getAllEpisodesWithFileInfo(showID, seasonNum)
+        },
+        toggle_watched:{
+            params: ['episode_ids', 'watched_status'],
+            func: (episodeIDs, watchedStatus)=> showSeasonEpisodesModel.updateMultipleEpisodesWatchedStatus(episodeIDs, watchedStatus)
         }
     },
     episode: {

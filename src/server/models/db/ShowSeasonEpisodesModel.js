@@ -55,25 +55,24 @@ export default class ShowSeasonEpisodesModel {
         return Promise.all(promisesToRun);
     }
 
-    toggleHasWatched(episodeID){
-        return this.getSingle(episodeID)
-            .then((episode) => {
-                const where = {
-                    id: episodeID
-                };
-                let data = {
-                    has_watched: 1
-                };
-                if (episode.has_watched === 1) {
-                    data.has_watched = 0;
-                }
+    updateMultipleEpisodesWatchedStatus(episodeIDs, watchedStatus){
+        let promisesToRun = [];
+        episodeIDs.forEach((episodeID)=>{
+            promisesToRun.push(this.updateEpisodeWatchedStatus(episodeID, watchedStatus));
+        })
 
-                return this._ibdb.update(data, where, this._tableName)
+        return Promise.all(promisesToRun);
+    }
 
-            })
-            .then(() => {
-                return this.getSingle(episodeID);
-            });
+    updateEpisodeWatchedStatus(episodeID, newWatchedStatus){
+        const data = {
+            watched: newWatchedStatus
+        };
+
+        const where = {
+            id: episodeID
+        };
+        return this._ibdb.update(data, where, this._tableName)
     }
 
     getSingle(episodeID){
