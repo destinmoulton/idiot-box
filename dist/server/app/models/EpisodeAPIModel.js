@@ -25,10 +25,10 @@ var EpisodeAPIModel = function () {
 
     _createClass(EpisodeAPIModel, [{
         key: 'getAllEpisodesWithFileInfo',
-        value: function getAllEpisodesWithFileInfo(showID, seasonID) {
+        value: function getAllEpisodesWithFileInfo(showID, seasonNum) {
             var _this = this;
 
-            return this._showSeasonEpisodesModel.getEpisodesForSeason(showID, seasonID).then(function (episodes) {
+            return this._showSeasonEpisodesModel.getEpisodesForSeasonNum(showID, seasonNum).then(function (episodes) {
                 var promisesToRun = [];
 
                 episodes.forEach(function (ep) {

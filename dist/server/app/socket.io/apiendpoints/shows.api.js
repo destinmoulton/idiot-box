@@ -85,9 +85,9 @@ var shows = {
             }
         },
         get_all_with_file_info: {
-            params: ['show_id', 'season_id'],
-            func: function func(showID, seasonID) {
-                return episodeAPIModel.getAllEpisodesWithFileInfo(showID, seasonID);
+            params: ['show_id', 'season_number'],
+            func: function func(showID, seasonNum) {
+                return episodeAPIModel.getAllEpisodesWithFileInfo(showID, seasonNum);
             }
         }
     },
