@@ -18,7 +18,7 @@ class IdiotBoxHeader extends Component {
                     style={{ lineHeight: '64px' }}
                 >
                     <Menu.Item key="filemanager">
-                        <Link to="/filemanager">File Manager</Link>
+                        <Link to="/filemanager/Downloads">File Manager</Link>
                     </Menu.Item>
                     <Menu.Item key="shows">
                         <Link to="/shows">Shows</Link>
