@@ -47,8 +47,8 @@ const shows = {
             func: (showID, seasonID)=> showSeasonEpisodesModel.getEpisodesForSeason(showID, seasonID)
         },
         get_all_with_file_info: {
-            params: ['show_id', 'season_id'],
-            func: (showID, seasonID)=> episodeAPIModel.getAllEpisodesWithFileInfo(showID, seasonID)
+            params: ['show_id', 'season_number'],
+            func: (showID, seasonNum)=> episodeAPIModel.getAllEpisodesWithFileInfo(showID, seasonNum)
         }
     },
     episode: {

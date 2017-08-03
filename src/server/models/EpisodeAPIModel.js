@@ -8,8 +8,8 @@ export default class EpisodeAPIModel {
         this._fileToEpisodeModel = models.fileToEpisodeModel;
     }
 
-    getAllEpisodesWithFileInfo(showID, seasonID){
-        return this._showSeasonEpisodesModel.getEpisodesForSeason(showID, seasonID)
+    getAllEpisodesWithFileInfo(showID, seasonNum){
+        return this._showSeasonEpisodesModel.getEpisodesForSeasonNum(showID, seasonNum)
                 .then((episodes)=>{
                     let promisesToRun = [];
                     
