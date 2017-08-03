@@ -77,6 +77,7 @@ CREATE TABLE show_seasons (
     tvdb_id INTEGER,
     tmdb_id INTEGER,
     tvrage_id INTEGER,
+    locked INTEGER,
     FOREIGN KEY(show_id) REFERENCES shows(id) ON DELETE CASCADE
 );
 
@@ -97,7 +98,7 @@ CREATE TABLE show_season_episodes (
     imdb_id TEXT,
     tmdb_id INTEGER,
     tvrage_id INTEGER,
-    has_watched INTEGER,
+    watched INTEGER,
     FOREIGN KEY(show_id) REFERENCES shows(id) ON DELETE CASCADE,
     FOREIGN KEY(season_id) REFERENCES show_seasons(id) ON DELETE CASCADE
 );
