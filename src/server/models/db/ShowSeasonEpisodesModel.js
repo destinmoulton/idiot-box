@@ -25,7 +25,8 @@ export default class ShowSeasonEpisodesModel {
             tvdb_id: apiData.ids.tvdb,
             imdb_id: apiData.ids.imdb,
             tmdb_id: apiData.ids.tmdb,
-            tvrage_id: apiData.ids.tvrage
+            tvrage_id: apiData.ids.tvrage,
+            watched: 0
         };
     }
 
