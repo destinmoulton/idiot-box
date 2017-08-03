@@ -24,7 +24,7 @@ class IdiotBoxLayout extends Component {
                         <Route path='/movies' component={MoviesList}/>
                         <Route path='/settings' component={Settings}/>
                         <Route path='/shows' component={ShowsList}/>
-                        <Route path={`/show/:slug`} component={ShowInfo}/>
+                        <Route path={`/show/:slug/:season_id?`} component={ShowInfo}/>
                     </div>
                     </Content>
                     <Footer style={{ textAlign: 'center' }}>
