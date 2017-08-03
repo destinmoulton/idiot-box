@@ -99,7 +99,9 @@ class ShowInfo extends Component {
         let episodesTable = "";
         if (!isLoadingShow) {
             seasonsBar = <SeasonsBar activeSeasonNum={activeSeasonNum} show={show} />;
-            episodesTable = <EpisodesTable activeSeasonNum={activeSeasonNum} show={show} />;
+            if(activeSeasonNum > -1){
+                episodesTable = <EpisodesTable activeSeasonNum={activeSeasonNum} show={show} />;
+            }
         }
         
         return (

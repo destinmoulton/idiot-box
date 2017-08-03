@@ -68,6 +68,10 @@ class EpisodesTable extends Component {
         const { selectedEpisodeKeys } = this.state;
         const { activeSeasonNum, emitAPIRequest } = this.props;
 
+        this.setState({
+            isLoadingEpisodes: true
+        });
+
         const params = {
             episode_ids: selectedEpisodeKeys,
             watched_status: newWatchedStatus
