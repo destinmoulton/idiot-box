@@ -69,6 +69,14 @@ var shows = {
             }
         }
     },
+    season: {
+        toggle_lock: {
+            params: ['season_id', 'lock_status'],
+            func: function func(seasonID, lockStatus) {
+                return showSeasonsModel.updateLock(seasonID, lockStatus);
+            }
+        }
+    },
     seasons: {
         get: {
             params: ['show_id'],
@@ -88,6 +96,12 @@ var shows = {
             params: ['show_id', 'season_number'],
             func: function func(showID, seasonNum) {
                 return episodeAPIModel.getAllEpisodesWithFileInfo(showID, seasonNum);
+            }
+        },
+        toggle_watched: {
+            params: ['episode_ids', 'watched_status'],
+            func: function func(episodeIDs, watchedStatus) {
+                return showSeasonEpisodesModel.updateMultipleEpisodesWatchedStatus(episodeIDs, watchedStatus);
             }
         }
     },

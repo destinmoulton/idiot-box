@@ -79,25 +79,28 @@ var ShowSeasonEpisodesModel = function () {
             return Promise.all(promisesToRun);
         }
     }, {
-        key: 'toggleHasWatched',
-        value: function toggleHasWatched(episodeID) {
+        key: 'updateMultipleEpisodesWatchedStatus',
+        value: function updateMultipleEpisodesWatchedStatus(episodeIDs, watchedStatus) {
             var _this3 = this;
 
-            return this.getSingle(episodeID).then(function (episode) {
-                var where = {
-                    id: episodeID
-                };
-                var data = {
-                    has_watched: 1
-                };
-                if (episode.has_watched === 1) {
-                    data.has_watched = 0;
-                }
-
-                return _this3._ibdb.update(data, where, _this3._tableName);
-            }).then(function () {
-                return _this3.getSingle(episodeID);
+            var promisesToRun = [];
+            episodeIDs.forEach(function (episodeID) {
+                promisesToRun.push(_this3.updateEpisodeWatchedStatus(episodeID, watchedStatus));
             });
+
+            return Promise.all(promisesToRun);
+        }
+    }, {
+        key: 'updateEpisodeWatchedStatus',
+        value: function updateEpisodeWatchedStatus(episodeID, newWatchedStatus) {
+            var data = {
+                watched: newWatchedStatus
+            };
+
+            var where = {
+                id: episodeID
+            };
+            return this._ibdb.update(data, where, this._tableName);
         }
     }, {
         key: 'getSingle',

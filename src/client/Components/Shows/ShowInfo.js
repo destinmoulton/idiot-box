@@ -5,7 +5,8 @@ import { Col, Icon, Row, Spin } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 
-import Seasons from './Seasons';
+import EpisodesTable from './EpisodesTable';
+import SeasonsBar from './SeasonsBar';
 
 class ShowInfo extends Component {
 
@@ -94,14 +95,23 @@ class ShowInfo extends Component {
 
         const showInfo = this._buildShowInfo();
         
-        let seasons = (isLoadingShow) ? <Spin /> : <Seasons activeSeasonNum={activeSeasonNum} show={show} />;
+        let seasonsBar = "";
+        let episodesTable = "";
+        if (!isLoadingShow) {
+            seasonsBar = <SeasonsBar activeSeasonNum={activeSeasonNum} show={show} />;
+            episodesTable = <EpisodesTable activeSeasonNum={activeSeasonNum} show={show} />;
+        }
+        
         return (
             <div>
                 <Row>
                     {showInfo}
                 </Row>
                 <Row>
-                    {seasons}
+                    {seasonsBar}
+                </Row>
+                <Row>
+                    {episodesTable}
                 </Row>
             </div>
         );

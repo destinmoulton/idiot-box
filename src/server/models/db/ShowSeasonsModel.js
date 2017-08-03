@@ -72,4 +72,16 @@ export default class ShowSeasonsModel {
         };
         return this._ibdb.getAll(where, this._tableName, "season_number ASC");
     }
+
+    updateLock(seasonID, lockStatus){
+        const data = {
+            locked: lockStatus
+        };
+
+        const where = {
+            id: seasonID            
+        };
+
+        return this._ibdb.update(data, where, this._tableName);
+    }
 }
