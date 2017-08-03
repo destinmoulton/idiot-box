@@ -93,16 +93,20 @@ class Seasons extends Component {
         let seasonList = [];
         seasons.forEach((season)=>{
             let boxClass = "ib-show-seasonlist-season-box";
-
+            let seasonNumEl = "";
             if(season.season_number === selectedSeasonNum){
                 boxClass += " ib-show-seasonlist-season-box-active";
+                seasonNumEl = season.season_number;
+            } else {
+                seasonNumEl = <Link to={"/show/" + show.slug + "/" + season.season_number}>
+                                  {season.season_number}
+                              </Link>;
             }
 
+            
             const el =  <div key={season.season_number}
                             className={boxClass}>
-                            <Link to={"/show/" + show.slug + "/" + season.season_number}>
-                            {season.season_number}
-                            </Link>
+                            {seasonNumEl}
                         </div>;
 
             seasonList.push(el);
@@ -162,7 +166,9 @@ class Seasons extends Component {
                     {seasonBar}
                 </Row>
                 <Row>
-                    {episodeList}
+                    <div className="ib-show-seasonlist-episodes-container">
+                        {episodeList}
+                    </div>
                 </Row>
             </div>
         );

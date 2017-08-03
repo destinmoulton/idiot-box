@@ -164,6 +164,10 @@ div.ib-shows-seasonlist-episode-row {
     border-bottom: 1px solid #ebebeb;
 }
 
+.ib-show-seasonlist-episodes-container{
+    padding:10px;
+}
+
 div.ib-show-seasonlist-season-box {
     float: left;
     width: 40px;
@@ -175,7 +179,7 @@ div.ib-show-seasonlist-season-box {
 }
 
 div.ib-show-seasonlist-season-box-active {
-    background-color: gray;
+    background-color: #ebf3cc;
 }
 
 div.ib-trashmodal-list-box {
