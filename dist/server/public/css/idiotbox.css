@@ -164,6 +164,20 @@ div.ib-shows-seasonlist-episode-row {
     border-bottom: 1px solid #ebebeb;
 }
 
+div.ib-show-seasonlist-season-box {
+    float: left;
+    width: 40px;
+    border: 1px solid black;
+    font-size: 1.2em;
+    font-weight: bold;
+    text-align: center;
+    margin-right: 4px;
+}
+
+div.ib-show-seasonlist-season-box-active {
+    background-color: gray;
+}
+
 div.ib-trashmodal-list-box {
     
 }
