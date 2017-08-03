@@ -20,7 +20,8 @@ export default class ShowSeasonsModel {
             trakt_id: apiData.ids.trakt,
             tvdb_id: apiData.ids.tvdb,
             tmdb_id: apiData.ids.tmdb,
-            tvrage_id: apiData.ids.tvrage
+            tvrage_id: apiData.ids.tvrage,
+            locked: 0
         };
     }
 
