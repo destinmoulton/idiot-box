@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Col, Row, Spin } from 'antd';
+import { Col, Icon, Input, Row, Spin } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 
@@ -11,6 +11,7 @@ class ShowsList extends Component {
         super(props);
 
         this.state = {
+            currentSearchString: "",
             isLoadingShows: false,
             shows: []
         };
@@ -27,14 +28,26 @@ class ShowsList extends Component {
             isLoadingShows: true
         });
 
-        emitAPIRequest("shows.shows.get", {}, this._showsReceived.bind(this), false);
+        emitAPIRequest("shows.shows.get_all_with_locked_info", {}, this._showsReceived.bind(this), false);
     }
 
     _showsReceived(shows){
+        let newShows = [];
+        shows.forEach((show)=>{
+            show['is_visible'] = true;
+            show['searchable_text'] = this._prepStringForFilter(show.title);
+            newShows.push(show);
+        });
+
         this.setState({
             isLoadingShows: false,
-            shows
+            shows: newShows
         });
+    }
+
+    _prepStringForFilter(title){
+        const lowerTitle = title.toLowerCase();
+        return lowerTitle.replace(/[^a-z0-9]/g, "");
     }
 
     _buildShowList(){
@@ -42,26 +55,57 @@ class ShowsList extends Component {
 
         let showList = [];
         shows.forEach((show)=>{
-            const details = <Col 
-                                key={show.id}
-                                span={4}>
-                                <div className="ib-shows-thumbnail-box">
-                                    <Link to={"/show/" + show.slug}>
-                                        <img
-                                            className="ib-shows-thumbnail" 
-                                            src={"/images/shows/" + show.image_filename}/>
-                                        {show.title}
-                                    </Link>
-                                </div>
-                            </Col>;
-            showList.push(details);
+            if(show.is_visible){
+                const details = <Col 
+                                    key={show.id}
+                                    span={4}>
+                                    <div className="ib-shows-thumbnail-box">
+                                        <Link to={"/show/" + show.slug}>
+                                            <img
+                                                className="ib-shows-thumbnail" 
+                                                src={"/images/shows/" + show.image_filename}/>
+                                            {show.title}
+                                            <br/>[ {show.num_seasons_locked} <Icon type="lock" /> ][ {show.num_seasons_unlocked} <Icon type="unlock" /> ]
+                                        </Link>
+                                    </div>
+                                </Col>;
+                showList.push(details);
+            }
         });
 
         return showList;
     }
 
+    _handleChangeFilter(evt){
+        const { shows } = this.state;
+
+        const currentSearchString = evt.currentTarget.value;
+        const filterText = this._prepStringForFilter(currentSearchString);
+        let filteredShows = [];
+
+        shows.forEach((show)=>{
+            if(filterText === ""){
+                show.is_visible = true;
+            } else {
+                show.is_visible = true;
+                if(show.searchable_text.search(filterText) === -1){
+                    show.is_visible = false;
+                }
+            }
+            filteredShows.push(show);
+        });
+
+        this.setState({
+            currentSearchString,
+            shows: filteredShows
+        });
+    }
+
     render() {
-        const { isLoadingShows } = this.state;
+        const { 
+            currentSearchString,
+            isLoadingShows
+        } = this.state;
 
         let content = "";
         if(isLoadingShows){
@@ -74,6 +118,13 @@ class ShowsList extends Component {
             <div>
                 <Row>
                     <h2>Shows</h2>
+                    <Input.Search
+                        autoFocus
+                        value={currentSearchString}
+                        onChange={this._handleChangeFilter.bind(this)}
+                        style={{ width: 400 }}
+                        onSearch={this._handleChangeFilter.bind(this)}
+                    />
                 </Row>
                 <Row>
                     {content}

@@ -138,10 +138,12 @@ i.ib-playbutton-icon {
 
 div.ib-shows-thumbnail-box {
     width: 100%;
-    height: 230px;
+    height: 240px;
     padding: 5px;
     text-align: center;
     font-size: 1.1em;
+    margin: 4px;
+    border: 2px solid gray;
 }
 
 img.ib-shows-thumbnail {
