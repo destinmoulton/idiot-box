@@ -44,7 +44,7 @@ export default class FilesystemModel {
         if(isDirectory){
             return Promise.resolve(fileData);
         }
-        
+
         return this._settingsModel.getSingleByCatAndVal("directories", basePath)
                 .then((setting)=>{
                     if(!setting.hasOwnProperty('id')){

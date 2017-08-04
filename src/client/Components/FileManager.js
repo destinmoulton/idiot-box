@@ -90,9 +90,11 @@ class FileManager extends Component {
         });
 
         if(currentPathInfo.subpath !== subpath){
+            const newSubpath = (subpath.startsWith("/")) ? subpath.slice(1) : subpath;
+
             // The subpath has changed so go there
             const location = {
-                pathname: "/filemanager/" + currentPathInfo.setting_key + "/" + encodeURIComponent(subpath)
+                pathname: "/filemanager/" + currentPathInfo.setting_key + "/" + encodeURIComponent(newSubpath)
             };
             this.props.history.push(location);
         }

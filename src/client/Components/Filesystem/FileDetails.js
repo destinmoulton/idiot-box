@@ -21,7 +21,7 @@ class FileDetails extends Component {
 
     render() {
         const { assocData, filename, fullPath } = this.props;
-
+        console.log("assocData", assocData);
         let mediaDetails = "";
         if('title' in assocData){
             mediaDetails = <div className="ib-filebrowser-media-title">{assocData.title}</div>;
