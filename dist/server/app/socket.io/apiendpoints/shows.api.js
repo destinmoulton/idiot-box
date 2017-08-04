@@ -24,6 +24,10 @@ var _FileToEpisodeModel = require('../../models/db/FileToEpisodeModel');
 
 var _FileToEpisodeModel2 = _interopRequireDefault(_FileToEpisodeModel);
 
+var _ShowsAPIModel = require('../../models/ShowsAPIModel');
+
+var _ShowsAPIModel2 = _interopRequireDefault(_ShowsAPIModel);
+
 var _ShowsModel = require('../../models/db/ShowsModel');
 
 var _ShowsModel2 = _interopRequireDefault(_ShowsModel);
@@ -52,6 +56,13 @@ var episodeAPIConfig = {
 
 var episodeAPIModel = new _EpisodeAPIModel2.default(episodeAPIConfig);
 
+var showsAPIConfig = {
+    showsModel: showsModel,
+    showSeasonsModel: showSeasonsModel
+};
+
+var showsAPIModel = new _ShowsAPIModel2.default(showsAPIConfig);
+
 var shows = {
     show: {
         get_for_slug: {
@@ -66,6 +77,12 @@ var shows = {
             params: [],
             func: function func() {
                 return showsModel.getAll();
+            }
+        },
+        get_all_with_locked_info: {
+            params: [],
+            func: function func() {
+                return showsAPIModel.getAllShowsWithSeasonLockedInfo();
             }
         }
     },
