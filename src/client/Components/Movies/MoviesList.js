@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Col, Row, Spin } from 'antd';
+import { Col, Input, Row, Spin } from 'antd';
 import MovieInfoModal from './MovieInfoModal';
 
 import { emitAPIRequest } from '../../actions/api.actions';
@@ -13,6 +13,7 @@ class MoviesList extends Component {
         super(props);
 
         this.state = {
+            currentSearchString: "",
             infomodalIsVisible: false,
             infomodalMovie: {},
             isLoadingMovies: false,
@@ -35,9 +36,15 @@ class MoviesList extends Component {
     }
 
     _moviesReceived(movies){
+        let processedMovies = [];
+        movies.forEach((movie)=>{
+            movie['is_visible'] = true;
+            movie['searchable_text'] = this._prepStringForFilter(movie.title);
+            processedMovies.push(movie);
+        });
         this.setState({
             isLoadingMovies: false,
-            movies
+            movies: processedMovies
         });
     }
 
@@ -55,26 +62,57 @@ class MoviesList extends Component {
         });
     }
 
+    _handleChangeFilter(evt){
+        const { movies } = this.state;
+
+        const currentSearchString = evt.currentTarget.value;
+        const filterText = this._prepStringForFilter(currentSearchString);
+
+        let filteredMovies = [];
+        movies.forEach((movie)=>{
+            if(filterText === ""){
+                movie.is_visible = true;
+            } else {
+                movie.is_visible = true;
+                if(movie.searchable_text.search(filterText) === -1){
+                    movie.is_visible = false;
+                }
+            }
+            filteredMovies.push(movie);
+        });
+
+        this.setState({
+            currentSearchString,
+            movies: filteredMovies
+        });
+    }
+
+    _prepStringForFilter(title){
+        const lowerTitle = title.toLowerCase();
+        return lowerTitle.replace(/[^a-z0-9]/g, "");
+    }
+
     _buildMovieList(){
-        
         const { movies } = this.state;
 
         let movieList = [];
         movies.forEach((movie)=>{
-            const details = <Col 
-                                key={movie.id}
-                                span={4}>
-                                <div className="ib-movies-thumbnail-box">
-                                    <a  href="javascript:void(0)"
-                                        onClick={this._handleClickMovie.bind(this, movie)}>
-                                        <img
-                                            className="ib-movies-thumbnail" 
-                                            src={"/images/movies/" + movie.image_filename}/>
-                                        <span dangerouslySetInnerHTML={{__html: movie.title}}></span>
-                                    </a>
-                                </div>
-                            </Col>;
-            movieList.push(details);
+            if(movie.is_visible){
+                const details = <Col 
+                                    key={movie.id}
+                                    span={4}>
+                                    <div className="ib-movies-thumbnail-box">
+                                        <a  href="javascript:void(0)"
+                                            onClick={this._handleClickMovie.bind(this, movie)}>
+                                            <img
+                                                className="ib-movies-thumbnail" 
+                                                src={"/images/movies/" + movie.image_filename}/>
+                                            <span dangerouslySetInnerHTML={{__html: movie.title}}></span>
+                                        </a>
+                                    </div>
+                                </Col>;
+                movieList.push(details);
+            }
         });
 
         return movieList;
@@ -82,6 +120,7 @@ class MoviesList extends Component {
 
     render() {
         const {
+            currentSearchString,
             infomodalIsVisible,
             infomodalMovie,
             isLoadingMovies
@@ -98,6 +137,13 @@ class MoviesList extends Component {
             <div>
                 <Row>
                     <h2>Movies</h2>
+                    <Input.Search
+                        autoFocus
+                        value={currentSearchString}
+                        onChange={this._handleChangeFilter.bind(this)}
+                        style={{ width: 400 }}
+                        onSearch={this._handleChangeFilter.bind(this)}
+                    />
                 </Row>
                 <Row>
                     {content}
