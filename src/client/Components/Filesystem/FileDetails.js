@@ -5,8 +5,8 @@ import { Icon, Spin } from 'antd';
 
 import PlayButton from '../PlayButton';
 
+import Regex from '../../lib/Regex.lib';
 class FileDetails extends Component {
-    VIDEO_FILE_REGX = /(\.mp4|\.mkv|\.avi)$/;
 
     static propTypes = {
         assocData: PropTypes.object.isRequired,
@@ -21,14 +21,14 @@ class FileDetails extends Component {
 
     render() {
         const { assocData, filename, fullPath } = this.props;
-        console.log("assocData", assocData);
+
         let mediaDetails = "";
         if('title' in assocData){
             mediaDetails = <div className="ib-filebrowser-media-title">{assocData.title}</div>;
         }
 
         let actions = "";
-        if(filename.search(this.VIDEO_FILE_REGX) > -1){
+        if(Regex.isVideoFile(filename)){
             actions = <PlayButton filename={filename} fullPath={fullPath} />;
         }
         

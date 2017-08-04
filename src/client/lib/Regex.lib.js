@@ -27,6 +27,16 @@ class Regex {
         }
         return "";
     }
+
+    /**
+     * Determine if a filename is a video.
+     * 
+     * @param string possibleVideoFilename 
+     */
+    isVideoFile(possibleVideoFilename){
+        const regx = /(\.mp4|\.mkv|\.avi)$/;
+        return ( possibleVideoFilename.search(regx) > -1 ) ? true: false;
+    }
 }
 
 export default new Regex();

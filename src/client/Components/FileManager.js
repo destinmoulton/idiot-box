@@ -10,8 +10,9 @@ import IDMultipleEpisodesModal from './ID/IDMultipleEpisodesModal';
 import TrashModal from './Filesystem/TrashModal';
 import UntagModal from './ID/UntagModal';
 
+import Regex from '../lib/Regex.lib';
 class FileManager extends Component {
-    VIDEO_FILE_REGX = /(\.mp4|\.mkv|\.avi)$/;
+    
     constructor(props){
         super(props);
 
@@ -173,7 +174,7 @@ class FileManager extends Component {
         filenamesToID.forEach((filename)=>{
             dirList.forEach((item)=>{
                 if(item.name === filename &&
-                    item.name.search(this.VIDEO_FILE_REGX) > -1){
+                    Regex.isVideoFile(item.name)){
                     idItems.push(item);
                 }
             })
@@ -207,7 +208,7 @@ class FileManager extends Component {
         
         let selected = [];
         dirList.forEach((item)=>{
-            if(item.name.search(this.VIDEO_FILE_REGX) > -1){
+            if(Regex.isVideoFile(item.name)){
                 selected.push(item.name);
             }
         });
@@ -270,7 +271,7 @@ class FileManager extends Component {
                     const { assocData } = record;
                     
                     let tag = "";
-                    if(record.name.search(this.VIDEO_FILE_REGX) > -1){
+                    if(Regex.isVideoFile(record.name)){
                         if(!('type' in assocData)){
                             tag =   <a  href="javascript:void(0);"
                                         onClick={this._handleClickIDFile.bind(this, record.name)}>
