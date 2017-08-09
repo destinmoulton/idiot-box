@@ -81,6 +81,14 @@ var filesystem = {
                 return filesystemModel.trash(sourcePath, filenames);
             }
         }
+    },
+    rename: {
+        multiple: {
+            params: ['source_path', 'dest_path', 'items_to_rename'],
+            func: function func(sourcePath, destPath, itemsToRename) {
+                return filesystemModel.directMoveMultiple(sourcePath, destPath, itemsToRename);
+            }
+        }
     }
 };
 

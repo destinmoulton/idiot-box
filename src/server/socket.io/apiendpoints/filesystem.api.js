@@ -42,6 +42,12 @@ const filesystem = {
             params: ['source_path', 'filenames'],
             func: (sourcePath, filenames)=> filesystemModel.trash(sourcePath, filenames)
         }
+    },
+    rename: {
+        multiple: {
+            params: ['source_path', 'dest_path', 'items_to_rename'],
+            func: (sourcePath, destPath, itemsToRename)=> filesystemModel.directMoveMultiple(sourcePath, destPath, itemsToRename)
+        }
     }
 };
 
