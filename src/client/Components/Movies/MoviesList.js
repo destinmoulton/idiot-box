@@ -55,11 +55,16 @@ class MoviesList extends Component {
         });
     }
 
-    _handleCloseModal(){
+    _handleCloseModal(shouldReload = false){
+
         this.setState({
             infomodalIsVisible: false,
             infomodalMovie: {}
         });
+
+        if(shouldReload){
+            this._getShows();
+        }
     }
 
     _handleChangeFilter(evt){
