@@ -303,13 +303,13 @@ class FileManager extends Component {
                 render: (text,record)=>{
                     const { assocData } = record;
                     
-                    let tag = "";
+                    let tagAction = "";
                     if(Regex.isVideoFile(record.name)){
                         if(!('type' in assocData)){
-                            tag =   <a  href="javascript:void(0);"
-                                        onClick={this._handleClickIDFile.bind(this, record.name)}>
-                                        <Icon type="tag"/>
-                                    </a>;
+                            tagAction =   <a  href="javascript:void(0);"
+                                                onClick={this._handleClickIDFile.bind(this, record.name)}>
+                                                <Icon type="tag"/>
+                                            </a>;
                         }
                     }
                     
@@ -325,10 +325,8 @@ class FileManager extends Component {
                     let moveAction = "";
                     if(record.name !== '..'){
                         moveAction = <a  href="javascript:void(0);"
-                                    onClick={this._handleClickMoveRename.bind(this)}
-                                    data-item-name={record.name}>
-                                    Move
-                                </a>;
+                                        onClick={this._handleClickMoveRename.bind(this)}
+                                        data-item-name={record.name}>Move</a>;
                     }
                     return (
                         <span>
@@ -336,7 +334,7 @@ class FileManager extends Component {
                                 onClick={this._handleClickTrash.bind(this)}
                                 data-item-name={record.name}>
                                 <Icon type="delete"/>
-                            </a>&nbsp;{moveAction}&nbsp;{tag}{untagAction}
+                            </a>&nbsp;{moveAction}&nbsp;{tagAction}{untagAction}
                         </span>
                     );
                 }
