@@ -16,7 +16,7 @@ export default class IDModel {
 
     idAndArchiveMovie(movieInfo, imageURL, sourceInfo, destInfo){
         const imageFilename = this._buildThumbFilename(movieInfo);
-        return this._filesystemModel.move(sourceInfo, destInfo, "Movies")
+        return this._filesystemModel.moveInSetDir(sourceInfo, destInfo, "Movies")
                 .then(()=>{
                     if( imageURL !== ""){
                         return this._mediaScraperModel.downloadThumbnail("movies", imageURL, imageFilename)
@@ -38,7 +38,7 @@ export default class IDModel {
     }
 
     idAndArchiveEpisode(epInfo, sourceInfo, destInfo){
-        return this._filesystemModel.move(sourceInfo, destInfo, "Shows")
+        return this._filesystemModel.moveInSetDir(sourceInfo, destInfo, "Shows")
                 .then(()=>{
                     return this._settingsModel.getSingle("directories", "Shows")
                 })
