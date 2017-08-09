@@ -139,33 +139,33 @@ var FilesystemModel = function () {
          */
 
     }, {
-        key: 'move',
-        value: function move(sourceInfo, destInfo, destDirType) {
+        key: 'moveInSetDir',
+        value: function moveInSetDir(sourceInfo, destInfo, destDirType) {
             var _this3 = this;
 
             return this._settingsModel.getSingleByID(sourceInfo.setting_id).then(function (sourceSetting) {
                 var fullSourcePath = _path2.default.join(sourceSetting.value, sourceInfo.subpath, sourceInfo.filename);
                 if (!_fs2.default.existsSync(fullSourcePath)) {
-                    return Promise.reject('FilesystemModel :: move() :: source path ' + fullSourcePath + ' does not exist');
+                    return Promise.reject('FilesystemModel :: moveInSetDir() :: source path ' + fullSourcePath + ' does not exist');
                 }
 
                 return _this3._settingsModel.getSingle("directories", destDirType).then(function (destSetting) {
                     var baseDestDir = destSetting.value;
                     if (!_fs2.default.existsSync(baseDestDir)) {
-                        return Promise.reject('FilesystemModel :: move() :: destination path ' + baseDestDir + ' does not exist');
+                        return Promise.reject('FilesystemModel :: moveInSetDir() :: destination path ' + baseDestDir + ' does not exist');
                     }
 
                     var destPath = _path2.default.join(baseDestDir, destInfo.subpath);
                     if (!_fs2.default.existsSync(destPath)) {
                         if (!_mkdirp2.default.sync(destPath)) {
-                            return Promise.reject('FilesystemModel :: move() :: unable to make the destination dir ' + destPath);
+                            return Promise.reject('FilesystemModel :: moveInSetDir() :: unable to make the destination dir ' + destPath);
                         }
                     }
 
                     var fullDestPath = _path2.default.join(destPath, destInfo.filename);
                     _fs2.default.renameSync(fullSourcePath, fullDestPath);
                     if (!_fs2.default.existsSync(fullDestPath)) {
-                        return Promise.reject('FilesystemModel :: move() :: unable to move file \'' + fullSourcePath + '\' to \'' + fullDestPath + '\'');
+                        return Promise.reject('FilesystemModel :: moveInSetDir() :: unable to move file \'' + fullSourcePath + '\' to \'' + fullDestPath + '\'');
                     }
                     return {
                         original_path: fullSourcePath,
@@ -174,17 +174,73 @@ var FilesystemModel = function () {
                 });
             });
         }
+
+        /**
+         * Perform a direct move (ie between setting dirs)
+         * on multiple items (files or dirs);
+         * 
+         * @param string sourcePath 
+         * @param string destPath 
+         * @param object itemsToRename 
+         */
+
+    }, {
+        key: 'directMoveMultiple',
+        value: function directMoveMultiple(sourcePath, destPath, itemsToRename) {
+            var _this4 = this;
+
+            var promisesToRun = [];
+
+            var originalNames = Object.keys(itemsToRename);
+
+            originalNames.forEach(function (sourceName) {
+                var cmd = _this4.directMoveSingle(sourcePath, destPath, sourceName, itemsToRename[sourceName]);
+                promisesToRun.push(cmd);
+            });
+
+            return Promise.all(promisesToRun);
+        }
+
+        /**
+         * Perform a "direct" move -- possibly between two
+         * setting directories.
+         * 
+         * To move within a setting directory, use moveInSetDir()
+         * 
+         * @param string sourcePath
+         * @param string destPath
+         * @param string sourceName
+         * @param string destName
+         */
+
+    }, {
+        key: 'directMoveSingle',
+        value: function directMoveSingle(sourcePath, destPath, sourceName, destName) {
+            return new Promise(function (resolve, reject) {
+                var fullSource = _path2.default.join(sourcePath, sourceName);
+                if (!_fs2.default.existsSync(fullSource)) {
+                    reject('FilesystemModel :: directMoveSingle() :: source does not exist \'' + fullSource + '\'');
+                }
+
+                var fullDest = _path2.default.join(destPath, destName);
+                _fs2.default.renameSync(fullSource, fullDest);
+                if (!_fs2.default.existsSync(fullDest)) {
+                    reject('FilesystemModel :: directMoveSingle() :: unable to rename \'' + fullSource + '\' to ' + fullDest);
+                }
+                resolve(fullDest);
+            });
+        }
     }, {
         key: 'trash',
         value: function trash(sourcePath, filenames) {
-            var _this4 = this;
+            var _this5 = this;
 
             return new Promise(function (resolve, reject) {
                 if (!_fs2.default.existsSync(sourcePath)) {
                     reject('FilesystemModel :: trash() :: sourcePath: ' + sourcePath + ' does not exist.');
                 }
 
-                return _this4._settingsModel.getSingle("directories", "Trash").then(function (row) {
+                return _this5._settingsModel.getSingle("directories", "Trash").then(function (row) {
                     var trashPath = row.value;
                     if (!_fs2.default.existsSync(trashPath)) {
                         reject('FilesystemModel :: trash() :: trash directory: ' + trashPath + ' does not exist.');

@@ -112,32 +112,32 @@ export default class FilesystemModel {
      * @param object sourceInfo 
      * @param object destInfo 
      */
-    move(sourceInfo, destInfo, destDirType){
+    moveInSetDir(sourceInfo, destInfo, destDirType){
         return this._settingsModel.getSingleByID(sourceInfo.setting_id)
                 .then((sourceSetting)=>{
                     const fullSourcePath = path.join(sourceSetting.value, sourceInfo.subpath, sourceInfo.filename);
                     if (!fs.existsSync(fullSourcePath)) {
-                        return Promise.reject(`FilesystemModel :: move() :: source path ${fullSourcePath} does not exist`);
+                        return Promise.reject(`FilesystemModel :: moveInSetDir() :: source path ${fullSourcePath} does not exist`);
                     }
 
                     return this._settingsModel.getSingle("directories", destDirType)
                             .then((destSetting)=>{
                                 const baseDestDir = destSetting.value;
                                 if (!fs.existsSync(baseDestDir)) {
-                                    return Promise.reject(`FilesystemModel :: move() :: destination path ${baseDestDir} does not exist`);
+                                    return Promise.reject(`FilesystemModel :: moveInSetDir() :: destination path ${baseDestDir} does not exist`);
                                 }
 
                                 const destPath = path.join(baseDestDir, destInfo.subpath);
                                 if(!fs.existsSync(destPath)){
                                     if(!mkdirp.sync(destPath)){
-                                        return Promise.reject(`FilesystemModel :: move() :: unable to make the destination dir ${destPath}`);
+                                        return Promise.reject(`FilesystemModel :: moveInSetDir() :: unable to make the destination dir ${destPath}`);
                                     }
                                 }
 
                                 const fullDestPath = path.join(destPath, destInfo.filename);
                                 fs.renameSync(fullSourcePath, fullDestPath);
                                 if(!fs.existsSync(fullDestPath)){
-                                    return Promise.reject(`FilesystemModel :: move() :: unable to move file '${fullSourcePath}' to '${fullDestPath}'`)
+                                    return Promise.reject(`FilesystemModel :: moveInSetDir() :: unable to move file '${fullSourcePath}' to '${fullDestPath}'`)
                                 }
                                 return {
                                     original_path: fullSourcePath,
@@ -145,6 +145,54 @@ export default class FilesystemModel {
                                 };
                             });
                 });
+    }
+
+    /**
+     * Perform a direct move (ie between setting dirs)
+     * on multiple items (files or dirs);
+     * 
+     * @param string sourcePath 
+     * @param string destPath 
+     * @param object itemsToRename 
+     */
+    directMoveMultiple(sourcePath, destPath, itemsToRename){
+        let promisesToRun = [];
+
+        const originalNames = Object.keys(itemsToRename);
+
+        originalNames.forEach((sourceName)=>{
+            const cmd = this.directMoveSingle(sourcePath, destPath, sourceName, itemsToRename[sourceName]);
+            promisesToRun.push(cmd);
+        });
+
+        return Promise.all(promisesToRun);
+    }
+
+    /**
+     * Perform a "direct" move -- possibly between two
+     * setting directories.
+     * 
+     * To move within a setting directory, use moveInSetDir()
+     * 
+     * @param string sourcePath
+     * @param string destPath
+     * @param string sourceName
+     * @param string destName
+     */
+    directMoveSingle(sourcePath, destPath, sourceName, destName){
+        return new Promise((resolve, reject)=>{
+            const fullSource = path.join(sourcePath, sourceName);
+            if(!fs.existsSync(fullSource)){
+                reject(`FilesystemModel :: directMoveSingle() :: source does not exist '${fullSource}'`)
+            }
+
+            const fullDest = path.join(destPath, destName);
+            fs.renameSync(fullSource, fullDest);
+            if(!fs.existsSync(fullDest)){
+                reject(`FilesystemModel :: directMoveSingle() :: unable to rename '${fullSource}' to ${fullDest}`)
+            }
+            resolve(fullDest);
+        });
     }
 
     trash(sourcePath, filenames){

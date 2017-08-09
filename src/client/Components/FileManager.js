@@ -7,6 +7,7 @@ import { Icon, Button, Menu, Modal } from 'antd';
 import FilesystemBrowser from './Filesystem/FilesystemBrowser';
 import IDFileModal from './ID/IDFileModal';
 import IDMultipleEpisodesModal from './ID/IDMultipleEpisodesModal';
+import MoveRenameModal from './Filesystem/MoveRenameModal';
 import TrashModal from './Filesystem/TrashModal';
 import UntagModal from './ID/UntagModal';
 
@@ -26,6 +27,8 @@ class FileManager extends Component {
             idsingleFilename: "",
             idsingleIsModalVisible: false,
             isReloading: false,
+            moverenameIsModalVisible: false,
+            moverenameSelectedItems: [],
             trashIsModalVisible: false,
             trashSelectedItems: [],
             selectedRows: [],
@@ -140,6 +143,36 @@ class FileManager extends Component {
         this.setState({
             trashIsModalVisible: false,
             trashSelectedItems: []
+        });
+    }
+
+    _handleClickMoveRename(evt){
+        let moverenameSelectedItems = [];
+        if(evt.currentTarget.tagName === "BUTTON"){
+            moverenameSelectedItems = [...this.state.selectedRows];
+        } else {
+            const item = evt.currentTarget.getAttribute('data-item-name');
+            moverenameSelectedItems = [item];
+        }
+
+        this.setState({
+            moverenameIsModalVisible: true,
+            moverenameSelectedItems
+        })
+    }
+
+    _handleMoveRenameCancel(){
+        this.setState({
+            moverenameIsModalVisible: false,
+            moverenameSelectedItems: []
+        });
+    }
+
+    _handleMoveRenameComplete(){
+        this.setState({
+            isReloading: true,
+            moverenameIsModalVisible: false,
+            moverenameSelectedItems: []
         });
     }
 
@@ -270,23 +303,30 @@ class FileManager extends Component {
                 render: (text,record)=>{
                     const { assocData } = record;
                     
-                    let tag = "";
+                    let tagAction = "";
                     if(Regex.isVideoFile(record.name)){
                         if(!('type' in assocData)){
-                            tag =   <a  href="javascript:void(0);"
-                                        onClick={this._handleClickIDFile.bind(this, record.name)}>
-                                        <Icon type="tag"/>
-                                    </a>;
+                            tagAction =   <a  href="javascript:void(0);"
+                                                onClick={this._handleClickIDFile.bind(this, record.name)}>
+                                                <Icon type="tag"/>
+                                            </a>;
                         }
                     }
                     
-                    let untag = "";
+                    let untagAction = "";
                     if('type' in assocData){
-                        untag = <a  href="javascript:void(0);"
-                                    onClick={this._handleClickUntag.bind(this)}
-                                    data-item-name={record.name}>
-                                    <Icon type="disconnect" className="ib-filebrowser-media-play"/>
-                                </a>;
+                        untagAction = <a  href="javascript:void(0);"
+                                            onClick={this._handleClickUntag.bind(this)}
+                                            data-item-name={record.name}>
+                                            <Icon type="disconnect" className="ib-filebrowser-media-play"/>
+                                        </a>;
+                    }
+
+                    let moveAction = "";
+                    if(record.name !== '..'){
+                        moveAction = <a  href="javascript:void(0);"
+                                        onClick={this._handleClickMoveRename.bind(this)}
+                                        data-item-name={record.name}>Move</a>;
                     }
                     return (
                         <span>
@@ -294,7 +334,7 @@ class FileManager extends Component {
                                 onClick={this._handleClickTrash.bind(this)}
                                 data-item-name={record.name}>
                                 <Icon type="delete"/>
-                            </a>&nbsp;{tag}{untag}
+                            </a>&nbsp;{moveAction}&nbsp;{tagAction}{untagAction}
                         </span>
                     );
                 }
@@ -312,6 +352,8 @@ class FileManager extends Component {
             idsingleFilename,
             idsingleIsModalVisible,
             isReloading,
+            moverenameIsModalVisible,
+            moverenameSelectedItems,
             trashIsModalVisible,
             trashSelectedItems,
             selectedRows,
@@ -335,6 +377,10 @@ class FileManager extends Component {
                             icon="tag"
                             disabled={buttonDisabled}
                             onClick={this._handleClickIDMultipleEpisodes.bind(this)}>ID Multiple</Button>
+                        <Button 
+                            icon="move"
+                            disabled={buttonDisabled}
+                            onClick={this._handleClickMoveRename.bind(this)}>Move / Rename</Button>
                         <Button 
                             type="danger"
                             icon="delete"
@@ -367,6 +413,13 @@ class FileManager extends Component {
                     itemsToTrash={trashSelectedItems}
                     onTrashComplete={this._handleTrashComplete.bind(this)}
                     onCancel={this._handleCancelTrash.bind(this)}
+                />
+                <MoveRenameModal
+                    initialPath={currentPath}
+                    isVisible={moverenameIsModalVisible}
+                    itemsToRename={moverenameSelectedItems}
+                    onRenameComplete={this._handleMoveRenameComplete.bind(this)}
+                    onCancel={this._handleMoveRenameCancel.bind(this)}
                 />
                 <IDFileModal
                     key={idsingleFilename}
