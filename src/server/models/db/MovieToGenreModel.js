@@ -69,6 +69,13 @@ export default class MovieToGenreModel {
         return this._ibdb.getRow(where, this._tableName);
     }
 
+    deleteForMovie(movieID){
+        const where = {
+            movie_id: movieID
+        };
+        return this._ibdb.delete(where, this._tableName);
+    }
+
     // Sort the array of genres by the 'name' property
     _sortGenresByName(a, b){
         if(a.slug < b.slug){

@@ -84,6 +84,14 @@ var MovieToGenreModel = function () {
 
             return this._ibdb.getRow(where, this._tableName);
         }
+    }, {
+        key: "deleteForMovie",
+        value: function deleteForMovie(movieID) {
+            var where = {
+                movie_id: movieID
+            };
+            return this._ibdb.delete(where, this._tableName);
+        }
 
         // Sort the array of genres by the 'name' property
 
