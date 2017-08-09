@@ -64,7 +64,7 @@ export default class MediaScraperModel {
     downloadThumbnail(typeOfMedia, fileURL, destFilenameMinusExt){
         const origFilename = fileURL.split("/").pop();
         const origFileExt = origFilename.split(".").pop();
-        const destFilename = destFilenameMinusExt + "." + origFileExt;
+        const destFilename = this._sanitizeThumbFilename(destFilenameMinusExt) + "." + origFileExt;
 
         const camelCaseType = typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
         
@@ -75,5 +75,16 @@ export default class MediaScraperModel {
                     res.body.pipe(dest);
                     return destFilename;
                 });
+    }
+
+    _sanitizeThumbFilename(originalFilename){
+        // Replace current periods
+        let newThumbFilename = originalFilename.replace(/\./g, "");
+
+        // Replace spaces and dashes with periods
+        newThumbFilename = newThumbFilename.replace(/(\s|\-)/g, ".");
+
+        // Replace everything else with blank
+        return newThumbFilename.replace(/[^\.a-zA-Z0-9]/g, "");
     }
 }

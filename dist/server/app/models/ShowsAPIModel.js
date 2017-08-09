@@ -25,26 +25,31 @@ var ShowsAPIModel = function () {
                 var showsToReturn = [];
                 var promisesToRun = [];
                 shows.forEach(function (show) {
-                    var cmd = _this._showSeasonsModel.getSeasonsForShow(show.id).then(function (seasons) {
-                        var newShow = Object.assign({}, show);
-
-                        var countLocked = 0;
-                        var countUnLocked = 0;
-                        seasons.forEach(function (season) {
-                            if (season.locked === 1) {
-                                countLocked++;
-                            } else {
-                                countUnLocked++;
-                            }
-                        });
-
-                        newShow['num_seasons_locked'] = countLocked;
-                        newShow['num_seasons_unlocked'] = countUnLocked;
-                        return Promise.resolve(newShow);
-                    });
+                    var cmd = _this._getSeasonLockedInfo(show);
                     promisesToRun.push(cmd);
                 });
                 return Promise.all(promisesToRun);
+            });
+        }
+    }, {
+        key: '_getSeasonLockedInfo',
+        value: function _getSeasonLockedInfo(show) {
+            return this._showSeasonsModel.getSeasonsForShow(show.id).then(function (seasons) {
+                var newShow = Object.assign({}, show);
+
+                var countLocked = 0;
+                var countUnLocked = 0;
+                seasons.forEach(function (season) {
+                    if (season.locked === 1) {
+                        countLocked++;
+                    } else {
+                        countUnLocked++;
+                    }
+                });
+
+                newShow['num_seasons_locked'] = countLocked;
+                newShow['num_seasons_unlocked'] = countUnLocked;
+                return Promise.resolve(newShow);
             });
         }
     }]);

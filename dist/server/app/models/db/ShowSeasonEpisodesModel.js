@@ -142,12 +142,28 @@ var ShowSeasonEpisodesModel = function () {
             return this._ibdb.getAll(where, this._tableName, "episode_number ASC");
         }
     }, {
+        key: 'getEpisodesForShow',
+        value: function getEpisodesForShow(showID) {
+            var where = {
+                show_id: showID
+            };
+            return this._ibdb.getAll(where, this._tableName, "episode_number ASC");
+        }
+    }, {
         key: 'deleteSingle',
         value: function deleteSingle(episodeID) {
             var where = {
                 id: episodeID
             };
 
+            return this._ibdb.delete(where, this._tableName);
+        }
+    }, {
+        key: 'deleteAllForShow',
+        value: function deleteAllForShow(showID) {
+            var where = {
+                show_id: showID
+            };
             return this._ibdb.delete(where, this._tableName);
         }
     }, {

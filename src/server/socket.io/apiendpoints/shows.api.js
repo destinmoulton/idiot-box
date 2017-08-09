@@ -4,7 +4,7 @@ import logger from '../../logger';
 import EpisodeAPIModel from '../../models/EpisodeAPIModel';
 import FilesModel from '../../models/db/FilesModel';
 import FileToEpisodeModel from '../../models/db/FileToEpisodeModel';
-import ShowsAPIModel from '../../models/ShowsAPIModel';
+import ShowsAPI from '../../models/ShowsAPI';
 import ShowsModel from '../../models/db/ShowsModel';
 import ShowSeasonsModel from '../../models/db/ShowSeasonsModel';
 import ShowSeasonEpisodesModel from '../../models/db/ShowSeasonEpisodesModel';
@@ -24,17 +24,24 @@ const episodeAPIConfig = {
 const episodeAPIModel = new EpisodeAPIModel(episodeAPIConfig);
 
 const showsAPIConfig = {
+    filesModel,
+    fileToEpisodeModel,
     showsModel,
+    showSeasonEpisodesModel,
     showSeasonsModel
 };
 
-const showsAPIModel = new ShowsAPIModel(showsAPIConfig);
+const showsAPI = new ShowsAPI(showsAPIConfig);
 
 const shows = {
     show: {
         get_for_slug: {
             params: ['slug'],
             func: (slug)=> showsModel.getSingleBySlug(slug)
+        },
+        delete: {
+            params: ['show_id'],
+            func: (showID)=> showsAPI.deleteSingleShow(showID)
         }
     },
     shows: {
@@ -44,7 +51,7 @@ const shows = {
         },
         get_all_with_locked_info: {
             params: [],
-            func: ()=> showsAPIModel.getAllShowsWithSeasonLockedInfo()
+            func: ()=> showsAPI.getAllShowsWithSeasonLockedInfo()
         }
     },
     season: {

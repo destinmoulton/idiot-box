@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Col, Icon, Row, Spin } from 'antd';
+import { Button, Col, Icon, Row, Spin } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 
@@ -62,6 +62,33 @@ class ShowInfo extends Component {
         });
     }
 
+    _deleteShow(){
+        const { emitAPIRequest } = this.props;
+        const { show } = this.state;
+
+        const params = {
+            show_id: show.id
+        };
+
+        emitAPIRequest("shows.show.delete", params, this._showDeleted.bind(this), false);
+    }
+
+    _showDeleted(){
+        // The subpath has changed so go there
+        const location = {
+            pathname: "/shows"
+        };
+        this.props.history.push(location);
+    }
+
+    _handlePressDelete(){
+        const { show } = this.state;
+
+        if(confirm(`Really delete ${show.title}`)){
+            this._deleteShow();
+        }
+    }
+
     _buildShowInfo(){
         const { show } = this.state;
 
@@ -79,6 +106,8 @@ class ShowInfo extends Component {
                     <h3>{show.title}</h3>
                     <h4>{show.year}</h4>
                     <a href={"http://imdb.com/title/" + show.imdb_id} target="_blank">IMDB</a>
+                    <br/>
+                    <Button onClick={this._handlePressDelete.bind(this)}>Delete</Button>
                     <br/><br/>
                     <p>{show.overview}</p>
                 </Col>

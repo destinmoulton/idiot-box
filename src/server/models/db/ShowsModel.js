@@ -70,4 +70,11 @@ export default class ShowsModel {
     getAll(){
         return this._ibdb.getAll({}, this._tableName, "title ASC");
     }
+
+    deleteSingle(showID){
+        const where = {
+            id: showID
+        };
+        return this._ibdb.delete(where, this._tableName);
+    }
 }

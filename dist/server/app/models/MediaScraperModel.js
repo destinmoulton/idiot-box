@@ -97,7 +97,7 @@ var MediaScraperModel = function () {
         value: function downloadThumbnail(typeOfMedia, fileURL, destFilenameMinusExt) {
             var origFilename = fileURL.split("/").pop();
             var origFileExt = origFilename.split(".").pop();
-            var destFilename = destFilenameMinusExt + "." + origFileExt;
+            var destFilename = this._sanitizeThumbFilename(destFilenameMinusExt) + "." + origFileExt;
 
             var camelCaseType = typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
 
@@ -107,6 +107,18 @@ var MediaScraperModel = function () {
                 res.body.pipe(dest);
                 return destFilename;
             });
+        }
+    }, {
+        key: '_sanitizeThumbFilename',
+        value: function _sanitizeThumbFilename(originalFilename) {
+            // Replace current periods
+            var newThumbFilename = originalFilename.replace(/\./g, "");
+
+            // Replace spaces and dashes with periods
+            newThumbFilename = newThumbFilename.replace(/(\s|\-)/g, ".");
+
+            // Replace everything else with blank
+            return newThumbFilename.replace(/[^\.a-zA-Z0-9]/g, "");
         }
     }]);
 

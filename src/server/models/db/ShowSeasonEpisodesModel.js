@@ -110,11 +110,25 @@ export default class ShowSeasonEpisodesModel {
         return this._ibdb.getAll(where, this._tableName, "episode_number ASC");
     }
 
+    getEpisodesForShow(showID){
+        const where = {
+            show_id: showID
+        };
+        return this._ibdb.getAll(where, this._tableName, "episode_number ASC");
+    }
+
     deleteSingle(episodeID){
         const where = {
             id: episodeID
         };
 
+        return this._ibdb.delete(where, this._tableName);
+    }
+
+    deleteAllForShow(showID){
+        const where = {
+            show_id: showID
+        };
         return this._ibdb.delete(where, this._tableName);
     }
 

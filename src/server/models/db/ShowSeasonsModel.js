@@ -73,6 +73,13 @@ export default class ShowSeasonsModel {
         return this._ibdb.getAll(where, this._tableName, "season_number ASC");
     }
 
+    deleteAllForShow(showID){
+        const where = {
+            show_id: showID
+        };
+        return this._ibdb.delete(where, this._tableName);
+    }
+
     updateLock(seasonID, lockStatus){
         const data = {
             locked: lockStatus

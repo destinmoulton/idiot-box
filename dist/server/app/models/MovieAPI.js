@@ -6,6 +6,20 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _fs = require('fs');
+
+var _fs2 = _interopRequireDefault(_fs);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _thumbnails = require('../config/thumbnails.config');
+
+var _thumbnails2 = _interopRequireDefault(_thumbnails);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var MovieAPI = function () {
@@ -27,12 +41,24 @@ var MovieAPI = function () {
                 if (!movie.hasOwnProperty('id')) {
                     return Promise.reject("MovieAPI :: deleteSingle() :: Unable to find movie ${movieID}");
                 }
-
-                return _this._removeGenresForMovie(movieID);
+                return _this._removeMovieThumbnail(movie);
+            }).then(function () {
+                return _this._movieToGenreModel.deleteForMovie(movieID);
             }).then(function () {
                 return _this._removeFileAssociationForMovie(movieID);
             }).then(function () {
                 return _this._moviesModel.deleteSingle(movieID);
+            });
+        }
+    }, {
+        key: '_removeShowThumbnail',
+        value: function _removeShowThumbnail(showID) {
+            return this._showsModel.getSingle(showID).then(function (show) {
+                var fullPath = _path2.default.join(_thumbnails2.default.shows, show.image_filename);
+                if (!_fs2.default.existsSync(fullPath)) {
+                    return Promise.resolve(true);
+                }
+                return Promise.resolve(_fs2.default.unlinkSync(fullPath));
             });
         }
     }, {
@@ -51,9 +77,13 @@ var MovieAPI = function () {
             });
         }
     }, {
-        key: '_removeGenresForMovie',
-        value: function _removeGenresForMovie(movieID) {
-            return this._movieToGenreModel.deleteForMovie(movieID);
+        key: '_removeMovieThumbnail',
+        value: function _removeMovieThumbnail(movie) {
+            var fullPath = _path2.default.join(_thumbnails2.default.movies, movie.image_filename);
+            if (!_fs2.default.existsSync(fullPath)) {
+                return Promise.resolve(true);
+            }
+            return Promise.resolve(_fs2.default.unlinkSync(fullPath));
         }
     }]);
 

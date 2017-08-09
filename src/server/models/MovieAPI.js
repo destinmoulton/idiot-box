@@ -1,3 +1,8 @@
+import fs from 'fs';
+import path from 'path';
+
+import thumbConfig from '../config/thumbnails.config';
+
 class MovieAPI {
     constructor(models){
         this._filesModel = models.filesModel;
@@ -12,8 +17,10 @@ class MovieAPI {
                     if(!movie.hasOwnProperty('id')){
                         return Promise.reject("MovieAPI :: deleteSingle() :: Unable to find movie ${movieID}");
                     }
-
-                    return this._removeGenresForMovie(movieID);
+                    return this._removeMovieThumbnail(movie);
+                })
+                .then(()=>{
+                    return this._movieToGenreModel.deleteForMovie(movieID);
                 })
                 .then(()=>{
                     return this._removeFileAssociationForMovie(movieID);
@@ -22,6 +29,18 @@ class MovieAPI {
                     return this._moviesModel.deleteSingle(movieID);
                 })
                 
+    }
+
+    _removeShowThumbnail(showID){
+        return this._showsModel.getSingle(showID)
+                .then((show)=>{
+                    const fullPath = path.join(thumbConfig.shows, show.image_filename);
+                    if(!fs.existsSync(fullPath)){
+                        return Promise.resolve(true);
+                    }
+                    return Promise.resolve(fs.unlinkSync(fullPath));
+                })
+
     }
 
     _removeFileAssociationForMovie(movieID){
@@ -39,8 +58,12 @@ class MovieAPI {
                 
     }
 
-    _removeGenresForMovie(movieID){
-        return this._movieToGenreModel.deleteForMovie(movieID);
+    _removeMovieThumbnail(movie){
+        const fullPath = path.join(thumbConfig.movies, movie.image_filename);
+        if(!fs.existsSync(fullPath)){
+            return Promise.resolve(true);
+        }
+        return Promise.resolve(fs.unlinkSync(fullPath));
     }
 }
 

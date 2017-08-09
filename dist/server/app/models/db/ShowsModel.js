@@ -93,6 +93,14 @@ var ShowsModel = function () {
         value: function getAll() {
             return this._ibdb.getAll({}, this._tableName, "title ASC");
         }
+    }, {
+        key: 'deleteSingle',
+        value: function deleteSingle(showID) {
+            var where = {
+                id: showID
+            };
+            return this._ibdb.delete(where, this._tableName);
+        }
     }]);
 
     return ShowsModel;
