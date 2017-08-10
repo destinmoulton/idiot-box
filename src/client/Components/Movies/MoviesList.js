@@ -105,8 +105,9 @@ class MoviesList extends Component {
             if(movie.is_visible){
                 const details = <Col 
                                     key={movie.id}
+                                    className="ib-movies-thumbnail-box"
                                     span={4}>
-                                    <div className="ib-movies-thumbnail-box">
+                                    <div >
                                         <a  href="javascript:void(0)"
                                             onClick={this._handleClickMovie.bind(this, movie)}>
                                             <img

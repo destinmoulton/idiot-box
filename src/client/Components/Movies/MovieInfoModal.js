@@ -50,6 +50,7 @@ class MovieInfoModal extends Component {
                     footer={[
                         <Button key="close" size="large" onClick={onClose}>Close</Button>
                     ]}
+                    width={700}
                 >
                 <Row>
                     <Col span={5}>

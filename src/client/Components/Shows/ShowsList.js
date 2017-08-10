@@ -58,13 +58,14 @@ class ShowsList extends Component {
             if(show.is_visible){
                 const details = <Col 
                                     key={show.id}
+                                    className="ib-shows-thumbnail-box"
                                     span={4}>
-                                    <div className="ib-shows-thumbnail-box">
+                                    <div >
                                         <Link to={"/show/" + show.slug}>
                                             <img
                                                 className="ib-shows-thumbnail" 
                                                 src={"/images/shows/" + show.image_filename}/>
-                                            {show.title.substring(0, 17)}
+                                            {show.title.substring(0, 21)}
                                             <br/>[ {show.num_seasons_locked} <Icon type="lock" /> ][ {show.num_seasons_unlocked} <Icon type="unlock" /> ]
                                         </Link>
                                     </div>
