@@ -65,9 +65,9 @@ function processShows(){
                 let promisesToRun = [];
                 let count = 0;
                 shows.forEach((show)=>{
-                    if(count < 2){
+                    //if(count < 2){
                         promisesToRun.push(addShowAndSeasonsAndEpisodes(show.trakt_id, show.poster_filename));
-                    }
+                    //}
                     count++;
                 });
                 return Promise.all(promisesToRun);

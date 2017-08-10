@@ -103,9 +103,9 @@ function processShows() {
         var promisesToRun = [];
         var count = 0;
         shows.forEach(function (show) {
-            if (count < 2) {
-                promisesToRun.push(addShowAndSeasonsAndEpisodes(show.trakt_id, show.poster_filename));
-            }
+            //if(count < 2){
+            promisesToRun.push(addShowAndSeasonsAndEpisodes(show.trakt_id, show.poster_filename));
+            //}
             count++;
         });
         return Promise.all(promisesToRun);
