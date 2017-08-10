@@ -171,6 +171,14 @@ var ShowSeasonEpisodesModel = function () {
             return this._ibdb.getAll(where, this._tableName, "episode_number ASC");
         }
     }, {
+        key: 'getBetweenUnixTimestamps',
+        value: function getBetweenUnixTimestamps(startUnixTimestamp, endUnixTimestamp) {
+            var query = "SELECT * FROM " + this._tableName + " WHERE first_aired > ? AND first_aired < ? ORDER BY first_aired";
+
+            var params = [startUnixTimestamp, endUnixTimestamp];
+            return this._ibdb.queryAll(query, params);
+        }
+    }, {
         key: 'deleteSingle',
         value: function deleteSingle(episodeID) {
             var where = {

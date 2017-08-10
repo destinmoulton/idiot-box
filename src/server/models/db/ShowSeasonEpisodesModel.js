@@ -136,6 +136,16 @@ export default class ShowSeasonEpisodesModel {
         return this._ibdb.getAll(where, this._tableName, "episode_number ASC");
     }
 
+    getBetweenUnixTimestamps(startUnixTimestamp, endUnixTimestamp){
+        const query = "SELECT * FROM " + this._tableName + " WHERE first_aired > ? AND first_aired < ? ORDER BY first_aired";
+
+        const params = [
+            startUnixTimestamp,
+            endUnixTimestamp
+        ];
+        return this._ibdb.queryAll(query, params);
+    }
+
     deleteSingle(episodeID){
         const where = {
             id: episodeID
