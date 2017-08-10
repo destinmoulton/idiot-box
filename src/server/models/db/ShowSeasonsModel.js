@@ -73,6 +73,13 @@ export default class ShowSeasonsModel {
         return this._ibdb.getAll(where, this._tableName, "season_number ASC");
     }
 
+    getSeasonsByTraktID(traktID){
+        const where = {
+            trakt_id: traktID
+        };
+        return this._ibdb.getAll(where, this._tableName, "season_number ASC");
+    }
+
     deleteAllForShow(showID){
         const where = {
             show_id: showID

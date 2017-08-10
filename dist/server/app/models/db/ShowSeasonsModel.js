@@ -98,6 +98,14 @@ var ShowSeasonsModel = function () {
             return this._ibdb.getAll(where, this._tableName, "season_number ASC");
         }
     }, {
+        key: 'getSeasonsByTraktID',
+        value: function getSeasonsByTraktID(traktID) {
+            var where = {
+                trakt_id: traktID
+            };
+            return this._ibdb.getAll(where, this._tableName, "season_number ASC");
+        }
+    }, {
         key: 'deleteAllForShow',
         value: function deleteAllForShow(showID) {
             var where = {
