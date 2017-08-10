@@ -148,6 +148,36 @@ img.ib-movies-thumbnail {
     width: 100%;
 }
 
+div.ib-newepisode-section {
+    margin-bottom: 10px;
+}
+div.ib-newepisode-container {
+    float: left;
+    width: 300px;
+    border: 1px solid gray;
+    margin: 4px;
+}
+
+div.ib-newepisode-img-box {
+    float:left;
+    width:50px;
+    margin: 4px;
+}
+
+img.ib-newepisode-img {
+    width:50px;
+}
+
+div.ib-newepisode-details-box {
+    float: left;
+    width: 240px;
+}
+
+div.ib-newepisode-title {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
 i.ib-playbutton-icon {
     font-size: 1.2em;
     padding-right: 5px;
