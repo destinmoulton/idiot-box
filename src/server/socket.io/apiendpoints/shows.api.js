@@ -78,6 +78,10 @@ const shows = {
         toggle_watched:{
             params: ['episode_ids', 'watched_status'],
             func: (episodeIDs, watchedStatus)=> showSeasonEpisodesModel.updateMultipleEpisodesWatchedStatus(episodeIDs, watchedStatus)
+        },
+        get_between_unix_timestamps:{
+            params: ['start_unix_timestamp', 'end_unix_timestamp'],
+            func: (startUnixTimestamp, endUnixTimestamp)=> showsAPI.getEpisodesBetweenTimestamps(startUnixTimestamp, endUnixTimestamp)
         }
     },
     episode: {

@@ -129,6 +129,12 @@ var shows = {
             func: function func(episodeIDs, watchedStatus) {
                 return showSeasonEpisodesModel.updateMultipleEpisodesWatchedStatus(episodeIDs, watchedStatus);
             }
+        },
+        get_between_unix_timestamps: {
+            params: ['start_unix_timestamp', 'end_unix_timestamp'],
+            func: function func(startUnixTimestamp, endUnixTimestamp) {
+                return showsAPI.getEpisodesBetweenTimestamps(startUnixTimestamp, endUnixTimestamp);
+            }
         }
     },
     episode: {
