@@ -55,6 +55,17 @@ export default class ShowSeasonEpisodesModel {
         return Promise.all(promisesToRun);
     }
 
+    updateEpisode(showID, seasonID, episodeID, apiData){
+        const data = this._prepareData(showID, seasonID, apiData);
+
+        const where = {
+            id: episodeID,
+            show_id: showID,
+            season_id: seasonID
+        };
+        return this._ibdb.update(data, where, this._tableName)
+    }
+
     updateMultipleEpisodesWatchedStatus(episodeIDs, watchedStatus){
         let promisesToRun = [];
         episodeIDs.forEach((episodeID)=>{
@@ -88,6 +99,14 @@ export default class ShowSeasonEpisodesModel {
             show_id: showID,
             season_id: seasonID,
             episode_number: episodeNumber,
+            trakt_id: traktID
+        };
+
+        return this._ibdb.getRow(where, this._tableName);
+    }
+
+    getSingleByTraktID(traktID){
+        const where = {
             trakt_id: traktID
         };
 

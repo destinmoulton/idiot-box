@@ -79,6 +79,18 @@ var ShowSeasonEpisodesModel = function () {
             return Promise.all(promisesToRun);
         }
     }, {
+        key: 'updateEpisode',
+        value: function updateEpisode(showID, seasonID, episodeID, apiData) {
+            var data = this._prepareData(showID, seasonID, apiData);
+
+            var where = {
+                id: episodeID,
+                show_id: showID,
+                season_id: seasonID
+            };
+            return this._ibdb.update(data, where, this._tableName);
+        }
+    }, {
         key: 'updateMultipleEpisodesWatchedStatus',
         value: function updateMultipleEpisodesWatchedStatus(episodeIDs, watchedStatus) {
             var _this3 = this;
@@ -118,6 +130,15 @@ var ShowSeasonEpisodesModel = function () {
                 show_id: showID,
                 season_id: seasonID,
                 episode_number: episodeNumber,
+                trakt_id: traktID
+            };
+
+            return this._ibdb.getRow(where, this._tableName);
+        }
+    }, {
+        key: 'getSingleByTraktID',
+        value: function getSingleByTraktID(traktID) {
+            var where = {
                 trakt_id: traktID
             };
 
