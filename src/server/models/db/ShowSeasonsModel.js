@@ -66,6 +66,14 @@ export default class ShowSeasonsModel {
         return this._ibdb.getRow(where, this._tableName);
     }
 
+    getSingleByTraktID(traktID){
+        const where = {
+            trakt_id: traktID
+        };
+
+        return this._ibdb.getRow(where, this._tableName);
+    }
+
     getSeasonsForShow(showID){
         const where = {
             show_id: showID

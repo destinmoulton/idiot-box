@@ -90,6 +90,15 @@ var ShowSeasonsModel = function () {
             return this._ibdb.getRow(where, this._tableName);
         }
     }, {
+        key: 'getSingleByTraktID',
+        value: function getSingleByTraktID(traktID) {
+            var where = {
+                trakt_id: traktID
+            };
+
+            return this._ibdb.getRow(where, this._tableName);
+        }
+    }, {
         key: 'getSeasonsForShow',
         value: function getSeasonsForShow(showID) {
             var where = {
