@@ -64,7 +64,7 @@ class ShowsList extends Component {
                                             <img
                                                 className="ib-shows-thumbnail" 
                                                 src={"/images/shows/" + show.image_filename}/>
-                                            {show.title}
+                                            {show.title.substring(0, 17)}
                                             <br/>[ {show.num_seasons_locked} <Icon type="lock" /> ][ {show.num_seasons_unlocked} <Icon type="unlock" /> ]
                                         </Link>
                                     </div>
