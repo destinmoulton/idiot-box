@@ -165,6 +165,13 @@ var IBDB = function () {
             });
         }
     }, {
+        key: 'queryAll',
+        value: function queryAll(sql, params) {
+            return this._db.all(sql, params).then(function (rows) {
+                return rows === undefined ? [] : rows;
+            });
+        }
+    }, {
         key: '_buildSelectQuery',
         value: function _buildSelectQuery(whereColumnsAndValues, tablename) {
             var _buildCommaDelimetedS7 = this._buildCommaDelimetedStatement(whereColumnsAndValues, " AND "),

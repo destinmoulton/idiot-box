@@ -106,6 +106,13 @@ class IBDB {
                         });
     }
 
+    queryAll(sql, params){
+        return this._db.all(sql, params)
+                    .then((rows)=>{
+                        return (rows===undefined) ? [] : rows;
+                    });
+    }
+
     _buildSelectQuery(whereColumnsAndValues, tablename){
         const [where, params] = this._buildCommaDelimetedStatement(whereColumnsAndValues, " AND ");
         let query = "SELECT * FROM " + tablename;
