@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button, Icon, Row, Spin, Table } from 'antd';
 
+import moment from 'moment';
 import { emitAPIRequest } from '../../actions/api.actions';
 
 import PlayButton from '../PlayButton';
@@ -138,6 +139,14 @@ class EpisodesTable extends Component {
             {
                 title: "Name",
                 dataIndex: "title"
+            },
+            {
+                title: "First Aired",
+                render: (text, record) =>{
+                    console.log(record);
+                    return moment.unix(record.first_aired).format("MMM. D, YYYY, h:mm:ss a");
+                }
+
             },
             {
                 title: <Icon type="play-circle" className="ib-playbutton-icon"/>,
