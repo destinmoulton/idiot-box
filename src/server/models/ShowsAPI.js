@@ -46,6 +46,30 @@ class ShowsAPI {
                     });
     }
 
+    getEpisodesBetweenTimestamps(startUnixTimestamp, endUnixTimestamp){
+        return this._showSeasonEpisodesModel.getBetweenUnixTimestamps(startUnixTimestamp, endUnixTimestamp)
+                    .then((episodes)=>{
+                        if(episodes.length===0){
+                            return Promise.resolve([]);
+                        }
+
+                        let promisesToRun = [];
+                        episodes.forEach((episode)=>{
+                            const cmd = this._collateShowIntoEpisode(episode);
+                            promisesToRun.push(cmd);
+                        });
+                        return Promise.all(promisesToRun);
+                    })
+    }
+
+    _collateShowIntoEpisode(originalEpisode){
+        return this._showsModel.getSingle(originalEpisode.show_id)
+                .then((show)=>{
+                    originalEpisode['show_info'] = show;
+                    return Promise.resolve(originalEpisode);
+                })
+    }
+    
     deleteSingleShow(showID){
         return this._removeEpisodes(showID)
                 .then(()=>{

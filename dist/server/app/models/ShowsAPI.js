@@ -70,16 +70,42 @@ var ShowsAPI = function () {
             });
         }
     }, {
-        key: 'deleteSingleShow',
-        value: function deleteSingleShow(showID) {
+        key: 'getEpisodesBetweenTimestamps',
+        value: function getEpisodesBetweenTimestamps(startUnixTimestamp, endUnixTimestamp) {
             var _this2 = this;
 
+            return this._showSeasonEpisodesModel.getBetweenUnixTimestamps(startUnixTimestamp, endUnixTimestamp).then(function (episodes) {
+                if (episodes.length === 0) {
+                    return Promise.resolve([]);
+                }
+
+                var promisesToRun = [];
+                episodes.forEach(function (episode) {
+                    var cmd = _this2._collateShowIntoEpisode(episode);
+                    promisesToRun.push(cmd);
+                });
+                return Promise.all(promisesToRun);
+            });
+        }
+    }, {
+        key: '_collateShowIntoEpisode',
+        value: function _collateShowIntoEpisode(originalEpisode) {
+            return this._showsModel.getSingle(originalEpisode.show_id).then(function (show) {
+                originalEpisode['show_info'] = show;
+                return Promise.resolve(originalEpisode);
+            });
+        }
+    }, {
+        key: 'deleteSingleShow',
+        value: function deleteSingleShow(showID) {
+            var _this3 = this;
+
             return this._removeEpisodes(showID).then(function () {
-                return _this2._showSeasonsModel.deleteAllForShow(showID);
+                return _this3._showSeasonsModel.deleteAllForShow(showID);
             }).then(function () {
-                return _this2._removeShowThumbnail(showID);
+                return _this3._removeShowThumbnail(showID);
             }).then(function () {
-                return _this2._showsModel.deleteSingle(showID);
+                return _this3._showsModel.deleteSingle(showID);
             });
         }
     }, {
@@ -96,28 +122,28 @@ var ShowsAPI = function () {
     }, {
         key: '_removeEpisodes',
         value: function _removeEpisodes(showID) {
-            var _this3 = this;
+            var _this4 = this;
 
             return this._showSeasonEpisodesModel.getEpisodesForShow(showID).then(function (episodes) {
                 var promisesToRun = [];
 
                 episodes.forEach(function (episode) {
-                    var cmd = _this3._removeFileAssociations(episode.id);
+                    var cmd = _this4._removeFileAssociations(episode.id);
                     promisesToRun.push(cmd);
                 });
                 Promise.all(promisesToRun);
             }).then(function () {
-                return _this3._showSeasonEpisodesModel.deleteAllForShow(showID);
+                return _this4._showSeasonEpisodesModel.deleteAllForShow(showID);
             });
         }
     }, {
         key: '_removeFileAssociations',
         value: function _removeFileAssociations(episodeID) {
-            var _this4 = this;
+            var _this5 = this;
 
             return this._fileToEpisodeModel.getSingleForEpisode(episodeID).then(function (fileToEpisode) {
-                return _this4._filesModel.deleteSingle(fileToEpisode.file_id).then(function () {
-                    return _this4._fileToEpisodeModel.deleteSingle(fileToEpisode.file_id, episodeID);
+                return _this5._filesModel.deleteSingle(fileToEpisode.file_id).then(function () {
+                    return _this5._fileToEpisodeModel.deleteSingle(fileToEpisode.file_id, episodeID);
                 });
             });
         }
