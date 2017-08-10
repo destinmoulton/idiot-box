@@ -17,6 +17,9 @@ class IdiotBoxHeader extends Component {
                     defaultSelectedKeys={['2']}
                     style={{ lineHeight: '64px' }}
                 >
+                    <Menu.Item key="newepisodes">
+                        <Link to="/newepisodes">New</Link>
+                    </Menu.Item>
                     <Menu.Item key="filemanager">
                         <Link to="/filemanager/Downloads">File Manager</Link>
                     </Menu.Item>
