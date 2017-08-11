@@ -157,8 +157,9 @@ div.ib-newepisode-section {
 div.ib-newepisode-container {
     float: left;
     width: 300px;
-    border: 1px solid gray;
+    border: 2px solid gray;
     margin: 4px;
+    padding: 4px;
 }
 
 div.ib-newepisode-img-box {
@@ -173,12 +174,23 @@ img.ib-newepisode-img {
 
 div.ib-newepisode-details-box {
     float: left;
-    width: 240px;
+    width: 230px;
 }
 
-div.ib-newepisode-title {
+div.ib-newepisode-show-title {
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+div.ib-newepisode-ep-title {
     font-weight: bold;
     font-size: 1.1em;
+    color: #383F55;
+}
+
+div.ib-newepisode-links {
+    bottom: 0px;
+    right: 0px;
 }
 
 i.ib-playbutton-icon {

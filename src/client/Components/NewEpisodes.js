@@ -2,6 +2,7 @@ import moment from 'moment';
 
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 import { Col, Row, Spin } from 'antd';
 
@@ -52,6 +53,38 @@ class NewEpisodes extends Component {
         });
     }
 
+    _buildEpisodeDetails(episode){
+        return (
+            <div key={episode.id}
+                    className="ib-newepisode-container">
+                <div className="ib-newepisode-img-box">
+                    <img
+                        className="ib-newepisode-img"
+                        src={"/images/shows/" + episode.show_info.image_filename}
+                    />
+                </div>
+                <div className="ib-newepisode-details-box">
+                    <div className="ib-newepisode-show-title">
+                        <Link to={"/show/"+episode.show_info.slug}>
+                            {episode.show_info.title}
+                        </Link>
+                    </div>
+                    <div className="ib-newepisode-ep-title">
+                        {episode.title}
+                    </div>
+                    <div>
+                        Season {episode.season_number} - Episode {episode.episode_number}
+                    </div>
+                    <div className="ib-newepisode-links">
+                        <a target="_blank" href={"https://www.1337x.to/search/" + encodeURIComponent(episode.show_info.title)+"/1/"}>1337x</a>
+                        &nbsp;|&nbsp;
+                        <a target="_blank" href={"https://thepiratebay.org/search/" + encodeURIComponent(episode.show_info.title)+"/0/99/0/"}>thepiratebay</a>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     _buildEpisodesList(){
         const { days, episodes } = this.state;
 
@@ -62,26 +95,18 @@ class NewEpisodes extends Component {
 
             let epList = [];
             if(episodes.hasOwnProperty(unixDay)){
-                episodes[unixDay].forEach((episode)=>{
-                    const epEl = <div key={episode.id}
-                                      className="ib-newepisode-container">
-                                    <div className="ib-newepisode-img-box">
-                                        <img
-                                            className="ib-newepisode-img"
-                                            src={"/images/shows/" + episode.show_info.image_filename}
-                                        />
-                                    </div>
-                                    <div className="ib-newepisode-details-box">
-                                        <div className="ib-newepisode-title">
-                                            {episode.title}
-                                        </div>
-                                        Season {episode.season_number} - Episode {episode.episode_number}
-                                        <br/>
-                                        <a target="_blank" href={"https://www.1337x.to/search/" + encodeURIComponent(episode.show_info.title)+"/1/"}>1337x</a>
-                                    </div>
-                                </div>;
-                    epList.push(epEl);
-                });
+                if(episodes[unixDay].length === 0){
+                    // No episodes message
+                    epList = <div key={unixDay}
+                                    className="ib-newepisode-container">
+                                <h3>Nothing to see here...</h3>
+                            </div>;
+                } else {
+                    episodes[unixDay].forEach((episode)=>{
+                        const epEl = this._buildEpisodeDetails(episode);
+                        epList.push(epEl);
+                    });
+                }
             }
             const el = <Row key={unixDay}
                             className="ib-newepisode-section">
