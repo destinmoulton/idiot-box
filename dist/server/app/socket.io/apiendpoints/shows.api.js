@@ -12,9 +12,9 @@ var _logger = require('../../logger');
 
 var _logger2 = _interopRequireDefault(_logger);
 
-var _EpisodeAPIModel = require('../../models/EpisodeAPIModel');
+var _EpisodeAPI = require('../../models/EpisodeAPI');
 
-var _EpisodeAPIModel2 = _interopRequireDefault(_EpisodeAPIModel);
+var _EpisodeAPI2 = _interopRequireDefault(_EpisodeAPI);
 
 var _FilesModel = require('../../models/db/FilesModel');
 
@@ -54,7 +54,7 @@ var episodeAPIConfig = {
     showSeasonEpisodesModel: showSeasonEpisodesModel
 };
 
-var episodeAPIModel = new _EpisodeAPIModel2.default(episodeAPIConfig);
+var episodeAPI = new _EpisodeAPI2.default(episodeAPIConfig);
 
 var showsAPIConfig = {
     filesModel: filesModel,
@@ -121,7 +121,7 @@ var shows = {
         get_all_with_file_info: {
             params: ['show_id', 'season_number'],
             func: function func(showID, seasonNum) {
-                return episodeAPIModel.getAllEpisodesWithFileInfo(showID, seasonNum);
+                return episodeAPI.getAllEpisodesWithFileInfo(showID, seasonNum);
             }
         },
         toggle_watched: {

@@ -1,6 +1,6 @@
 import logger from '../logger';
 
-export default class EpisodeAPIModel {
+export default class EpisodeAPI {
 
     constructor(models){
         this._showSeasonEpisodesModel = models.showSeasonEpisodesModel;

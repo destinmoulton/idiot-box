@@ -1,7 +1,7 @@
 import ibdb from '../../db/IBDB';
 import logger from '../../logger';
 
-import EpisodeAPIModel from '../../models/EpisodeAPIModel';
+import EpisodeAPI from '../../models/EpisodeAPI';
 import FilesModel from '../../models/db/FilesModel';
 import FileToEpisodeModel from '../../models/db/FileToEpisodeModel';
 import ShowsAPI from '../../models/ShowsAPI';
@@ -21,7 +21,7 @@ const episodeAPIConfig = {
     showSeasonEpisodesModel
 };
 
-const episodeAPIModel = new EpisodeAPIModel(episodeAPIConfig);
+const episodeAPI = new EpisodeAPI(episodeAPIConfig);
 
 const showsAPIConfig = {
     filesModel,
@@ -73,7 +73,7 @@ const shows = {
         },
         get_all_with_file_info: {
             params: ['show_id', 'season_number'],
-            func: (showID, seasonNum)=> episodeAPIModel.getAllEpisodesWithFileInfo(showID, seasonNum)
+            func: (showID, seasonNum)=> episodeAPI.getAllEpisodesWithFileInfo(showID, seasonNum)
         },
         toggle_watched:{
             params: ['episode_ids', 'watched_status'],
