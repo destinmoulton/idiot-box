@@ -7,6 +7,7 @@ import MovieInfoModal from './MovieInfoModal';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 
+import PlayButton from '../PlayButton';
 class MoviesList extends Component {
 
     constructor(props){
@@ -32,7 +33,7 @@ class MoviesList extends Component {
             isLoadingMovies: true
         });
 
-        emitAPIRequest("movies.movies.get_all", {}, this._moviesReceived.bind(this), false);
+        emitAPIRequest("movies.movies.get_all_with_file_info", {}, this._moviesReceived.bind(this), false);
     }
 
     _moviesReceived(movies){
@@ -103,6 +104,8 @@ class MoviesList extends Component {
         let movieList = [];
         movies.forEach((movie)=>{
             if(movie.is_visible){
+                console.log(movie);
+                const playButton = this._buildPlayButton(movie);
                 const details = <Col 
                                     key={movie.id}
                                     className="ib-movies-thumbnail-box"
@@ -113,6 +116,10 @@ class MoviesList extends Component {
                                             <img
                                                 className="ib-movies-thumbnail" 
                                                 src={"/images/movies/" + movie.image_filename}/>
+                                        </a>
+                                        {playButton}
+                                        <a  href="javascript:void(0)"
+                                            onClick={this._handleClickMovie.bind(this, movie)}>
                                             <span dangerouslySetInnerHTML={{__html: movie.title}}></span>
                                         </a>
                                     </div>
@@ -122,6 +129,15 @@ class MoviesList extends Component {
         });
 
         return movieList;
+    }
+
+    _buildPlayButton(movie){
+        const { directories } = this.props;
+        if(movie.file_info.hasOwnProperty('id')){
+            const fullPath = directories.Movies + "/" + movie.file_info.subpath;
+            return <PlayButton filename={movie.file_info.filename} fullPath={fullPath} />;
+        }
+        return "";
     }
 
     render() {
@@ -165,7 +181,10 @@ class MoviesList extends Component {
 }
 
 const mapStateToProps = (state)=>{
-    return {};
+    const { settings } = state;
+    return {
+        directories: settings.settings.directories
+    }
 }
 
 const mapDispatchToProps = (dispatch) => {
