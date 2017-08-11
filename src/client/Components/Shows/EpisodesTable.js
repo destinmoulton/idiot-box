@@ -143,7 +143,6 @@ class EpisodesTable extends Component {
             {
                 title: "First Aired",
                 render: (text, record) =>{
-                    console.log(record);
                     return moment.unix(record.first_aired).format("MMM. D, YYYY, h:mm:ss a");
                 }
 
