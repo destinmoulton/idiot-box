@@ -1,3 +1,4 @@
+import isEqual from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -12,27 +13,29 @@ import Regex from '../../lib/Regex.lib';
 class IDMultipleEpisodesModal extends Component {
     static propTypes = {
         currentPathInfo: PropTypes.object.isRequired,
+        episodesToID: PropTypes.array.isRequired,
         isVisible: PropTypes.bool.isRequired,
         onCancel: PropTypes.func.isRequired,
-        onIDComplete: PropTypes.func.isRequired,
-        episodesToID: PropTypes.array.isRequired
+        onIDComplete: PropTypes.func.isRequired
     };
+
+    INITIAL_STATE = {
+        currentEpisodesInfo: {},
+        episodeDestPath: "",
+        currentShowID: 0,
+        currentShowInfo: {},
+        currentSeasonID: 0,
+        currentSeasonInfo: {},
+        isIDing: false,
+        episodes: [],
+        seasons: [],
+        shows: []
+    }
 
     constructor(props){
         super(props);
 
-        this.state = {
-            currentEpisodesInfo: {},
-            episodeDestPath: "",
-            currentShowID: 0,
-            currentShowInfo: {},
-            currentSeasonID: 0,
-            currentSeasonInfo: {},
-            isIDing: false,
-            episodes: [],
-            seasons: [],
-            shows: []
-        };
+        this.state = this.INITIAL_STATE;
     }
 
     componentWillMount(){
@@ -50,10 +53,13 @@ class IDMultipleEpisodesModal extends Component {
                 selectedEpisodeID: 0
             };
         });
-
+        
         this.setState({
+            ...this.INITIAL_STATE,
             currentEpisodesInfo
         });
+
+        this._getShows();
     }
 
     _getShows(){
@@ -372,6 +378,7 @@ class IDMultipleEpisodesModal extends Component {
                     footer={[
                         <Button key="cancel" size="large" onClick={onCancel}>Cancel</Button>
                     ]}
+                    width={700}
                 >
                 {showSeasonSelectors}
                 {pathInput}
