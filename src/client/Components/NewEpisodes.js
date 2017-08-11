@@ -58,10 +58,12 @@ class NewEpisodes extends Component {
             <div key={episode.id}
                     className="ib-newepisode-container">
                 <div className="ib-newepisode-img-box">
-                    <img
-                        className="ib-newepisode-img"
-                        src={"/images/shows/" + episode.show_info.image_filename}
-                    />
+                    <Link to={"/show/"+episode.show_info.slug}>
+                        <img
+                            className="ib-newepisode-img"
+                            src={"/images/shows/" + episode.show_info.image_filename}
+                        />
+                    </Link>
                 </div>
                 <div className="ib-newepisode-details-box">
                     <div className="ib-newepisode-show-title">
