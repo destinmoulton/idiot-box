@@ -33,21 +33,51 @@ var MovieAPI = function () {
     }
 
     _createClass(MovieAPI, [{
+        key: 'getAllMoviesWithFileInfo',
+        value: function getAllMoviesWithFileInfo() {
+            var _this = this;
+
+            return this._moviesModel.getAll().then(function (movies) {
+                var promisesToRun = [];
+
+                movies.forEach(function (movie) {
+                    var data = Object.assign({}, movie);
+                    data['file_info'] = {};
+
+                    var cmd = _this._fileToMovieModel.getSingleForMovie(movie.id).then(function (fileMovie) {
+                        if (!fileMovie.hasOwnProperty('file_id')) {
+                            return Promise.resolve(data);
+                        }
+                        return _this._filesModel.getSingle(fileMovie.file_id).then(function (file) {
+                            if (!file.hasOwnProperty('id')) {
+                                return Promise.resolve(data);
+                            }
+                            data.file_info = file;
+                            return Promise.resolve(data);
+                        });
+                    });
+                    promisesToRun.push(cmd);
+                });
+
+                return Promise.all(promisesToRun);
+            });
+        }
+    }, {
         key: 'deleteSingle',
         value: function deleteSingle(movieID) {
-            var _this = this;
+            var _this2 = this;
 
             return this._moviesModel.getSingle(movieID).then(function (movie) {
                 if (!movie.hasOwnProperty('id')) {
                     return Promise.reject("MovieAPI :: deleteSingle() :: Unable to find movie ${movieID}");
                 }
-                return _this._removeMovieThumbnail(movie);
+                return _this2._removeMovieThumbnail(movie);
             }).then(function () {
-                return _this._movieToGenreModel.deleteForMovie(movieID);
+                return _this2._movieToGenreModel.deleteForMovie(movieID);
             }).then(function () {
-                return _this._removeFileAssociationForMovie(movieID);
+                return _this2._removeFileAssociationForMovie(movieID);
             }).then(function () {
-                return _this._moviesModel.deleteSingle(movieID);
+                return _this2._moviesModel.deleteSingle(movieID);
             });
         }
     }, {
@@ -64,15 +94,15 @@ var MovieAPI = function () {
     }, {
         key: '_removeFileAssociationForMovie',
         value: function _removeFileAssociationForMovie(movieID) {
-            var _this2 = this;
+            var _this3 = this;
 
             return this._fileToMovieModel.getSingleForMovie(movieID).then(function (fileToMovie) {
                 if (!fileToMovie.hasOwnProperty('file_id')) {
                     return Promise.reject("MovieAPI :: _removeFileAssociationForMovie :: Unable to find file to movie association");
                 }
 
-                return _this2._filesModel.deleteSingle(fileToMovie.file_id).then(function () {
-                    return _this2._fileToMovieModel.deleteSingle(fileToMovie.file_id, movieID);
+                return _this3._filesModel.deleteSingle(fileToMovie.file_id).then(function () {
+                    return _this3._fileToMovieModel.deleteSingle(fileToMovie.file_id, movieID);
                 });
             });
         }

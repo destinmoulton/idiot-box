@@ -11,6 +11,36 @@ class MovieAPI {
         this._movieToGenreModel = models.movieToGenreModel;
     }
 
+    getAllMoviesWithFileInfo(){
+        return this._moviesModel.getAll()
+                .then((movies)=>{
+                    let promisesToRun = [];
+                    
+                    movies.forEach((movie)=>{
+                        let data = Object.assign({}, movie);
+                        data['file_info'] = {};
+                        
+                        const cmd = this._fileToMovieModel.getSingleForMovie(movie.id)
+                                        .then((fileMovie)=>{
+                                            if(!fileMovie.hasOwnProperty('file_id')){
+                                                return Promise.resolve(data);
+                                            }
+                                            return this._filesModel.getSingle(fileMovie.file_id)
+                                                    .then((file)=>{
+                                                        if(!file.hasOwnProperty('id')){
+                                                            return Promise.resolve(data);
+                                                        }
+                                                        data.file_info = file;
+                                                        return Promise.resolve(data);
+                                                    });
+                                        });
+                        promisesToRun.push(cmd);
+                    });
+
+                    return Promise.all(promisesToRun);
+                });
+    }
+
     deleteSingle(movieID){
         return this._moviesModel.getSingle(movieID)
                 .then((movie)=>{

@@ -34,6 +34,10 @@ const movies = {
         get_all: {
             params: [],
             func: ()=> moviesModel.getAll()
+        },
+        get_all_with_file_info: {
+            params: [],
+            func: ()=> movieAPI.getAllMoviesWithFileInfo()
         }
     }
 };

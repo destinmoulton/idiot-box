@@ -68,6 +68,12 @@ var movies = {
             func: function func() {
                 return moviesModel.getAll();
             }
+        },
+        get_all_with_file_info: {
+            params: [],
+            func: function func() {
+                return movieAPI.getAllMoviesWithFileInfo();
+            }
         }
     }
 };
