@@ -135,7 +135,8 @@ class FileManager extends Component {
         this.setState({
             isReloading: true,
             trashIsModalVisible: false,
-            trashSelectedItems: []
+            trashSelectedItems: [],
+            selectedRows: []
         });
     }
 
@@ -172,7 +173,8 @@ class FileManager extends Component {
         this.setState({
             isReloading: true,
             moverenameIsModalVisible: false,
-            moverenameSelectedItems: []
+            moverenameSelectedItems: [],
+            selectedRows: []            
         });
     }
 
@@ -232,7 +234,8 @@ class FileManager extends Component {
         this.setState({
             isReloading: true,
             idmultipleIsModalVisible: false,
-            idmultipleEpisodes: []
+            idmultipleEpisodes: [],
+            selectedRows: []
         });
     }
     
