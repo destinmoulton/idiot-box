@@ -9,7 +9,7 @@
     "clean:server": "rm -rf dist/server/app/*",
     "compile:react": "webpack --config webpack.config.js -d --watch",
     "compile:server": "npm run clean:server && babel --watch src/server --out-dir dist/server/app",
-    "start:server": "nodemon --watch dist/server/app dist/server/app/server.js"
+    "start:server": "pm2 start dist/server/app/server.js --watch dist/server/app --name idiot-box --node-args='--inspect'"
   },
   "keywords": [
     "raspberry-pi",
@@ -34,7 +34,6 @@
     "jest": "^20.0.4",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
-    "nodemon": "^1.11.0",
     "react": "^15.6.1",
     "react-dom": "^15.6.1",
     "react-router-dom": "^4.1.1",
