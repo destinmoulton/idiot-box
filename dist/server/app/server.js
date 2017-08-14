@@ -41,9 +41,9 @@ Promise.resolve().then(function () {
 }).then(function () {
     try {
         return app.listen(PORT, function () {
-            console.log("\n---------------------------------------");
-            console.log("Idiot Box Server running on Port " + PORT);
-            console.log("---------------------------------------");
+            _logger2.default.log("\n---------------------------------------");
+            _logger2.default.log("Idiot Box Server running on Port " + PORT);
+            _logger2.default.log("---------------------------------------");
         });
     } catch (err) {
         return Promise.reject(err);

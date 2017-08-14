@@ -1,44 +1,42 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var winston = require('winston');
 
-winston.setLevels({
-    trace: 9,
-    input: 8,
-    verbose: 7,
-    prompt: 6,
-    debug: 5,
-    info: 4,
-    data: 3,
-    help: 2,
-    warn: 1,
-    error: 0
-});
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-winston.addColors({
-    trace: 'magenta',
-    input: 'grey',
-    verbose: 'cyan',
-    prompt: 'grey',
-    debug: 'blue',
-    info: 'green',
-    data: 'grey',
-    help: 'cyan',
-    warn: 'yellow',
-    error: 'red'
-});
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-winston.remove(winston.transports.Console);
-winston.add(winston.transports.Console, {
-    level: 'trace',
-    prettyPrint: true,
-    colorize: true,
-    silent: false,
-    timestamp: false
-});
+var Logger = function () {
+    function Logger() {
+        _classCallCheck(this, Logger);
+    }
 
-var logger = winston;
-exports.default = logger;
+    _createClass(Logger, [{
+        key: "log",
+        value: function log() {
+            var _console;
+
+            (_console = console).log.apply(_console, arguments);
+        }
+    }, {
+        key: "error",
+        value: function error() {
+            var _console2;
+
+            (_console2 = console).error.apply(_console2, arguments);
+        }
+    }, {
+        key: "info",
+        value: function info() {
+            var _console3;
+
+            (_console3 = console).info.apply(_console3, arguments);
+        }
+    }]);
+
+    return Logger;
+}();
+
+exports.default = new Logger();

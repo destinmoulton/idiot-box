@@ -1,39 +1,15 @@
-const winston = require('winston');
+class Logger{
+    log(){
+        console.log(...arguments);
+    }
 
-winston.setLevels({
-    trace: 9,
-    input: 8,
-    verbose: 7,
-    prompt: 6,
-    debug: 5,
-    info: 4,
-    data: 3,
-    help: 2,
-    warn: 1,
-    error: 0
-});
+    error(){
+        console.error(...arguments);
+    }
 
-winston.addColors({
-    trace: 'magenta',
-    input: 'grey',
-    verbose: 'cyan',
-    prompt: 'grey',
-    debug: 'blue',
-    info: 'green',
-    data: 'grey',
-    help: 'cyan',
-    warn: 'yellow',
-    error: 'red'
-});
+    info(){
+        console.info(...arguments);
+    }
+}
 
-winston.remove(winston.transports.Console)
-winston.add(winston.transports.Console, {
-    level: 'trace',
-    prettyPrint: true,
-    colorize: true,
-    silent: false,
-    timestamp: false
-});
-
-const logger = winston;
-export default logger;
+export default new Logger();
