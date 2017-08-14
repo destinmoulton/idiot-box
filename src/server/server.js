@@ -26,9 +26,9 @@ Promise.resolve()
     .then(()=>{
         try {
             return app.listen(PORT, ()=>{
-                console.log("\n---------------------------------------");
-                console.log("Idiot Box Server running on Port "+PORT);
-                console.log("---------------------------------------");
+                logger.log("\n---------------------------------------");
+                logger.log("Idiot Box Server running on Port "+PORT);
+                logger.log("---------------------------------------");
             });
         }
         catch(err){
