@@ -4,7 +4,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { Col, Row, Spin } from 'antd';
+import { Col, Icon, Row, Spin } from 'antd';
 
 import { emitAPIRequest } from '../actions/api.actions';
 class NewEpisodes extends Component {
@@ -93,7 +93,7 @@ class NewEpisodes extends Component {
         let elements = [];
         days.forEach((dayMoment)=>{
             let unixDay = dayMoment.unix();
-            const header = <h3>{dayMoment.format("dddd, MMMM Do YYYY")}</h3>;
+            const header = <h3><Icon type="calendar"/>&nbsp;{dayMoment.format("dddd, MMMM Do YYYY")}</h3>;
 
             let epList = [];
             if(episodes.hasOwnProperty(unixDay)){
