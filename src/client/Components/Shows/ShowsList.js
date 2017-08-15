@@ -56,6 +56,7 @@ class ShowsList extends Component {
         let showList = [];
         shows.forEach((show)=>{
             if(show.is_visible){
+                const showTitle = {__html: show.title.substring(0, 21)};
                 const details = <Col 
                                     key={show.id}
                                     className="ib-shows-thumbnail-box"
@@ -65,7 +66,7 @@ class ShowsList extends Component {
                                             <img
                                                 className="ib-shows-thumbnail" 
                                                 src={"/images/shows/" + show.image_filename}/>
-                                            {show.title.substring(0, 21)}
+                                            <span dangerouslySetInnerHTML={showTitle} />
                                             <br/>[ {show.num_seasons_locked} <Icon type="lock" /> ][ {show.num_seasons_unlocked} <Icon type="unlock" /> ]
                                         </Link>
                                     </div>
