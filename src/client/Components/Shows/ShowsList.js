@@ -5,6 +5,8 @@ import { Col, Icon, Input, Row, Spin } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 
+import Text from '../../lib/Text.lib';
+
 class ShowsList extends Component {
 
     constructor(props){
@@ -56,7 +58,7 @@ class ShowsList extends Component {
         let showList = [];
         shows.forEach((show)=>{
             if(show.is_visible){
-                const showTitle = {__html: show.title.substring(0, 21)};
+                const showTitle = {__html: Text.truncate(show.title, 19)};
                 const details = <Col 
                                     key={show.id}
                                     className="ib-shows-thumbnail-box"
