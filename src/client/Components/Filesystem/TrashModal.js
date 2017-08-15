@@ -26,6 +26,12 @@ class TrashModal extends Component {
         };
     }
 
+    componentWillReceiveProps(nextProps){
+        this.setState({
+            isTrashing: false
+        });
+    }
+
     _handlePressOk(){
         this._trashFiles();
     }
