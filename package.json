@@ -9,7 +9,7 @@
     "clean:server": "rm -rf dist/server/app/*",
     "compile:react": "webpack --config webpack.config.js -d --watch",
     "compile:server": "npm run clean:server && babel --watch src/server --out-dir dist/server/app",
-    "start:server": "pm2 start dist/server/app/server.js --watch dist/server/app --name idiot-box --node-args='--inspect'",
+    "start:server": "pm2 start pm2.config.json",
     "update": "node /home/pi/idiot-box/dist/server/app/scripts/daily_update.js"
   },
   "keywords": [
