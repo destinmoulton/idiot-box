@@ -10,6 +10,11 @@ class Text{
     truncate(str, length, suffix = "..."){
         let shortString = str.substring(0, length);
 
+        if(str[length-1] === " "){
+            // Remove last space
+            shortString = str.substring(0, length-1);
+        }
+        
         if(str.length > length){
             shortString += suffix;
         }
