@@ -55,7 +55,7 @@ class MediaItemSearchDetails extends Component {
         if(imageURL){
             image = <img src={imageURL} className={"ib-idmodal-item-search-details-img"} />
         }
-        let movieTitle = {__html: item.title};
+        let itemTitle = {__html: item.title};
         return (
             <Col 
                 span={6} 
@@ -65,7 +65,7 @@ class MediaItemSearchDetails extends Component {
                     {image}
                 </div>
                 <div>
-                    <b><span dangerouslySetInnerHTML={movieTitle} /></b>
+                    <b><span dangerouslySetInnerHTML={itemTitle} /></b>
                     <br/>
                     {item.year}
                     <br/>
