@@ -4,10 +4,11 @@ import { connect } from 'react-redux';
 
 import { Col, Input, Row, Spin } from 'antd';
 import MovieInfoModal from './MovieInfoModal';
+import PlayButton from '../PlayButton';
 
 import { emitAPIRequest } from '../../actions/api.actions';
+import Text from '../../lib/Text.lib';
 
-import PlayButton from '../PlayButton';
 class MoviesList extends Component {
 
     constructor(props){
@@ -104,8 +105,8 @@ class MoviesList extends Component {
         let movieList = [];
         movies.forEach((movie)=>{
             if(movie.is_visible){
-                console.log(movie);
                 const playButton = this._buildPlayButton(movie);
+                const movieTitle = {__html: Text.truncate(movie.title, 15)};
                 const details = <Col 
                                     key={movie.id}
                                     className="ib-movies-thumbnail-box"
@@ -120,7 +121,7 @@ class MoviesList extends Component {
                                         {playButton}
                                         <a  href="javascript:void(0)"
                                             onClick={this._handleClickMovie.bind(this, movie)}>
-                                            <span dangerouslySetInnerHTML={{__html: movie.title}}></span>
+                                            <span dangerouslySetInnerHTML={movieTitle}></span>
                                         </a>
                                     </div>
                                 </Col>;
