@@ -58,10 +58,10 @@ class MediaItemSearchDetails extends Component {
         let itemTitle = {__html: item.title};
         return (
             <Col 
-                span={6} 
+                span={5} 
                 key={item.ids.trakt} 
-                className={"ib-idmodal-item-search-details-box"}>
-                <div className={"ib-idmodal-item-search-details-img-box"}>
+                className="ib-idmodal-item-search-details-box">
+                <div className="ib-idmodal-item-search-details-img-box">
                     {image}
                 </div>
                 <div>
