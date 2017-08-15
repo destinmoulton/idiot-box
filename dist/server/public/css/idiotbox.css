@@ -228,6 +228,16 @@ div.ib-shows-seasonlist-episode-row {
     border-bottom: 1px solid #ebebeb;
 }
 
+div.ib-show-info-thumbnail-box {
+    width: 150px;
+    height: 214px;
+    padding: 5px;
+    text-align: center;
+    font-size: 1.1em;
+    margin: 4px;
+    border: 2px solid gray;
+}
+
 .ib-show-seasonlist-episodes-container{
     padding:10px;
 }

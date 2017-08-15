@@ -95,7 +95,7 @@ class ShowInfo extends Component {
         return (
             <div>
                 <Col span={4}>
-                    <div className="ib-shows-thumbnail-box">
+                    <div className="ib-show-info-thumbnail-box">
                         <img
                             className="ib-shows-thumbnail" 
                             src={"/images/shows/" + show.image_filename}
@@ -107,7 +107,7 @@ class ShowInfo extends Component {
                     <h4>{show.year}</h4>
                     <a href={"http://imdb.com/title/" + show.imdb_id} target="_blank">IMDB</a>
                     <br/>
-                    <Button onClick={this._handlePressDelete.bind(this)}>Delete</Button>
+                    <Button type="danger" onClick={this._handlePressDelete.bind(this)}>Delete Show</Button>
                     <br/><br/>
                     <p>{show.overview}</p>
                 </Col>
