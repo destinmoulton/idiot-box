@@ -67,7 +67,7 @@ class MediaItemSearchDetails extends Component {
                 <div>
                     <b><span dangerouslySetInnerHTML={itemTitle} /></b>
                     <br/>
-                    {item.year}
+                    {item.year} - <a href={"http://imdb.com/title/" + item.ids.imdb} target="_blank">IMDB</a>
                     <br/>
                     <Button type="primary" icon="check" onClick={this._handleSelectMovie.bind(this, item)}>This Is It</Button>
                 </div>
