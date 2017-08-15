@@ -170,7 +170,8 @@ class IDFileModal extends Component {
                     onOk={()=>{}}
                     footer={[
                         <Button key="cancel" size="large" onClick={this._handleCancel.bind(this)}>Cancel</Button>,
-                    ]} >
+                    ]}
+                    width={700}>
                     <Row>
                         <div className='ib-idmodal-filename'>{backButton}&nbsp;&nbsp;{currentFilename}</div>
                     </Row>
