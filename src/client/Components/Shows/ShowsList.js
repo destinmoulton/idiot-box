@@ -58,7 +58,7 @@ class ShowsList extends Component {
         let showList = [];
         shows.forEach((show)=>{
             if(show.is_visible){
-                const showTitle = {__html: Text.truncate(show.title, 19)};
+                const showTitle = {__html: Text.truncate(show.title, 18)};
                 const details = <Col 
                                     key={show.id}
                                     className="ib-shows-thumbnail-box"
