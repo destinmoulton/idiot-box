@@ -64,7 +64,7 @@ class MovieInfoModal extends Component {
                         <h3 dangerouslySetInnerHTML={{__html: movie.title}}></h3>
                         <h4>{movie.year}</h4>
                         <h4><a href={"http://imdb.com/title/" + movie.imdb_id} target="_blank">IMDB</a></h4>
-                        <Button onClick={this._handlePressDelete.bind(this)}>Delete</Button>
+                        <Button onClick={this._handlePressDelete.bind(this)} type="danger">Delete</Button>
                         <p>{movie.overview}</p>
                     </Col>
                 </Row>
