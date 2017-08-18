@@ -12,23 +12,6 @@ class Regex {
     }
 
     /**
-     * Get the S##E## from an episode filename.
-     * 
-     * ie. Desperate.Housewives.S01E04.mp4
-     *     will return S01E04 
-     *
-     * @param string episodeFilename 
-     */
-    parseSeasonEpisodeDoublet(episodeFilename){
-        let possibleIndex = episodeFilename.search(/S\d\dE\d\d/);
-
-        if(possibleIndex > -1){
-            return episodeFilename.substr(possibleIndex, 6);
-        }
-        return "";
-    }
-
-    /**
      * Determine if a filename is a video.
      * 
      * @param string possibleVideoFilename 
