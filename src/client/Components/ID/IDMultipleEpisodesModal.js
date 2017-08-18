@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import { Button, Input, Modal, Select } from 'antd';
+import { Button, Col, Input, Modal, Select } from 'antd';
 const Option = Select.Option;
 
 import { emitAPIRequest } from '../../actions/api.actions';
@@ -27,6 +27,7 @@ class IDMultipleEpisodesModal extends Component {
         currentSeasonInfo: {},
         isIDing: false,
         episodes: [],
+        seasonParseRegexStr: 'E\\d\\d',
         seasons: [],
         shows: []
     }
@@ -127,25 +128,32 @@ class IDMultipleEpisodesModal extends Component {
     }
 
     _episodesReceived(episodes){
-        const { currentEpisodesInfo } = this.state;
+        const { seasonParseRegexStr } = this.state;
+        
+        this._collateEpisodeInfo(seasonParseRegexStr, episodes);
+    }
 
+    _collateEpisodeInfo(seasonParseRegexStr, episodes){
+        const { currentEpisodesInfo } = this.state;
         // Set the default selected episode based on the filename
         const epFilenames = Object.keys(currentEpisodesInfo);
         epFilenames.forEach((filename)=>{
             // Get the S##E##
-            const seasEp = Regex.parseSeasonEpisodeDoublet(filename);
-            if(seasEp !== ""){
-                const episodeNumber = parseInt(seasEp.split("E").pop());
+            const epPos = filename.search(RegExp(seasonParseRegexStr));
+            if(epPos > -1){
+                const episodeNumber = parseInt(filename.substring(epPos + 1, epPos + 3));
+                console.log(filename.substring(epPos + 1, epPos + 3));
                 const ep = episodes.find((ep)=>ep.episode_number === episodeNumber);
                 const episodeID = (ep !== undefined) ? ep.id : 0;
 
                 currentEpisodesInfo[filename] = this._constructEpisodeInfo(episodes, filename, episodeID);
             }
         });
-        
+
         this.setState({
             currentEpisodesInfo,
-            episodes
+            episodes,
+            seasonParseRegexStr
         });
     }
 
@@ -348,6 +356,24 @@ class IDMultipleEpisodesModal extends Component {
         return input;
     }
 
+    _handleChangeEpisodeRegex(evt){
+        const { episodes } = this.state;
+        const seasonParseRegexStr = evt.target.value;
+
+        this._collateEpisodeInfo(seasonParseRegexStr, episodes);
+    }
+
+    _buildEpisodeRegexInput(){
+        const { seasonParseRegexStr } = this.state;
+
+        const el = <Input.Group size="large">
+                        <Col span="10">
+                            <Input addonBefore="Episode Regex: " value={seasonParseRegexStr} onChange={this._handleChangeEpisodeRegex.bind(this)}/>
+                        </Col>
+                    </Input.Group>;
+        return el;
+    }
+
     render() {
         const {
             currentShowID,
@@ -367,6 +393,8 @@ class IDMultipleEpisodesModal extends Component {
             episodesSelectors = this._buildEpisodeSelectors();
         }
 
+        const episodeRegexInput = this._buildEpisodeRegexInput();
+
         const buttonDisabled = !(this._areAllEpisodesSelected());
 
         return (
@@ -381,6 +409,7 @@ class IDMultipleEpisodesModal extends Component {
                 >
                 {showSeasonSelectors}
                 {pathInput}
+                {episodeRegexInput}
                 <div>
                     {episodesSelectors}
                 </div>
