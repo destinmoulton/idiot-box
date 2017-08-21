@@ -142,7 +142,6 @@ class IDMultipleEpisodesModal extends Component {
             const epPos = filename.search(RegExp(seasonParseRegexStr));
             if(epPos > -1){
                 const episodeNumber = parseInt(filename.substring(epPos + 1, epPos + 3));
-                console.log(filename.substring(epPos + 1, epPos + 3));
                 const ep = episodes.find((ep)=>ep.episode_number === episodeNumber);
                 const episodeID = (ep !== undefined) ? ep.id : 0;
 
