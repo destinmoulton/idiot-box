@@ -27,7 +27,7 @@ class IDMultipleEpisodesModal extends Component {
         currentSeasonInfo: {},
         isIDing: false,
         episodes: [],
-        seasonParseRegexStr: 'E\\d\\d',
+        seasonParseRegexStr: 'E\\d+',
         seasons: [],
         shows: []
     }
@@ -141,7 +141,19 @@ class IDMultipleEpisodesModal extends Component {
             // Get the S##E##
             const epPos = filename.search(RegExp(seasonParseRegexStr));
             if(epPos > -1){
-                const episodeNumber = parseInt(filename.substring(epPos + 1, epPos + 3));
+                const regexAsString = seasonParseRegexStr.toString();
+                const regexPos = regexAsString.indexOf("\\d+");
+
+                const offsetIndex = epPos + regexPos;
+                const firstDigit = parseInt(filename.substr(offsetIndex, 1));
+                const secondDigit = parseInt(filename.substr(offsetIndex + 1, 1));
+                let episodeNumber = firstDigit;
+                if(typeof(firstDigit) === "number"){
+                    if(typeof(secondDigit) === "number"){
+                        // ie 01
+                        episodeNumber = parseInt(`${firstDigit}${secondDigit}`);
+                    }
+                } 
                 const ep = episodes.find((ep)=>ep.episode_number === episodeNumber);
                 const episodeID = (ep !== undefined) ? ep.id : 0;
 
@@ -358,7 +370,6 @@ class IDMultipleEpisodesModal extends Component {
     _handleChangeEpisodeRegex(evt){
         const { episodes } = this.state;
         const seasonParseRegexStr = evt.target.value;
-
         this._collateEpisodeInfo(seasonParseRegexStr, episodes);
     }
 
