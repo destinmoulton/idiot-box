@@ -1,6 +1,6 @@
 ## Idiot Box
 
-Idiot Box is a Movie and TV manager written with the Raspberry Pi in mind.
+Idiot Box is a Movie and TV media manager and player built for usage on the Raspberry Pi (omxplayer). Add TV shows and movies to your library using a Trakt API key. See new episodes and watch them by using the remote built into the navigation bar.
 
 #### Server
 
