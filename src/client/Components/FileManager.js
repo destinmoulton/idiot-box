@@ -379,11 +379,11 @@ class FileManager extends Component {
                         <Button 
                             icon="tag"
                             disabled={buttonDisabled}
-                            onClick={this._handleClickIDMultipleEpisodes.bind(this)}>ID Multiple</Button>
+                            onClick={this._handleClickIDMultipleEpisodes.bind(this)}>ID</Button>
                         <Button 
-                            icon="move"
+                            icon="export"
                             disabled={buttonDisabled}
-                            onClick={this._handleClickMoveRename.bind(this)}>Move / Rename</Button>
+                            onClick={this._handleClickMoveRename.bind(this)}>Move or Rename</Button>
                         <Button 
                             type="danger"
                             icon="delete"
