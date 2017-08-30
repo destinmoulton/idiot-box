@@ -393,7 +393,8 @@ class IDMultipleEpisodesModal extends Component {
         } = this.props;
 
         const {
-            episodes
+            episodes,
+            isIDing
         } = this.state;
 
         const showSeasonSelectors = this._buildShowSeasonSelectors();
@@ -424,7 +425,9 @@ class IDMultipleEpisodesModal extends Component {
                     {episodesSelectors}
                 </div>
                 <div key="button" className="ib-idmodal-button-box">
-                    <Button onClick={this._handleClickIDButton.bind(this)} disabled={buttonDisabled}>ID Episodes</Button>
+                    <Button onClick={this._handleClickIDButton.bind(this)}
+                            disabled={buttonDisabled}
+                            loading={isIDing}>ID Episodes</Button>
                 </div>
             </Modal>
         )
