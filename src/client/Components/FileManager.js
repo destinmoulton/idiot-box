@@ -325,19 +325,13 @@ class FileManager extends Component {
                                         </a>;
                     }
 
-                    let moveAction = "";
-                    if(record.name !== '..'){
-                        moveAction = <a  href="javascript:void(0);"
-                                        onClick={this._handleClickMoveRename.bind(this)}
-                                        data-item-name={record.name}>Move</a>;
-                    }
                     return (
                         <span>
                             <a  href="javascript:void(0);"
                                 onClick={this._handleClickTrash.bind(this)}
                                 data-item-name={record.name}>
                                 <Icon type="delete"/>
-                            </a>&nbsp;{moveAction}&nbsp;{tagAction}{untagAction}
+                            </a>&nbsp;{tagAction}{untagAction}
                         </span>
                     );
                 }
