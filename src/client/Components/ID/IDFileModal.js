@@ -17,17 +17,17 @@ import EpisodeIDSelector from './EpisodeIDSelector';
 import MovieCheckForm from './MovieCheckForm';
 import MovieID from './MovieID';
 
-const INITIAL_STATE = {
-    currentView: 'two_column_single_id',
-    episodeInfo: {},
-    movieSearchString: ""
-};
-
 class IDFileModal extends Component {
     INITIAL_VIEW = "two_column_single_id";
     MOVIE_SEARCH_VIEW = "movie_search_results";
     ADD_SHOW_VIEW = "add_show";
     ARCHIVE_EPISODE_VIEW = "archive_episode";
+
+    INITIAL_STATE = {
+        currentView: 'two_column_single_id',
+        episodeInfo: {},
+        movieSearchString: ""
+    };
 
     static propTypes = {
         currentFilename: PropTypes.string.isRequired,
@@ -40,11 +40,11 @@ class IDFileModal extends Component {
     constructor(props){
         super(props);
 
-        this.state = INITIAL_STATE;
+        this.state = this.INITIAL_STATE;
     }
 
     componentWillMount(){
-        this.setState(INITIAL_STATE);
+        this.setState(this.INITIAL_STATE);
     }
 
     _handleCancel(){
