@@ -24,7 +24,6 @@ export function srvConnect(){
     }
 }
 
-
 function tryReconnect(){
     return (dispatch)=>{
         setTimeout(()=>{
