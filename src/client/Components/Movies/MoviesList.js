@@ -1,3 +1,4 @@
+import { truncate } from 'lodash';
 import PropTypes from 'prop-types';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -7,7 +8,6 @@ import MovieInfoModal from './MovieInfoModal';
 import PlayButton from '../PlayButton';
 
 import { emitAPIRequest } from '../../actions/api.actions';
-import Text from '../../lib/Text.lib';
 
 class MoviesList extends Component {
 
@@ -106,7 +106,7 @@ class MoviesList extends Component {
         movies.forEach((movie)=>{
             if(movie.is_visible){
                 const playButton = this._buildPlayButton(movie);
-                const movieTitle = {__html: Text.truncate(movie.title, 15)};
+                const movieTitle = {__html: truncate(movie.title, {length: 15})};
                 const details = <Col 
                                     key={movie.id}
                                     className="ib-movies-thumbnail-box"
