@@ -7,8 +7,6 @@ import { Col, Icon, Input, Row, Spin } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 
-import Text from '../../lib/Text.lib';
-
 class ShowsList extends Component {
 
     constructor(props){
