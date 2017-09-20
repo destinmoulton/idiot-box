@@ -118,8 +118,6 @@ class ArchiveSingleEpisode extends Component {
         return showTitle + "." + seasonID + episodeID + "." + ext;
     }
 
-    
-
     _getEpisodeID(episodeNumber){
         let episodeID = "E";
         if(episodeNumber < 10){
