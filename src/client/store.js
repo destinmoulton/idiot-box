@@ -7,7 +7,6 @@ import socketMiddleware from './socketMiddleware';
 import SocketAPI from './SocketAPI';
 
 import errorReducer from './reducers/error.reducer';
-import filesystemReducer from './reducers/filesystem.reducer';
 import serverReducer from './reducers/server.reducer';
 import settingsReducer from './reducers/settings.reducer';
 import videoplayerReducer from './reducers/videoplayer.reducer';
@@ -20,7 +19,6 @@ const socketMiddle = socketMiddleware(socketClient);
 const store = createStore(
   combineReducers({
     error: errorReducer,
-    filesystem: filesystemReducer,
     server: serverReducer,
     settings: settingsReducer,
     router: routerReducer,
