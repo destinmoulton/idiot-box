@@ -14,10 +14,6 @@ class TrashModal extends Component {
         onCancel: PropTypes.func.isRequired,
     };
 
-    static defaultProps = {
-        
-    };
-
     constructor(props){
         super(props);
 
