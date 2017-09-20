@@ -2,7 +2,6 @@ import {
     IO_ON_SETUP, 
     IO_ON_SUCCESS, 
     IO_ON_FAILURE,
-
     ERROR_RECEIVED
 } from '../actions/actionTypes';
 
