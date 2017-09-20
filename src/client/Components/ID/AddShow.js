@@ -8,7 +8,14 @@ import { emitAPIRequest } from '../../actions/api.actions';
 
 import MediaItemSearchDetails from './MediaItemSearchDetails';
 
+const INITIAL_STATE = {
+    currentSearchString: "",
+    isIDing: false,
+    shows: []
+};
+
 class AddShow extends Component {
+    
     static propTypes = {
         currentFilename: PropTypes.string.isRequired,
         onIDComplete: PropTypes.func.isRequired
@@ -17,19 +24,11 @@ class AddShow extends Component {
     constructor(props){
         super(props);
 
-        this.state = {
-            currentSearchString: "",
-            isIDing: false,
-            shows: []
-        };
+        this.state = INITIAL_STATE;
     }
 
     componentWillMount(){
-        this.setState({
-            currentSearchString: "",
-            isIDing: false,
-            shows: []
-        });
+        this.setState(INITIAL_STATE);
     }
 
     _handleSelectMovie(show, imageURL){
