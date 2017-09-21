@@ -4,8 +4,8 @@
   "description": "Web based media manager for Raspberry Pi.",
   "main": "index.js",
   "scripts": {
-    "test": "jest --verbose",
-    "test:watch": "jest --watchAll",
+    "test": "jest --silent=false --colors --verbose",
+    "test:watch": "jest --silent=false --colors --watchAll",
     "clean:server": "rm -rf dist/server/app/*",
     "compile:react": "webpack --config webpack.config.js -d --watch",
     "compile:server": "npm run clean:server && babel --watch src/server --out-dir dist/server/app",
@@ -53,7 +53,8 @@
     "redux-thunk": "^2.2.0",
     "scraperjs": "^1.2.0",
     "socket.io": "^2.0.3",
-    "sqlite": "^2.8.0"
+    "sqlite": "^2.8.0",
+    "trakt.tv": "^6.0.1"
   },
   "jest": {
     "testPathIgnorePatterns": [

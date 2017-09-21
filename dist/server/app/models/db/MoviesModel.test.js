@@ -131,6 +131,7 @@ describe("MoviesModel", function () {
 });
 
 function _getFirstTestData() {
+    var slug = "independence-day-1996";
     var data = {
         title: "Independence Day",
         year: 1996,
@@ -139,16 +140,17 @@ function _getFirstTestData() {
         released: "1996-07-04",
         runtime: 145,
         rating: 9.9998,
-        slug: "independence-day-1996",
         ids: {
             trakt: 123456,
             imdb: "imdbtest",
-            tmdb: 98765
+            tmdb: 98765,
+            slug: slug
         },
         genres: ['action', 'scifi', 'comedy']
     };
 
     var expected = Object.assign({}, data);
+    expected['slug'] = slug;
     delete expected.genres;
     delete expected.ids;
     expected.trakt_id = data.ids.trakt;
@@ -158,6 +160,7 @@ function _getFirstTestData() {
 }
 
 function _getSecondTestData() {
+    var slug = "armageddon-1998";
     var data = {
         title: "Armageddon",
         year: 1998,
@@ -166,16 +169,17 @@ function _getSecondTestData() {
         released: "1998-06-01",
         runtime: 130,
         rating: 8.231,
-        slug: "armageddon-1998",
         ids: {
             trakt: 112233,
             imdb: "armaimdb",
-            tmdb: 998877
+            tmdb: 998877,
+            slug: slug
         },
         genres: ['action', 'scifi', 'documentary']
     };
 
     var expected = Object.assign({}, data);
+    expected['slug'] = slug;
     delete expected.ids;
     delete expected.genres;
     expected.trakt_id = data.ids.trakt;

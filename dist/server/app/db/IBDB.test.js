@@ -96,7 +96,7 @@ describe("IBDB", function () {
                 };
                 return _IBDB2.default.getRow(query, "settings");
             }).then(function (row) {
-                expect(row.id).toBe(1);
+                expect(row.id).toBe(6);
                 expect(row.value).toBe("testValue");
             });
         });
