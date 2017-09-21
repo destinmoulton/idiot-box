@@ -56,6 +56,7 @@ describe("SettingsModel", ()=>{
                     })
         })
     })
+
     it("adds and a single setting [addSetting()]", ()=>{
         expect.assertions(3);
         return settingsModel.addSetting("sizes", "small", 42)
@@ -66,5 +67,44 @@ describe("SettingsModel", ()=>{
                 });
     });
 
-    
+    describe("Adds multiple and", ()=>{
+        beforeEach(()=>{
+            return settingsModel.addSetting("crackers", "Nabisco", "Ritz")
+                    .then(()=>{
+                        return settingsModel.addSetting("crackers", "Keebler", "Cheez-It");
+                    })
+                    .then(()=>{
+                        return settingsModel.addSetting("cookies", "Nabisco", "Oreos");
+                    });
+        });
+
+        it("gets all [getAll()]", ()=>{
+            expect.assertions(3);
+            return settingsModel.getAll()
+                    .then((res)=>{
+                        expect(res.length).toBe(8);
+                        expect(res[3].key).toBe("Trash");
+                        expect(res[7].value).toBe("Oreos");
+                    });
+        });
+
+        it("updates single [updateSetting()]", ()=>{
+            expect.assertions(6);
+            return settingsModel.updateSetting(7, "crackers", "Nabadsco", "Nachos")
+                    .then((res)=>{
+                        expect(res.key).toBe("Nabadsco");
+                        expect(res.value).toBe("Nachos");
+                        return settingsModel.getSingleByID(6);
+                    })
+                    .then((res)=>{
+                        expect(res.key).toBe("Nabisco");
+                        expect(res.value).toBe("Ritz");
+                        return settingsModel.getSingleByID(8);
+                    })
+                    .then((res)=>{
+                        expect(res.key).toBe("Nabisco");
+                        expect(res.value).toBe("Oreos");
+                    })
+        });
+    });
 });
