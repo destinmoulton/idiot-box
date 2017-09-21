@@ -106,5 +106,16 @@ describe("SettingsModel", function () {
                 expect(res.value).toBe("Oreos");
             });
         });
+
+        it("deletes single [deleteSetting()]", function () {
+            expect.assertions(3);
+            return settingsModel.deleteSetting(6).then(function () {
+                return settingsModel.getAll();
+            }).then(function (res) {
+                expect(res.length).toBe(7);
+                expect(res[5].key).toBe("Keebler");
+                expect(res[6].value).toBe("Oreos");
+            });
+        });
     });
 });
