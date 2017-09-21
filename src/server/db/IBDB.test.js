@@ -95,7 +95,7 @@ describe("IBDB",()=>{
                         return ibdb.getRow(query, "settings");
                     })
                     .then((row)=>{
-                        expect(row.id).toBe(1);
+                        expect(row.id).toBe(6);
                         expect(row.value).toBe("testValue");
                     });
         });
