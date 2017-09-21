@@ -1,3 +1,5 @@
+import path from 'path';
+
 import ibdb from '../../db/IBDB';
 
 import SettingsModel from './SettingsModel';
@@ -24,5 +26,15 @@ describe("SettingsModel", ()=>{
 
     afterEach(()=>{
         ibdb.close();
+    });
+
+    it("adds and gets a single setting", ()=>{
+        expect.assertions(3);
+        return settingsModel.addSetting("sizes", "small", 42)
+                .then((res)=>{
+                    expect(res.category).toBe("sizes");
+                    expect(res.key).toBe("small");
+                    expect(res.value).toBe("42");
+                });
     });
 });

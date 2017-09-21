@@ -1,5 +1,9 @@
 'use strict';
 
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
 var _IBDB = require('../../db/IBDB');
 
 var _IBDB2 = _interopRequireDefault(_IBDB);
@@ -18,7 +22,7 @@ describe("SettingsModel", function () {
         };
 
         var migConfig = {
-            migrationsPath: path.resolve(__dirname, '../../../migrations')
+            migrationsPath: _path2.default.resolve(__dirname, '../../../migrations')
         };
 
         return _IBDB2.default.connect(dbConfig).then(function () {
@@ -30,5 +34,14 @@ describe("SettingsModel", function () {
 
     afterEach(function () {
         _IBDB2.default.close();
+    });
+
+    it("adds and gets a single setting", function () {
+        expect.assertions(3);
+        return settingsModel.addSetting("sizes", "small", 42).then(function (res) {
+            expect(res.category).toBe("sizes");
+            expect(res.key).toBe("small");
+            expect(res.value).toBe("42");
+        });
     });
 });
