@@ -1,5 +1,7 @@
 'use strict';
 
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 var _path = require('path');
 
 var _path2 = _interopRequireDefault(_path);
@@ -36,7 +38,32 @@ describe("SettingsModel", function () {
         _IBDB2.default.close();
     });
 
-    it("adds and gets a single setting", function () {
+    describe("Gets single by", function () {
+        it("id [getSingleByID()]", function () {
+            expect.assertions(2);
+            return settingsModel.getSingleByID(3).then(function (res) {
+                expect(typeof res === 'undefined' ? 'undefined' : _typeof(res)).toBe("object");
+                expect(res.key).toBe("Shows");
+            });
+        });
+
+        it("category and key [getSingle()]", function () {
+            expect.assertions(2);
+            return settingsModel.getSingle("directories", "Movies").then(function (res) {
+                expect(typeof res === 'undefined' ? 'undefined' : _typeof(res)).toBe("object");
+                expect(res.key).toBe("Movies");
+            });
+        });
+
+        it("category and value [getSingleByCatAndVal(]", function () {
+            expect.assertions(2);
+            return settingsModel.getSingle("directories", "Downloads").then(function (res) {
+                expect(typeof res === 'undefined' ? 'undefined' : _typeof(res)).toBe("object");
+                expect(res.key).toBe("Downloads");
+            });
+        });
+    });
+    it("adds and a single setting [addSetting()]", function () {
         expect.assertions(3);
         return settingsModel.addSetting("sizes", "small", 42).then(function (res) {
             expect(res.category).toBe("sizes");

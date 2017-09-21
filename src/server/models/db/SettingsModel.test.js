@@ -28,7 +28,35 @@ describe("SettingsModel", ()=>{
         ibdb.close();
     });
 
-    it("adds and gets a single setting", ()=>{
+    describe("Gets single by", ()=>{
+        it("id [getSingleByID()]", ()=>{
+            expect.assertions(2);
+            return settingsModel.getSingleByID(3)
+                    .then((res)=>{
+                        expect(typeof res).toBe("object");
+                        expect(res.key).toBe("Shows");
+                    })
+        });
+
+        it("category and key [getSingle()]", ()=>{
+            expect.assertions(2);
+            return settingsModel.getSingle("directories", "Movies")
+                    .then((res)=>{
+                        expect(typeof res).toBe("object");
+                        expect(res.key).toBe("Movies");
+                    })
+        })
+
+        it("category and value [getSingleByCatAndVal(]", ()=>{
+            expect.assertions(2);
+            return settingsModel.getSingle("directories", "Downloads")
+                    .then((res)=>{
+                        expect(typeof res).toBe("object");
+                        expect(res.key).toBe("Downloads");
+                    })
+        })
+    })
+    it("adds and a single setting [addSetting()]", ()=>{
         expect.assertions(3);
         return settingsModel.addSetting("sizes", "small", 42)
                 .then((res)=>{
@@ -37,4 +65,6 @@ describe("SettingsModel", ()=>{
                     expect(res.value).toBe("42");
                 });
     });
+
+    
 });
