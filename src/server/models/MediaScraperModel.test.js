@@ -3,6 +3,8 @@ import Trakt from 'trakt.tv';
 import traktConfig from '../config/trakt.config';
 import MediaScraperModel from './MediaScraperModel';
 
+jest.autoMockOff(); 
+
 describe("MediaScrapeModel", ()=>{
     let traktInstance = {};
     let mediaScraper = {};
@@ -14,8 +16,8 @@ describe("MediaScrapeModel", ()=>{
         expect.assertions(2);
         return mediaScraper.searchMovies('tron')
             .then((res)=>{
-                expect(res[1].type).toBe('movie');
-                expect(res[1].movie.title).toBe('TRON: Legacy');
+                expect(res[1].ids.trakt).toBe(12601);
+                expect(res[1].title).toBe('TRON: Legacy');
             });
     });
 
@@ -23,9 +25,9 @@ describe("MediaScrapeModel", ()=>{
         expect.assertions(3);
         return mediaScraper.searchShows('days')
             .then((res)=>{
-                expect(res[1].type).toBe('show');
-                expect(res[1].show.title).toBe('Day Break');
-                expect(res[1].show.status).toBe('ended');
+                expect(res[1].ids.trakt).toBe(4594);
+                expect(res[1].title).toBe('Day Break');
+                expect(res[1].status).toBe('ended');
             });
     });
 

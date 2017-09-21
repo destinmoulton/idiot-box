@@ -18,6 +18,8 @@ var _MediaScraperModel2 = _interopRequireDefault(_MediaScraperModel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+jest.autoMockOff();
+
 describe("MediaScrapeModel", function () {
     var traktInstance = {};
     var mediaScraper = {};
@@ -28,17 +30,17 @@ describe("MediaScrapeModel", function () {
     test("finds movies", function () {
         expect.assertions(2);
         return mediaScraper.searchMovies('tron').then(function (res) {
-            expect(res[1].type).toBe('movie');
-            expect(res[1].movie.title).toBe('TRON: Legacy');
+            expect(res[1].ids.trakt).toBe(12601);
+            expect(res[1].title).toBe('TRON: Legacy');
         });
     });
 
     test("finds tv shows", function () {
         expect.assertions(3);
         return mediaScraper.searchShows('days').then(function (res) {
-            expect(res[1].type).toBe('show');
-            expect(res[1].show.title).toBe('Day Break');
-            expect(res[1].show.status).toBe('ended');
+            expect(res[1].ids.trakt).toBe(4594);
+            expect(res[1].title).toBe('Day Break');
+            expect(res[1].status).toBe('ended');
         });
     });
 
