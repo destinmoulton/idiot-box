@@ -3,12 +3,10 @@ import Trakt from 'trakt.tv';
 import traktConfig from '../config/trakt.config';
 import MediaScraperModel from './MediaScraperModel';
 
-jest.autoMockOff(); 
-
 describe("MediaScrapeModel", ()=>{
     let traktInstance = {};
     let mediaScraper = {};
-    
+
     beforeEach(()=>{
         traktInstance = new Trakt(traktConfig);
         mediaScraper = new MediaScraperModel(traktInstance);

@@ -18,8 +18,6 @@ var _MediaScraperModel2 = _interopRequireDefault(_MediaScraperModel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-jest.autoMockOff();
-
 describe("MediaScrapeModel", function () {
     var traktInstance = {};
     var mediaScraper = {};
