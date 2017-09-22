@@ -23,10 +23,12 @@ jest.autoMockOff();
 describe("MediaScrapeModel", function () {
     var traktInstance = {};
     var mediaScraper = {};
+
     beforeEach(function () {
         traktInstance = new _trakt2.default(_trakt4.default);
         mediaScraper = new _MediaScraperModel2.default(traktInstance);
     });
+
     test("finds movies", function () {
         expect.assertions(2);
         return mediaScraper.searchMovies('tron').then(function (res) {

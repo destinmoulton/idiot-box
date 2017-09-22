@@ -8,10 +8,12 @@ jest.autoMockOff();
 describe("MediaScrapeModel", ()=>{
     let traktInstance = {};
     let mediaScraper = {};
+    
     beforeEach(()=>{
         traktInstance = new Trakt(traktConfig);
         mediaScraper = new MediaScraperModel(traktInstance);
     });
+
     test("finds movies", ()=>{
         expect.assertions(2);
         return mediaScraper.searchMovies('tron')
