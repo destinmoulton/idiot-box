@@ -115,11 +115,19 @@ describe("ShowsModel", ()=>{
                 });
         });
 
-        it("gets single by id", ()=>{
+        it("gets single by id [getSingle()]", ()=>{
             expect.assertions(1);
             return showsModel.getSingle(2)
                     .then((res)=>{
                         expect(res).toMatchObject(EXPECTED_DATA_TWO);
+                    });
+        });
+
+        it("gets single by slug [getSingleBySlug()]", ()=>{
+            expect.assertions(1);
+            return showsModel.getSingleBySlug('day-break')
+                    .then((res)=>{
+                        expect(res).toMatchObject(EXPECTED_DATA_ONE);
                     });
         });
     });

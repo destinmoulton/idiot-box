@@ -121,10 +121,17 @@ describe("ShowsModel", function () {
             });
         });
 
-        it("gets single by id", function () {
+        it("gets single by id [getSingle()]", function () {
             expect.assertions(1);
             return showsModel.getSingle(2).then(function (res) {
                 expect(res).toMatchObject(EXPECTED_DATA_TWO);
+            });
+        });
+
+        it("gets single by slug [getSingleBySlug()]", function () {
+            expect.assertions(1);
+            return showsModel.getSingleBySlug('day-break').then(function (res) {
+                expect(res).toMatchObject(EXPECTED_DATA_ONE);
             });
         });
     });
