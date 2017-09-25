@@ -141,6 +141,15 @@ describe("ShowsModel", function () {
                 expect(res).toMatchObject(EXPECTED_DATA_TWO);
             });
         });
+
+        it("gets all [getAll()]", function () {
+            expect.assertions(3);
+            return showsModel.getAll().then(function (res) {
+                expect(res.length).toBe(2);
+                expect(res[0]).toMatchObject(EXPECTED_DATA_ONE);
+                expect(res[1]).toMatchObject(EXPECTED_DATA_TWO);
+            });
+        });
     });
 });
 
