@@ -134,6 +134,13 @@ describe("ShowsModel", function () {
                 expect(res).toMatchObject(EXPECTED_DATA_ONE);
             });
         });
+
+        it("gets single by trakt id [getSingleByTraktID()]", function () {
+            expect.assertions(1);
+            return showsModel.getSingleByTraktID(3822).then(function (res) {
+                expect(res).toMatchObject(EXPECTED_DATA_TWO);
+            });
+        });
     });
 });
 

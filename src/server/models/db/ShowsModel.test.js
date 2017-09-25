@@ -130,6 +130,14 @@ describe("ShowsModel", ()=>{
                         expect(res).toMatchObject(EXPECTED_DATA_ONE);
                     });
         });
+
+        it("gets single by trakt id [getSingleByTraktID()]", ()=>{
+            expect.assertions(1);
+            return showsModel.getSingleByTraktID(3822)
+                    .then((res)=>{
+                        expect(res).toMatchObject(EXPECTED_DATA_TWO);
+                    });
+        });
     });
 });
 
