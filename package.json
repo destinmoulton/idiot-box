@@ -20,7 +20,7 @@
   "author": "Destin Moulton",
   "license": "MIT",
   "devDependencies": {
-    "antd": "^2.11.1",
+    "antd": "^2.13.3",
     "babel-cli": "^6.24.1",
     "babel-core": "^6.25.0",
     "babel-jest": "^20.0.3",
@@ -32,7 +32,7 @@
     "babel-preset-react": "^6.24.1",
     "enzyme": "^2.8.2",
     "eslint-plugin-react": "^7.1.0",
-    "jest": "^20.0.4",
+    "jest": "^21.1.0",
     "lodash": "^4.17.4",
     "moment": "^2.18.1",
     "react": "^15.6.1",
