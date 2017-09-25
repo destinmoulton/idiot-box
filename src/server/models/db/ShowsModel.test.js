@@ -6,65 +6,6 @@ import ibdb from '../../db/IBDB';
 
 import ShowsModel from './ShowsModel';
 
-describe("ShowsModel", ()=>{
-    let showsModel = {};
-
-    beforeEach(() => {
-        const dbConfig = {
-            inMemory: true
-        };
-
-        const migConfig = {
-            migrationsPath: path.resolve(__dirname, '../../../migrations')
-        };
-
-        return ibdb.connect(dbConfig)
-            .then(() => {
-                return ibdb._db.migrate(migConfig);
-            })
-            .then(()=>{
-                showsModel = new ShowsModel(ibdb);
-            });
-    });
-
-    afterEach(()=>{
-        ibdb.close();
-    });
-
-    it("adds a show", ()=>{
-        expect.assertions(1);
-        const IMAGE_FILENAME = "FILANEME_ONE.png";
-        const EXPECTED_DATA = collateExpectation(DATASET_ONE, IMAGE_FILENAME);
-        return showsModel.addShow(DATASET_ONE, IMAGE_FILENAME)
-                .then((res)=>{
-                    expect(res).toMatchObject(EXPECTED_DATA);
-                })
-    })
-});
-
-function collateExpectation(apiData, imageFilename) {
-    const EXPECTED_DATA = {
-        title: apiData.title,
-        year: apiData.year,
-        overview: apiData.overview,
-        first_aired: parseInt(moment(apiData.first_aired).format('X')),
-        runtime: apiData.runtime,
-        network: apiData.network,
-        status: apiData.status,
-        rating: apiData.rating,
-        updated_at: parseInt(moment(apiData.updated_at).format('X')),
-        slug: apiData.ids.slug,
-        trakt_id: apiData.ids.trakt,
-        tvdb_id: apiData.ids.tvdb,
-        imdb_id: apiData.ids.imdb,
-        tmdb_id: apiData.ids.tmdb,
-        tvrage_id: apiData.ids.tvrage,
-        image_filename: imageFilename
-    };
-
-    return EXPECTED_DATA;
-}
-
 // Data taken directly from an API call
 const DATASET_ONE = {
     title: 'Day Break',
@@ -127,3 +68,84 @@ const DATASET_TWO = {
     genres: [ 'comedy' ],
     aired_episodes: 255
 };
+
+describe("ShowsModel", ()=>{
+    let showsModel = {};
+
+    beforeEach(() => {
+        const dbConfig = {
+            inMemory: true
+        };
+
+        const migConfig = {
+            migrationsPath: path.resolve(__dirname, '../../../migrations')
+        };
+
+        return ibdb.connect(dbConfig)
+            .then(() => {
+                return ibdb._db.migrate(migConfig);
+            })
+            .then(()=>{
+                showsModel = new ShowsModel(ibdb);
+            });
+    });
+
+    afterEach(()=>{
+        ibdb.close();
+    });
+
+    const IMAGE_FILENAME_ONE = "FILENEME_ONE.png";
+    const IMAGE_FILENAME_TWO = "FILENAME_TWO.png";
+    const EXPECTED_DATA_ONE = collateExpectation(DATASET_ONE, IMAGE_FILENAME_ONE);
+    const EXPECTED_DATA_TWO = collateExpectation(DATASET_TWO, IMAGE_FILENAME_TWO);
+    it("adds a single show", ()=>{
+        expect.assertions(1);
+        
+        return showsModel.addShow(DATASET_ONE, IMAGE_FILENAME_ONE)
+                .then((res)=>{
+                    expect(res).toMatchObject(EXPECTED_DATA_ONE);
+                });
+    });
+
+    describe("Adds Multiple and", ()=>{
+        beforeEach(()=>{
+            return showsModel.addShow(DATASET_ONE, IMAGE_FILENAME_ONE)
+                .then((res)=>{
+                    return showsModel.addShow(DATASET_TWO, IMAGE_FILENAME_TWO)
+                });
+        });
+
+        it("gets single by id", ()=>{
+            expect.assertions(1);
+            return showsModel.getSingle(2)
+                    .then((res)=>{
+                        expect(res).toMatchObject(EXPECTED_DATA_TWO);
+                    });
+        });
+    });
+});
+
+
+
+function collateExpectation(apiData, imageFilename) {
+    const EXPECTED_DATA = {
+        title: apiData.title,
+        year: apiData.year,
+        overview: apiData.overview,
+        first_aired: parseInt(moment(apiData.first_aired).format('X')),
+        runtime: apiData.runtime,
+        network: apiData.network,
+        status: apiData.status,
+        rating: apiData.rating,
+        updated_at: parseInt(moment(apiData.updated_at).format('X')),
+        slug: apiData.ids.slug,
+        trakt_id: apiData.ids.trakt,
+        tvdb_id: apiData.ids.tvdb,
+        imdb_id: apiData.ids.imdb,
+        tmdb_id: apiData.ids.tmdb,
+        tvrage_id: apiData.ids.tvrage,
+        image_filename: imageFilename
+    };
+
+    return EXPECTED_DATA;
+}

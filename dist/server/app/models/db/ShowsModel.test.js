@@ -18,62 +18,6 @@ var _ShowsModel2 = _interopRequireDefault(_ShowsModel);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-describe("ShowsModel", function () {
-    var showsModel = {};
-
-    beforeEach(function () {
-        var dbConfig = {
-            inMemory: true
-        };
-
-        var migConfig = {
-            migrationsPath: _path2.default.resolve(__dirname, '../../../migrations')
-        };
-
-        return _IBDB2.default.connect(dbConfig).then(function () {
-            return _IBDB2.default._db.migrate(migConfig);
-        }).then(function () {
-            showsModel = new _ShowsModel2.default(_IBDB2.default);
-        });
-    });
-
-    afterEach(function () {
-        _IBDB2.default.close();
-    });
-
-    it("adds a show", function () {
-        expect.assertions(1);
-        var IMAGE_FILENAME = "FILANEME_ONE.png";
-        var EXPECTED_DATA = collateExpectation(DATASET_ONE, IMAGE_FILENAME);
-        return showsModel.addShow(DATASET_ONE, IMAGE_FILENAME).then(function (res) {
-            expect(res).toMatchObject(EXPECTED_DATA);
-        });
-    });
-});
-
-function collateExpectation(apiData, imageFilename) {
-    var EXPECTED_DATA = {
-        title: apiData.title,
-        year: apiData.year,
-        overview: apiData.overview,
-        first_aired: parseInt((0, _moment2.default)(apiData.first_aired).format('X')),
-        runtime: apiData.runtime,
-        network: apiData.network,
-        status: apiData.status,
-        rating: apiData.rating,
-        updated_at: parseInt((0, _moment2.default)(apiData.updated_at).format('X')),
-        slug: apiData.ids.slug,
-        trakt_id: apiData.ids.trakt,
-        tvdb_id: apiData.ids.tvdb,
-        imdb_id: apiData.ids.imdb,
-        tmdb_id: apiData.ids.tmdb,
-        tvrage_id: apiData.ids.tvrage,
-        image_filename: imageFilename
-    };
-
-    return EXPECTED_DATA;
-}
-
 // Data taken directly from an API call
 var DATASET_ONE = {
     title: 'Day Break',
@@ -134,3 +78,77 @@ var DATASET_TWO = {
     genres: ['comedy'],
     aired_episodes: 255
 };
+
+describe("ShowsModel", function () {
+    var showsModel = {};
+
+    beforeEach(function () {
+        var dbConfig = {
+            inMemory: true
+        };
+
+        var migConfig = {
+            migrationsPath: _path2.default.resolve(__dirname, '../../../migrations')
+        };
+
+        return _IBDB2.default.connect(dbConfig).then(function () {
+            return _IBDB2.default._db.migrate(migConfig);
+        }).then(function () {
+            showsModel = new _ShowsModel2.default(_IBDB2.default);
+        });
+    });
+
+    afterEach(function () {
+        _IBDB2.default.close();
+    });
+
+    var IMAGE_FILENAME_ONE = "FILENEME_ONE.png";
+    var IMAGE_FILENAME_TWO = "FILENAME_TWO.png";
+    var EXPECTED_DATA_ONE = collateExpectation(DATASET_ONE, IMAGE_FILENAME_ONE);
+    var EXPECTED_DATA_TWO = collateExpectation(DATASET_TWO, IMAGE_FILENAME_TWO);
+    it("adds a single show", function () {
+        expect.assertions(1);
+
+        return showsModel.addShow(DATASET_ONE, IMAGE_FILENAME_ONE).then(function (res) {
+            expect(res).toMatchObject(EXPECTED_DATA_ONE);
+        });
+    });
+
+    describe("Adds Multiple and", function () {
+        beforeEach(function () {
+            return showsModel.addShow(DATASET_ONE, IMAGE_FILENAME_ONE).then(function (res) {
+                return showsModel.addShow(DATASET_TWO, IMAGE_FILENAME_TWO);
+            });
+        });
+
+        it("gets single by id", function () {
+            expect.assertions(1);
+            return showsModel.getSingle(2).then(function (res) {
+                expect(res).toMatchObject(EXPECTED_DATA_TWO);
+            });
+        });
+    });
+});
+
+function collateExpectation(apiData, imageFilename) {
+    var EXPECTED_DATA = {
+        title: apiData.title,
+        year: apiData.year,
+        overview: apiData.overview,
+        first_aired: parseInt((0, _moment2.default)(apiData.first_aired).format('X')),
+        runtime: apiData.runtime,
+        network: apiData.network,
+        status: apiData.status,
+        rating: apiData.rating,
+        updated_at: parseInt((0, _moment2.default)(apiData.updated_at).format('X')),
+        slug: apiData.ids.slug,
+        trakt_id: apiData.ids.trakt,
+        tvdb_id: apiData.ids.tvdb,
+        imdb_id: apiData.ids.imdb,
+        tmdb_id: apiData.ids.tmdb,
+        tvrage_id: apiData.ids.tvrage,
+        image_filename: imageFilename
+    };
+
+    return EXPECTED_DATA;
+}
