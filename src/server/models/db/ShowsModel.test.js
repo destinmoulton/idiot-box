@@ -148,6 +148,18 @@ describe("ShowsModel", ()=>{
                         expect(res[1]).toMatchObject(EXPECTED_DATA_TWO);
                     });
         });
+
+        it("deletes single [deleteSingle()]", ()=>{
+            expect.assertions(2);
+            return showsModel.deleteSingle(1)
+                    .then(()=>{
+                        return showsModel.getAll()
+                    })
+                    .then((res)=>{
+                        expect(res.length).toBe(1);
+                        expect(res[0]).toMatchObject(EXPECTED_DATA_TWO);
+                    })
+        });
     });
 });
 

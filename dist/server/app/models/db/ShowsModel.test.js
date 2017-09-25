@@ -150,6 +150,16 @@ describe("ShowsModel", function () {
                 expect(res[1]).toMatchObject(EXPECTED_DATA_TWO);
             });
         });
+
+        it("deletes single [deleteSingle()]", function () {
+            expect.assertions(2);
+            return showsModel.deleteSingle(1).then(function () {
+                return showsModel.getAll();
+            }).then(function (res) {
+                expect(res.length).toBe(1);
+                expect(res[0]).toMatchObject(EXPECTED_DATA_TWO);
+            });
+        });
     });
 });
 
