@@ -115,12 +115,50 @@ describe("ShowsModel", ()=>{
                 });
         });
 
-        it("gets single by id", ()=>{
+        it("gets single by id [getSingle()]", ()=>{
             expect.assertions(1);
             return showsModel.getSingle(2)
                     .then((res)=>{
                         expect(res).toMatchObject(EXPECTED_DATA_TWO);
                     });
+        });
+
+        it("gets single by slug [getSingleBySlug()]", ()=>{
+            expect.assertions(1);
+            return showsModel.getSingleBySlug('day-break')
+                    .then((res)=>{
+                        expect(res).toMatchObject(EXPECTED_DATA_ONE);
+                    });
+        });
+
+        it("gets single by trakt id [getSingleByTraktID()]", ()=>{
+            expect.assertions(1);
+            return showsModel.getSingleByTraktID(3822)
+                    .then((res)=>{
+                        expect(res).toMatchObject(EXPECTED_DATA_TWO);
+                    });
+        });
+
+        it("gets all [getAll()]", ()=>{
+            expect.assertions(3);
+            return showsModel.getAll()
+                    .then((res)=>{
+                        expect(res.length).toBe(2);
+                        expect(res[0]).toMatchObject(EXPECTED_DATA_ONE);
+                        expect(res[1]).toMatchObject(EXPECTED_DATA_TWO);
+                    });
+        });
+
+        it("deletes single [deleteSingle()]", ()=>{
+            expect.assertions(2);
+            return showsModel.deleteSingle(1)
+                    .then(()=>{
+                        return showsModel.getAll()
+                    })
+                    .then((res)=>{
+                        expect(res.length).toBe(1);
+                        expect(res[0]).toMatchObject(EXPECTED_DATA_TWO);
+                    })
         });
     });
 });
