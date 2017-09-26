@@ -6,7 +6,7 @@ import { Input, Row } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 
-import MediaItemSearchDetails from './MediaItemSearchDetails';
+import MediaItemSearchDetails from '../shared/MediaItemSearchDetails';
 
 class MovieSearchResults extends Component {
 
