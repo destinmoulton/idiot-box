@@ -4,10 +4,12 @@ import { connect } from 'react-redux';
 
 import { Button, Col, Input, Modal, Select } from 'antd';
 
+import ShowResults from './ShowResults';
 
 class AddShowModal extends Component {
     static propTypes = {
         isVisible: PropTypes.bool.isRequired,
+        onAddShowComplete: PropTypes.func.isRequired,
         onCancel: PropTypes.func.isRequired
     }
 
@@ -20,6 +22,7 @@ class AddShowModal extends Component {
     render(){
         const {
             isVisible,
+            onAddShowComplete,
             onCancel,
         } = this.props;
 
@@ -33,8 +36,11 @@ class AddShowModal extends Component {
                     ]}
                     width={700}
                 >
-                
+                <ShowResults 
+                    onAddShowComplete={onAddShowComplete}/>
             </Modal>
         );
     }
 }
+
+export default AddShowModal;
