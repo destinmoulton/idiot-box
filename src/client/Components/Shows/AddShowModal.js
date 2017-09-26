@@ -8,6 +8,7 @@ import ShowResults from './ShowResults';
 
 class AddShowModal extends Component {
     static propTypes = {
+        currentSearchString: PropTypes.string.isRequired,
         isVisible: PropTypes.bool.isRequired,
         onAddShowComplete: PropTypes.func.isRequired,
         onCancel: PropTypes.func.isRequired
@@ -21,6 +22,7 @@ class AddShowModal extends Component {
 
     render(){
         const {
+            currentSearchString,
             isVisible,
             onAddShowComplete,
             onCancel,
@@ -36,7 +38,8 @@ class AddShowModal extends Component {
                     ]}
                     width={700}
                 >
-                <ShowResults 
+                <ShowResults
+                    currentSearchString={currentSearchString}
                     onAddShowComplete={onAddShowComplete}/>
             </Modal>
         );

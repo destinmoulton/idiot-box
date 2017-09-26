@@ -144,12 +144,11 @@ class ShowsList extends Component {
             <div>
                 <Row>
                     <h2>Shows</h2>
-                    <Input.Search
+                    <Input
                         autoFocus
                         value={currentSearchString}
                         onChange={this._handleChangeFilter.bind(this)}
                         style={{ width: 400 }}
-                        onSearch={this._handleChangeFilter.bind(this)}
                     />
                     <Button 
                         className="ib-button-green"
@@ -162,6 +161,7 @@ class ShowsList extends Component {
                     isVisible={isAddShowModalVisible}
                     onCancel={this._cancelAddShowModal.bind(this)}
                     onAddShowComplete={this._addShowComplete}
+                    currentSearchString={currentSearchString}
                 />
             </div>
         );
