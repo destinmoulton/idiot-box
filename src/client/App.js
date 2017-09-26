@@ -3,7 +3,7 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 import { BrowserRouter } from 'react-router-dom';
 
-import store, { history } from './store';
+import store from './store';
 
 import IdiotBox from './Components/IdiotBox';
 
@@ -13,7 +13,7 @@ class Main {
 
         const routing = (
             <Provider store={store}>
-                <BrowserRouter history={history}>
+                <BrowserRouter >
                     <IdiotBox />
                 </BrowserRouter>
             </Provider>
