@@ -16,7 +16,6 @@ class AddShow extends Component {
     };
 
     static propTypes = {
-        currentFilename: PropTypes.string.isRequired,
         onIDComplete: PropTypes.func.isRequired
     };
 
@@ -31,7 +30,7 @@ class AddShow extends Component {
     }
 
     _handleSelectMovie(show, imageURL){
-        const { emitAPIRequest, currentFilename } = this.props;
+        const { emitAPIRequest } = this.props;
 
         this.setState({
             isIDing: true
