@@ -11,7 +11,6 @@ import {
     Row
 } from 'antd';
 
-import AddShow from './AddShow';
 import ArchiveSingleEpisode from './ArchiveSingleEpisode';
 import EpisodeIDSelector from './EpisodeIDSelector';
 import MovieCheckForm from './MovieCheckForm';
@@ -20,7 +19,6 @@ import MovieID from './MovieID';
 class IDFileModal extends Component {
     INITIAL_VIEW = "two_column_single_id";
     MOVIE_SEARCH_VIEW = "movie_search_results";
-    ADD_SHOW_VIEW = "add_show";
     ARCHIVE_EPISODE_VIEW = "archive_episode";
 
     INITIAL_STATE = {
@@ -91,14 +89,6 @@ class IDFileModal extends Component {
         );
     }
 
-    _buildAddShowView(){
-        const { currentFilename, onIDComplete } = this.props;
-
-        return <AddShow
-                    currentFilename={currentFilename}
-                    onIDComplete={onIDComplete}/>;
-    }
-
     _buildMovieIDView(){
         const { movieSearchString } = this.state;
         const { currentFilename, currentPathInfo, onIDComplete } = this.props;
@@ -139,8 +129,6 @@ class IDFileModal extends Component {
                 return this._buildTwoColumnSingleID();
             case this.MOVIE_SEARCH_VIEW:
                 return this._buildMovieIDView();
-            case this.ADD_SHOW_VIEW:
-                return this._buildAddShowView();
             case this.ARCHIVE_EPISODE_VIEW:
                 return this._buildArchiveEpisodeView();
         }
