@@ -3,9 +3,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { Col, Icon, Input, Row, Spin } from 'antd';
+import { Button, Col, Icon, Input, Row, Spin } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
+
+import AddShowModal from './AddShowModal';
 
 class ShowsList extends Component {
 
@@ -15,6 +17,7 @@ class ShowsList extends Component {
         this.state = {
             currentSearchString: "",
             isLoadingShows: false,
+            isAddShowModalVisible: false,
             shows: []
         };
     }
@@ -105,9 +108,28 @@ class ShowsList extends Component {
         });
     }
 
+    _handleClickAddShow(){
+        this.setState({
+            isAddShowModalVisible: true
+        });
+    }
+
+    _cancelAddShowModal(){
+        this.setState({
+            isAddShowModalVisible: false
+        });
+    }
+
+    _addShowComplete(){
+        this.setState({
+            isAddShowModalVisible: false
+        });
+    }
+
     render() {
         const { 
             currentSearchString,
+            isAddShowModalVisible,
             isLoadingShows
         } = this.state;
 
@@ -131,11 +153,16 @@ class ShowsList extends Component {
                     />
                     <Button 
                         className="ib-button-green"
-                        onClick={this._changeCurrentView.bind(this, this.ADD_SHOW_VIEW)}>Add New Show</Button>
+                        onClick={this._handleClickAddShow.bind(this)}>Add New Show</Button>
                 </Row>
                 <Row>
                     {content}
                 </Row>
+                <AddShowModal
+                    isVisible={isAddShowModalVisible}
+                    onCancel={this._cancelAddShowModal.bind(this)}
+                    onAddShowComplete={this._addShowComplete}
+                />
             </div>
         );
     }
