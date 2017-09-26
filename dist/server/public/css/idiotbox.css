@@ -160,6 +160,7 @@ div.ib-newepisode-container {
     border: 2px solid gray;
     margin: 4px;
     padding: 4px;
+    border-radius: 6px;
 }
 
 div.ib-newepisode-img-box {
