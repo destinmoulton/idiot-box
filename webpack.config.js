@@ -8,10 +8,6 @@ module.exports = {
         path: path.join(__dirname, 'dist/server/public/js'), 
         filename: 'idiot-box.js'
     },
-    externals: {
-        'react': 'React',
-        'react-dom': 'ReactDOM'
-    },
     module: {
         loaders: [
             {
