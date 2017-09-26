@@ -6,9 +6,9 @@ import { Input, Row, Spin } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 
-import MediaItemSearchDetails from './MediaItemSearchDetails';
+import MediaItemSearchDetails from '../shared/MediaItemSearchDetails';
 
-class AddShow extends Component {
+class ShowResults extends Component {
     INITIAL_STATE = {
         currentSearchString: "",
         isIDing: false,
@@ -16,7 +16,7 @@ class AddShow extends Component {
     };
 
     static propTypes = {
-        onIDComplete: PropTypes.func.isRequired
+        onAddShowComplete: PropTypes.func.isRequired
     };
 
     constructor(props){
@@ -145,4 +145,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AddShow);
+export default connect(mapStateToProps, mapDispatchToProps)(ShowResults);
