@@ -9,23 +9,29 @@ import { emitAPIRequest } from '../../actions/api.actions';
 import MediaItemSearchDetails from '../shared/MediaItemSearchDetails';
 
 class ShowResults extends Component {
-    INITIAL_STATE = {
-        currentSearchString: "",
-        isIDing: false,
-        shows: []
-    };
 
     static propTypes = {
+        currentSearchString: PropTypes.string.isRequired,
         onAddShowComplete: PropTypes.func.isRequired
     };
 
     constructor(props){
         super(props);
 
+        this.INITIAL_STATE = {
+            currentSearchString: props.currentSearchString,
+            isIDing: false,
+            shows: []
+        };
+
         this.state = this.INITIAL_STATE;
     }
 
     componentWillMount(){
+        if(this.state.currentSearchString !== ""){
+            this._getSearchResultsFromServer();
+        }
+        
         this.setState(this.INITIAL_STATE);
     }
 
@@ -47,9 +53,9 @@ class ShowResults extends Component {
     }
 
     _idShowComplete(recd){
-        const { onIDComplete } = this.props;
+        const { onAddShowComplete } = this.props;
         
-        onIDComplete();
+        onAddShowComplete();
     }
 
     _handleChangeSearchInput(evt){
