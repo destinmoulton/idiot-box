@@ -129,6 +129,9 @@ class ShowsList extends Component {
                         style={{ width: 400 }}
                         onSearch={this._handleChangeFilter.bind(this)}
                     />
+                    <Button 
+                        className="ib-button-green"
+                        onClick={this._changeCurrentView.bind(this, this.ADD_SHOW_VIEW)}>Add New Show</Button>
                 </Row>
                 <Row>
                     {content}

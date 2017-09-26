@@ -81,9 +81,7 @@ class IDFileModal extends Component {
                     />
                 </Col>
                 <Col span={12} offset={2}>
-                    <Button 
-                        className="ib-button-green"
-                        onClick={this._changeCurrentView.bind(this, this.ADD_SHOW_VIEW)}>Add New Show</Button>
+                    
                     <div className="ib-idmodal-idepisode-box">
                     <h4>ID Episode</h4>
                     <EpisodeIDSelector onIDEpisode={this._handleClickIDEpisode.bind(this)}/>
