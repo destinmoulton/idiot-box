@@ -1,12 +1,13 @@
 import moment from 'moment';
-
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { truncate } from 'lodash';
 
 import { Col, Icon, Row, Spin } from 'antd';
 
 import { emitAPIRequest } from '../actions/api.actions';
+
 class NewEpisodes extends Component {
     constructor(props){
         super(props);
@@ -68,11 +69,11 @@ class NewEpisodes extends Component {
                 <div className="ib-newepisode-details-box">
                     <div className="ib-newepisode-show-title">
                         <Link to={"/show/"+episode.show_info.slug}>
-                            {episode.show_info.title}
+                            {truncate(episode.show_info.title, {length:32})}
                         </Link>
                     </div>
                     <div className="ib-newepisode-ep-title">
-                        {episode.title}
+                        {truncate(episode.title, {length:35})}
                     </div>
                     <div>
                         Season {episode.season_number} - Episode {episode.episode_number}
@@ -100,7 +101,7 @@ class NewEpisodes extends Component {
                 if(episodes[unixDay].length === 0){
                     // No episodes message
                     epList = <div key={unixDay}
-                                    className="ib-newepisode-container">
+                                  className="ib-newepisode-container">
                                 <h3>Nothing to see here...</h3>
                             </div>;
                 } else {
