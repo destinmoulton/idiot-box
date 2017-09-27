@@ -3,9 +3,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { Col, Icon, Input, Row, Spin } from 'antd';
+import { Button, Col, Icon, Input, Row, Spin } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
+
+import AddShowModal from './AddShowModal';
 
 class ShowsList extends Component {
 
@@ -15,6 +17,7 @@ class ShowsList extends Component {
         this.state = {
             currentSearchString: "",
             isLoadingShows: false,
+            isAddShowModalVisible: false,
             shows: []
         };
     }
@@ -45,6 +48,8 @@ class ShowsList extends Component {
             isLoadingShows: false,
             shows: newShows
         });
+
+        this._filterVisibleShows(this.state.currentSearchString);
     }
 
     _prepStringForFilter(title){
@@ -81,10 +86,18 @@ class ShowsList extends Component {
     }
 
     _handleChangeFilter(evt){
-        const { shows } = this.state;
-
         const currentSearchString = evt.currentTarget.value;
-        const filterText = this._prepStringForFilter(currentSearchString);
+
+        this.setState({
+            currentSearchString,
+        });
+
+        this._filterVisibleShows(currentSearchString);
+    }
+
+    _filterVisibleShows(searchString){
+        const { shows } = this.state;
+        const filterText = this._prepStringForFilter(searchString);
         let filteredShows = [];
 
         shows.forEach((show)=>{
@@ -100,14 +113,41 @@ class ShowsList extends Component {
         });
 
         this.setState({
-            currentSearchString,
             shows: filteredShows
         });
+    }
+
+    _handleClickAddShow(){
+        this.setState({
+            isAddShowModalVisible: true
+        });
+    }
+
+    _handleClickClearFilter(){
+        this.setState({
+            currentSearchString: ""
+        });
+        this._filterVisibleShows("");
+    }
+
+    _cancelAddShowModal(){
+        this.setState({
+            isAddShowModalVisible: false
+        });
+    }
+
+    _addShowComplete(){
+        this.setState({
+            isAddShowModalVisible: false
+        });
+
+        this._getShows();
     }
 
     render() {
         const { 
             currentSearchString,
+            isAddShowModalVisible,
             isLoadingShows
         } = this.state;
 
@@ -122,17 +162,26 @@ class ShowsList extends Component {
             <div>
                 <Row>
                     <h2>Shows</h2>
-                    <Input.Search
+                    <Input
                         autoFocus
                         value={currentSearchString}
                         onChange={this._handleChangeFilter.bind(this)}
                         style={{ width: 400 }}
-                        onSearch={this._handleChangeFilter.bind(this)}
+                        suffix={<Icon type="close-square" onClick={this._handleClickClearFilter.bind(this)}/>}                        
                     />
+                    <Button 
+                        className="ib-button-green"
+                        onClick={this._handleClickAddShow.bind(this)}>Add New Show</Button>
                 </Row>
                 <Row>
                     {content}
                 </Row>
+                <AddShowModal
+                    isVisible={isAddShowModalVisible}
+                    onCancel={this._cancelAddShowModal.bind(this)}
+                    onAddShowComplete={this._addShowComplete.bind(this)}
+                    currentSearchString={currentSearchString}
+                />
             </div>
         );
     }

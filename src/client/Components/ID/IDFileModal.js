@@ -11,7 +11,6 @@ import {
     Row
 } from 'antd';
 
-import AddShow from './AddShow';
 import ArchiveSingleEpisode from './ArchiveSingleEpisode';
 import EpisodeIDSelector from './EpisodeIDSelector';
 import MovieCheckForm from './MovieCheckForm';
@@ -20,7 +19,6 @@ import MovieID from './MovieID';
 class IDFileModal extends Component {
     INITIAL_VIEW = "two_column_single_id";
     MOVIE_SEARCH_VIEW = "movie_search_results";
-    ADD_SHOW_VIEW = "add_show";
     ARCHIVE_EPISODE_VIEW = "archive_episode";
 
     INITIAL_STATE = {
@@ -75,30 +73,21 @@ class IDFileModal extends Component {
         return (
             <div>
                 <Col span={10}>
+                    <h4>Movie</h4>
                     <MovieCheckForm
                         currentFilename={currentFilename}
                         onSearchMovies={this._handleClickSearchMovies.bind(this)}
                     />
                 </Col>
-                <Col span={12} offset={2}>
-                    <Button 
-                        className="ib-button-green"
-                        onClick={this._changeCurrentView.bind(this, this.ADD_SHOW_VIEW)}>Add New Show</Button>
+                <Col span={12} offset={1}>
+                    
                     <div className="ib-idmodal-idepisode-box">
-                    <h4>ID Episode</h4>
-                    <EpisodeIDSelector onIDEpisode={this._handleClickIDEpisode.bind(this)}/>
+                        <h4>Episode</h4>
+                        <EpisodeIDSelector onIDEpisode={this._handleClickIDEpisode.bind(this)}/>
                     </div>
                 </Col>
             </div>
         );
-    }
-
-    _buildAddShowView(){
-        const { currentFilename, onIDComplete } = this.props;
-
-        return <AddShow
-                    currentFilename={currentFilename}
-                    onIDComplete={onIDComplete}/>;
     }
 
     _buildMovieIDView(){
@@ -141,8 +130,6 @@ class IDFileModal extends Component {
                 return this._buildTwoColumnSingleID();
             case this.MOVIE_SEARCH_VIEW:
                 return this._buildMovieIDView();
-            case this.ADD_SHOW_VIEW:
-                return this._buildAddShowView();
             case this.ARCHIVE_EPISODE_VIEW:
                 return this._buildArchiveEpisodeView();
         }

@@ -44,9 +44,8 @@ div.ib-idmodal-item-search-details-box {
 }
 
 div.ib-idmodal-idepisode-box {
-    margin-top: 5px;
-    padding: 10px;
-    border: 1px solid gray;
+    padding-left: 25px;
+    border-left: 1px solid gray;
     width: 100%;
 }
 
