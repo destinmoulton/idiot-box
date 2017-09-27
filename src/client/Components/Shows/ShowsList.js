@@ -153,7 +153,7 @@ class ShowsList extends Component {
 
         let content = "";
         if(isLoadingShows){
-            content = <Spin />;
+            content = <div class="ib-spinner-container"><Spin /></div>;
         } else {
             content = this._buildShowList();
         }
