@@ -115,9 +115,9 @@ class ShowResults extends Component {
 
     _buildAddingShow(){
         return (
-            <div>
+            <div class="ib-spinner-container">
                 <Spin />
-                Adding show. This could take a while...
+                <br/>Adding show. This could take a while...
             </div>
         );
     }
