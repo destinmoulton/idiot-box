@@ -160,7 +160,7 @@ class ShowsList extends Component {
                 <AddShowModal
                     isVisible={isAddShowModalVisible}
                     onCancel={this._cancelAddShowModal.bind(this)}
-                    onAddShowComplete={this._addShowComplete}
+                    onAddShowComplete={this._addShowComplete.bind(this)}
                     currentSearchString={currentSearchString}
                 />
             </div>
