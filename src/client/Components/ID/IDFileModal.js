@@ -73,16 +73,17 @@ class IDFileModal extends Component {
         return (
             <div>
                 <Col span={10}>
+                    <h4>Movie</h4>
                     <MovieCheckForm
                         currentFilename={currentFilename}
                         onSearchMovies={this._handleClickSearchMovies.bind(this)}
                     />
                 </Col>
-                <Col span={12} offset={2}>
+                <Col span={12} offset={1}>
                     
                     <div className="ib-idmodal-idepisode-box">
-                    <h4>ID Episode</h4>
-                    <EpisodeIDSelector onIDEpisode={this._handleClickIDEpisode.bind(this)}/>
+                        <h4>Episode</h4>
+                        <EpisodeIDSelector onIDEpisode={this._handleClickIDEpisode.bind(this)}/>
                     </div>
                 </Col>
             </div>
