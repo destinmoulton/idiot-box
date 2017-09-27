@@ -48,6 +48,8 @@ class ShowsList extends Component {
             isLoadingShows: false,
             shows: newShows
         });
+
+        this._filterVisibleShows(this.state.currentSearchString);
     }
 
     _prepStringForFilter(title){
@@ -84,10 +86,18 @@ class ShowsList extends Component {
     }
 
     _handleChangeFilter(evt){
-        const { shows } = this.state;
-
         const currentSearchString = evt.currentTarget.value;
-        const filterText = this._prepStringForFilter(currentSearchString);
+
+        this.setState({
+            currentSearchString,
+        });
+
+        this._filterVisibleShows(currentSearchString);
+    }
+
+    _filterVisibleShows(searchString){
+        const { shows } = this.state;
+        const filterText = this._prepStringForFilter(searchString);
         let filteredShows = [];
 
         shows.forEach((show)=>{
@@ -103,7 +113,6 @@ class ShowsList extends Component {
         });
 
         this.setState({
-            currentSearchString,
             shows: filteredShows
         });
     }
@@ -124,6 +133,8 @@ class ShowsList extends Component {
         this.setState({
             isAddShowModalVisible: false
         });
+
+        this._getShows();
     }
 
     render() {
