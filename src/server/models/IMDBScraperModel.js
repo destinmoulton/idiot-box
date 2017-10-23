@@ -1,4 +1,5 @@
-import scraperjs from 'scraperjs';
+import scraperjs from "scraperjs";
+import randomUseragent from "random-useragent";
 
 export default class IMDBScraperModel {
     constructor(){
@@ -13,12 +14,14 @@ export default class IMDBScraperModel {
                 url,
                 method: "GET",
                 headers: {
-                    "user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X)",
+                    "user-agent":randomUseragent.getRandom((ua)=>{
+                        return parseFloat(ua.browserVersion) >= 20 && ua.browserName === 'Firefox'
+                    }),
                     "accept":"text/html"
                 }
             })
             .scrape(($)=>{
-                return $(this._posterSelector).attr('src');
+                return $(this._posterSelector).attr("src");
             });
     }
 

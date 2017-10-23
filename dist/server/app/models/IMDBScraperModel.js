@@ -10,6 +10,10 @@ var _scraperjs = require("scraperjs");
 
 var _scraperjs2 = _interopRequireDefault(_scraperjs);
 
+var _randomUseragent = require("random-useragent");
+
+var _randomUseragent2 = _interopRequireDefault(_randomUseragent);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -32,11 +36,13 @@ var IMDBScraperModel = function () {
                 url: url,
                 method: "GET",
                 headers: {
-                    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X)",
+                    "user-agent": _randomUseragent2.default.getRandom(function (ua) {
+                        return parseFloat(ua.browserVersion) >= 20 && ua.browserName === 'Firefox';
+                    }),
                     "accept": "text/html"
                 }
             }).scrape(function ($) {
-                return $(_this._posterSelector).attr('src');
+                return $(_this._posterSelector).attr("src");
             });
         }
     }, {
