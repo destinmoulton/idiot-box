@@ -7,7 +7,16 @@ export default class IMDBScraperModel {
     }
 
     getPosterURL(imdbID){
-        return scraperjs.StaticScraper.create(this._buildImdbPath(imdbID))
+        const url = this._buildImdbPath(imdbID);
+        return scraperjs.StaticScraper.create()
+            .request({
+                url,
+                method: "GET",
+                headers: {
+                    "user-agent":"Mozilla/5.0 (Macintosh; Intel Mac OS X)",
+                    "accept":"text/html"
+                }
+            })
             .scrape(($)=>{
                 return $(this._posterSelector).attr('src');
             });

@@ -27,7 +27,15 @@ var IMDBScraperModel = function () {
         value: function getPosterURL(imdbID) {
             var _this = this;
 
-            return _scraperjs2.default.StaticScraper.create(this._buildImdbPath(imdbID)).scrape(function ($) {
+            var url = this._buildImdbPath(imdbID);
+            return _scraperjs2.default.StaticScraper.create().request({
+                url: url,
+                method: "GET",
+                headers: {
+                    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X)",
+                    "accept": "text/html"
+                }
+            }).scrape(function ($) {
                 return $(_this._posterSelector).attr('src');
             });
         }
