@@ -12,6 +12,17 @@ class MovieInfoModal extends Component {
         onClose: PropTypes.func.isRequired 
     };
 
+    constructor(props){
+        super(props);
+
+        this._handleCancelClose = this._handleCancelClose.bind(this);
+        this._handlePressDelete = this._handlePressDelete.bind(this);
+    }
+
+    _handleCancelClose(){
+        this.props.onClose(false);
+    }
+
     _handlePressDelete(){
         const { movie } = this.props;
 
@@ -35,20 +46,21 @@ class MovieInfoModal extends Component {
         onClose(true);
     }
 
+    
+
     render() {
         const {
             isVisible,
-            movie,
-            onClose
+            movie
         } = this.props;
         
         return (
             <Modal
                     title="Movie Info"
                     visible={isVisible}
-                    onCancel={onClose}
+                    onCancel={this._handleCancelClose}
                     footer={[
-                        <Button key="close" size="large" onClick={onClose}>Close</Button>
+                        <Button key="close" size="large" onClick={this._handleCancelClose}>Close</Button>
                     ]}
                     width={700}
                 >
@@ -64,7 +76,7 @@ class MovieInfoModal extends Component {
                         <h3 dangerouslySetInnerHTML={{__html: movie.title}}></h3>
                         <h4>{movie.year}</h4>
                         <h4><a href={"http://imdb.com/title/" + movie.imdb_id} target="_blank">IMDB</a></h4>
-                        <Button onClick={this._handlePressDelete.bind(this)} type="danger">Delete</Button>
+                        <Button onClick={this._handlePressDelete} type="danger">Delete</Button>
                         <p>{movie.overview}</p>
                     </Col>
                 </Row>
