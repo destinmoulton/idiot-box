@@ -169,7 +169,8 @@ class ShowsList extends Component {
                         value={currentSearchString}
                         onChange={this._handleChangeFilter.bind(this)}
                         style={{ width: 400 }}
-                        suffix={<Icon type="close-square" onClick={this._handleClickClearFilter.bind(this)}/>}                        
+                        suffix={<Icon type="close-square" onClick={this._handleClickClearFilter.bind(this)}/>}
+                        placeholder="Search..."                       
                     />
                     <Button 
                         className="ib-button-green"
