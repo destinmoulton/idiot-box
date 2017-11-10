@@ -256,6 +256,11 @@ div.ib-show-seasonlist-season-box-active {
     background-color: #ebf3cc;
 }
 
+div.ib-shows-searchbar{
+    padding:5px;
+    text-align: right;
+}
+
 div.ib-spinner-container {
     width: 100%;
     padding-top: 25px;
