@@ -24,10 +24,10 @@ class MoviesList extends Component {
     }
 
     componentWillMount(){
-        this._getShows();
+        this._getMovies();
     }
 
-    _getShows(){
+    _getMovies(){
         const { emitAPIRequest } = this.props;
 
         this.setState({
@@ -65,7 +65,7 @@ class MoviesList extends Component {
         });
 
         if(shouldReload){
-            this._getShows();
+            this._getMovies();
         }
     }
 
