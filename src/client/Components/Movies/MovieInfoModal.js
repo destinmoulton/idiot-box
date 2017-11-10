@@ -46,8 +46,6 @@ class MovieInfoModal extends Component {
         onClose(true);
     }
 
-    
-
     render() {
         const {
             isVisible,
