@@ -160,6 +160,8 @@ class MoviesList extends Component {
             <div>
                 <Row>
                     <h2>Movies</h2>
+                </Row>
+                <Row className="ib-movies-searchbar">
                     <Input.Search
                         autoFocus
                         value={currentSearchString}

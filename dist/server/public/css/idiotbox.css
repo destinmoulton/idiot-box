@@ -135,6 +135,11 @@ div.ib-moverename-input-box{
     padding: 5px;
 }
 
+div.ib-movies-searchbar{
+    text-align:right;
+    padding: 5px;
+}
+
 div.ib-movies-thumbnail-box {
     float: left;
     width: 150px;
