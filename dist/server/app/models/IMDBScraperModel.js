@@ -43,6 +43,11 @@ var IMDBScraperModel = function () {
                 }
             }).scrape(function ($) {
                 return $(_this._posterSelector).attr("src");
+            }).then(function (parsedResult, utils) {
+                return {
+                    imageURL: parsedResult,
+                    url: utils.url
+                };
             });
         }
     }, {
