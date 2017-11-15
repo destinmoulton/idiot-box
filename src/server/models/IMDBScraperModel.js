@@ -22,6 +22,12 @@ export default class IMDBScraperModel {
             })
             .scrape(($)=>{
                 return $(this._posterSelector).attr("src");
+            })
+            .then((parsedResult, utils)=>{
+                return {
+                    imageURL: parsedResult,
+                    url: utils.url
+                }
             });
     }
 
