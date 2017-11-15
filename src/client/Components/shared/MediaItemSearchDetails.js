@@ -6,6 +6,8 @@ import { Button, Col, Spin } from 'antd';
 
 import { emitAPIRequest } from '../../actions/api.actions';
 
+const MAX_IMAGE_RETRIES = 5;
+
 class MediaItemSearchDetails extends Component {
 
     static propTypes = {
@@ -16,7 +18,9 @@ class MediaItemSearchDetails extends Component {
         super(props);
 
         this.state = {
-            imageURL: ""
+            imageURL: "",
+            imageRetryCount: 0,
+            imageStatus: "loading"
         };
     }
 
@@ -26,6 +30,14 @@ class MediaItemSearchDetails extends Component {
 
     _getImageFromServer(){
         const { emitAPIRequest, item } = this.props;
+
+        if(item.ids.imdb === null){
+            this.setState({
+                imageStatus: "no_imdb_page"
+            })
+            
+            return;
+        }
 
         const options = {
             imdb_id: item.ids.imdb
@@ -41,20 +53,40 @@ class MediaItemSearchDetails extends Component {
         onSelectItem(item, imageURL);
     }
 
-    _imageReceived(imageURL){
-        this.setState({
-            imageURL
-        });
+    _imageReceived(responseObj){
+        const { imageRetryCount } = this.state;
+        if(responseObj.imageURL === undefined && imageRetryCount < MAX_IMAGE_RETRIES){
+            this.setState({
+                imageRetryCount: imageRetryCount + 1
+            })
+
+            //Retry getting image
+            this._getImageFromServer();
+        } else if(responseObj.imageURL === undefined){
+            this.setState({
+                imageStatus: "no_imdb_image"
+            })
+        } else {
+            this.setState({
+                imageStatus: "found",
+                imageURL: responseObj.imageURL
+            });
+        }
     }
 
     render() {
-        const { imageURL } = this.state;
+        const { imageStatus, imageURL } = this.state;
         const { item, onSelectItem } = this.props;
 
         let image = <Spin />;
-        if(imageURL){
+        if(imageStatus === "found"){
             image = <img src={imageURL} className={"ib-idmodal-item-search-details-img"} />
+        } else if(imageStatus === "no_imdb_image"){
+            image = <span>No IMDB image available.</span>;
+        } else if (imageStatus === "no_imdb_page"){
+            image = <span>No IMDB page.</span>;
         }
+
         let itemTitle = {__html: item.title};
         return (
             <Col 
