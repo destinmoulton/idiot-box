@@ -117,7 +117,13 @@ class ShowsList extends Component {
         });
     }
 
-    _handleClickAddShow(){
+    _handleCheckPressEnter(e){
+        if(e.key === "Enter"){
+            this._handleOpenAddShowModal();
+        }
+    }
+
+    _handleOpenAddShowModal(){
         this.setState({
             isAddShowModalVisible: true
         });
@@ -153,7 +159,7 @@ class ShowsList extends Component {
 
         let content = "";
         if(isLoadingShows){
-            content = <div class="ib-spinner-container"><Spin /></div>;
+            content = <div className="ib-spinner-container"><Spin /></div>;
         } else {
             content = this._buildShowList();
         }
@@ -168,13 +174,14 @@ class ShowsList extends Component {
                         autoFocus
                         value={currentSearchString}
                         onChange={this._handleChangeFilter.bind(this)}
+                        onKeyPress={this._handleCheckPressEnter.bind(this)}
                         style={{ width: 400 }}
                         suffix={<Icon type="close-square" onClick={this._handleClickClearFilter.bind(this)}/>}
                         placeholder="Search..."                       
                     />
                     <Button 
                         className="ib-button-green"
-                        onClick={this._handleClickAddShow.bind(this)}>Add New Show</Button>
+                        onClick={this._handleOpenAddShowModal.bind(this)}>Add New Show</Button>
                 </Row>
                 <Row>
                     {content}
