@@ -1,11 +1,12 @@
+import PropTypes from "prop-types";
 import React, { Component } from 'react';
 
-import { Button, Icon } from 'antd';
+import { Button, Icon, Modal } from 'antd';
 
 import { connect } from 'react-redux';
 
 import { emitAPIRequest } from '../actions/api.actions';
-class VideoPlayerRemote extends Component {
+class VideoPlayerRemoteModal extends Component {
 
     BUTTONS = {
         reverse: [
@@ -43,6 +44,11 @@ class VideoPlayerRemote extends Component {
 
     BUTTON_ACTIVE_CLASS = "ib-remote-button-active";
 
+    static propTypes = {
+        onCancel: PropTypes.func.isRequired,
+        isVisible: PropTypes.bool.isRequired
+    }
+
     constructor(props){
         super(props);
 
@@ -62,7 +68,7 @@ class VideoPlayerRemote extends Component {
     }
 
     _sendCommandComplete(){
-        console.log("VideoPlayerRemote :: command sent :: " + this.state.activeCmd);
+        console.log("VideoPlayerRemoteModal :: command sent :: " + this.state.activeCmd);
     }
 
     _buildButtonSet(buttonSection){
@@ -98,19 +104,34 @@ class VideoPlayerRemote extends Component {
     }
 
     render() {
+        const {
+            isVisible,
+            onCancel
+        } = this.props;
+
         let revButtons = this._buildButtonSet('reverse');
         let playpauseButtons = this._buildPlayPauseButton();
         let forwardButtons = this._buildButtonSet('forward');
         let closeButton = this._buildButtonSet('close');
         return (
-            <div>
-                <Button.Group>
-                    {revButtons}
-                    {playpauseButtons}
-                    {forwardButtons}
-                </Button.Group>
-                &nbsp;{closeButton}
-            </div>
+            <Modal
+                title="ID Multiple Episodes"
+                visible={isVisible}
+                onCancel={onCancel}
+                footer={[
+                    <Button key="cancel" size="large" onClick={onCancel}>Close</Button>
+                ]}
+                width={700}
+            >
+                <div>
+                    <Button.Group>
+                        {revButtons}
+                        {playpauseButtons}
+                        {forwardButtons}
+                    </Button.Group>
+                    &nbsp;{closeButton}
+                </div>
+            </Modal>
         );
     }
 }
@@ -124,4 +145,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(VideoPlayerRemote);
+export default connect(mapStateToProps, mapDispatchToProps)(VideoPlayerRemoteModal);
