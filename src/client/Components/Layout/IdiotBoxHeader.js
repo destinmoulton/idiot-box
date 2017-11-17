@@ -59,8 +59,10 @@ class IdiotBoxHeader extends Component {
                             <Icon type="setting"/>
                         </Link>
                     </Menu.Item>
-                    <Menu.Item key="remote">
-                        <Button onClick={this._handleRemoteModalOpen}>Remote</Button>
+                    <Menu.Item key="remote" >
+                        <div onClick={this._handleRemoteModalOpen}>
+                        <Icon type="video-camera" />
+                        </div>
                         <VideoPlayerRemoteModal onCancel={this._handleRemoteModalClose} isVisible={remoteModalIsVisible}/>
                     </Menu.Item>
                 </Menu>
