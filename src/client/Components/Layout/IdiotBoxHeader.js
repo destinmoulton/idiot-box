@@ -1,13 +1,38 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import { Icon, Layout, Menu } from 'antd';
+import { Button, Icon, Layout, Menu } from 'antd';
 const { Header } = Layout;
 
-import VideoPlayerRemote from '../VideoPlayerRemote';
+import VideoPlayerRemoteModal from '../VideoPlayerRemoteModal';
 
 class IdiotBoxHeader extends Component {
+    constructor(props){
+        super(props);
+
+        this.state = {
+            remoteModalIsVisible: false
+        }
+
+        this._handleRemoteModalClose = this._handleRemoteModalClose.bind(this);
+        this._handleRemoteModalOpen = this._handleRemoteModalOpen.bind(this);
+    }
+
+    _handleRemoteModalOpen(){
+        this.setState({
+            remoteModalIsVisible: true
+        });
+    }
+
+    _handleRemoteModalClose(){
+        this.setState({
+            remoteModalIsVisible: false
+        })
+    }
+
     render() {
+        const { remoteModalIsVisible } = this.state;
+
         return (
             <Header>
                 <div className="logo" />
@@ -35,7 +60,8 @@ class IdiotBoxHeader extends Component {
                         </Link>
                     </Menu.Item>
                     <Menu.Item key="remote">
-                        <VideoPlayerRemote />
+                        <Button onClick={this._handleRemoteModalOpen}>Remote</Button>
+                        <VideoPlayerRemoteModal onCancel={this._handleRemoteModalClose} isVisible={remoteModalIsVisible}/>
                     </Menu.Item>
                 </Menu>
             </Header>
