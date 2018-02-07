@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6,15 +6,15 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _fs = require('fs');
+var _fs = require("fs");
 
 var _fs2 = _interopRequireDefault(_fs);
 
-var _path = require('path');
+var _path = require("path");
 
 var _path2 = _interopRequireDefault(_path);
 
-var _thumbnails = require('../config/thumbnails.config');
+var _thumbnails = require("../config/thumbnails.config");
 
 var _thumbnails2 = _interopRequireDefault(_thumbnails);
 
@@ -33,7 +33,7 @@ var MovieAPI = function () {
     }
 
     _createClass(MovieAPI, [{
-        key: 'getAllMoviesWithFileInfo',
+        key: "getAllMoviesWithFileInfo",
         value: function getAllMoviesWithFileInfo() {
             var _this = this;
 
@@ -42,14 +42,14 @@ var MovieAPI = function () {
 
                 movies.forEach(function (movie) {
                     var data = Object.assign({}, movie);
-                    data['file_info'] = {};
+                    data["file_info"] = {};
 
                     var cmd = _this._fileToMovieModel.getSingleForMovie(movie.id).then(function (fileMovie) {
-                        if (!fileMovie.hasOwnProperty('file_id')) {
+                        if (!fileMovie.hasOwnProperty("file_id")) {
                             return Promise.resolve(data);
                         }
                         return _this._filesModel.getSingle(fileMovie.file_id).then(function (file) {
-                            if (!file.hasOwnProperty('id')) {
+                            if (!file.hasOwnProperty("id")) {
                                 return Promise.resolve(data);
                             }
                             data.file_info = file;
@@ -63,12 +63,12 @@ var MovieAPI = function () {
             });
         }
     }, {
-        key: 'deleteSingle',
+        key: "deleteSingle",
         value: function deleteSingle(movieID) {
             var _this2 = this;
 
             return this._moviesModel.getSingle(movieID).then(function (movie) {
-                if (!movie.hasOwnProperty('id')) {
+                if (!movie.hasOwnProperty("id")) {
                     return Promise.reject("MovieAPI :: deleteSingle() :: Unable to find movie ${movieID}");
                 }
                 return _this2._removeMovieThumbnail(movie);
@@ -81,7 +81,7 @@ var MovieAPI = function () {
             });
         }
     }, {
-        key: '_removeShowThumbnail',
+        key: "_removeShowThumbnail",
         value: function _removeShowThumbnail(showID) {
             return this._showsModel.getSingle(showID).then(function (show) {
                 var fullPath = _path2.default.join(_thumbnails2.default.shows, show.image_filename);
@@ -92,13 +92,14 @@ var MovieAPI = function () {
             });
         }
     }, {
-        key: '_removeFileAssociationForMovie',
+        key: "_removeFileAssociationForMovie",
         value: function _removeFileAssociationForMovie(movieID) {
             var _this3 = this;
 
             return this._fileToMovieModel.getSingleForMovie(movieID).then(function (fileToMovie) {
-                if (!fileToMovie.hasOwnProperty('file_id')) {
-                    return Promise.reject("MovieAPI :: _removeFileAssociationForMovie :: Unable to find file to movie association");
+                if (!fileToMovie.hasOwnProperty("file_id")) {
+                    // No file to remove
+                    return Promise.resolve();
                 }
 
                 return _this3._filesModel.deleteSingle(fileToMovie.file_id).then(function () {
@@ -107,7 +108,7 @@ var MovieAPI = function () {
             });
         }
     }, {
-        key: '_removeMovieThumbnail',
+        key: "_removeMovieThumbnail",
         value: function _removeMovieThumbnail(movie) {
             var fullPath = _path2.default.join(_thumbnails2.default.movies, movie.image_filename);
             if (!_fs2.default.existsSync(fullPath)) {
