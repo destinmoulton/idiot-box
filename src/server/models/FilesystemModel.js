@@ -67,38 +67,24 @@ export default class FilesystemModel {
                 }
 
                 if (file.mediatype === "movie") {
-                    return this._getMovieFileInfo(file);
+                    return this._getMovieFileInfo(file, fileData);
                 } else {
-                    return this._fileToEpisodeModel
-                        .getSingleForFile(file.id)
-                        .then(fileToEpisode => {
-                            if (!fileToEpisode.hasOwnProperty("episode_id")) {
-                                return Promise.resolve(fileData);
-                            }
-                            return this._showSeasonEpisodesModel.getSingle(
-                                fileToEpisode.episode_id
-                            );
-                        })
-                        .then(episodeInfo => {
-                            const assocData = {
-                                episode_id: episodeInfo.id,
-                                file_id: file.id,
-                                title: episodeInfo.title,
-                                type: "show"
-                            };
-                            fileData.assocData = assocData;
-                            return Promise.resolve(fileData);
-                        });
+                    return this._getEpisodeFileInfo(file, fileData);
                 }
             });
     }
 
-    _getMovieFileInfo(file) {
+    /**
+     * Get the movie file information for collation
+     * @param object FilesModel file row.
+     * @param object Object to append collation
+     */
+    _getMovieFileInfo(file, fileCollate) {
         return this._fileToMovieModel
             .getSingleForFile(file.id)
             .then(fileToMovie => {
                 if (!fileToMovie.hasOwnProperty("movie_id")) {
-                    return Promise.resolve(fileData);
+                    return Promise.resolve(fileCollate);
                 }
                 return this._moviesModel.getSingle(fileToMovie.movie_id);
             })
@@ -109,8 +95,36 @@ export default class FilesystemModel {
                     title: movieInfo.title,
                     type: "movie"
                 };
-                fileData.assocData = assocData;
-                return Promise.resolve(fileData);
+                fileCollate.assocData = assocData;
+                return Promise.resolve(fileCollate);
+            });
+    }
+
+    /**
+     * Get the episode-file information for collation.
+     * @param Object FilesModel file row.
+     * @param Object Object to append collation
+     */
+    _getEpisodeFileInfo(file, fileCollate) {
+        return this._fileToEpisodeModel
+            .getSingleForFile(file.id)
+            .then(fileToEpisode => {
+                if (!fileToEpisode.hasOwnProperty("episode_id")) {
+                    return Promise.resolve(fileCollate);
+                }
+                return this._showSeasonEpisodesModel.getSingle(
+                    fileToEpisode.episode_id
+                );
+            })
+            .then(episodeInfo => {
+                const assocData = {
+                    episode_id: episodeInfo.id,
+                    file_id: file.id,
+                    title: episodeInfo.title,
+                    type: "show"
+                };
+                fileCollate.assocData = assocData;
+                return Promise.resolve(fileCollate);
             });
     }
 

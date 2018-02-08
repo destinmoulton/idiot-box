@@ -87,34 +87,27 @@ var FilesystemModel = function () {
                 }
 
                 if (file.mediatype === "movie") {
-                    return _this2._getMovieFileInfo(file);
+                    return _this2._getMovieFileInfo(file, fileData);
                 } else {
-                    return _this2._fileToEpisodeModel.getSingleForFile(file.id).then(function (fileToEpisode) {
-                        if (!fileToEpisode.hasOwnProperty("episode_id")) {
-                            return Promise.resolve(fileData);
-                        }
-                        return _this2._showSeasonEpisodesModel.getSingle(fileToEpisode.episode_id);
-                    }).then(function (episodeInfo) {
-                        var assocData = {
-                            episode_id: episodeInfo.id,
-                            file_id: file.id,
-                            title: episodeInfo.title,
-                            type: "show"
-                        };
-                        fileData.assocData = assocData;
-                        return Promise.resolve(fileData);
-                    });
+                    return _this2._getEpisodeFileInfo(file, fileData);
                 }
             });
         }
+
+        /**
+         * Get the movie file information for collation
+         * @param object FilesModel file row.
+         * @param object Object to append collation
+         */
+
     }, {
         key: "_getMovieFileInfo",
-        value: function _getMovieFileInfo(file) {
+        value: function _getMovieFileInfo(file, fileCollate) {
             var _this3 = this;
 
             return this._fileToMovieModel.getSingleForFile(file.id).then(function (fileToMovie) {
                 if (!fileToMovie.hasOwnProperty("movie_id")) {
-                    return Promise.resolve(fileData);
+                    return Promise.resolve(fileCollate);
                 }
                 return _this3._moviesModel.getSingle(fileToMovie.movie_id);
             }).then(function (movieInfo) {
@@ -124,8 +117,36 @@ var FilesystemModel = function () {
                     title: movieInfo.title,
                     type: "movie"
                 };
-                fileData.assocData = assocData;
-                return Promise.resolve(fileData);
+                fileCollate.assocData = assocData;
+                return Promise.resolve(fileCollate);
+            });
+        }
+
+        /**
+         * Get the episode-file information for collation.
+         * @param Object FilesModel file row.
+         * @param Object Object to append collation
+         */
+
+    }, {
+        key: "_getEpisodeFileInfo",
+        value: function _getEpisodeFileInfo(file, fileCollate) {
+            var _this4 = this;
+
+            return this._fileToEpisodeModel.getSingleForFile(file.id).then(function (fileToEpisode) {
+                if (!fileToEpisode.hasOwnProperty("episode_id")) {
+                    return Promise.resolve(fileCollate);
+                }
+                return _this4._showSeasonEpisodesModel.getSingle(fileToEpisode.episode_id);
+            }).then(function (episodeInfo) {
+                var assocData = {
+                    episode_id: episodeInfo.id,
+                    file_id: file.id,
+                    title: episodeInfo.title,
+                    type: "show"
+                };
+                fileCollate.assocData = assocData;
+                return Promise.resolve(fileCollate);
             });
         }
 
@@ -147,7 +168,7 @@ var FilesystemModel = function () {
     }, {
         key: "moveInSetDir",
         value: function moveInSetDir(sourceInfo, destInfo, destDirType) {
-            var _this4 = this;
+            var _this5 = this;
 
             return this._settingsModel.getSingleByID(sourceInfo.setting_id).then(function (sourceSetting) {
                 var fullSourcePath = _path2.default.join(sourceSetting.value, sourceInfo.subpath, sourceInfo.filename);
@@ -155,7 +176,7 @@ var FilesystemModel = function () {
                     return Promise.reject("FilesystemModel :: moveInSetDir() :: source path " + fullSourcePath + " does not exist");
                 }
 
-                return _this4._settingsModel.getSingle("directories", destDirType).then(function (destSetting) {
+                return _this5._settingsModel.getSingle("directories", destDirType).then(function (destSetting) {
                     var baseDestDir = destSetting.value;
                     if (!_fs2.default.existsSync(baseDestDir)) {
                         return Promise.reject("FilesystemModel :: moveInSetDir() :: destination path " + baseDestDir + " does not exist");
@@ -193,14 +214,14 @@ var FilesystemModel = function () {
     }, {
         key: "directMoveMultiple",
         value: function directMoveMultiple(sourcePath, destPath, itemsToRename) {
-            var _this5 = this;
+            var _this6 = this;
 
             var promisesToRun = [];
 
             var originalNames = Object.keys(itemsToRename);
 
             originalNames.forEach(function (sourceName) {
-                var cmd = _this5.directMoveSingle(sourcePath, destPath, sourceName, itemsToRename[sourceName]);
+                var cmd = _this6.directMoveSingle(sourcePath, destPath, sourceName, itemsToRename[sourceName]);
                 promisesToRun.push(cmd);
             });
 
@@ -239,14 +260,14 @@ var FilesystemModel = function () {
     }, {
         key: "trash",
         value: function trash(sourcePath, filenames) {
-            var _this6 = this;
+            var _this7 = this;
 
             return new Promise(function (resolve, reject) {
                 if (!_fs2.default.existsSync(sourcePath)) {
                     reject("FilesystemModel :: trash() :: sourcePath: " + sourcePath + " does not exist.");
                 }
 
-                return _this6._settingsModel.getSingle("directories", "Trash").then(function (row) {
+                return _this7._settingsModel.getSingle("directories", "Trash").then(function (row) {
                     var trashPath = row.value;
                     if (!_fs2.default.existsSync(trashPath)) {
                         reject("FilesystemModel :: trash() :: trash directory: " + trashPath + " does not exist.");
