@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
@@ -6,19 +6,19 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _fs = require('fs');
+var _fs = require("fs");
 
 var _fs2 = _interopRequireDefault(_fs);
 
-var _path = require('path');
+var _path = require("path");
 
 var _path2 = _interopRequireDefault(_path);
 
-var _mkdirp = require('mkdirp');
+var _mkdirp = require("mkdirp");
 
 var _mkdirp2 = _interopRequireDefault(_mkdirp);
 
-var _logger = require('../logger');
+var _logger = require("../logger");
 
 var _logger2 = _interopRequireDefault(_logger);
 
@@ -39,12 +39,12 @@ var FilesystemModel = function () {
     }
 
     _createClass(FilesystemModel, [{
-        key: 'getDirList',
+        key: "getDirList",
         value: function getDirList(basePath, fullPath) {
             var _this = this;
 
             if (!_fs2.default.existsSync(fullPath)) {
-                return Promise.reject('FilesystemModel Error: ' + fullPath + ' does not exist.');
+                return Promise.reject("FilesystemModel Error: " + fullPath + " does not exist.");
             }
             var contents = _fs2.default.readdirSync(fullPath);
             var dirList = [];
@@ -55,7 +55,7 @@ var FilesystemModel = function () {
             return Promise.all(promisesToRun);
         }
     }, {
-        key: '_collateFileInformation',
+        key: "_collateFileInformation",
         value: function _collateFileInformation(basePath, fullPath, filename) {
             var _this2 = this;
 
@@ -77,39 +77,24 @@ var FilesystemModel = function () {
             }
 
             return this._settingsModel.getSingleByCatAndVal("directories", basePath).then(function (setting) {
-                if (!setting.hasOwnProperty('id')) {
+                if (!setting.hasOwnProperty("id")) {
                     return Promise.resolve(fileData);
                 }
                 return _this2._filesModel.getSingleByDirectoryAndFilename(setting.id, subpath, filename);
             }).then(function (file) {
-                if (!file.hasOwnProperty('id')) {
+                if (!file.hasOwnProperty("id")) {
                     return Promise.resolve(fileData);
                 }
 
                 if (file.mediatype === "movie") {
-                    return _this2._fileToMovieModel.getSingleForFile(file.id).then(function (fileToMovie) {
-                        if (!fileToMovie.hasOwnProperty('movie_id')) {
-                            return Promise.resolve(fileData);
-                        }
-                        return _this2._moviesModel.getSingle(fileToMovie.movie_id);
-                    }).then(function (movieInfo) {
-                        var assocData = {
-                            movie_id: movieInfo.id,
-                            file_id: file.id,
-                            title: movieInfo.title,
-                            type: "movie"
-                        };
-                        fileData.assocData = assocData;
-                        return Promise.resolve(fileData);
-                    });
+                    return _this2._getMovieFileInfo(file);
                 } else {
                     return _this2._fileToEpisodeModel.getSingleForFile(file.id).then(function (fileToEpisode) {
-                        if (!fileToEpisode.hasOwnProperty('episode_id')) {
+                        if (!fileToEpisode.hasOwnProperty("episode_id")) {
                             return Promise.resolve(fileData);
                         }
                         return _this2._showSeasonEpisodesModel.getSingle(fileToEpisode.episode_id);
                     }).then(function (episodeInfo) {
-
                         var assocData = {
                             episode_id: episodeInfo.id,
                             file_id: file.id,
@@ -122,50 +107,71 @@ var FilesystemModel = function () {
                 }
             });
         }
+    }, {
+        key: "_getMovieFileInfo",
+        value: function _getMovieFileInfo(file) {
+            var _this3 = this;
+
+            return this._fileToMovieModel.getSingleForFile(file.id).then(function (fileToMovie) {
+                if (!fileToMovie.hasOwnProperty("movie_id")) {
+                    return Promise.resolve(fileData);
+                }
+                return _this3._moviesModel.getSingle(fileToMovie.movie_id);
+            }).then(function (movieInfo) {
+                var assocData = {
+                    movie_id: movieInfo.id,
+                    file_id: file.id,
+                    title: movieInfo.title,
+                    type: "movie"
+                };
+                fileData.assocData = assocData;
+                return Promise.resolve(fileData);
+            });
+        }
 
         /**
-         * 
+         *
          * sourceInfo:
          *     setting_id
          *     subpath
          *     filename
-         * 
+         *
          * destInfo:
          *     subpath
          *     filename
-         * 
-         * @param object sourceInfo 
-         * @param object destInfo 
+         *
+         * @param object sourceInfo
+         * @param object destInfo
          */
 
     }, {
-        key: 'moveInSetDir',
+        key: "moveInSetDir",
         value: function moveInSetDir(sourceInfo, destInfo, destDirType) {
-            var _this3 = this;
+            var _this4 = this;
 
             return this._settingsModel.getSingleByID(sourceInfo.setting_id).then(function (sourceSetting) {
                 var fullSourcePath = _path2.default.join(sourceSetting.value, sourceInfo.subpath, sourceInfo.filename);
                 if (!_fs2.default.existsSync(fullSourcePath)) {
-                    return Promise.reject('FilesystemModel :: moveInSetDir() :: source path ' + fullSourcePath + ' does not exist');
+                    return Promise.reject("FilesystemModel :: moveInSetDir() :: source path " + fullSourcePath + " does not exist");
                 }
 
-                return _this3._settingsModel.getSingle("directories", destDirType).then(function (destSetting) {
+                return _this4._settingsModel.getSingle("directories", destDirType).then(function (destSetting) {
                     var baseDestDir = destSetting.value;
                     if (!_fs2.default.existsSync(baseDestDir)) {
-                        return Promise.reject('FilesystemModel :: moveInSetDir() :: destination path ' + baseDestDir + ' does not exist');
+                        return Promise.reject("FilesystemModel :: moveInSetDir() :: destination path " + baseDestDir + " does not exist");
                     }
 
                     var destPath = _path2.default.join(baseDestDir, destInfo.subpath);
                     if (!_fs2.default.existsSync(destPath)) {
                         if (!_mkdirp2.default.sync(destPath)) {
-                            return Promise.reject('FilesystemModel :: moveInSetDir() :: unable to make the destination dir ' + destPath);
+                            return Promise.reject("FilesystemModel :: moveInSetDir() :: unable to make the destination dir " + destPath);
                         }
                     }
 
                     var fullDestPath = _path2.default.join(destPath, destInfo.filename);
                     _fs2.default.renameSync(fullSourcePath, fullDestPath);
                     if (!_fs2.default.existsSync(fullDestPath)) {
-                        return Promise.reject('FilesystemModel :: moveInSetDir() :: unable to move file \'' + fullSourcePath + '\' to \'' + fullDestPath + '\'');
+                        return Promise.reject("FilesystemModel :: moveInSetDir() :: unable to move file '" + fullSourcePath + "' to '" + fullDestPath + "'");
                     }
                     return {
                         original_path: fullSourcePath,
@@ -178,23 +184,23 @@ var FilesystemModel = function () {
         /**
          * Perform a direct move (ie between setting dirs)
          * on multiple items (files or dirs);
-         * 
-         * @param string sourcePath 
-         * @param string destPath 
-         * @param object itemsToRename 
+         *
+         * @param string sourcePath
+         * @param string destPath
+         * @param object itemsToRename
          */
 
     }, {
-        key: 'directMoveMultiple',
+        key: "directMoveMultiple",
         value: function directMoveMultiple(sourcePath, destPath, itemsToRename) {
-            var _this4 = this;
+            var _this5 = this;
 
             var promisesToRun = [];
 
             var originalNames = Object.keys(itemsToRename);
 
             originalNames.forEach(function (sourceName) {
-                var cmd = _this4.directMoveSingle(sourcePath, destPath, sourceName, itemsToRename[sourceName]);
+                var cmd = _this5.directMoveSingle(sourcePath, destPath, sourceName, itemsToRename[sourceName]);
                 promisesToRun.push(cmd);
             });
 
@@ -204,9 +210,9 @@ var FilesystemModel = function () {
         /**
          * Perform a "direct" move -- possibly between two
          * setting directories.
-         * 
+         *
          * To move within a setting directory, use moveInSetDir()
-         * 
+         *
          * @param string sourcePath
          * @param string destPath
          * @param string sourceName
@@ -214,36 +220,36 @@ var FilesystemModel = function () {
          */
 
     }, {
-        key: 'directMoveSingle',
+        key: "directMoveSingle",
         value: function directMoveSingle(sourcePath, destPath, sourceName, destName) {
             return new Promise(function (resolve, reject) {
                 var fullSource = _path2.default.join(sourcePath, sourceName);
                 if (!_fs2.default.existsSync(fullSource)) {
-                    reject('FilesystemModel :: directMoveSingle() :: source does not exist \'' + fullSource + '\'');
+                    reject("FilesystemModel :: directMoveSingle() :: source does not exist '" + fullSource + "'");
                 }
 
                 var fullDest = _path2.default.join(destPath, destName);
                 _fs2.default.renameSync(fullSource, fullDest);
                 if (!_fs2.default.existsSync(fullDest)) {
-                    reject('FilesystemModel :: directMoveSingle() :: unable to rename \'' + fullSource + '\' to ' + fullDest);
+                    reject("FilesystemModel :: directMoveSingle() :: unable to rename '" + fullSource + "' to " + fullDest);
                 }
                 resolve(fullDest);
             });
         }
     }, {
-        key: 'trash',
+        key: "trash",
         value: function trash(sourcePath, filenames) {
-            var _this5 = this;
+            var _this6 = this;
 
             return new Promise(function (resolve, reject) {
                 if (!_fs2.default.existsSync(sourcePath)) {
-                    reject('FilesystemModel :: trash() :: sourcePath: ' + sourcePath + ' does not exist.');
+                    reject("FilesystemModel :: trash() :: sourcePath: " + sourcePath + " does not exist.");
                 }
 
-                return _this5._settingsModel.getSingle("directories", "Trash").then(function (row) {
+                return _this6._settingsModel.getSingle("directories", "Trash").then(function (row) {
                     var trashPath = row.value;
                     if (!_fs2.default.existsSync(trashPath)) {
-                        reject('FilesystemModel :: trash() :: trash directory: ' + trashPath + ' does not exist.');
+                        reject("FilesystemModel :: trash() :: trash directory: " + trashPath + " does not exist.");
                     }
 
                     var succeeded = [];
