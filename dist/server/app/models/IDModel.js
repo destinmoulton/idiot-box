@@ -135,24 +135,55 @@ var IDModel = function () {
             return this._mediaScraperModel.downloadThumbnail("shows", imageInfo.url, imageFilename).then(function (imageFilename) {
                 return _this6._showsModel.addShow(showInfo, imageFilename);
             }).then(function (show) {
-                return _this6._mediaScraperModel.getShowSeasonsList(show.trakt_id).then(function (seasons) {
-                    return _this6._showSeasonsModel.addArrayOfSeasons(seasons, show.id);
-                }).then(function (addedSeasons) {
-                    var promisesToRun = [];
-                    addedSeasons.forEach(function (season) {
-                        var prom = _this6._mediaScraperModel.getEpisodesForSeason(show.trakt_id, season.season_number).then(function (episodesArr) {
-                            return _this6._showSeasonEpisodesModel.addArrEpisodes(show.id, season.id, episodesArr);
-                        });
-                        promisesToRun.push(prom);
-                    });
-                    return Promise.all(promisesToRun);
-                });
+                return _this6._scrapeAndAddSeasonsForShow(show);
             });
         }
     }, {
         key: "_buildThumbFilename",
         value: function _buildThumbFilename(mediaInfo) {
             return mediaInfo.title + "." + mediaInfo.year;
+        }
+
+        /**
+         * Scrape and add the seasons (and episodes)
+         * for a show.
+         *
+         * @param Show show
+         */
+
+    }, {
+        key: "_scrapeAndAddSeasonsForShow",
+        value: function _scrapeAndAddSeasonsForShow(show) {
+            var _this7 = this;
+
+            return this._mediaScraperModel.getShowSeasonsList(show.trakt_id).then(function (seasons) {
+                return _this7._showSeasonsModel.addArrayOfSeasons(seasons, show.id);
+            }).then(function (addedSeasons) {
+                return _this7._scrapeAndAddEpisodesForSeasons(show, addedSeasons);
+            });
+        }
+
+        /**
+         * Scrape the episodes for an array of seasons and
+         * add them to the db.
+         *
+         * @param Show show
+         * @param ShowSeasons seasons for a show
+         */
+
+    }, {
+        key: "_scrapeAndAddEpisodesForSeasons",
+        value: function _scrapeAndAddEpisodesForSeasons(show, seasons) {
+            var _this8 = this;
+
+            var promisesToRun = [];
+            seasons.forEach(function (season) {
+                var prom = _this8._mediaScraperModel.getEpisodesForSeason(show.trakt_id, season.season_number).then(function (episodesArr) {
+                    return _this8._showSeasonEpisodesModel.addArrEpisodes(show.id, season.id, episodesArr);
+                });
+                promisesToRun.push(prom);
+            });
+            return Promise.all(promisesToRun);
         }
     }]);
 
