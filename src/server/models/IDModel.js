@@ -117,25 +117,30 @@ export default class IDModel {
 
     removeSingleID(idInfo) {
         if (idInfo.type === "movie") {
-            return this._filesModel
-                .deleteSingle(idInfo.file_id)
-                .then(() => {
-                    return this._fileToMovieModel.deleteSingle(
-                        idInfo.file_id,
-                        idInfo.movie_id
-                    );
-                })
-                .then(() => {
-                    return this._moviesModel.deleteSingle(idInfo.movie_id);
-                });
+            return this._removeMovie(idInfo);
         } else if (idInfo.type === "show") {
-            return this._filesModel.deleteSingle(idInfo.file_id).then(() => {
-                return this._fileToEpisodeModel.deleteSingle(
-                    idInfo.file_id,
-                    idInfo.episode_id
-                );
-            });
         }
+    }
+
+    /**
+     * Remove a movie and the file-to-movie associated with it.
+     *
+     * The movie is deleted because movies are 1:1 with files.
+     *
+     * @param object idInfo
+     */
+    _removeMovie(idInfo) {
+        return this._filesModel
+            .deleteSingle(idInfo.file_id)
+            .then(() => {
+                return this._fileToMovieModel.deleteSingle(
+                    idInfo.file_id,
+                    idInfo.movie_id
+                );
+            })
+            .then(() => {
+                return this._moviesModel.deleteSingle(idInfo.movie_id);
+            });
     }
 
     addShow(showInfo, imageInfo) {

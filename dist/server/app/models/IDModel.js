@@ -112,19 +112,29 @@ var IDModel = function () {
     }, {
         key: "removeSingleID",
         value: function removeSingleID(idInfo) {
+            if (idInfo.type === "movie") {
+                return this._removeMovie(idInfo);
+            } else if (idInfo.type === "show") {}
+        }
+
+        /**
+         * Remove a movie and the file-to-movie associated with it.
+         *
+         * The movie is deleted because movies are 1:1 with files.
+         *
+         * @param object idInfo
+         */
+
+    }, {
+        key: "_removeMovie",
+        value: function _removeMovie(idInfo) {
             var _this5 = this;
 
-            if (idInfo.type === "movie") {
-                return this._filesModel.deleteSingle(idInfo.file_id).then(function () {
-                    return _this5._fileToMovieModel.deleteSingle(idInfo.file_id, idInfo.movie_id);
-                }).then(function () {
-                    return _this5._moviesModel.deleteSingle(idInfo.movie_id);
-                });
-            } else if (idInfo.type === "show") {
-                return this._filesModel.deleteSingle(idInfo.file_id).then(function () {
-                    return _this5._fileToEpisodeModel.deleteSingle(idInfo.file_id, idInfo.episode_id);
-                });
-            }
+            return this._filesModel.deleteSingle(idInfo.file_id).then(function () {
+                return _this5._fileToMovieModel.deleteSingle(idInfo.file_id, idInfo.movie_id);
+            }).then(function () {
+                return _this5._moviesModel.deleteSingle(idInfo.movie_id);
+            });
         }
     }, {
         key: "addShow",
