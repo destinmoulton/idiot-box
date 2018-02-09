@@ -2,8 +2,8 @@ import logger from "../logger";
 
 export default class IDModel {
     constructor(models) {
-        (this._filesystemModel = models.filesystemModel),
-            (this._filesModel = models.filesModel);
+        this._filesystemModel = models.filesystemModel;
+        this._filesModel = models.filesModel;
         this._fileToEpisodeModel = models.fileToEpisodeModel;
         this._fileToMovieModel = models.fileToMovieModel;
         this._mediaScraperModel = models.mediaScraperModel;

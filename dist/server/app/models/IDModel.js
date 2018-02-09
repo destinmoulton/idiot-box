@@ -18,7 +18,8 @@ var IDModel = function () {
     function IDModel(models) {
         _classCallCheck(this, IDModel);
 
-        this._filesystemModel = models.filesystemModel, this._filesModel = models.filesModel;
+        this._filesystemModel = models.filesystemModel;
+        this._filesModel = models.filesModel;
         this._fileToEpisodeModel = models.fileToEpisodeModel;
         this._fileToMovieModel = models.fileToMovieModel;
         this._mediaScraperModel = models.mediaScraperModel;
