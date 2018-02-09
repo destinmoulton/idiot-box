@@ -114,7 +114,9 @@ var IDModel = function () {
         value: function removeSingleID(idInfo) {
             if (idInfo.type === "movie") {
                 return this._removeMovie(idInfo);
-            } else if (idInfo.type === "show") {}
+            } else if (idInfo.type === "show") {
+                return this._removeEpisodeFileAssociations(idInfo);
+            }
         }
 
         /**
@@ -136,16 +138,34 @@ var IDModel = function () {
                 return _this5._moviesModel.deleteSingle(idInfo.movie_id);
             });
         }
+
+        /**
+         * Remove the file and file-to-episode associating for a show episode.
+         *
+         * This does not remove the show as Shows are not directly tied to episodes.
+         *
+         * @param object idInfo
+         */
+
+    }, {
+        key: "_removeEpisodeFileAssociations",
+        value: function _removeEpisodeFileAssociations(idInfo) {
+            var _this6 = this;
+
+            return this._filesModel.deleteSingle(idInfo.file_id).then(function () {
+                return _this6._fileToEpisodeModel.deleteSingle(idInfo.file_id, idInfo.episode_id);
+            });
+        }
     }, {
         key: "addShow",
         value: function addShow(showInfo, imageInfo) {
-            var _this6 = this;
+            var _this7 = this;
 
             var imageFilename = this._buildThumbFilename(showInfo);
             return this._mediaScraperModel.downloadThumbnail("shows", imageInfo.url, imageFilename).then(function (imageFilename) {
-                return _this6._showsModel.addShow(showInfo, imageFilename);
+                return _this7._showsModel.addShow(showInfo, imageFilename);
             }).then(function (show) {
-                return _this6._scrapeAndAddSeasonsForShow(show);
+                return _this7._scrapeAndAddSeasonsForShow(show);
             });
         }
     }, {
@@ -164,12 +184,12 @@ var IDModel = function () {
     }, {
         key: "_scrapeAndAddSeasonsForShow",
         value: function _scrapeAndAddSeasonsForShow(show) {
-            var _this7 = this;
+            var _this8 = this;
 
             return this._mediaScraperModel.getShowSeasonsList(show.trakt_id).then(function (seasons) {
-                return _this7._showSeasonsModel.addArrayOfSeasons(seasons, show.id);
+                return _this8._showSeasonsModel.addArrayOfSeasons(seasons, show.id);
             }).then(function (addedSeasons) {
-                return _this7._scrapeAndAddEpisodesForSeasons(show, addedSeasons);
+                return _this8._scrapeAndAddEpisodesForSeasons(show, addedSeasons);
             });
         }
 
@@ -184,12 +204,12 @@ var IDModel = function () {
     }, {
         key: "_scrapeAndAddEpisodesForSeasons",
         value: function _scrapeAndAddEpisodesForSeasons(show, seasons) {
-            var _this8 = this;
+            var _this9 = this;
 
             var promisesToRun = [];
             seasons.forEach(function (season) {
-                var prom = _this8._mediaScraperModel.getEpisodesForSeason(show.trakt_id, season.season_number).then(function (episodesArr) {
-                    return _this8._showSeasonEpisodesModel.addArrEpisodes(show.id, season.id, episodesArr);
+                var prom = _this9._mediaScraperModel.getEpisodesForSeason(show.trakt_id, season.season_number).then(function (episodesArr) {
+                    return _this9._showSeasonEpisodesModel.addArrEpisodes(show.id, season.id, episodesArr);
                 });
                 promisesToRun.push(prom);
             });

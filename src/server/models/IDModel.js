@@ -119,6 +119,7 @@ export default class IDModel {
         if (idInfo.type === "movie") {
             return this._removeMovie(idInfo);
         } else if (idInfo.type === "show") {
+            return this._removeEpisodeFileAssociations(idInfo);
         }
     }
 
@@ -141,6 +142,22 @@ export default class IDModel {
             .then(() => {
                 return this._moviesModel.deleteSingle(idInfo.movie_id);
             });
+    }
+
+    /**
+     * Remove the file and file-to-episode associating for a show episode.
+     *
+     * This does not remove the show as Shows are not directly tied to episodes.
+     *
+     * @param object idInfo
+     */
+    _removeEpisodeFileAssociations(idInfo) {
+        return this._filesModel.deleteSingle(idInfo.file_id).then(() => {
+            return this._fileToEpisodeModel.deleteSingle(
+                idInfo.file_id,
+                idInfo.episode_id
+            );
+        });
     }
 
     addShow(showInfo, imageInfo) {
