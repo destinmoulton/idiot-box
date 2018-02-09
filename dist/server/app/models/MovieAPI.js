@@ -44,22 +44,35 @@ var MovieAPI = function () {
                     var data = Object.assign({}, movie);
                     data["file_info"] = {};
 
-                    var cmd = _this._fileToMovieModel.getSingleForMovie(movie.id).then(function (fileMovie) {
-                        if (!fileMovie.hasOwnProperty("file_id")) {
-                            return Promise.resolve(data);
-                        }
-                        return _this._filesModel.getSingle(fileMovie.file_id).then(function (file) {
-                            if (!file.hasOwnProperty("id")) {
-                                return Promise.resolve(data);
-                            }
-                            data.file_info = file;
-                            return Promise.resolve(data);
-                        });
+                    var cmd = _this._fileToMovieModel.getSingleForMovie(movie.id).then(function (fileToMovie) {
+                        return _this._collateMovieFileInfo(fileToMovie, data);
                     });
                     promisesToRun.push(cmd);
                 });
 
                 return Promise.all(promisesToRun);
+            });
+        }
+
+        /**
+         * Add file-to-movie information to the info object.
+         *
+         * @param FileToMovie fileToMovie
+         * @param object infoObj for collation
+         */
+
+    }, {
+        key: "_collateMovieFileInfo",
+        value: function _collateMovieFileInfo(fileToMovie, infoObj) {
+            if (!fileToMovie.hasOwnProperty("file_id")) {
+                return Promise.resolve(infoObj);
+            }
+            return this._filesModel.getSingle(fileToMovie.file_id).then(function (file) {
+                if (!file.hasOwnProperty("id")) {
+                    return Promise.resolve(infoObj);
+                }
+                infoObj.file_info = file;
+                return Promise.resolve(infoObj);
             });
         }
     }, {

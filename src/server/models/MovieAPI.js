@@ -21,24 +21,32 @@ class MovieAPI {
 
                 const cmd = this._fileToMovieModel
                     .getSingleForMovie(movie.id)
-                    .then(fileMovie => {
-                        if (!fileMovie.hasOwnProperty("file_id")) {
-                            return Promise.resolve(data);
-                        }
-                        return this._filesModel
-                            .getSingle(fileMovie.file_id)
-                            .then(file => {
-                                if (!file.hasOwnProperty("id")) {
-                                    return Promise.resolve(data);
-                                }
-                                data.file_info = file;
-                                return Promise.resolve(data);
-                            });
+                    .then(fileToMovie => {
+                        return this._collateMovieFileInfo(fileToMovie, data);
                     });
                 promisesToRun.push(cmd);
             });
 
             return Promise.all(promisesToRun);
+        });
+    }
+
+    /**
+     * Add file-to-movie information to the info object.
+     *
+     * @param FileToMovie fileToMovie
+     * @param object infoObj for collation
+     */
+    _collateMovieFileInfo(fileToMovie, infoObj) {
+        if (!fileToMovie.hasOwnProperty("file_id")) {
+            return Promise.resolve(infoObj);
+        }
+        return this._filesModel.getSingle(fileToMovie.file_id).then(file => {
+            if (!file.hasOwnProperty("id")) {
+                return Promise.resolve(infoObj);
+            }
+            infoObj.file_info = file;
+            return Promise.resolve(infoObj);
         });
     }
 
