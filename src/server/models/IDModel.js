@@ -32,22 +32,30 @@ export default class IDModel {
                 return this._moviesModel.addMovie(movieInfo, imageFilename);
             })
             .then(movieRow => {
-                return this._settingsModel
-                    .getSingle("directories", "Movies")
-                    .then(destSetting => {
-                        return this._filesModel.addFile(
-                            destSetting.id,
-                            destInfo.subpath,
-                            destInfo.filename,
-                            "movie"
-                        );
-                    })
-                    .then(fileRow => {
-                        return this._fileToMovieModel.add(
-                            fileRow.id,
-                            movieRow.id
-                        );
-                    });
+                return this._addMovieFileAssociations(movieRow, destInfo);
+            });
+    }
+
+    /**
+     * Add the file info to the db and the movie-to-file
+     * association using that info.
+     *
+     * @param Movie movie
+     * @param object destInfo
+     */
+    _addMovieFileAssociations(movie, destInfo) {
+        return this._settingsModel
+            .getSingle("directories", "Movies")
+            .then(destSetting => {
+                return this._filesModel.addFile(
+                    destSetting.id,
+                    destInfo.subpath,
+                    destInfo.filename,
+                    "movie"
+                );
+            })
+            .then(fileRow => {
+                return this._fileToMovieModel.add(fileRow.id, movie.id);
             });
     }
 

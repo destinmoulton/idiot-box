@@ -43,30 +43,46 @@ var IDModel = function () {
             }).then(function (imageFilename) {
                 return _this._moviesModel.addMovie(movieInfo, imageFilename);
             }).then(function (movieRow) {
-                return _this._settingsModel.getSingle("directories", "Movies").then(function (destSetting) {
-                    return _this._filesModel.addFile(destSetting.id, destInfo.subpath, destInfo.filename, "movie");
-                }).then(function (fileRow) {
-                    return _this._fileToMovieModel.add(fileRow.id, movieRow.id);
-                });
+                return _this._addMovieFileAssociations(movieRow, destInfo);
+            });
+        }
+
+        /**
+         * Add the file info to the db and the movie-to-file
+         * association using that info.
+         *
+         * @param Movie movie
+         * @param object destInfo
+         */
+
+    }, {
+        key: "_addMovieFileAssociations",
+        value: function _addMovieFileAssociations(movie, destInfo) {
+            var _this2 = this;
+
+            return this._settingsModel.getSingle("directories", "Movies").then(function (destSetting) {
+                return _this2._filesModel.addFile(destSetting.id, destInfo.subpath, destInfo.filename, "movie");
+            }).then(function (fileRow) {
+                return _this2._fileToMovieModel.add(fileRow.id, movie.id);
             });
         }
     }, {
         key: "idAndArchiveEpisode",
         value: function idAndArchiveEpisode(epInfo, sourceInfo, destInfo) {
-            var _this2 = this;
+            var _this3 = this;
 
             return this._filesystemModel.moveInSetDir(sourceInfo, destInfo, "Shows").then(function () {
-                return _this2._settingsModel.getSingle("directories", "Shows");
+                return _this3._settingsModel.getSingle("directories", "Shows");
             }).then(function (destSetting) {
-                return _this2._filesModel.addFile(destSetting.id, destInfo.subpath, destInfo.filename, "show");
+                return _this3._filesModel.addFile(destSetting.id, destInfo.subpath, destInfo.filename, "show");
             }).then(function (fileRow) {
-                return _this2._fileToEpisodeModel.add(fileRow.id, epInfo.show_id, epInfo.season_id, epInfo.episode_id);
+                return _this3._fileToEpisodeModel.add(fileRow.id, epInfo.show_id, epInfo.season_id, epInfo.episode_id);
             });
         }
     }, {
         key: "idAndArchiveMultipleEpisodes",
         value: function idAndArchiveMultipleEpisodes(sourcePathInfo, destSubpath, idInfo) {
-            var _this3 = this;
+            var _this4 = this;
 
             var episodesToMove = idInfo.episodes;
             var filenames = Object.keys(episodesToMove);
@@ -92,7 +108,7 @@ var IDModel = function () {
                     episode_id: episode.selectedEpisodeID
                 };
 
-                promisesToRun.push(_this3.idAndArchiveEpisode(epInfo, source, dest));
+                promisesToRun.push(_this4.idAndArchiveEpisode(epInfo, source, dest));
             });
 
             return Promise.all(promisesToRun);
@@ -100,11 +116,11 @@ var IDModel = function () {
     }, {
         key: "removeMultipleIDs",
         value: function removeMultipleIDs(itemsToRemove) {
-            var _this4 = this;
+            var _this5 = this;
 
             var promisesToRun = [];
             itemsToRemove.forEach(function (item) {
-                promisesToRun.push(_this4.removeSingleID(item.assocData));
+                promisesToRun.push(_this5.removeSingleID(item.assocData));
             });
 
             return Promise.all(promisesToRun);
@@ -130,12 +146,12 @@ var IDModel = function () {
     }, {
         key: "_removeMovie",
         value: function _removeMovie(idInfo) {
-            var _this5 = this;
+            var _this6 = this;
 
             return this._filesModel.deleteSingle(idInfo.file_id).then(function () {
-                return _this5._fileToMovieModel.deleteSingle(idInfo.file_id, idInfo.movie_id);
+                return _this6._fileToMovieModel.deleteSingle(idInfo.file_id, idInfo.movie_id);
             }).then(function () {
-                return _this5._moviesModel.deleteSingle(idInfo.movie_id);
+                return _this6._moviesModel.deleteSingle(idInfo.movie_id);
             });
         }
 
@@ -150,22 +166,22 @@ var IDModel = function () {
     }, {
         key: "_removeEpisodeFileAssociations",
         value: function _removeEpisodeFileAssociations(idInfo) {
-            var _this6 = this;
+            var _this7 = this;
 
             return this._filesModel.deleteSingle(idInfo.file_id).then(function () {
-                return _this6._fileToEpisodeModel.deleteSingle(idInfo.file_id, idInfo.episode_id);
+                return _this7._fileToEpisodeModel.deleteSingle(idInfo.file_id, idInfo.episode_id);
             });
         }
     }, {
         key: "addShow",
         value: function addShow(showInfo, imageInfo) {
-            var _this7 = this;
+            var _this8 = this;
 
             var imageFilename = this._buildThumbFilename(showInfo);
             return this._mediaScraperModel.downloadThumbnail("shows", imageInfo.url, imageFilename).then(function (imageFilename) {
-                return _this7._showsModel.addShow(showInfo, imageFilename);
+                return _this8._showsModel.addShow(showInfo, imageFilename);
             }).then(function (show) {
-                return _this7._scrapeAndAddSeasonsForShow(show);
+                return _this8._scrapeAndAddSeasonsForShow(show);
             });
         }
     }, {
@@ -184,12 +200,12 @@ var IDModel = function () {
     }, {
         key: "_scrapeAndAddSeasonsForShow",
         value: function _scrapeAndAddSeasonsForShow(show) {
-            var _this8 = this;
+            var _this9 = this;
 
             return this._mediaScraperModel.getShowSeasonsList(show.trakt_id).then(function (seasons) {
-                return _this8._showSeasonsModel.addArrayOfSeasons(seasons, show.id);
+                return _this9._showSeasonsModel.addArrayOfSeasons(seasons, show.id);
             }).then(function (addedSeasons) {
-                return _this8._scrapeAndAddEpisodesForSeasons(show, addedSeasons);
+                return _this9._scrapeAndAddEpisodesForSeasons(show, addedSeasons);
             });
         }
 
@@ -204,12 +220,12 @@ var IDModel = function () {
     }, {
         key: "_scrapeAndAddEpisodesForSeasons",
         value: function _scrapeAndAddEpisodesForSeasons(show, seasons) {
-            var _this9 = this;
+            var _this10 = this;
 
             var promisesToRun = [];
             seasons.forEach(function (season) {
-                var prom = _this9._mediaScraperModel.getEpisodesForSeason(show.trakt_id, season.season_number).then(function (episodesArr) {
-                    return _this9._showSeasonEpisodesModel.addArrEpisodes(show.id, season.id, episodesArr);
+                var prom = _this10._mediaScraperModel.getEpisodesForSeason(show.trakt_id, season.season_number).then(function (episodesArr) {
+                    return _this10._showSeasonEpisodesModel.addArrEpisodes(show.id, season.id, episodesArr);
                 });
                 promisesToRun.push(prom);
             });
