@@ -29,12 +29,12 @@ module.exports = {
         ]
     },
     externals: {
-        react: "React",
-        "react-dom": "ReactDOM",
+        antd: "antd",
+        lodash: "_",
         immutable: "Immutable",
         moment: "moment",
-        lodash: "_",
-        antd: "antd"
+        react: "React",
+        "react-dom": "ReactDOM"
     },
     plugins: [new BundleAnalyzerPlugin()]
 };
