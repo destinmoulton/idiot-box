@@ -5,19 +5,20 @@
     "main": "index.js",
     "scripts": {
         "clean:server": "rm -rf dist/server/app/*",
-        "compile:styles":
-            "less-watch-compiler src/client/styles dist/server/public/css idiotbox.less",
+        "compile:styles": "less-watch-compiler --js src/client/styles dist/server/public/css idiotbox.less",
         "compile:react": "webpack --config webpack.config.js -d --watch",
-        "compile:server":
-            "npm run clean:server && babel --watch src/server --out-dir dist/server/app",
+        "compile:server": "npm run clean:server && babel --watch src/server --out-dir dist/server/app",
         "profile": "webpack --profile --json > stats.json",
         "start:server": "pm2 start pm2.config.json",
         "test": "jest --silent=false --colors --verbose",
         "test:watch": "jest --silent=false --colors --watchAll",
-        "update":
-            "node /home/pi/idiot-box/dist/server/app/scripts/daily_update.js"
+        "update": "node /home/pi/idiot-box/dist/server/app/scripts/daily_update.js"
     },
-    "keywords": ["raspberry-pi", "react", "express"],
+    "keywords": [
+        "raspberry-pi",
+        "react",
+        "express"
+    ],
     "author": "Destin Moulton",
     "license": "MIT",
     "devDependencies": {
@@ -33,7 +34,7 @@
         "enzyme": "^3.3.0",
         "jest": "^22.4.2",
         "less": "^3.0.1",
-        "less-watch-compiler": "^1.8.0",
+        "less-watch-compiler": "^1.11.0",
         "webpack": "^4.1.1",
         "webpack-bundle-analyzer": "^2.11.1",
         "webpack-cli": "^2.0.10"
@@ -63,6 +64,9 @@
         "trakt.tv": "^6.0.2"
     },
     "jest": {
-        "testPathIgnorePatterns": ["/node_modules/", "/src/"]
+        "testPathIgnorePatterns": [
+            "/node_modules/",
+            "/src/"
+        ]
     }
 }
