@@ -33,7 +33,8 @@ module.exports = {
         "react-dom": "ReactDOM",
         immutable: "Immutable",
         moment: "moment",
-        lodash: "_"
+        lodash: "_",
+        antd: "antd"
     },
     plugins: [new BundleAnalyzerPlugin()]
 };
