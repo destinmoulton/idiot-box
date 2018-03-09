@@ -21,10 +21,6 @@ button.ib-button-green:hover {
     border-color: #3ab532;
 }
 
-div.ib-settings-dirsel-fs-cont {
-    overflow-y: scroll;
-}
-
 div.ib-filebrowser-spin-box {
     width: 100%;
     padding-top: 30px;
@@ -209,6 +205,24 @@ i.ib-playbutton-icon {
     padding-right: 5px;
 }
 
+button.ib-remote-button-active {
+    color: #6c3778;
+}
+
+button.ib-remote-button:hover,
+button.ib-remote-button:focus {
+    color: #6c3778;
+    border-color: #6c3778;
+}
+
+i.ib-remote-icon {
+    font-size: 1.2em;
+}
+
+div.ib-settings-dirsel-fs-cont {
+    overflow-y: scroll;
+}
+
 div.ib-shows-thumbnail-box {
     width: 150px;
     height: 258px;
@@ -281,18 +295,4 @@ div.ib-spinner-container {
 ul.ib-trashmodal-list {
     list-style-type: disc;
     padding-left: 15px;
-}
-
-button.ib-remote-button-active {
-    color: #6c3778;
-}
-
-button.ib-remote-button:hover,
-button.ib-remote-button:focus {
-    color: #6c3778;
-    border-color: #6c3778;
-}
-
-i.ib-remote-icon {
-    font-size: 1.2em;
 }
