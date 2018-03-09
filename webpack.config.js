@@ -5,8 +5,8 @@ module.exports = {
     devtool: "source-map",
     entry: "./src/client/App.js",
     output: {
-        path: path.join(__dirname, "dist/server/public/js"),
-        filename: "idiot-box.js"
+        path: path.join(__dirname, "dist/server/public/js/idiotbox"),
+        filename: "idiotbox.build.js"
     },
     module: {
         loaders: [
