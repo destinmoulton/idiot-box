@@ -33,6 +33,14 @@ $ pm2 monit
 
 Open the Chrome Node.js DevTools.
 
+### Dev Notes
+
+To build the frontend:
+
+```
+npm run compile:react
+```
+
 ### License
 
 Idiot Box is freely available under the MIT License.
