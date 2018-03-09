@@ -36,5 +36,10 @@ module.exports = {
         react: "React",
         "react-dom": "ReactDOM"
     },
-    plugins: [new BundleAnalyzerPlugin()]
+    plugins: [
+        /**
+         * Bundle Analyzer will load a browser window to view the map.
+         */
+        //new BundleAnalyzerPlugin()
+    ]
 };
