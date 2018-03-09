@@ -6,6 +6,8 @@ Idiot Box is a Movie and TV media manager and player built for usage on the Rasp
 
 Dev URL: http://localhost:3000
 
+Update Script: `node ./dist/server/app/scripts/daily_update.js`
+
 #### Starting, Stopping, and Monitoring
 
 The npm pm2 package is used to persist the server.
