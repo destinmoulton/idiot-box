@@ -1,33 +1,33 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
-import { Button, Icon, Layout, Menu } from 'antd';
+import { Button, Icon, Layout, Menu } from "antd";
 const { Header } = Layout;
 
-import VideoPlayerRemoteModal from '../VideoPlayerRemoteModal';
+import VideoPlayerRemoteModal from "../VideoPlayerRemoteModal";
 
 class IdiotBoxHeader extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
             remoteModalIsVisible: false
-        }
+        };
 
         this._handleRemoteModalClose = this._handleRemoteModalClose.bind(this);
         this._handleRemoteModalOpen = this._handleRemoteModalOpen.bind(this);
     }
 
-    _handleRemoteModalOpen(){
+    _handleRemoteModalOpen() {
         this.setState({
             remoteModalIsVisible: true
         });
     }
 
-    _handleRemoteModalClose(){
+    _handleRemoteModalClose() {
         this.setState({
             remoteModalIsVisible: false
-        })
+        });
     }
 
     render() {
@@ -35,12 +35,11 @@ class IdiotBoxHeader extends Component {
 
         return (
             <Header>
-                <div className="logo" />
                 <Menu
                     theme="dark"
                     mode="horizontal"
-                    defaultSelectedKeys={['2']}
-                    style={{ lineHeight: '64px' }}
+                    defaultSelectedKeys={["2"]}
+                    style={{ lineHeight: "40px" }}
                 >
                     <Menu.Item key="newepisodes">
                         <Link to="/newepisodes">New</Link>
@@ -56,14 +55,17 @@ class IdiotBoxHeader extends Component {
                     </Menu.Item>
                     <Menu.Item key="settings">
                         <Link to="/settings">
-                            <Icon type="setting"/>
+                            <Icon type="setting" />
                         </Link>
                     </Menu.Item>
-                    <Menu.Item key="remote" >
+                    <Menu.Item key="remote">
                         <div onClick={this._handleRemoteModalOpen}>
-                        <Icon type="video-camera" />
+                            <Icon type="video-camera" />
                         </div>
-                        <VideoPlayerRemoteModal onCancel={this._handleRemoteModalClose} isVisible={remoteModalIsVisible}/>
+                        <VideoPlayerRemoteModal
+                            onCancel={this._handleRemoteModalClose}
+                            isVisible={remoteModalIsVisible}
+                        />
                     </Menu.Item>
                 </Menu>
             </Header>
