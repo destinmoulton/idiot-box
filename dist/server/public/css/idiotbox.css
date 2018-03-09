@@ -283,15 +283,14 @@ ul.ib-trashmodal-list {
     padding-left: 15px;
 }
 
-@dark-purple: "#6C3778";
 button.ib-remote-button-active {
-    color: @dark-purple;
+    color: #6c3778;
 }
 
 button.ib-remote-button:hover,
 button.ib-remote-button:focus {
-    color: @dark-purple;
-    border-color: @dark-purple;
+    color: #6c3778;
+    border-color: #6c3778;
 }
 
 i.ib-remote-icon {
