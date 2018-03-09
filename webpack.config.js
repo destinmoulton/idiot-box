@@ -1,5 +1,7 @@
 var path = require("path");
 var webpack = require("webpack");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+    .BundleAnalyzerPlugin;
 
 module.exports = {
     devtool: "source-map",
@@ -29,6 +31,9 @@ module.exports = {
     externals: {
         react: "React",
         "react-dom": "ReactDOM",
-        moment: "moment"
-    }
+        immutable: "Immutable",
+        moment: "moment",
+        lodash: "_"
+    },
+    plugins: [new BundleAnalyzerPlugin()]
 };
