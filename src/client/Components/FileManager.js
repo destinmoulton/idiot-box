@@ -1,20 +1,19 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { Icon, Button, Menu, Modal } from 'antd';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
+import { Icon, Button, Menu, Modal } from "antd";
 
-import FilesystemBrowser from './Filesystem/FilesystemBrowser';
-import IDFileModal from './ID/IDFileModal';
-import IDMultipleEpisodesModal from './ID/IDMultipleEpisodesModal';
-import MoveRenameModal from './Filesystem/MoveRenameModal';
-import TrashModal from './Filesystem/TrashModal';
-import UntagModal from './ID/UntagModal';
+import FilesystemBrowser from "./Filesystem/FilesystemBrowser";
+import IDFileModal from "./ID/IDFileModal";
+import IDMultipleEpisodesModal from "./ID/IDMultipleEpisodesModal";
+import MoveRenameModal from "./Filesystem/MoveRenameModal";
+import TrashModal from "./Filesystem/TrashModal";
+import UntagModal from "./ID/UntagModal";
 
-import Regex from '../lib/Regex.lib';
+import Regex from "../lib/Regex.lib";
 class FileManager extends Component {
-    
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -37,11 +36,11 @@ class FileManager extends Component {
         };
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this._parseURL(this.props);
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
         this._parseURL(nextProps);
     }
 
@@ -49,8 +48,8 @@ class FileManager extends Component {
         const { toplevelDirectories } = this.props;
 
         const settingKey = props.match.params.setting_key;
-        
-        if(settingKey === undefined){
+
+        if (settingKey === undefined) {
             this.setState({
                 currentPath: "",
                 currentPathInfo: {},
@@ -64,11 +63,11 @@ class FileManager extends Component {
         const newSubpath = props.match.params.subpath;
 
         let subpath = "";
-        if(newSubpath !== undefined){
+        if (newSubpath !== undefined) {
             subpath = decodeURIComponent(newSubpath);
         }
 
-        const dir = toplevelDirectories.find((dir)=> dir.key === settingKey);
+        const dir = toplevelDirectories.find(dir => dir.key === settingKey);
 
         const pathInfo = {
             setting_id: dir.id,
@@ -84,7 +83,7 @@ class FileManager extends Component {
         });
     }
 
-    _handleChangeDirectory(newDir, dirList){
+    _handleChangeDirectory(newDir, dirList) {
         const { currentPathInfo, currentToplevelDirectory } = this.state;
         const subpath = newDir.slice(currentToplevelDirectory.length + 1);
 
@@ -93,35 +92,41 @@ class FileManager extends Component {
             isReloading: false
         });
 
-        if(currentPathInfo.subpath !== subpath){
-            const newSubpath = (subpath.startsWith("/")) ? subpath.slice(1) : subpath;
+        if (currentPathInfo.subpath !== subpath) {
+            const newSubpath = subpath.startsWith("/")
+                ? subpath.slice(1)
+                : subpath;
 
             // The subpath has changed so go there
             const location = {
-                pathname: "/filemanager/" + currentPathInfo.setting_key + "/" + encodeURIComponent(newSubpath)
+                pathname:
+                    "/filemanager/" +
+                    currentPathInfo.setting_key +
+                    "/" +
+                    encodeURIComponent(newSubpath)
             };
             this.props.history.push(location);
         }
     }
 
-    _reloadDirList(){
+    _reloadDirList() {
         this.setState({
             isReloading: true
         });
     }
-    
-    _handleSelectionChange(selectedRows){
+
+    _handleSelectionChange(selectedRows) {
         this.setState({
             selectedRows
         });
     }
 
-    _handleClickTrash(evt){
+    _handleClickTrash(evt) {
         let trashSelectedItems = [];
-        if(evt.currentTarget.tagName === "BUTTON"){
+        if (evt.currentTarget.tagName === "BUTTON") {
             trashSelectedItems = [...this.state.selectedRows];
         } else {
-            const item = evt.currentTarget.getAttribute('data-item-name');
+            const item = evt.currentTarget.getAttribute("data-item-name");
             trashSelectedItems = [item];
         }
 
@@ -131,7 +136,7 @@ class FileManager extends Component {
         });
     }
 
-    _handleTrashComplete(){
+    _handleTrashComplete() {
         this.setState({
             isReloading: true,
             trashIsModalVisible: false,
@@ -140,59 +145,59 @@ class FileManager extends Component {
         });
     }
 
-    _handleCancelTrash(){
+    _handleCancelTrash() {
         this.setState({
             trashIsModalVisible: false,
             trashSelectedItems: []
         });
     }
 
-    _handleClickMoveRename(evt){
+    _handleClickMoveRename(evt) {
         let moverenameSelectedItems = [];
-        if(evt.currentTarget.tagName === "BUTTON"){
+        if (evt.currentTarget.tagName === "BUTTON") {
             moverenameSelectedItems = [...this.state.selectedRows];
         } else {
-            const item = evt.currentTarget.getAttribute('data-item-name');
+            const item = evt.currentTarget.getAttribute("data-item-name");
             moverenameSelectedItems = [item];
         }
 
         this.setState({
             moverenameIsModalVisible: true,
             moverenameSelectedItems
-        })
+        });
     }
 
-    _handleMoveRenameCancel(){
+    _handleMoveRenameCancel() {
         this.setState({
             moverenameIsModalVisible: false,
             moverenameSelectedItems: []
         });
     }
 
-    _handleMoveRenameComplete(){
+    _handleMoveRenameComplete() {
         this.setState({
             isReloading: true,
             moverenameIsModalVisible: false,
             moverenameSelectedItems: [],
-            selectedRows: []            
+            selectedRows: []
         });
     }
 
-    _handleClickIDFile(filename){
+    _handleClickIDFile(filename) {
         this.setState({
             idsingleFilename: filename,
             idsingleIsModalVisible: true
         });
     }
 
-    _handleIDModalCancel(){
+    _handleIDModalCancel() {
         this.setState({
             idsingleIsModalVisible: false,
             idsingleFilename: ""
         });
     }
 
-    _handleIDModalComplete(){
+    _handleIDModalComplete() {
         this.setState({
             isReloading: true,
             idsingleIsModalVisible: false,
@@ -200,22 +205,21 @@ class FileManager extends Component {
         });
     }
 
-    _handleClickIDMultipleEpisodes(){
+    _handleClickIDMultipleEpisodes() {
         const { dirList } = this.state;
 
         const filenamesToID = [...this.state.selectedRows];
 
         const idItems = [];
-        filenamesToID.forEach((filename)=>{
-            dirList.forEach((item)=>{
-                if(item.name === filename &&
-                    Regex.isVideoFile(item.name)){
+        filenamesToID.forEach(filename => {
+            dirList.forEach(item => {
+                if (item.name === filename && Regex.isVideoFile(item.name)) {
                     idItems.push(item);
                 }
-            })
+            });
         });
 
-        if(idItems.length > 0){
+        if (idItems.length > 0) {
             this.setState({
                 idmultipleIsModalVisible: true,
                 idmultipleEpisodes: idItems
@@ -223,14 +227,14 @@ class FileManager extends Component {
         }
     }
 
-    _handleIDMultipleCancel(){
+    _handleIDMultipleCancel() {
         this.setState({
             idmultipleIsModalVisible: false,
             idmultipleEpisodes: []
         });
     }
 
-    _handleIDMultipleComplete(){
+    _handleIDMultipleComplete() {
         this.setState({
             isReloading: true,
             idmultipleIsModalVisible: false,
@@ -238,13 +242,13 @@ class FileManager extends Component {
             selectedRows: []
         });
     }
-    
-    _handleSelectVideos(){
+
+    _handleSelectVideos() {
         const { dirList } = this.state;
-        
+
         let selected = [];
-        dirList.forEach((item)=>{
-            if(Regex.isVideoFile(item.name)){
+        dirList.forEach(item => {
+            if (Regex.isVideoFile(item.name)) {
                 selected.push(item.name);
             }
         });
@@ -254,27 +258,30 @@ class FileManager extends Component {
         });
     }
 
-    _handleClickUntag(evt){
+    _handleClickUntag(evt) {
         const { dirList } = this.state;
 
         let filenamesToUntag = [];
-        if(evt.currentTarget.tagName === "BUTTON"){
+        if (evt.currentTarget.tagName === "BUTTON") {
             filenamesToUntag = [...this.state.selectedRows];
         } else {
-            const item = evt.currentTarget.getAttribute('data-item-name');
+            const item = evt.currentTarget.getAttribute("data-item-name");
             filenamesToUntag = [item];
         }
 
         const untagItems = [];
-        filenamesToUntag.forEach((filename)=>{
-            dirList.forEach((item)=>{
-                if(item.name === filename && item.assocData.hasOwnProperty('type')){
+        filenamesToUntag.forEach(filename => {
+            dirList.forEach(item => {
+                if (
+                    item.name === filename &&
+                    item.assocData.hasOwnProperty("type")
+                ) {
                     untagItems.push(item);
                 }
-            })
+            });
         });
 
-        if(untagItems.length > 0){
+        if (untagItems.length > 0) {
             this.setState({
                 untagIsModalVisible: true,
                 untagIDinfo: untagItems
@@ -282,7 +289,7 @@ class FileManager extends Component {
         }
     }
 
-    _handleUntagModalComplete(){
+    _handleUntagModalComplete() {
         this.setState({
             isReloading: true,
             untagIsModalVisible: false,
@@ -290,48 +297,64 @@ class FileManager extends Component {
         });
     }
 
-    _handleUntagCancel(){
+    _handleUntagCancel() {
         this.setState({
             untagIsModalVisible: false,
             untagIDinfo: []
         });
     }
 
-    _buildActionColumns(){
-        
+    _buildActionColumns() {
         return [
             {
                 title: "",
                 dataIndex: "",
-                render: (text,record)=>{
+                render: (text, record) => {
                     const { assocData } = record;
-                    
+
                     let tagAction = "";
-                    if(Regex.isVideoFile(record.name)){
-                        if(!('type' in assocData)){
-                            tagAction =   <a  href="javascript:void(0);"
-                                                onClick={this._handleClickIDFile.bind(this, record.name)}>
-                                                <Icon type="tag"/>
-                                            </a>;
+                    if (Regex.isVideoFile(record.name)) {
+                        if (!("type" in assocData)) {
+                            tagAction = (
+                                <a
+                                    href="javascript:void(0);"
+                                    onClick={this._handleClickIDFile.bind(
+                                        this,
+                                        record.name
+                                    )}
+                                >
+                                    <Icon type="tag" />
+                                </a>
+                            );
                         }
                     }
-                    
+
                     let untagAction = "";
-                    if('type' in assocData){
-                        untagAction = <a  href="javascript:void(0);"
-                                            onClick={this._handleClickUntag.bind(this)}
-                                            data-item-name={record.name}>
-                                            <Icon type="disconnect" className="ib-filebrowser-media-play"/>
-                                        </a>;
+                    if ("type" in assocData) {
+                        untagAction = (
+                            <a
+                                href="javascript:void(0);"
+                                onClick={this._handleClickUntag.bind(this)}
+                                data-item-name={record.name}
+                            >
+                                <Icon
+                                    type="disconnect"
+                                    className="ib-filebrowser-media-play"
+                                />
+                            </a>
+                        );
                     }
 
                     return (
                         <span>
-                            <a  href="javascript:void(0);"
+                            <a
+                                href="javascript:void(0);"
                                 onClick={this._handleClickTrash.bind(this)}
-                                data-item-name={record.name}>
-                                <Icon type="delete"/>
-                            </a>&nbsp;{tagAction}{untagAction}
+                                data-item-name={record.name}
+                            >
+                                <Icon type="delete" />
+                            </a>&nbsp;{tagAction}
+                            {untagAction}
                         </span>
                     );
                 }
@@ -339,9 +362,9 @@ class FileManager extends Component {
         ];
     }
 
-    _buildFileManager(){
-        const { 
-            currentPath, 
+    _buildFileManager() {
+        const {
+            currentPath,
             currentPathInfo,
             currentToplevelDirectory,
             idmultipleIsModalVisible,
@@ -358,48 +381,64 @@ class FileManager extends Component {
             untagIsModalVisible
         } = this.state;
 
-        const hasSelected = (selectedRows.length > 0) ? true : false;
+        const hasSelected = selectedRows.length > 0 ? true : false;
         const buttonDisabled = !hasSelected;
 
         return (
             <div>
                 <div className="ib-filemanager-button-bar">
-                    <Button 
+                    <Button
                         type="primary"
                         icon="video-camera"
                         onClick={this._handleSelectVideos.bind(this)}
-                    >Select Videos</Button>&nbsp;&nbsp;
+                    >
+                        Select Videos
+                    </Button>&nbsp;&nbsp;
                     <Button.Group>
-                        <Button 
+                        <Button
                             icon="tag"
                             disabled={buttonDisabled}
-                            onClick={this._handleClickIDMultipleEpisodes.bind(this)}>ID</Button>
-                        <Button 
+                            onClick={this._handleClickIDMultipleEpisodes.bind(
+                                this
+                            )}
+                        >
+                            ID
+                        </Button>
+                        <Button
                             icon="export"
                             disabled={buttonDisabled}
-                            onClick={this._handleClickMoveRename.bind(this)}>Move or Rename</Button>
-                        <Button 
+                            onClick={this._handleClickMoveRename.bind(this)}
+                        >
+                            Move or Rename
+                        </Button>
+                        <Button
                             type="danger"
                             icon="delete"
                             disabled={buttonDisabled}
                             onClick={this._handleClickTrash.bind(this)}
-                        >Trash</Button>
-                        <Button 
+                        >
+                            Trash
+                        </Button>
+                        <Button
                             type="danger"
                             icon="disconnect"
                             disabled={buttonDisabled}
                             onClick={this._handleClickUntag.bind(this)}
-                        >Remove ID</Button>
+                        >
+                            Remove ID
+                        </Button>
                     </Button.Group>
                 </div>
-                <FilesystemBrowser 
+                <FilesystemBrowser
                     actionColumns={this._buildActionColumns()}
                     basePath={currentToplevelDirectory}
                     currentPath={currentPath}
                     forceReload={isReloading}
                     hasCheckboxes={true}
                     onChangeDirectory={this._handleChangeDirectory.bind(this)}
-                    parentHandleSelectChange={this._handleSelectionChange.bind(this)}
+                    parentHandleSelectChange={this._handleSelectionChange.bind(
+                        this
+                    )}
                     selectedRowKeys={selectedRows}
                     showDirectories={true}
                     showFiles={true}
@@ -444,51 +483,57 @@ class FileManager extends Component {
         );
     }
 
-    _buildDirectoryMenu(){
+    _buildDirectoryMenu() {
         const { toplevelDirectories } = this.props;
         const { currentToplevelDirectory } = this.state;
 
         const menuList = [];
-        toplevelDirectories.forEach((dir)=>{
-            const activeClass = (dir.value === currentToplevelDirectory) ? "ib-filemanager-button ib-filemanager-button-active" : "ib-filemanager-button";
+        toplevelDirectories.forEach(dir => {
+            const activeClass =
+                dir.value === currentToplevelDirectory
+                    ? "ib-filemanager-button ib-filemanager-button-active"
+                    : "ib-filemanager-button";
             menuList.push(
-                <Menu.Item 
-                    key={dir.value}>
-                    <Link to={"/filemanager/" + dir.key}>
-                        {dir.key}
-                    </Link>
+                <Menu.Item key={dir.value}>
+                    <Link to={"/filemanager/" + dir.key}>{dir.key}</Link>
                 </Menu.Item>
             );
         });
 
-        return (<Menu mode="horizontal" selectedKeys={[currentToplevelDirectory]}>{menuList}</Menu>);
+        return (
+            <Menu
+                mode="horizontal"
+                theme="light"
+                selectedKeys={[currentToplevelDirectory]}
+            >
+                {menuList}
+            </Menu>
+        );
     }
 
     render() {
         const { currentToplevelDirectory } = this.state;
-        
+
         let directoryMenu = this._buildDirectoryMenu();
         let output = "";
-        if(currentToplevelDirectory){
+        if (currentToplevelDirectory) {
             output = this._buildFileManager();
-        } 
+        }
         return (
             <div>
-                <div>
-                    {directoryMenu}
-                </div>
+                <div>{directoryMenu}</div>
                 {output}
             </div>
         );
     }
 }
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = state => {
     const { settings } = state;
-    
+
     return {
         toplevelDirectories: settings.settings.directories
     };
-}
+};
 
 export default connect(mapStateToProps)(FileManager);
