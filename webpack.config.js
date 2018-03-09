@@ -9,36 +9,26 @@ module.exports = {
         filename: "idiotbox.build.js"
     },
     module: {
-        loaders: [
+        rules: [
             {
-                test: /.js?$/,
-                loader: "babel-loader",
-                exclude: /node_modules/,
-                query: {
-                    presets: ["env", "react"],
-                    plugins: [
-                        "transform-class-properties",
-                        "transform-object-rest-spread",
-                        ["import", { libraryName: "antd" }]
-                    ]
+                test: /\.js$/,
+                exclude: /(node_modules|bower_components)/,
+                use: {
+                    loader: "babel-loader",
+                    options: {
+                        presets: ["env", "react"],
+                        plugins: [
+                            "transform-class-properties",
+                            "transform-object-rest-spread"
+                        ]
+                    }
                 }
             }
         ]
     },
-    plugins: [
-        new webpack.DefinePlugin({
-            // <-- key to reducing React's size
-            "process.env": {
-                NODE_ENV: JSON.stringify("dev") // Change to 'production' to save space
-            }
-        }),
-        // new webpack.optimize.UglifyJsPlugin({
-        //     compress: {
-        //         warnings: false
-        //     }
-        // }),
-        new webpack.optimize.AggressiveMergingPlugin(),
-        new webpack.optimize.OccurrenceOrderPlugin(),
-        new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/)
-    ]
+    externals: {
+        react: "React",
+        "react-dom": "ReactDOM",
+        moment: "moment"
+    }
 };
