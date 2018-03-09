@@ -1,17 +1,16 @@
-import { truncate } from 'lodash';
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import { truncate } from "lodash";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import { Col, Input, Row, Spin } from 'antd';
-import MovieInfoModal from './MovieInfoModal';
-import PlayButton from '../PlayButton';
+import { Col, Input, Row, Spin } from "antd";
+import MovieInfoModal from "./MovieInfoModal";
+import PlayButton from "../PlayButton";
 
-import { emitAPIRequest } from '../../actions/api.actions';
+import { emitAPIRequest } from "../../actions/api.actions";
 
 class MoviesList extends Component {
-
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -23,25 +22,30 @@ class MoviesList extends Component {
         };
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this._getMovies();
     }
 
-    _getMovies(){
+    _getMovies() {
         const { emitAPIRequest } = this.props;
 
         this.setState({
             isLoadingMovies: true
         });
 
-        emitAPIRequest("movies.movies.get_all_with_file_info", {}, this._moviesReceived.bind(this), false);
+        emitAPIRequest(
+            "movies.movies.get_all_with_file_info",
+            {},
+            this._moviesReceived.bind(this),
+            false
+        );
     }
 
-    _moviesReceived(movies){
+    _moviesReceived(movies) {
         let processedMovies = [];
-        movies.forEach((movie)=>{
-            movie['is_visible'] = true;
-            movie['searchable_text'] = this._prepStringForFilter(movie.title);
+        movies.forEach(movie => {
+            movie["is_visible"] = true;
+            movie["searchable_text"] = this._prepStringForFilter(movie.title);
             processedMovies.push(movie);
         });
         this.setState({
@@ -50,38 +54,37 @@ class MoviesList extends Component {
         });
     }
 
-    _handleClickMovie(movie){
+    _handleClickMovie(movie) {
         this.setState({
             infomodalIsVisible: true,
-            infomodalMovie: movie,
+            infomodalMovie: movie
         });
     }
 
-    _handleCloseModal(shouldReload = false){
-
+    _handleCloseModal(shouldReload = false) {
         this.setState({
             infomodalIsVisible: false,
             infomodalMovie: {}
         });
 
-        if(shouldReload){
+        if (shouldReload) {
             this._getMovies();
         }
     }
 
-    _handleChangeFilter(evt){
+    _handleChangeFilter(evt) {
         const { movies } = this.state;
 
         const currentSearchString = evt.currentTarget.value;
         const filterText = this._prepStringForFilter(currentSearchString);
 
         let filteredMovies = [];
-        movies.forEach((movie)=>{
-            if(filterText === ""){
+        movies.forEach(movie => {
+            if (filterText === "") {
                 movie.is_visible = true;
             } else {
                 movie.is_visible = true;
-                if(movie.searchable_text.search(filterText) === -1){
+                if (movie.searchable_text.search(filterText) === -1) {
                     movie.is_visible = false;
                 }
             }
@@ -94,37 +97,55 @@ class MoviesList extends Component {
         });
     }
 
-    _prepStringForFilter(title){
+    _prepStringForFilter(title) {
         const lowerTitle = title.toLowerCase();
         return lowerTitle.replace(/[^a-z0-9]/g, "");
     }
 
-    _buildMovieList(){
+    _buildMovieList() {
         const { movies } = this.state;
 
         let movieList = [];
-        movies.forEach((movie)=>{
-            if(movie.is_visible){
+        movies.forEach(movie => {
+            if (movie.is_visible) {
                 const playButton = this._buildPlayButton(movie);
-                const movieTitle = {__html: truncate(movie.title, {length: 15})};
-                const details = <Col 
-                                    key={movie.id}
-                                    className="ib-movies-thumbnail-box"
-                                    span={4}>
-                                    <div >
-                                        <a  href="javascript:void(0)"
-                                            onClick={this._handleClickMovie.bind(this, movie)}>
-                                            <img
-                                                className="ib-movies-thumbnail" 
-                                                src={"/images/movies/" + movie.image_filename}/>
-                                        </a>
-                                        {playButton}
-                                        <a  href="javascript:void(0)"
-                                            onClick={this._handleClickMovie.bind(this, movie)}>
-                                            <span dangerouslySetInnerHTML={movieTitle}></span>
-                                        </a>
-                                    </div>
-                                </Col>;
+                const movieTitle = {
+                    __html: truncate(movie.title, { length: 30 })
+                };
+                const details = (
+                    <Col
+                        key={movie.id}
+                        className="ib-movies-thumbnail-box"
+                        span={4}
+                    >
+                        <div>
+                            <a
+                                href="javascript:void(0)"
+                                onClick={this._handleClickMovie.bind(
+                                    this,
+                                    movie
+                                )}
+                            >
+                                <img
+                                    className="ib-movies-thumbnail"
+                                    src={
+                                        "/images/movies/" + movie.image_filename
+                                    }
+                                />
+                            </a>
+                            {playButton}
+                            <a
+                                href="javascript:void(0)"
+                                onClick={this._handleClickMovie.bind(
+                                    this,
+                                    movie
+                                )}
+                            >
+                                <span dangerouslySetInnerHTML={movieTitle} />
+                            </a>
+                        </div>
+                    </Col>
+                );
                 movieList.push(details);
             }
         });
@@ -132,11 +153,16 @@ class MoviesList extends Component {
         return movieList;
     }
 
-    _buildPlayButton(movie){
+    _buildPlayButton(movie) {
         const { directories } = this.props;
-        if(movie.file_info.hasOwnProperty('id')){
+        if (movie.file_info.hasOwnProperty("id")) {
             const fullPath = directories.Movies + "/" + movie.file_info.subpath;
-            return <PlayButton filename={movie.file_info.filename} fullPath={fullPath} />;
+            return (
+                <PlayButton
+                    filename={movie.file_info.filename}
+                    fullPath={fullPath}
+                />
+            );
         }
         return "";
     }
@@ -150,7 +176,7 @@ class MoviesList extends Component {
         } = this.state;
 
         let content = "";
-        if(isLoadingMovies){
+        if (isLoadingMovies) {
             content = <Spin />;
         } else {
             content = this._buildMovieList();
@@ -171,9 +197,7 @@ class MoviesList extends Component {
                         placeholder="Search movies..."
                     />
                 </Row>
-                <Row>
-                    {content}
-                </Row>
+                <Row>{content}</Row>
                 <MovieInfoModal
                     onClose={this._handleCloseModal.bind(this)}
                     movie={infomodalMovie}
@@ -184,17 +208,18 @@ class MoviesList extends Component {
     }
 }
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = state => {
     const { settings } = state;
     return {
         directories: settings.settings.directories
-    }
-}
+    };
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
-    }
-}
+        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+    };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MoviesList);
