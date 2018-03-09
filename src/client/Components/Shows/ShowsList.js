@@ -1,17 +1,16 @@
-import { truncate } from 'lodash';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import _ from "lodash";
+import React, { Component } from "react";
+import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 
-import { Button, Col, Icon, Input, Row, Spin } from 'antd';
+import { Button, Col, Icon, Input, Row, Spin } from "antd";
 
-import { emitAPIRequest } from '../../actions/api.actions';
+import { emitAPIRequest } from "../../actions/api.actions";
 
-import AddShowModal from './AddShowModal';
+import AddShowModal from "./AddShowModal";
 
 class ShowsList extends Component {
-
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -22,25 +21,30 @@ class ShowsList extends Component {
         };
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this._getShows();
     }
 
-    _getShows(){
+    _getShows() {
         const { emitAPIRequest } = this.props;
 
         this.setState({
             isLoadingShows: true
         });
 
-        emitAPIRequest("shows.shows.get_all_with_locked_info", {}, this._showsReceived.bind(this), false);
+        emitAPIRequest(
+            "shows.shows.get_all_with_locked_info",
+            {},
+            this._showsReceived.bind(this),
+            false
+        );
     }
 
-    _showsReceived(shows){
+    _showsReceived(shows) {
         let newShows = [];
-        shows.forEach((show)=>{
-            show['is_visible'] = true;
-            show['searchable_text'] = this._prepStringForFilter(show.title);
+        shows.forEach(show => {
+            show["is_visible"] = true;
+            show["searchable_text"] = this._prepStringForFilter(show.title);
             newShows.push(show);
         });
 
@@ -52,32 +56,41 @@ class ShowsList extends Component {
         this._filterVisibleShows(this.state.currentSearchString);
     }
 
-    _prepStringForFilter(title){
+    _prepStringForFilter(title) {
         const lowerTitle = title.toLowerCase();
         return lowerTitle.replace(/[^a-z0-9]/g, "");
     }
 
-    _buildShowList(){
+    _buildShowList() {
         const { shows } = this.state;
 
         let showList = [];
-        shows.forEach((show)=>{
-            if(show.is_visible){
-                const showTitle = {__html: truncate(show.title, {length: 18})};
-                const details = <Col 
-                                    key={show.id}
-                                    className="ib-shows-thumbnail-box"
-                                    span={4}>
-                                    <div >
-                                        <Link to={"/show/" + show.slug}>
-                                            <img
-                                                className="ib-shows-thumbnail" 
-                                                src={"/images/shows/" + show.image_filename}/>
-                                            <span dangerouslySetInnerHTML={showTitle} />
-                                            <br/>[ {show.num_seasons_locked} <Icon type="lock" /> ][ {show.num_seasons_unlocked} <Icon type="unlock" /> ]
-                                        </Link>
-                                    </div>
-                                </Col>;
+        shows.forEach(show => {
+            if (show.is_visible) {
+                const showTitle = {
+                    __html: _.truncate(show.title, { length: 18 })
+                };
+                const details = (
+                    <Col
+                        key={show.id}
+                        className="ib-shows-thumbnail-box"
+                        span={4}
+                    >
+                        <div>
+                            <Link to={"/show/" + show.slug}>
+                                <img
+                                    className="ib-shows-thumbnail"
+                                    src={"/images/shows/" + show.image_filename}
+                                />
+                                <span dangerouslySetInnerHTML={showTitle} />
+                                <br />[ {show.num_seasons_locked}{" "}
+                                <Icon type="lock" /> ][{" "}
+                                {show.num_seasons_unlocked}{" "}
+                                <Icon type="unlock" /> ]
+                            </Link>
+                        </div>
+                    </Col>
+                );
                 showList.push(details);
             }
         });
@@ -85,27 +98,27 @@ class ShowsList extends Component {
         return showList;
     }
 
-    _handleChangeFilter(evt){
+    _handleChangeFilter(evt) {
         const currentSearchString = evt.currentTarget.value;
 
         this.setState({
-            currentSearchString,
+            currentSearchString
         });
 
         this._filterVisibleShows(currentSearchString);
     }
 
-    _filterVisibleShows(searchString){
+    _filterVisibleShows(searchString) {
         const { shows } = this.state;
         const filterText = this._prepStringForFilter(searchString);
         let filteredShows = [];
 
-        shows.forEach((show)=>{
-            if(filterText === ""){
+        shows.forEach(show => {
+            if (filterText === "") {
                 show.is_visible = true;
             } else {
                 show.is_visible = true;
-                if(show.searchable_text.search(filterText) === -1){
+                if (show.searchable_text.search(filterText) === -1) {
                     show.is_visible = false;
                 }
             }
@@ -117,32 +130,32 @@ class ShowsList extends Component {
         });
     }
 
-    _handleCheckPressEnter(e){
-        if(e.key === "Enter"){
+    _handleCheckPressEnter(e) {
+        if (e.key === "Enter") {
             this._handleOpenAddShowModal();
         }
     }
 
-    _handleOpenAddShowModal(){
+    _handleOpenAddShowModal() {
         this.setState({
             isAddShowModalVisible: true
         });
     }
 
-    _handleClickClearFilter(){
+    _handleClickClearFilter() {
         this.setState({
             currentSearchString: ""
         });
         this._filterVisibleShows("");
     }
 
-    _cancelAddShowModal(){
+    _cancelAddShowModal() {
         this.setState({
             isAddShowModalVisible: false
         });
     }
 
-    _addShowComplete(){
+    _addShowComplete() {
         this.setState({
             isAddShowModalVisible: false
         });
@@ -151,15 +164,19 @@ class ShowsList extends Component {
     }
 
     render() {
-        const { 
+        const {
             currentSearchString,
             isAddShowModalVisible,
             isLoadingShows
         } = this.state;
 
         let content = "";
-        if(isLoadingShows){
-            content = <div className="ib-spinner-container"><Spin /></div>;
+        if (isLoadingShows) {
+            content = (
+                <div className="ib-spinner-container">
+                    <Spin />
+                </div>
+            );
         } else {
             content = this._buildShowList();
         }
@@ -176,16 +193,24 @@ class ShowsList extends Component {
                         onChange={this._handleChangeFilter.bind(this)}
                         onKeyPress={this._handleCheckPressEnter.bind(this)}
                         style={{ width: 400 }}
-                        suffix={<Icon type="close-square" onClick={this._handleClickClearFilter.bind(this)}/>}
-                        placeholder="Search..."                       
+                        suffix={
+                            <Icon
+                                type="close-square"
+                                onClick={this._handleClickClearFilter.bind(
+                                    this
+                                )}
+                            />
+                        }
+                        placeholder="Search..."
                     />
-                    <Button 
+                    <Button
                         className="ib-button-green"
-                        onClick={this._handleOpenAddShowModal.bind(this)}>Add New Show</Button>
+                        onClick={this._handleOpenAddShowModal.bind(this)}
+                    >
+                        Add New Show
+                    </Button>
                 </Row>
-                <Row>
-                    {content}
-                </Row>
+                <Row>{content}</Row>
                 <AddShowModal
                     isVisible={isAddShowModalVisible}
                     onCancel={this._cancelAddShowModal.bind(this)}
@@ -197,14 +222,15 @@ class ShowsList extends Component {
     }
 }
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = state => {
     return {};
-}
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
-    }
-}
+        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+    };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShowsList);
