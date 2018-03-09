@@ -7,51 +7,53 @@
         "test": "jest --silent=false --colors --verbose",
         "test:watch": "jest --silent=false --colors --watchAll",
         "clean:server": "rm -rf dist/server/app/*",
-        "compile:styles":
-            "less-watch-compiler src/client/styles dist/server/public/css idiotbox.less",
+        "compile:styles": "less-watch-compiler src/client/styles dist/server/public/css idiotbox.less",
         "compile:react": "webpack --config webpack.config.js -d --watch",
-        "compile:server":
-            "npm run clean:server && babel --watch src/server --out-dir dist/server/app",
+        "compile:server": "npm run clean:server && babel --watch src/server --out-dir dist/server/app",
         "start:server": "pm2 start pm2.config.json",
-        "update":
-            "node /home/pi/idiot-box/dist/server/app/scripts/daily_update.js"
+        "update": "node /home/pi/idiot-box/dist/server/app/scripts/daily_update.js"
     },
-    "keywords": ["raspberry-pi", "react", "express"],
+    "keywords": [
+        "raspberry-pi",
+        "react",
+        "express"
+    ],
     "author": "Destin Moulton",
     "license": "MIT",
     "devDependencies": {
-        "antd": "^2.13.10",
         "babel-cli": "^6.24.1",
         "babel-core": "^6.25.0",
-        "babel-jest": "^20.0.3",
+        "babel-jest": "^22.4.1",
         "babel-loader": "^7.1.0",
         "babel-plugin-import": "^1.6.2",
         "babel-plugin-transform-class-properties": "^6.24.1",
         "babel-plugin-transform-object-rest-spread": "^6.23.0",
         "babel-preset-env": "^1.6.1",
         "babel-preset-react": "^6.24.1",
-        "enzyme": "^2.8.2",
-        "eslint-plugin-react": "^7.4.0",
-        "jest": "^21.2.1",
-        "less": "^2.7.3",
+        "enzyme": "^3.3.0",
+        "jest": "^22.4.2",
+        "less": "^3.0.1",
         "less-watch-compiler": "^1.8.0",
-        "lodash": "^4.17.4",
-        "moment": "^2.19.2",
-        "react": "^16.1.1",
-        "react-dom": "^16.1.1",
-        "react-router-dom": "^4.1.1",
-        "react-router-redux": "^4.0.8",
-        "webpack": "^3.8.1"
+        "webpack": "^4.1.1",
+        "webpack-cli": "^2.0.10"
     },
     "dependencies": {
+        "antd": "^3.2.3",
         "bluebird": "^3.5.1",
+        "eslint-plugin-react": "^7.4.0",
         "express": "^4.16.2",
-        "fs-extra": "^4.0.1",
+        "fs-extra": "^5.0.0",
+        "lodash": "^4.17.4",
         "mkdirp": "^0.5.1",
-        "node-fetch": "^1.7.1",
-        "node-omxplayer": "^0.4.1",
+        "moment": "^2.19.2",
+        "node-fetch": "^2.1.1",
+        "node-omxplayer": "^0.6.1",
         "random-useragent": "^0.3.1",
+        "react": "^16.1.1",
+        "react-dom": "^16.1.1",
         "react-redux": "^5.0.5",
+        "react-router-dom": "^4.1.1",
+        "react-router-redux": "^4.0.8",
         "redux": "^3.7.1",
         "redux-thunk": "^2.2.0",
         "scraperjs": "^1.2.0",
@@ -60,6 +62,9 @@
         "trakt.tv": "^6.0.2"
     },
     "jest": {
-        "testPathIgnorePatterns": ["/node_modules/", "/src/"]
+        "testPathIgnorePatterns": [
+            "/node_modules/",
+            "/src/"
+        ]
     }
 }
