@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 
 import { Col, Input, Row, Spin } from "antd";
 import MovieInfoModal from "./MovieInfoModal";
-import PlayButton from "../PlayButton";
+import MovieThumbInfo from "./MovieThumbInfo";
 
 import { emitAPIRequest } from "../../actions/api.actions";
 
@@ -108,63 +108,23 @@ class MoviesList extends Component {
         let movieList = [];
         movies.forEach(movie => {
             if (movie.is_visible) {
-                const playButton = this._buildPlayButton(movie);
-                const movieTitle = {
-                    __html: truncate(movie.title, { length: 30 })
-                };
-                const details = (
+                movieList.push(
                     <Col
                         key={movie.id}
                         className="ib-movies-thumbnail-box"
                         span={4}
                     >
-                        <div>
-                            <a
-                                href="javascript:void(0)"
-                                onClick={this._handleClickMovie.bind(
-                                    this,
-                                    movie
-                                )}
-                            >
-                                <img
-                                    className="ib-movies-thumbnail"
-                                    src={
-                                        "/images/movies/" + movie.image_filename
-                                    }
-                                />
-                            </a>
-                            {playButton}
-                            <a
-                                href="javascript:void(0)"
-                                onClick={this._handleClickMovie.bind(
-                                    this,
-                                    movie
-                                )}
-                            >
-                                <span dangerouslySetInnerHTML={movieTitle} />
-                            </a>
-                        </div>
+                        <MovieThumbInfo
+                            movie={movie}
+                            directories={this.props.directories}
+                            onClickMovie={this._handleClickMovie.bind(this)}
+                        />
                     </Col>
                 );
-                movieList.push(details);
             }
         });
 
         return movieList;
-    }
-
-    _buildPlayButton(movie) {
-        const { directories } = this.props;
-        if (movie.file_info.hasOwnProperty("id")) {
-            const fullPath = directories.Movies + "/" + movie.file_info.subpath;
-            return (
-                <PlayButton
-                    filename={movie.file_info.filename}
-                    fullPath={fullPath}
-                />
-            );
-        }
-        return "";
     }
 
     render() {
