@@ -1,15 +1,14 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import { Input, Row } from 'antd';
+import { Input, Row } from "antd";
 
-import { emitAPIRequest } from '../../actions/api.actions';
+import { emitAPIRequest } from "../../actions/api.actions";
 
-import MediaItemSearchDetails from '../shared/MediaItemSearchDetails';
+import MediaItemSearchDetails from "../shared/MediaItemSearchDetails";
 
 class MovieSearchResults extends Component {
-
     static propTypes = {
         currentFilename: PropTypes.string.isRequired,
         currentPathInfo: PropTypes.object.isRequired,
@@ -17,7 +16,7 @@ class MovieSearchResults extends Component {
         onSelectMovie: PropTypes.func.isRequired
     };
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -26,38 +25,43 @@ class MovieSearchResults extends Component {
         };
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this._getSearchResultsFromServer();
     }
 
-    _handleSelectMovie(movie, imageURL){
+    _handleSelectMovie(movie, imageURL) {
         const { onSelectMovie } = this.props;
 
         onSelectMovie(movie, imageURL);
     }
 
-    _handleSearchPress(){
+    _handleSearchPress() {
         this._getSearchResultsFromServer();
     }
 
-    _handleChangeSearchInput(evt){
+    _handleChangeSearchInput(evt) {
         this.setState({
             currentSearchString: evt.currentTarget.value
         });
     }
 
-    _getSearchResultsFromServer(){
+    _getSearchResultsFromServer() {
         const { currentSearchString } = this.state;
         const { emitAPIRequest } = this.props;
 
         const options = {
-            search_string:currentSearchString
+            search_string: currentSearchString
         };
-        
-        emitAPIRequest("mediascraper.movies.search", options, this._searchResultsReceived.bind(this), false);
+
+        emitAPIRequest(
+            "mediascraper.movies.search",
+            options,
+            this._searchResultsReceived.bind(this),
+            false
+        );
     }
 
-    _searchResultsReceived(results){
+    _searchResultsReceived(results) {
         this.setState({
             movies: results
         });
@@ -68,11 +72,14 @@ class MovieSearchResults extends Component {
         const { currentSearchString, movies } = this.state;
 
         let movieList = [];
-        movies.forEach((movie)=>{
-            const movieDetails = <MediaItemSearchDetails 
-                                    key={movie.ids.trakt} 
-                                    item={movie}
-                                    onSelectItem={this._handleSelectMovie.bind(this)}/>
+        movies.forEach(movie => {
+            const movieDetails = (
+                <MediaItemSearchDetails
+                    key={movie.ids.trakt}
+                    item={movie}
+                    onSelectItem={this._handleSelectMovie.bind(this)}
+                />
+            );
 
             movieList.push(movieDetails);
         });
@@ -84,21 +91,21 @@ class MovieSearchResults extends Component {
                     onChange={this._handleChangeSearchInput.bind(this)}
                     style={{ width: 400 }}
                     onSearch={this._handleSearchPress.bind(this)}
+                    enterButton
                 />
-                <Row>
-                    {movieList}
-                </Row>
+                <Row>{movieList}</Row>
             </div>
         );
     }
 }
-const mapStateToProps = (state)=>{
+const mapStateToProps = state => {
     return {};
-}
-const mapDispatchToProps = (dispatch) => {
+};
+const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
-    }
-}
+        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+    };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MovieSearchResults);
