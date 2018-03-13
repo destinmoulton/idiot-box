@@ -73,7 +73,11 @@ class MoviesList extends Component {
     }
 
     _handlePressDelete(movie) {
-        if (confirm(`Really delete ${movie.title}`)) {
+        if (
+            confirm(
+                `Really delete ${movie.title}?\nThis will NOT remove the file.`
+            )
+        ) {
             this._deleteMovie(movie);
         }
     }
@@ -153,6 +157,7 @@ class MoviesList extends Component {
                         <MovieThumbInfo
                             movie={movie}
                             directories={this.props.directories}
+                            onClickDelete={this._handlePressDelete.bind(this)}
                             onClickMovie={this._handleClickMovie.bind(this)}
                         />
                     </Col>
