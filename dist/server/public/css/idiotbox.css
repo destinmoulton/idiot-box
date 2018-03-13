@@ -22,7 +22,7 @@
     background: #44484c;
 }
 
-.ant-menu-dark .ant-menu-item > a {
+.ant-menu-dark .ant-menu-item>a {
     font-weight: bold;
 }
 
@@ -128,6 +128,7 @@ div.ib-idmultiplemodal-episode-box {
     margin: 5px;
 }
 
+
 /** The main content box **/
 
 div#ib-layout-content-box {
@@ -201,7 +202,7 @@ div.ib-newepisode-section {
 
 div.ib-newepisode-container {
     float: left;
-    width: 33%;
+    width: 30%;
     border: 2px solid gray;
     margin: 4px;
     padding: 4px;
