@@ -234,6 +234,10 @@ div.ib-settings-dirsel-fs-cont {
     overflow-y: scroll;
 }
 
+div#ib-showmodal-searbox {
+    text-align: center;
+}
+
 div.ib-shows-thumbnail-box {
     width: 150px;
     height: 258px;
