@@ -1,7 +1,7 @@
 import React from "react";
 
 import { truncate } from "lodash";
-import { Col } from "antd";
+import { Col, Icon } from "antd";
 
 import PlayButton from "../PlayButton";
 
@@ -17,6 +17,10 @@ class MovieThumbInfo extends React.Component {
 
     _handleClick(movie) {
         this.props.onClickMovie(movie);
+    }
+
+    _handleClickDelete() {
+        this.props.onClickDelete(this.props.movie);
     }
 
     _handleMouseOverMovie() {
@@ -38,14 +42,20 @@ class MovieThumbInfo extends React.Component {
             __html: truncate(movie.title, { length: 30 })
         };
 
-        let playButton = null;
+        let veilOptions = null;
         if (this.state.isMouseOverMovie) {
-            playButton = (
+            veilOptions = (
                 <div className="ib-movies-veil">
                     <PlayButton
                         filename={movie.file_info.filename}
                         fullPath={fullPath}
                     />
+                    <a
+                        href="javascript:void(0)"
+                        onClick={this._handleClickDelete.bind(this)}
+                    >
+                        <Icon type="delete" className="ib-playbutton-icon" />
+                    </a>
                 </div>
             );
         }
@@ -63,7 +73,7 @@ class MovieThumbInfo extends React.Component {
                         src={"/images/movies/" + movie.image_filename}
                     />
                 </a>
-                {playButton}
+                {veilOptions}
                 <a
                     href="javascript:void(0)"
                     onClick={this._handleClick.bind(this, movie)}
