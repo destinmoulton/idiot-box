@@ -1,12 +1,29 @@
+/** Ant Overrides **/
+
 .ant-table-title {
     font-weight: bold;
     padding-left: 15px;
     font-size: 1.1em;
 }
 
+.ant-layout-content {
+    -webkit-box-shadow: inset 0 20px 20px -20px rgba(0, 0, 0, 0.8);
+    -moz-box-shadow: inset 0 20px 20px -20px rgba(0, 0, 0, 0.8);
+    box-shadow: inset 0 20px 20px -20px rgba(0, 0, 0, 0.8);
+}
+
 .ant-layout-header {
     height: 40px;
     line-height: 40px;
+    background: #44484c;
+}
+
+.ant-menu-dark.ant-menu-horizontal {
+    background: #44484c;
+}
+
+.ant-menu-dark .ant-menu-item > a {
+    font-weight: bold;
 }
 
 button.ib-button-green {
@@ -111,6 +128,17 @@ div.ib-idmultiplemodal-episode-box {
     margin: 5px;
 }
 
+/** The main content box **/
+
+div#ib-layout-content-box {
+    background: #fff;
+    padding: 15px 20px 20px 20px;
+    min-height: 280px;
+    -webkit-box-shadow: inset 0 20px 20px -20px rgba(0, 0, 0, 0.8);
+    -moz-box-shadow: inset 0 20px 20px -20px rgba(0, 0, 0, 0.8);
+    box-shadow: inset 0 20px 20px -20px rgba(0, 0, 0, 0.8);
+}
+
 div#ib-loading-box {
     width: 100%;
     text-align: center;
@@ -173,7 +201,7 @@ div.ib-newepisode-section {
 
 div.ib-newepisode-container {
     float: left;
-    width: 45%;
+    width: 33%;
     border: 2px solid gray;
     margin: 4px;
     padding: 4px;
@@ -182,17 +210,17 @@ div.ib-newepisode-container {
 
 div.ib-newepisode-img-box {
     float: left;
-    width: 57px;
+    width: 20%;
     margin: 4px;
 }
 
 img.ib-newepisode-img {
-    width: 57px;
+    width: 100%;
 }
 
 div.ib-newepisode-details-box {
     float: left;
-    width: 300px;
+    width: 75%;
 }
 
 div.ib-newepisode-show-title {
