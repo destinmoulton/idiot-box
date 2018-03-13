@@ -187,7 +187,7 @@ class ShowsList extends Component {
                     <h2>Shows</h2>
                 </Row>
                 <Row className="ib-shows-searchbar">
-                    <Input
+                    <Input.Search
                         autoFocus
                         value={currentSearchString}
                         onChange={this._handleChangeFilter.bind(this)}
@@ -201,8 +201,9 @@ class ShowsList extends Component {
                                 )}
                             />
                         }
-                        placeholder="Search..."
+                        placeholder="Filter shows..."
                     />
+                    &nbsp;&nbsp;
                     <Button
                         className="ib-button-green"
                         onClick={this._handleOpenAddShowModal.bind(this)}
