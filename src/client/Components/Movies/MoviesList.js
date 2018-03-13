@@ -72,6 +72,42 @@ class MoviesList extends Component {
         }
     }
 
+    _handlePressDelete(movie) {
+        if (confirm(`Really delete ${movie.title}`)) {
+            this._deleteMovie(movie);
+        }
+    }
+
+    _deleteMovie(movie) {
+        const { emitAPIRequest } = this.props;
+
+        const params = {
+            movie_id: movie.id
+        };
+
+        emitAPIRequest(
+            "movies.movie.delete",
+            params,
+            this._movieDeleteComplete.bind(this, movie.id),
+            false
+        );
+    }
+
+    _movieDeleteComplete(movieId) {
+        // Delete can be called from the modal (close it)
+        this._handleCloseModal(false);
+
+        const { movies } = this.state;
+
+        const filteredMovies = movies.filter(movie => {
+            return movie.id !== movieId;
+        });
+
+        this.setState({
+            movies: filteredMovies
+        });
+    }
+
     _handleChangeFilter(evt) {
         const { movies } = this.state;
 
@@ -159,6 +195,7 @@ class MoviesList extends Component {
                 </Row>
                 <Row>{content}</Row>
                 <MovieInfoModal
+                    onClickDelete={this._handlePressDelete.bind(this)}
                     onClose={this._handleCloseModal.bind(this)}
                     movie={infomodalMovie}
                     isVisible={infomodalIsVisible}
