@@ -173,7 +173,7 @@ div.ib-newepisode-section {
 
 div.ib-newepisode-container {
     float: left;
-    width: 300px;
+    width: 45%;
     border: 2px solid gray;
     margin: 4px;
     padding: 4px;
@@ -182,27 +182,33 @@ div.ib-newepisode-container {
 
 div.ib-newepisode-img-box {
     float: left;
-    width: 50px;
+    width: 57px;
     margin: 4px;
 }
 
 img.ib-newepisode-img {
-    width: 50px;
+    width: 57px;
 }
 
 div.ib-newepisode-details-box {
     float: left;
-    width: 230px;
+    width: 300px;
 }
 
 div.ib-newepisode-show-title {
     font-weight: bold;
     font-size: 1.2em;
+    height: 25px;
+    width: 100%;
+    overflow: hidden;
 }
 
 div.ib-newepisode-ep-title {
     font-weight: bold;
     font-size: 1.1em;
+    height: 20px;
+    overflow: hidden;
+    width: 100%;
     color: #383f55;
 }
 
