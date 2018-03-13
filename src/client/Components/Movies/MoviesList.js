@@ -195,7 +195,7 @@ class MoviesList extends Component {
                         onChange={this._handleChangeFilter.bind(this)}
                         style={{ width: 400 }}
                         onSearch={this._handleChangeFilter.bind(this)}
-                        placeholder="Search movies..."
+                        placeholder="Filter movies..."
                     />
                 </Row>
                 <Row>{content}</Row>
