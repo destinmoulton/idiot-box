@@ -5,7 +5,6 @@ import { Button, Card, Col, Icon, Row, Spin } from "antd";
 
 import { emitAPIRequest } from "../../actions/api.actions";
 
-import EpisodesTable from "./EpisodesTable";
 import SeasonTabs from "./SeasonTabs";
 
 class ShowInfo extends Component {
@@ -13,7 +12,6 @@ class ShowInfo extends Component {
         super(props);
 
         this.state = {
-            activeSeasonNum: -1,
             isLoadingShow: true,
             show: {}
         };
@@ -21,24 +19,6 @@ class ShowInfo extends Component {
 
     componentWillMount() {
         this._getShowInfo();
-        this._parseActiveSeason(this.props);
-    }
-
-    componentWillReceiveProps(nextProps) {
-        this._parseActiveSeason(nextProps);
-    }
-
-    _parseActiveSeason(props) {
-        const { match } = props;
-        const { activeSeasonNum } = this.state;
-
-        if (match.params.season_id !== undefined) {
-            if (match.params.season_id !== activeSeasonNum) {
-                this.setState({
-                    activeSeasonNum: parseInt(match.params.season_id)
-                });
-            }
-        }
     }
 
     _getShowInfo() {
@@ -136,7 +116,7 @@ class ShowInfo extends Component {
     }
 
     render() {
-        const { activeSeasonNum, isLoadingShow, show } = this.state;
+        const { isLoadingShow, show } = this.state;
 
         const showInfo = this._buildShowInfo();
 
@@ -145,30 +125,17 @@ class ShowInfo extends Component {
         if (!isLoadingShow) {
             seasonsBar = (
                 <SeasonTabs
-                    activeSeasonNum={activeSeasonNum}
                     show={show}
                     history={this.props.history}
+                    match={this.props.match}
                 />
             );
-            if (activeSeasonNum > -1) {
-                episodesTable = (
-                    <EpisodesTable
-                        activeSeasonNum={activeSeasonNum}
-                        show={show}
-                    />
-                );
-            }
         }
 
         return (
             <div>
                 <Row>{showInfo}</Row>
-                <Row>
-                    <Card title="Seasons">
-                        {seasonsBar}
-                        {episodesTable}
-                    </Card>
-                </Row>
+                <Row>{seasonsBar}</Row>
             </div>
         );
     }

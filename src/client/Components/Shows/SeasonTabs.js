@@ -3,16 +3,16 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 
 import { Link } from "react-router-dom";
-import { Icon, Row, Spin, Table, Tabs } from "antd";
+import { Card, Icon, Row, Spin, Table, Tabs } from "antd";
 const TabPane = Tabs.TabPane;
 
 import { emitAPIRequest } from "../../actions/api.actions";
 
+import EpisodesTable from "./EpisodesTable";
 import PlayButton from "../PlayButton";
 
 class SeasonTabs extends Component {
     static propTypes = {
-        activeSeasonNum: PropTypes.number.isRequired,
         show: PropTypes.object.isRequired
     };
 
@@ -20,6 +20,7 @@ class SeasonTabs extends Component {
         super(props);
 
         this.state = {
+            activeSeasonNum: -1,
             isLoadingSeasons: false,
             seasons: []
         };
@@ -27,6 +28,24 @@ class SeasonTabs extends Component {
 
     componentWillMount() {
         this._getSeasons();
+        this._parseActiveSeason(this.props);
+    }
+
+    componentWillReceiveProps(nextProps) {
+        this._parseActiveSeason(nextProps);
+    }
+
+    _parseActiveSeason(props) {
+        const { match } = props;
+        const { activeSeasonNum } = this.state;
+
+        if (match.params.season_id !== undefined) {
+            if (match.params.season_id !== activeSeasonNum) {
+                this.setState({
+                    activeSeasonNum: parseInt(match.params.season_id)
+                });
+            }
+        }
     }
 
     _getSeasons() {
@@ -56,8 +75,8 @@ class SeasonTabs extends Component {
     }
 
     _buildSeasonBar() {
-        const { seasons } = this.state;
-        const { activeSeasonNum, show } = this.props;
+        const { activeSeasonNum, seasons } = this.state;
+        const { show } = this.props;
 
         let seasonList = [];
         seasons.forEach(season => {
@@ -125,7 +144,7 @@ class SeasonTabs extends Component {
     }
 
     _buildSeasonTabs() {
-        const { seasons } = this.state;
+        const { activeSeasonNum, seasons } = this.state;
         const tabpanes = seasons.map((season, index) => {
             let lockIcon = "";
             if (season.locked === 1) {
@@ -144,7 +163,7 @@ class SeasonTabs extends Component {
         });
         return (
             <Tabs
-                defaultActiveKey={this.props.activeSeasonNum}
+                defaultActiveKey={activeSeasonNum}
                 onTabClick={this._handleClickTab.bind(this)}
                 size="small"
                 tabBarGutter={1}
@@ -155,7 +174,8 @@ class SeasonTabs extends Component {
     }
 
     render() {
-        const { isLoadingSeasons } = this.state;
+        const { activeSeasonNum, isLoadingSeasons } = this.state;
+        const { show } = this.props;
 
         let seasonBar = "";
         if (isLoadingSeasons) {
@@ -164,7 +184,19 @@ class SeasonTabs extends Component {
             seasonBar = this._buildSeasonTabs();
         }
 
-        return <div>{seasonBar}</div>;
+        let episodesTable = null;
+        if (activeSeasonNum > -1) {
+            episodesTable = (
+                <EpisodesTable activeSeasonNum={activeSeasonNum} show={show} />
+            );
+        }
+
+        return (
+            <Card title="Seasons">
+                {seasonBar}
+                {episodesTable}
+            </Card>
+        );
     }
 }
 
