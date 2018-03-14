@@ -55,22 +55,6 @@ class SeasonTabs extends Component {
         });
     }
 
-    _handleClickToggleLock(seasonID, newLockStatus) {
-        const { emitAPIRequest } = this.props;
-
-        const params = {
-            season_id: seasonID,
-            lock_status: newLockStatus
-        };
-
-        emitAPIRequest(
-            "shows.season.toggle_lock",
-            params,
-            this._getSeasons.bind(this),
-            false
-        );
-    }
-
     _buildSeasonBar() {
         const { seasons } = this.state;
         const { activeSeasonNum, show } = this.props;
