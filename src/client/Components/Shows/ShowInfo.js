@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { Button, Col, Icon, Row, Spin } from "antd";
+import { Button, Card, Col, Icon, Row, Spin } from "antd";
 
 import { emitAPIRequest } from "../../actions/api.actions";
 
@@ -159,8 +159,12 @@ class ShowInfo extends Component {
         return (
             <div>
                 <Row>{showInfo}</Row>
-                <Row>{seasonsBar}</Row>
-                <Row>{episodesTable}</Row>
+                <Row>
+                    <Card title="Seasons">
+                        {seasonsBar}
+                        {episodesTable}
+                    </Card>
+                </Row>
             </div>
         );
     }
