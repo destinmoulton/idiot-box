@@ -13,6 +13,8 @@ import PlayButton from "../PlayButton";
 class EpisodesTable extends Component {
     static propTypes = {
         activeSeasonNum: PropTypes.number.isRequired,
+        onToggleSeasonLock: PropTypes.func.isRequired,
+        season: PropTypes.object.isRequired,
         show: PropTypes.object.isRequired
     };
 
@@ -39,22 +41,6 @@ class EpisodesTable extends Component {
         if (props.activeSeasonNum !== this.state.selectedSeasonNum) {
             this._getEpisodes(props.activeSeasonNum);
         }
-    }
-
-    _handleClickToggleLock(seasonID, newLockStatus) {
-        const { emitAPIRequest } = this.props;
-
-        const params = {
-            season_id: seasonID,
-            lock_status: newLockStatus
-        };
-
-        emitAPIRequest(
-            "shows.season.toggle_lock",
-            params,
-            this._getSeasons.bind(this),
-            false
-        );
     }
 
     _getEpisodes(seasonNum) {
@@ -109,6 +95,10 @@ class EpisodesTable extends Component {
         this.setState({
             selectedEpisodeKeys
         });
+    }
+
+    _handleToggleSeasonLock(newStatus) {
+        this.props.onToggleSeasonLock(newStatus);
     }
 
     _buildEpisodesTable() {
@@ -215,6 +205,23 @@ class EpisodesTable extends Component {
     }
 
     _buildButtons() {
+        const { season } = this.props;
+
+        let toggleLockButton = null;
+        if (season.locked) {
+            toggleLockButton = (
+                <Button onClick={this._handleToggleSeasonLock.bind(this, 0)}>
+                    <Icon type="unlock" />&nbsp;Unlock Season
+                </Button>
+            );
+        } else {
+            toggleLockButton = (
+                <Button onClick={this._handleToggleSeasonLock.bind(this, 1)}>
+                    <Icon type="lock" />&nbsp;Lock Season
+                </Button>
+            );
+        }
+
         return (
             <div>
                 <Button.Group>
@@ -235,6 +242,7 @@ class EpisodesTable extends Component {
                         Toggle to UnWatched
                     </Button>
                 </Button.Group>
+                &nbsp;{toggleLockButton}
             </div>
         );
     }
