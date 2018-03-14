@@ -21,6 +21,7 @@ class SeasonTabs extends Component {
 
         this.state = {
             activeSeasonNum: -1,
+            activeSeason: {},
             isLoadingSeasons: false,
             seasons: []
         };
@@ -37,12 +38,20 @@ class SeasonTabs extends Component {
 
     _parseActiveSeason(props) {
         const { match } = props;
-        const { activeSeasonNum } = this.state;
+        const { activeSeasonNum, seasons } = this.state;
 
-        if (match.params.season_id !== undefined) {
-            if (match.params.season_id !== activeSeasonNum) {
+        if (match.params.season_number !== undefined) {
+            if (match.params.season_number !== activeSeasonNum) {
+                const seasonNumber = parseInt(match.params.season_number);
+                let activeSeason = {};
+                seasons.forEach(season => {
+                    if (season.season_number === seasonNumber) {
+                        activeSeason = season;
+                    }
+                });
                 this.setState({
-                    activeSeasonNum: parseInt(match.params.season_id)
+                    activeSeasonNum: seasonNumber,
+                    activeSeason
                 });
             }
         }
@@ -68,79 +77,41 @@ class SeasonTabs extends Component {
     }
 
     _seasonsReceived(seasons) {
+        const { activeSeasonNum } = this.state;
+        let activeSeason = {};
+        seasons.forEach(season => {
+            if (season.season_number === activeSeasonNum) {
+                activeSeason = season;
+            }
+        });
+
         this.setState({
+            activeSeason,
             isLoadingSeasons: false,
             seasons
         });
     }
 
-    _buildSeasonBar() {
-        const { activeSeasonNum, seasons } = this.state;
-        const { show } = this.props;
-
-        let seasonList = [];
-        seasons.forEach(season => {
-            let boxClass = "ib-show-seasonlist-season-box";
-            let seasonNumEl = "";
-            if (season.season_number === activeSeasonNum) {
-                boxClass += " ib-show-seasonlist-season-box-active";
-                seasonNumEl = season.season_number;
-            } else {
-                seasonNumEl = (
-                    <Link
-                        to={"/show/" + show.slug + "/" + season.season_number}
-                    >
-                        {season.season_number}
-                    </Link>
-                );
-            }
-
-            let lockedIcon = "";
-            if (season.locked === 1) {
-                lockedIcon = (
-                    <a
-                        href="javascript:void(0);"
-                        title="Locked. Click to Unlock."
-                        onClick={this._handleClickToggleLock.bind(
-                            this,
-                            season.id,
-                            0
-                        )}
-                    >
-                        <Icon type="lock" />
-                    </a>
-                );
-            } else {
-                lockedIcon = (
-                    <a
-                        href="javascript:void(0);"
-                        title="Unlocked. Click to Lock."
-                        onClick={this._handleClickToggleLock.bind(
-                            this,
-                            season.id,
-                            1
-                        )}
-                    >
-                        <Icon type="unlock" />
-                    </a>
-                );
-            }
-
-            const el = (
-                <div key={season.season_number} className={boxClass}>
-                    {seasonNumEl}&nbsp;|&nbsp;{lockedIcon}
-                </div>
-            );
-
-            seasonList.push(el);
-        });
-
-        return seasonList;
-    }
-
     _handleClickTab(seasonNumber) {
         const { history, show } = this.props;
         history.push("/show/" + show.slug + "/" + seasonNumber);
+    }
+
+    _handleToggleSeasonLock(newLockStatus) {
+        const { emitAPIRequest } = this.props;
+        const { activeSeason } = this.state;
+
+        const params = {
+            season_id: activeSeason.id,
+            lock_status: newLockStatus
+        };
+
+        emitAPIRequest(
+            "shows.season.toggle_lock",
+            params,
+            this._getSeasons.bind(this),
+            false
+        );
     }
 
     _buildSeasonTabs() {
@@ -174,7 +145,7 @@ class SeasonTabs extends Component {
     }
 
     render() {
-        const { activeSeasonNum, isLoadingSeasons } = this.state;
+        const { activeSeason, activeSeasonNum, isLoadingSeasons } = this.state;
         const { show } = this.props;
 
         let seasonBar = "";
@@ -185,9 +156,14 @@ class SeasonTabs extends Component {
         }
 
         let episodesTable = null;
-        if (activeSeasonNum > -1) {
+        if (activeSeasonNum > -1 && !isLoadingSeasons) {
             episodesTable = (
-                <EpisodesTable activeSeasonNum={activeSeasonNum} show={show} />
+                <EpisodesTable
+                    activeSeasonNum={activeSeasonNum}
+                    season={activeSeason}
+                    show={show}
+                    onToggleSeasonLock={this._handleToggleSeasonLock.bind(this)}
+                />
             );
         }
 
