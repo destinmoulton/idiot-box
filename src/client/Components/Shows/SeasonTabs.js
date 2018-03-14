@@ -158,11 +158,11 @@ class SeasonTabs extends Component {
             );
             return <TabPane tab={tabTitle} key={season.season_number} />;
         });
-
         return (
             <Tabs
-                defaultActiveKey={seasons[0]["season_number"]}
+                defaultActiveKey={this.props.activeSeasonNum}
                 onTabClick={this._handleClickTab.bind(this)}
+                size="small"
             >
                 {tabpanes}
             </Tabs>
