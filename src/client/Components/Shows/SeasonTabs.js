@@ -10,7 +10,7 @@ import { emitAPIRequest } from "../../actions/api.actions";
 
 import PlayButton from "../PlayButton";
 
-class SeasonsBar extends Component {
+class SeasonTabs extends Component {
     static propTypes = {
         activeSeasonNum: PropTypes.number.isRequired,
         show: PropTypes.object.isRequired
@@ -197,4 +197,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SeasonsBar);
+export default connect(mapStateToProps, mapDispatchToProps)(SeasonTabs);
