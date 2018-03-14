@@ -3,11 +3,12 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { Button, Col, Icon, Input, Row, Spin } from "antd";
+import { Button, Col, Input, Row, Spin } from "antd";
 
 import { emitAPIRequest } from "../../actions/api.actions";
 
 import AddShowModal from "./AddShowModal";
+import ShowListThumbInfo from "./ShowListThumbInfo";
 
 class ShowsList extends Component {
     constructor(props) {
@@ -59,43 +60,6 @@ class ShowsList extends Component {
     _prepStringForFilter(title) {
         const lowerTitle = title.toLowerCase();
         return lowerTitle.replace(/[^a-z0-9]/g, "");
-    }
-
-    _buildShowList() {
-        const { shows } = this.state;
-
-        let showList = [];
-        shows.forEach(show => {
-            if (show.is_visible) {
-                const showTitle = {
-                    __html: _.truncate(show.title, { length: 18 })
-                };
-                const details = (
-                    <Col
-                        key={show.id}
-                        className="ib-shows-thumbnail-box"
-                        span={4}
-                    >
-                        <div>
-                            <Link to={"/show/" + show.slug}>
-                                <img
-                                    className="ib-shows-thumbnail"
-                                    src={"/images/shows/" + show.image_filename}
-                                />
-                                <span dangerouslySetInnerHTML={showTitle} />
-                                <br />[ {show.num_seasons_locked}{" "}
-                                <Icon type="lock" /> ][{" "}
-                                {show.num_seasons_unlocked}{" "}
-                                <Icon type="unlock" /> ]
-                            </Link>
-                        </div>
-                    </Col>
-                );
-                showList.push(details);
-            }
-        });
-
-        return showList;
     }
 
     _handleChangeFilter(evt) {
@@ -154,6 +118,27 @@ class ShowsList extends Component {
         });
 
         this._getShows();
+    }
+
+    _buildShowList() {
+        const { shows } = this.state;
+
+        let showList = [];
+        shows.forEach(show => {
+            if (show.is_visible) {
+                showList.push(
+                    <Col
+                        key={show.id}
+                        className="ib-shows-thumbnail-box"
+                        span={4}
+                    >
+                        <ShowListThumbInfo show={show} />
+                    </Col>
+                );
+            }
+        });
+
+        return showList;
     }
 
     render() {
