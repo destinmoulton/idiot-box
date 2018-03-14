@@ -135,6 +135,32 @@ class SeasonsBar extends Component {
         return seasonList;
     }
 
+    _buildSeasonTabs() {
+        const { seasons } = this.state;
+        const tabpanes = seasons.map((season, index) => {
+            let lockIcon = "";
+            if (season.locked === 1) {
+                lockIcon = <Icon type="lock" />;
+            } else {
+                lockIcon = <Icon type="unlock" />;
+            }
+
+            const tabTitle = (
+                <span>
+                    {season.season_number}&nbsp;
+                    {lockIcon}
+                </span>
+            );
+            return <TabPane tab={tabTitle} key={season.season_number} />;
+        });
+
+        return (
+            <Tabs defaultActiveKey={seasons[0]["season_number"]}>
+                {tabpanes}
+            </Tabs>
+        );
+    }
+
     render() {
         const { isLoadingSeasons } = this.state;
 
@@ -142,7 +168,7 @@ class SeasonsBar extends Component {
         if (isLoadingSeasons) {
             seasonBar = <Spin />;
         } else {
-            seasonBar = this._buildSeasonBar();
+            seasonBar = this._buildSeasonTabs();
         }
 
         return <div>{seasonBar}</div>;
