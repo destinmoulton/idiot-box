@@ -127,11 +127,7 @@ class ShowsList extends Component {
         shows.forEach(show => {
             if (show.is_visible) {
                 showList.push(
-                    <Col
-                        key={show.id}
-                        className="ib-shows-thumbnail-box"
-                        span={4}
-                    >
+                    <Col key={show.id} className="ib-showlist-infobox" span={4}>
                         <ShowListThumbInfo show={show} />
                     </Col>
                 );
