@@ -22,7 +22,7 @@
     background: #44484c;
 }
 
-.ant-menu-dark .ant-menu-item > a {
+.ant-menu-dark .ant-menu-item>a {
     font-weight: bold;
 }
 
@@ -127,6 +127,7 @@ div.ib-idmultiplemodal-episode-box {
     padding: 5px;
     margin: 5px;
 }
+
 
 /** The main content box **/
 
@@ -272,26 +273,6 @@ div#ib-showmodal-searbox {
     text-align: center;
 }
 
-div.ib-shows-thumbnail-box {
-    width: 150px;
-    height: 258px;
-    padding: 5px;
-    text-align: center;
-    font-size: 1.1em;
-    margin: 4px;
-    border: 2px solid gray;
-}
-
-img.ib-shows-thumbnail {
-    width: 100%;
-}
-
-div.ib-shows-seasonlist-row {
-    border: 1px solid black;
-    margin-bottom: 5px;
-    padding: 5px;
-}
-
 div.ib-shows-seasonlist-seasontitle {
     font-size: 1.1em;
 }
@@ -330,7 +311,41 @@ div.ib-show-seasonlist-season-box-active {
     background-color: #ebf3cc;
 }
 
-div.ib-showlist-searchbar {
+div.ib-showlist-infobox {
+    width: 150px;
+    height: 258px;
+    padding: 5px;
+    text-align: center;
+    font-size: 1.1em;
+    margin: 4px;
+    border: 2px solid gray;
+}
+
+div.ib-showlist-infobox-tags {
+    position: absolute;
+    bottom: 4px;
+    width: 100%;
+}
+
+img.ib-showlist-infobox-thumb {
+    width: 100%;
+}
+
+div.ib-showlist-infobox-thumb-container {
+    position: relative;
+    width: 136px;
+    height: 200px;
+}
+
+div.ib-showlist-infobox-title {
+    position: relative;
+    width: 136px;
+    height: 44px;
+    line-height: 1.4em;
+    overflow: hidden;
+}
+
+div.ib-showlist-infobox-tags div.ib-showlist-searchbar {
     padding: 5px;
     text-align: center;
 }
