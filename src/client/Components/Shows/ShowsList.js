@@ -142,13 +142,6 @@ class ShowsList extends Component {
         });
     }
 
-    _handleClickClearFilter() {
-        this.setState({
-            currentSearchString: ""
-        });
-        this._filterVisibleShows("");
-    }
-
     _cancelAddShowModal() {
         this.setState({
             isAddShowModalVisible: false
@@ -193,14 +186,6 @@ class ShowsList extends Component {
                         onChange={this._handleChangeFilter.bind(this)}
                         onKeyPress={this._handleCheckPressEnter.bind(this)}
                         style={{ width: 400 }}
-                        suffix={
-                            <Icon
-                                type="close-square"
-                                onClick={this._handleClickClearFilter.bind(
-                                    this
-                                )}
-                            />
-                        }
                         placeholder="Filter shows..."
                     />
                     &nbsp;&nbsp;
