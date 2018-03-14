@@ -164,7 +164,7 @@ class ShowsList extends Component {
                 <Row>
                     <h2>Shows</h2>
                 </Row>
-                <Row className="ib-shows-searchbar">
+                <Row className="ib-showlist-searchbar">
                     <Input.Search
                         autoFocus
                         value={currentSearchString}
