@@ -113,22 +113,22 @@ class ShowInfo extends Component {
                 </Col>
                 <Col span={14} offset={1}>
                     <h3>{show.title}</h3>
-                    <h4>{show.year}</h4>
-                    <a
-                        href={"http://imdb.com/title/" + show.imdb_id}
-                        target="_blank"
-                    >
-                        IMDB
-                    </a>
-                    <br />
-                    <Button
-                        type="danger"
-                        onClick={this._handlePressDelete.bind(this)}
-                    >
-                        Delete Show
-                    </Button>
-                    <br />
-                    <br />
+                    <h4>
+                        <a
+                            href={"http://imdb.com/title/" + show.imdb_id}
+                            target="_blank"
+                        >
+                            IMDB
+                        </a>&nbsp;|&nbsp;
+                        {show.year}&nbsp;&nbsp;&nbsp;
+                        <Button
+                            type="danger"
+                            onClick={this._handlePressDelete.bind(this)}
+                            size="small"
+                        >
+                            <Icon type="delete" />Delete Show
+                        </Button>
+                    </h4>
                     <p>{show.overview}</p>
                 </Col>
             </div>
