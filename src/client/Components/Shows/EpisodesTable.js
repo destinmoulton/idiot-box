@@ -246,7 +246,11 @@ class EpisodesTable extends Component {
         let episodeList = "";
         if (selectedSeasonNum > -1) {
             if (isLoadingEpisodes) {
-                episodeList = <Spin />;
+                episodeList = (
+                    <div id="ib-loading-box">
+                        <Spin />
+                    </div>
+                );
             } else {
                 episodeList = this._buildEpisodesTable();
             }
