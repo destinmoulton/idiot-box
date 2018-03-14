@@ -7,23 +7,28 @@ import { Col, Icon, Tag } from "antd";
 export default props => {
     const { show } = props;
     const showTitle = {
-        __html: _.truncate(show.title, { length: 18 })
+        __html: show.title
     };
     return (
         <div>
             <Link to={"/show/" + show.slug}>
-                <img
-                    className="ib-shows-thumbnail"
-                    src={"/images/shows/" + show.image_filename}
-                />
-                <span dangerouslySetInnerHTML={showTitle} />
-                <br />
-                <Tag>
-                    {show.num_seasons_locked}&nbsp;<Icon type="lock" />
-                </Tag>
-                <Tag>
-                    {show.num_seasons_unlocked}&nbsp;<Icon type="unlock" />
-                </Tag>
+                <div className="ib-showlist-infobox-thumb-container">
+                    <img
+                        className="ib-showlist-infobox-thumb"
+                        src={"/images/shows/" + show.image_filename}
+                    />
+                    <div className="ib-showlist-infobox-tags">
+                        <Tag>
+                            {show.num_seasons_locked}&nbsp;<Icon type="lock" />
+                        </Tag>
+                        <Tag>
+                            {show.num_seasons_unlocked}&nbsp;<Icon type="unlock" />
+                        </Tag>
+                    </div>
+                </div>
+                <div className="ib-showlist-infobox-title">
+                    <span dangerouslySetInnerHTML={showTitle} />
+                </div>
             </Link>
         </div>
     );
