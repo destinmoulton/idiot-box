@@ -355,6 +355,11 @@ div.ib-showlist-infobox-tags div.ib-showlist-searchbar {
     text-align: center;
 }
 
+div.ib-showlist-searchbar {
+    text-align: center;
+    width: 100%;
+}
+
 div.ib-spinner-container {
     width: 100%;
     padding-top: 25px;
