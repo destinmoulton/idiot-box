@@ -6,7 +6,7 @@ import { Button, Card, Col, Icon, Row, Spin } from "antd";
 import { emitAPIRequest } from "../../actions/api.actions";
 
 import EpisodesTable from "./EpisodesTable";
-import SeasonsBar from "./SeasonsBar";
+import SeasonTabs from "./SeasonTabs";
 
 class ShowInfo extends Component {
     constructor(props) {
@@ -144,7 +144,11 @@ class ShowInfo extends Component {
         let episodesTable = "";
         if (!isLoadingShow) {
             seasonsBar = (
-                <SeasonsBar activeSeasonNum={activeSeasonNum} show={show} />
+                <SeasonTabs
+                    activeSeasonNum={activeSeasonNum}
+                    show={show}
+                    history={this.props.history}
+                />
             );
             if (activeSeasonNum > -1) {
                 episodesTable = (
