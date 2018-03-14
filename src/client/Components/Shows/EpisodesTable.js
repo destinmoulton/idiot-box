@@ -1,14 +1,14 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import { Link } from 'react-router-dom';
-import { Button, Icon, Row, Spin, Table } from 'antd';
+import { Link } from "react-router-dom";
+import { Button, Icon, Row, Spin, Table } from "antd";
 
-import moment from 'moment';
-import { emitAPIRequest } from '../../actions/api.actions';
+import moment from "moment";
+import { emitAPIRequest } from "../../actions/api.actions";
 
-import PlayButton from '../PlayButton';
+import PlayButton from "../PlayButton";
 
 class EpisodesTable extends Component {
     static propTypes = {
@@ -16,7 +16,7 @@ class EpisodesTable extends Component {
         show: PropTypes.object.isRequired
     };
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -24,25 +24,40 @@ class EpisodesTable extends Component {
             episodes: [],
             isLoadingEpisodes: false,
             selectedEpisodeKeys: []
-        }
+        };
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this._shouldGetEpisodes(this.props);
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
         this._shouldGetEpisodes(nextProps);
     }
 
-
-    _shouldGetEpisodes(props){
-        if(props.activeSeasonNum !== this.state.selectedSeasonNum){
+    _shouldGetEpisodes(props) {
+        if (props.activeSeasonNum !== this.state.selectedSeasonNum) {
             this._getEpisodes(props.activeSeasonNum);
         }
     }
 
-    _getEpisodes(seasonNum){
+    _handleClickToggleLock(seasonID, newLockStatus) {
+        const { emitAPIRequest } = this.props;
+
+        const params = {
+            season_id: seasonID,
+            lock_status: newLockStatus
+        };
+
+        emitAPIRequest(
+            "shows.season.toggle_lock",
+            params,
+            this._getSeasons.bind(this),
+            false
+        );
+    }
+
+    _getEpisodes(seasonNum) {
         const { emitAPIRequest, show } = this.props;
 
         this.setState({
@@ -54,10 +69,15 @@ class EpisodesTable extends Component {
             season_number: seasonNum
         };
 
-        emitAPIRequest("shows.episodes.get_all_with_file_info", options, this._episodesReceived.bind(this, seasonNum), false);
+        emitAPIRequest(
+            "shows.episodes.get_all_with_file_info",
+            options,
+            this._episodesReceived.bind(this, seasonNum),
+            false
+        );
     }
 
-    _episodesReceived(seasonNum, episodes){
+    _episodesReceived(seasonNum, episodes) {
         this.setState({
             selectedSeasonNum: seasonNum,
             episodes,
@@ -65,7 +85,7 @@ class EpisodesTable extends Component {
         });
     }
 
-    _changeSelectedEpisodesWatchedStatus(newWatchedStatus){
+    _changeSelectedEpisodesWatchedStatus(newWatchedStatus) {
         const { selectedEpisodeKeys } = this.state;
         const { activeSeasonNum, emitAPIRequest } = this.props;
 
@@ -77,16 +97,21 @@ class EpisodesTable extends Component {
             episode_ids: selectedEpisodeKeys,
             watched_status: newWatchedStatus
         };
-        emitAPIRequest("shows.episodes.toggle_watched", params, this._getEpisodes.bind(this, activeSeasonNum), false);
+        emitAPIRequest(
+            "shows.episodes.toggle_watched",
+            params,
+            this._getEpisodes.bind(this, activeSeasonNum),
+            false
+        );
     }
 
-    _handleSelectEpisodeTableRow(selectedEpisodeKeys){
+    _handleSelectEpisodeTableRow(selectedEpisodeKeys) {
         this.setState({
             selectedEpisodeKeys
         });
     }
 
-    _buildEpisodesTable(){
+    _buildEpisodesTable() {
         const { episodes, selectedEpisodeKeys } = this.state;
         const { directories } = this.props;
 
@@ -99,14 +124,13 @@ class EpisodesTable extends Component {
 
         const locale = {
             emptyText: "No episodes found."
-        }
+        };
 
-        
         return (
-            <Table 
-                columns={columns} 
-                dataSource={episodes} 
-                pagination={false} 
+            <Table
+                columns={columns}
+                dataSource={episodes}
+                pagination={false}
                 size="small"
                 rowKey="id"
                 rowSelection={rowSelection}
@@ -115,7 +139,7 @@ class EpisodesTable extends Component {
         );
     }
 
-    _episodeTableColumns(){
+    _episodeTableColumns() {
         const { directories } = this.props;
 
         return [
@@ -124,17 +148,16 @@ class EpisodesTable extends Component {
                 dataIndex: "episode_number"
             },
             {
-                title: <Icon type="check"/>,
-                render: (text, record) =>{
+                title: <Icon type="check" />,
+                render: (text, record) => {
                     let iconType = "";
-                    if(record.watched === 1){
+                    if (record.watched === 1) {
                         iconType = "check";
                     } else {
                         iconType = "minus";
                     }
-                    return <Icon type={iconType} />
+                    return <Icon type={iconType} />;
                 }
-
             },
             {
                 title: "Name",
@@ -142,51 +165,73 @@ class EpisodesTable extends Component {
             },
             {
                 title: "First Aired",
-                render: (text, record) =>{
-                    return moment.unix(record.first_aired).format("MMM. D, YYYY, h:mm:ss a");
+                render: (text, record) => {
+                    return moment
+                        .unix(record.first_aired)
+                        .format("MMM. D, YYYY, h:mm:ss a");
                 }
-
             },
             {
-                title: <Icon type="play-circle" className="ib-playbutton-icon"/>,
+                title: (
+                    <Icon type="play-circle" className="ib-playbutton-icon" />
+                ),
                 render: (text, record) => {
-                    if(record.file_info.hasOwnProperty('id')){
-                        const fullPath = directories.Shows + "/" + record.file_info.subpath;
-                        return <PlayButton filename={record.file_info.filename} fullPath={fullPath} />;
+                    if (record.file_info.hasOwnProperty("id")) {
+                        const fullPath =
+                            directories.Shows + "/" + record.file_info.subpath;
+                        return (
+                            <PlayButton
+                                filename={record.file_info.filename}
+                                fullPath={fullPath}
+                            />
+                        );
                     }
                 }
             }
         ];
     }
 
-    _buildEpisodesList(){
+    _buildEpisodesList() {
         const { episodes } = this.state;
         const { directories } = this.props;
 
         let episodeList = [];
 
-        episodes.forEach((episode)=>{
+        episodes.forEach(episode => {
             let playButton = "";
 
-            
-            const el = <div key={episode.id}
-                            className="ib-shows-seasonlist-episode-row">
-                            {playButton}{episode.episode_number}. {episode.title}
-                        </div>;
+            const el = (
+                <div
+                    key={episode.id}
+                    className="ib-shows-seasonlist-episode-row"
+                >
+                    {playButton}
+                    {episode.episode_number}. {episode.title}
+                </div>
+            );
             episodeList.push(el);
         });
         return episodeList;
     }
 
-    _buildButtons(){
-
+    _buildButtons() {
         return (
             <div>
                 <Button.Group>
-                    <Button onClick={this._changeSelectedEpisodesWatchedStatus.bind(this, 1)}>
+                    <Button
+                        onClick={this._changeSelectedEpisodesWatchedStatus.bind(
+                            this,
+                            1
+                        )}
+                    >
                         Toggle to Watched
                     </Button>
-                    <Button onClick={this._changeSelectedEpisodesWatchedStatus.bind(this, 0)}>
+                    <Button
+                        onClick={this._changeSelectedEpisodesWatchedStatus.bind(
+                            this,
+                            0
+                        )}
+                    >
                         Toggle to UnWatched
                     </Button>
                 </Button.Group>
@@ -196,14 +241,11 @@ class EpisodesTable extends Component {
 
     render() {
         const { activeSeasonNum } = this.props;
-        const {
-            selectedSeasonNum,
-            isLoadingEpisodes,
-        } = this.state;
+        const { selectedSeasonNum, isLoadingEpisodes } = this.state;
 
         let episodeList = "";
-        if(selectedSeasonNum > -1){
-            if(isLoadingEpisodes){
+        if (selectedSeasonNum > -1) {
+            if (isLoadingEpisodes) {
                 episodeList = <Spin />;
             } else {
                 episodeList = this._buildEpisodesTable();
@@ -222,17 +264,18 @@ class EpisodesTable extends Component {
     }
 }
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = state => {
     const { settings } = state;
     return {
         directories: settings.settings.directories
-    }
-}
+    };
+};
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
-    }
-}
+        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+    };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(EpisodesTable);
