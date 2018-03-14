@@ -293,6 +293,10 @@ div.ib-show-info-thumbnail-box {
     border: 2px solid gray;
 }
 
+img.ib-show-info-thumb {
+    width: 100%;
+}
+
 .ib-show-seasonlist-episodes-container {
     padding: 10px;
 }
