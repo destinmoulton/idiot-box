@@ -163,6 +163,7 @@ class SeasonTabs extends Component {
                 defaultActiveKey={this.props.activeSeasonNum}
                 onTabClick={this._handleClickTab.bind(this)}
                 size="small"
+                tabBarGutter={1}
             >
                 {tabpanes}
             </Tabs>
