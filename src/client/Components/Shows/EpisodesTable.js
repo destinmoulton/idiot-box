@@ -206,6 +206,7 @@ class EpisodesTable extends Component {
 
     _buildButtons() {
         const { season } = this.props;
+        const { selectedEpisodeKeys } = this.state;
 
         let toggleLockButton = null;
         if (season.locked) {
@@ -222,6 +223,8 @@ class EpisodesTable extends Component {
             );
         }
 
+        const buttonsDisabled = selectedEpisodeKeys.length > 0 ? false : true;
+
         return (
             <div>
                 <Button.Group>
@@ -230,6 +233,7 @@ class EpisodesTable extends Component {
                             this,
                             1
                         )}
+                        disabled={buttonsDisabled}
                     >
                         Toggle to Watched
                     </Button>
@@ -238,11 +242,13 @@ class EpisodesTable extends Component {
                             this,
                             0
                         )}
+                        disabled={buttonsDisabled}
                     >
                         Toggle to UnWatched
                     </Button>
                 </Button.Group>
-                &nbsp;{toggleLockButton}
+                &nbsp;
+                <Button.Group>{toggleLockButton}</Button.Group>
             </div>
         );
     }
