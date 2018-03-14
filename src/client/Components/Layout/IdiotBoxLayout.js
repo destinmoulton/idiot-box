@@ -32,7 +32,7 @@ class IdiotBoxLayout extends Component {
                             <Route path="/settings" component={Settings} />
                             <Route path="/shows" component={ShowsList} />
                             <Route
-                                path={`/show/:slug/:season_id?`}
+                                path={`/show/:slug/:season_number?`}
                                 component={ShowInfo}
                             />
                         </div>
