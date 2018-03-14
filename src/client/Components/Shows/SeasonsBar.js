@@ -135,6 +135,11 @@ class SeasonsBar extends Component {
         return seasonList;
     }
 
+    _handleClickTab(seasonNumber) {
+        const { history, show } = this.props;
+        history.push("/show/" + show.slug + "/" + seasonNumber);
+    }
+
     _buildSeasonTabs() {
         const { seasons } = this.state;
         const tabpanes = seasons.map((season, index) => {
@@ -155,7 +160,10 @@ class SeasonsBar extends Component {
         });
 
         return (
-            <Tabs defaultActiveKey={seasons[0]["season_number"]}>
+            <Tabs
+                defaultActiveKey={seasons[0]["season_number"]}
+                onTabClick={this._handleClickTab.bind(this)}
+            >
                 {tabpanes}
             </Tabs>
         );
