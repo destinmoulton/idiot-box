@@ -324,6 +324,7 @@ div.ib-showlist-infobox {
 div.ib-showlist-infobox-tags {
     position: absolute;
     bottom: 4px;
+    text-align: center;
     width: 100%;
 }
 
