@@ -178,7 +178,7 @@ class MoviesList extends Component {
 
         let content = "";
         if (isLoadingMovies) {
-            content = <Spin />;
+            content = <div className="ib-spinner-container"><Spin /></div>;
         } else {
             content = this._buildMovieList();
         }
