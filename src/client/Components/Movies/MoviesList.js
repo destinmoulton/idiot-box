@@ -173,16 +173,22 @@ class MoviesList extends Component {
             currentSearchString,
             infomodalIsVisible,
             infomodalMovie,
-            isLoadingMovies
+            isLoadingMovies,
+            movies
         } = this.state;
 
         let content = "";
         if (isLoadingMovies) {
-            content = <div className="ib-spinner-container"><Spin /></div>;
+            content = (
+                <div className="ib-spinner-container">
+                    <Spin />
+                </div>
+            );
         } else {
             content = this._buildMovieList();
         }
 
+        const filterPlaceholder = `Filter ${movies.length} movies...`;
         return (
             <div>
                 <Row>
@@ -195,7 +201,7 @@ class MoviesList extends Component {
                         onChange={this._handleChangeFilter.bind(this)}
                         style={{ width: 400 }}
                         onSearch={this._handleChangeFilter.bind(this)}
-                        placeholder="Filter movies..."
+                        placeholder={filterPlaceholder}
                     />
                 </Row>
                 <Row>{content}</Row>
