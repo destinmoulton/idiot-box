@@ -30,7 +30,6 @@ class MovieInfoModal extends Component {
 
     render() {
         const { onClickDelete, isVisible, movie } = this.props;
-
         return (
             <Modal
                 title="Movie Info"
@@ -58,18 +57,23 @@ class MovieInfoModal extends Component {
                     </Col>
                     <Col span={18} offset={1}>
                         <h3 dangerouslySetInnerHTML={{ __html: movie.title }} />
-                        <h4>{movie.year}</h4>
                         <h4>
+                            {movie.year}&nbsp;|&nbsp;
                             <a
                                 href={"http://imdb.com/title/" + movie.imdb_id}
                                 target="_blank"
                             >
                                 IMDB
-                            </a>
+                            </a>&nbsp;
+                            <Button
+                                onClick={this._handleClickDelete}
+                                type="danger"
+                                size="small"
+                            >
+                                Delete
+                            </Button>
                         </h4>
-                        <Button onClick={this._handleClickDelete} type="danger">
-                            Delete
-                        </Button>
+
                         <p>{movie.overview}</p>
                     </Col>
                 </Row>
