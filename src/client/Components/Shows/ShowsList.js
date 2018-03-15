@@ -141,7 +141,8 @@ class ShowsList extends Component {
         const {
             currentSearchString,
             isAddShowModalVisible,
-            isLoadingShows
+            isLoadingShows,
+            shows
         } = this.state;
 
         let content = "";
@@ -155,6 +156,7 @@ class ShowsList extends Component {
             content = this._buildShowList();
         }
 
+        const filterPlaceholder = `Filter ${shows.length} shows...`;
         return (
             <div>
                 <Row>
@@ -167,7 +169,7 @@ class ShowsList extends Component {
                         onChange={this._handleChangeFilter.bind(this)}
                         onKeyPress={this._handleCheckPressEnter.bind(this)}
                         style={{ width: 400 }}
-                        placeholder="Filter shows..."
+                        placeholder={filterPlaceholder}
                     />
                     &nbsp;&nbsp;
                     <Button
