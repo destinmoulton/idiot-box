@@ -22,7 +22,7 @@
     background: #44484c;
 }
 
-.ant-menu-dark .ant-menu-item>a {
+.ant-menu-dark .ant-menu-item > a {
     font-weight: bold;
 }
 
@@ -182,6 +182,7 @@ div.ib-movies-thumbnail-box {
     font-size: 1.1em;
     margin: 4px;
     border: 2px solid gray;
+    overflow: hidden;
 }
 
 img.ib-movies-thumbnail {
