@@ -268,10 +268,10 @@ class IDMultipleEpisodesModal extends Component {
             </Option>
         ];
         items.forEach(item => {
+            const itemTitle = prefix + item[titleKey];
             options.push(
                 <Option key={item.id.toString()} value={item.id.toString()}>
-                    {prefix}
-                    {item[titleKey]}
+                    {itemTitle}
                 </Option>
             );
         });
@@ -280,8 +280,16 @@ class IDMultipleEpisodesModal extends Component {
             <Select
                 key={Math.random()}
                 onChange={onChange}
+                optionFilterProp="children"
+                showSearch={true}
                 style={{ width: 200 }}
                 defaultValue={defaultValue.toString()}
+                filterOption={(input, option) => {
+                    const toSearch = option.props.children;
+                    return (
+                        toSearch.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    );
+                }}
             >
                 {options}
             </Select>
