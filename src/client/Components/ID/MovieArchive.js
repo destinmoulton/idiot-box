@@ -1,10 +1,10 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import { Button, Input, Spin } from 'antd';
+import { Button, Input, Spin } from "antd";
 
-import { emitAPIRequest } from '../../actions/api.actions';
+import { emitAPIRequest } from "../../actions/api.actions";
 
 class MovieArchive extends Component {
     static propTypes = {
@@ -15,7 +15,7 @@ class MovieArchive extends Component {
         onIDComplete: PropTypes.func.isRequired
     };
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -25,14 +25,14 @@ class MovieArchive extends Component {
         };
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this.setState({
             newMovieDirectory: this._getMovieTitleAndYear(),
             newMovieFilename: this._getMovieFilename()
         });
     }
 
-    _getMovieFilename(){
+    _getMovieFilename() {
         const { currentFilename, movie } = this.props;
 
         const ext = currentFilename.split(".").pop();
@@ -41,8 +41,8 @@ class MovieArchive extends Component {
 
         return movieName + "." + ext;
     }
-    
-    _getMovieTitleAndYear(){
+
+    _getMovieTitleAndYear() {
         const { movie } = this.props;
 
         const movieName = this._getCleanMovieName(movie);
@@ -50,8 +50,7 @@ class MovieArchive extends Component {
         return movieName + "." + movie.year.toString();
     }
 
-    _getCleanMovieName(movie){
-
+    _getCleanMovieName(movie) {
         // Replace current periods
         let newName = movie.title.replace(/\./g, "");
 
@@ -62,8 +61,8 @@ class MovieArchive extends Component {
         return newName.replace(/[^\.a-zA-Z0-9]/g, "");
     }
 
-     _idAndArchiveMovie(){
-        const { 
+    _idAndArchiveMovie() {
+        const {
             currentFilename,
             currentPathInfo,
             emitAPIRequest,
@@ -71,11 +70,7 @@ class MovieArchive extends Component {
             movieImageURL
         } = this.props;
 
-        const {
-            newMovieDirectory,
-            newMovieFilename
-        } = this.state;
-
+        const { newMovieDirectory, newMovieFilename } = this.state;
 
         this.setState({
             isIDing: true
@@ -94,38 +89,38 @@ class MovieArchive extends Component {
                 filename: newMovieFilename
             }
         };
-        
-        emitAPIRequest("id.movie.id_and_archive", options, this._idMovieComplete.bind(this), false);
+
+        emitAPIRequest(
+            "id.movie.id_and_archive",
+            options,
+            this._idMovieComplete.bind(this),
+            false
+        );
     }
 
-    _idMovieComplete(recd){
+    _idMovieComplete(recd) {
         const { onIDComplete } = this.props;
 
         onIDComplete();
     }
 
-    _handleChangeFilename(evt){
+    _handleChangeFilename(evt) {
         this.setState({
             newMovieFilename: evt.target.value
         });
     }
 
-    _handleChangeDirectory(evt){
+    _handleChangeDirectory(evt) {
         this.setState({
             newMovieDirectory: evt.target.value
         });
     }
 
-    _buildEpisodeForm(){
-        const {
-            newMovieDirectory,
-            newMovieFilename
-        } = this.state;
+    _buildEpisodeForm() {
+        const { newMovieDirectory, newMovieFilename } = this.state;
 
-        const {
-            movie
-        } = this.props;
-        
+        const { movie } = this.props;
+
         return (
             <div>
                 <div className="ib-idmodal-archivesingle-episodeinfo">
@@ -133,16 +128,25 @@ class MovieArchive extends Component {
                     <div>{movie.year}</div>
                 </div>
                 <div className="ib-idmodal-archivesingle-form-box">
-                    Directory: <Input onChange={this._handleChangeDirectory.bind(this)}
-                                    value={newMovieDirectory}/>
-                    Filename: <Input onChange={this._handleChangeFilename.bind(this)}
-                                    value={newMovieFilename}/>
+                    Directory:{" "}
+                    <Input
+                        onChange={this._handleChangeDirectory.bind(this)}
+                        value={newMovieDirectory}
+                    />
+                    Filename:{" "}
+                    <Input
+                        onChange={this._handleChangeFilename.bind(this)}
+                        value={newMovieFilename}
+                    />
                     <div className="ib-idmodal-button-box">
-                        <Button className="ib-button-green"
-                                onClick={this._idAndArchiveMovie.bind(this)}>Archive Movie</Button>
+                        <Button
+                            className="ib-button-green"
+                            onClick={this._idAndArchiveMovie.bind(this)}
+                        >
+                            Archive Movie
+                        </Button>
                     </div>
                 </div>
-                
             </div>
         );
     }
@@ -151,27 +155,29 @@ class MovieArchive extends Component {
         const { isIDing } = this.state;
 
         let contents = "";
-        if(isIDing){
-            contents = <Spin />;
+        if (isIDing) {
+            contents = (
+                <div className="ib-spinner-container">
+                    <Spin />
+                    <br />Adding Movie...
+                </div>
+            );
         } else {
             contents = this._buildEpisodeForm();
         }
-        
-        return (
-            <div>
-                {contents}
-            </div>
-        );
+
+        return <div>{contents}</div>;
     }
 }
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = state => {
     return {};
-}
-const mapDispatchToProps = (dispatch) => {
+};
+const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
-    }
-}
+        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+    };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(MovieArchive);
