@@ -22,7 +22,7 @@
     background: #44484c;
 }
 
-.ant-menu-dark .ant-menu-item > a {
+.ant-menu-dark .ant-menu-item>a {
     font-weight: bold;
 }
 
@@ -73,6 +73,14 @@ button.ib-filemanager-button-active {
     color: green;
     border-color: green;
     border-width: 2px;
+}
+
+div#ib-filemanager-directorymenu ul {
+    height: 40px;
+}
+
+div#ib-filemanager-directorymenu ul a {
+    height: 38px;
 }
 
 div.ib-filemanager-table tr {

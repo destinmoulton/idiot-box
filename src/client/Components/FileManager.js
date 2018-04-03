@@ -508,13 +508,15 @@ class FileManager extends Component {
         });
 
         return (
-            <Menu
-                mode="horizontal"
-                theme="light"
-                selectedKeys={[currentToplevelDirectory]}
-            >
-                {menuList}
-            </Menu>
+            <div id="ib-filemanager-directorymenu">
+                <Menu
+                    mode="horizontal"
+                    theme="light"
+                    selectedKeys={[currentToplevelDirectory]}
+                >
+                    {menuList}
+                </Menu>
+            </div>
         );
     }
 
