@@ -306,6 +306,7 @@ class FilesystemBrowser extends Component {
                             <Button
                                 icon="reload"
                                 onClick={this._reloadDir.bind(this)}
+                                size="small"
                             />
                             <span className="ib-filebrowser-current-path">
                                 {currentPath}
