@@ -168,7 +168,7 @@ class IDFileModal extends Component {
                     footer={[
                         <Button
                             key="cancel"
-                            size="large"
+                            size="small"
                             onClick={this._handleCancel.bind(this)}
                         >
                             Cancel

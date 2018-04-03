@@ -38,7 +38,7 @@ class MovieInfoModal extends Component {
                 footer={[
                     <Button
                         key="close"
-                        size="large"
+                        size="small"
                         onClick={this._handleCancelClose}
                     >
                         Close
