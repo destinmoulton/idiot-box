@@ -1,18 +1,19 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import _ from "lodash";
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import { Button, Select } from 'antd';
+import { Button, Select } from "antd";
 const Option = Select.Option;
 
-import { emitAPIRequest } from '../../actions/api.actions';
+import { emitAPIRequest } from "../../actions/api.actions";
 
 class EpisodeIDSelector extends Component {
     static propTypes = {
         onIDEpisode: PropTypes.func.isRequired
-    }
+    };
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -25,17 +26,22 @@ class EpisodeIDSelector extends Component {
         };
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this._getShows();
     }
 
-    _getShows(){
+    _getShows() {
         const { emitAPIRequest } = this.props;
 
-        emitAPIRequest("shows.shows.get", {}, this._showsReceived.bind(this), false);
+        emitAPIRequest(
+            "shows.shows.get",
+            {},
+            this._showsReceived.bind(this),
+            false
+        );
     }
 
-    _showsReceived(shows){
+    _showsReceived(shows) {
         this.setState({
             currentSeasonID: 0,
             currentEpisodeID: 0,
@@ -45,7 +51,7 @@ class EpisodeIDSelector extends Component {
         });
     }
 
-    _getSeasons(showID){
+    _getSeasons(showID) {
         const { emitAPIRequest } = this.props;
 
         this.setState({
@@ -59,16 +65,21 @@ class EpisodeIDSelector extends Component {
         const options = {
             show_id: showID
         };
-        emitAPIRequest("shows.seasons.get", options, this._seasonsReceived.bind(this), false);
+        emitAPIRequest(
+            "shows.seasons.get",
+            options,
+            this._seasonsReceived.bind(this),
+            false
+        );
     }
 
-    _seasonsReceived(seasons){
+    _seasonsReceived(seasons) {
         this.setState({
-            seasons,
+            seasons
         });
     }
 
-    _getEpisodes(seasonID){
+    _getEpisodes(seasonID) {
         const { emitAPIRequest } = this.props;
 
         this.setState({
@@ -81,40 +92,71 @@ class EpisodeIDSelector extends Component {
             show_id: this.state.currentShowID,
             season_id: seasonID
         };
-        emitAPIRequest("shows.episodes.get", options, this._episodesReceived.bind(this), false);
+        emitAPIRequest(
+            "shows.episodes.get",
+            options,
+            this._episodesReceived.bind(this),
+            false
+        );
     }
 
-    _episodesReceived(episodes){
+    _episodesReceived(episodes) {
         this.setState({
             episodes
         });
     }
 
-    _handleSelectEpisode(episodeID){
+    _handleSelectEpisode(episodeID) {
         this.setState({
             currentEpisodeID: parseInt(episodeID)
-        })
+        });
     }
 
-    _buildSelect(items, titleKey, onChange, defaultValue, prefix = ""){
-        let options = [<Option key="0" value="0">Select...</Option>];
-        items.forEach((item)=>{
-            options.push(<Option key={item.id.toString()} value={item.id.toString()}>{prefix}{item[titleKey]}</Option>)
+    _buildSelect(
+        items,
+        titleKey,
+        onChange,
+        defaultValue,
+        prefix = "",
+        searchable = false
+    ) {
+        let options = [
+            <Option key="0" value="0">
+                Select...
+            </Option>
+        ];
+
+        items.forEach(item => {
+            const optionValue = prefix + item[titleKey];
+            options.push(
+                <Option key={item.id.toString()} value={item.id.toString()}>
+                    {optionValue}
+                </Option>
+            );
         });
 
         return (
-            <Select onChange={onChange} style={{ width: 200}} defaultValue={defaultValue.toString()}>
+            <Select
+                defaultValue={defaultValue.toString()}
+                onChange={onChange}
+                optionFilterProp="children"
+                showSearch={searchable}
+                style={{ width: 200 }}
+                filterOption={(input, option) => {
+                    const toSearch = option.props.children;
+                    return (
+                        toSearch.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                    );
+                }}
+            >
                 {options}
             </Select>
         );
     }
 
-    _handleClickIDButton(){
+    _handleClickIDButton() {
         const { onIDEpisode } = this.props;
-        const {
-            currentShowID,
-            currentSeasonID,
-            currentEpisodeID } = this.state;
+        const { currentShowID, currentSeasonID, currentEpisodeID } = this.state;
 
         const episodeInfo = {
             currentShowID,
@@ -124,7 +166,7 @@ class EpisodeIDSelector extends Component {
 
         onIDEpisode(episodeInfo);
     }
-    
+
     render() {
         const {
             currentShowID,
@@ -132,47 +174,69 @@ class EpisodeIDSelector extends Component {
             currentEpisodeID,
             episodes,
             seasons,
-            shows } = this.state;
+            shows
+        } = this.state;
 
-        const showSelector = this._buildSelect(shows, 'title', this._getSeasons.bind(this), currentShowID);
+        const showSelector = this._buildSelect(
+            shows,
+            "title",
+            this._getSeasons.bind(this),
+            currentShowID,
+            "",
+            true
+        );
         let seasonsSelector = "Select a show...";
-        if(currentShowID > 0){
-            seasonsSelector = this._buildSelect(seasons, 'season_number', this._getEpisodes.bind(this), currentSeasonID, "Season ");
+        if (currentShowID > 0) {
+            seasonsSelector = this._buildSelect(
+                seasons,
+                "season_number",
+                this._getEpisodes.bind(this),
+                currentSeasonID,
+                "Season ",
+                true
+            );
         }
         let episodesSelector = "Select a season...";
-        if(currentSeasonID > 0){
-            episodesSelector = this._buildSelect(episodes, 'episode_number', this._handleSelectEpisode.bind(this), currentEpisodeID, "Episode ");
+        if (currentSeasonID > 0) {
+            episodesSelector = this._buildSelect(
+                episodes,
+                "episode_number",
+                this._handleSelectEpisode.bind(this),
+                currentEpisodeID,
+                "Episode ",
+                true
+            );
         }
 
         let buttonDisabled = true;
-        if( (currentShowID > 0) && (currentSeasonID > 0) && (currentEpisodeID > 0)){
+        if (currentShowID > 0 && currentSeasonID > 0 && currentEpisodeID > 0) {
             buttonDisabled = false;
         }
         return (
             <div>
-                <div key="show">
-                {showSelector}
-                </div>
-                <div key="season">
-                {seasonsSelector}
-                </div>
-                <div key="episode">
-                {episodesSelector}
-                </div>
+                <div key="show">{showSelector}</div>
+                <div key="season">{seasonsSelector}</div>
+                <div key="episode">{episodesSelector}</div>
                 <div key="button" className="ib-idmodal-button-box">
-                    <Button onClick={this._handleClickIDButton.bind(this)} disabled={buttonDisabled}>ID Episode</Button>
+                    <Button
+                        onClick={this._handleClickIDButton.bind(this)}
+                        disabled={buttonDisabled}
+                    >
+                        ID Episode
+                    </Button>
                 </div>
             </div>
         );
     }
 }
-const mapStateToProps = (state)=>{
+const mapStateToProps = state => {
     return {};
-}
-const mapDispatchToProps = (dispatch) => {
+};
+const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
-    }
-}
+        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+    };
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(EpisodeIDSelector);
