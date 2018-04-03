@@ -26,6 +26,17 @@ class AddShowModal extends Component {
             onCancel
         } = this.props;
 
+        let showResults = null;
+
+        if (isVisible) {
+            showResults = (
+                <ShowResults
+                    currentSearchString={currentSearchString}
+                    onAddShowComplete={onAddShowComplete}
+                />
+            );
+        }
+
         return (
             <Modal
                 title="Add New Show"
@@ -38,10 +49,7 @@ class AddShowModal extends Component {
                 ]}
                 width={700}
             >
-                <ShowResults
-                    currentSearchString={currentSearchString}
-                    onAddShowComplete={onAddShowComplete}
-                />
+                {showResults}
             </Modal>
         );
     }
