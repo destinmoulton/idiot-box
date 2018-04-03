@@ -1,13 +1,13 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import { Button, Col, Input, Modal, Select } from 'antd';
+import { Button, Col, Input, Modal, Select } from "antd";
 const Option = Select.Option;
 
-import { emitAPIRequest } from '../../actions/api.actions';
+import { emitAPIRequest } from "../../actions/api.actions";
 
-import Regex from '../../lib/Regex.lib';
+import Regex from "../../lib/Regex.lib";
 
 class IDMultipleEpisodesModal extends Component {
     static propTypes = {
@@ -27,33 +27,33 @@ class IDMultipleEpisodesModal extends Component {
         currentSeasonInfo: {},
         isIDing: false,
         episodes: [],
-        seasonParseRegexStr: 'E\\d+',
+        seasonParseRegexStr: "E\\d+",
         seasons: [],
         shows: []
-    }
+    };
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = this.INITIAL_STATE;
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this._getShows();
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
         const { episodesToID } = nextProps;
 
         let currentEpisodesInfo = {};
-        episodesToID.forEach((ep)=>{
+        episodesToID.forEach(ep => {
             currentEpisodesInfo[ep.name] = {
                 info: ep,
                 newFilename: "",
                 selectedEpisodeID: 0
             };
         });
-        
+
         this.setState({
             ...this.INITIAL_STATE,
             currentEpisodesInfo
@@ -62,13 +62,18 @@ class IDMultipleEpisodesModal extends Component {
         this._getShows();
     }
 
-    _getShows(){
+    _getShows() {
         const { emitAPIRequest } = this.props;
 
-        emitAPIRequest("shows.shows.get", {}, this._showsReceived.bind(this), false);
+        emitAPIRequest(
+            "shows.shows.get",
+            {},
+            this._showsReceived.bind(this),
+            false
+        );
     }
 
-    _showsReceived(shows){
+    _showsReceived(shows) {
         this.setState({
             currentSeasonID: 0,
             currentShowInfo: {},
@@ -78,11 +83,13 @@ class IDMultipleEpisodesModal extends Component {
         });
     }
 
-    _getSeasons(showID){
+    _getSeasons(showID) {
         const { emitAPIRequest } = this.props;
         const { shows } = this.state;
 
-        const currentShowInfo = shows.find((show)=> show.id === parseInt(showID));
+        const currentShowInfo = shows.find(
+            show => show.id === parseInt(showID)
+        );
 
         this.setState({
             currentSeasonID: 0,
@@ -95,21 +102,28 @@ class IDMultipleEpisodesModal extends Component {
         const options = {
             show_id: showID
         };
-        emitAPIRequest("shows.seasons.get", options, this._seasonsReceived.bind(this), false);
+        emitAPIRequest(
+            "shows.seasons.get",
+            options,
+            this._seasonsReceived.bind(this),
+            false
+        );
     }
 
-    _seasonsReceived(seasons){
+    _seasonsReceived(seasons) {
         this.setState({
-            seasons,
+            seasons
         });
     }
 
-    _getEpisodes(seasonID){
+    _getEpisodes(seasonID) {
         const { emitAPIRequest } = this.props;
         const { currentShowInfo, seasons } = this.state;
 
-        const currentSeasonInfo = seasons.find((season)=> season.id === parseInt(seasonID));
-        
+        const currentSeasonInfo = seasons.find(
+            season => season.id === parseInt(seasonID)
+        );
+
         const name = Regex.sanitizeShowTitle(currentShowInfo.title);
         const seasonNum = this._getSeasonString(currentSeasonInfo);
         const episodeDestPath = name + "/" + seasonNum;
@@ -124,40 +138,53 @@ class IDMultipleEpisodesModal extends Component {
             show_id: this.state.currentShowID,
             season_id: parseInt(seasonID)
         };
-        emitAPIRequest("shows.episodes.get", options, this._episodesReceived.bind(this), false);
+        emitAPIRequest(
+            "shows.episodes.get",
+            options,
+            this._episodesReceived.bind(this),
+            false
+        );
     }
 
-    _episodesReceived(episodes){
+    _episodesReceived(episodes) {
         const { seasonParseRegexStr } = this.state;
-        
+
         this._collateEpisodeInfo(seasonParseRegexStr, episodes);
     }
 
-    _collateEpisodeInfo(seasonParseRegexStr, episodes){
+    _collateEpisodeInfo(seasonParseRegexStr, episodes) {
         const { currentEpisodesInfo } = this.state;
         // Set the default selected episode based on the filename
         const epFilenames = Object.keys(currentEpisodesInfo);
-        epFilenames.forEach((filename)=>{
+        epFilenames.forEach(filename => {
             // Get the S##E##
             const epPos = filename.search(RegExp(seasonParseRegexStr));
-            if(epPos > -1){
+            if (epPos > -1) {
                 const regexAsString = seasonParseRegexStr.toString();
                 const regexPos = regexAsString.indexOf("\\d+");
 
                 const offsetIndex = epPos + regexPos;
                 const firstDigit = parseInt(filename.substr(offsetIndex, 1));
-                const secondDigit = parseInt(filename.substr(offsetIndex + 1, 1));
+                const secondDigit = parseInt(
+                    filename.substr(offsetIndex + 1, 1)
+                );
                 let episodeNumber = firstDigit;
-                if(typeof(firstDigit) === "number"){
-                    if(typeof(secondDigit) === "number"){
+                if (typeof firstDigit === "number") {
+                    if (typeof secondDigit === "number") {
                         // ie 01
                         episodeNumber = parseInt(`${firstDigit}${secondDigit}`);
                     }
-                } 
-                const ep = episodes.find((ep)=>ep.episode_number === episodeNumber);
-                const episodeID = (ep !== undefined) ? ep.id : 0;
+                }
+                const ep = episodes.find(
+                    ep => ep.episode_number === episodeNumber
+                );
+                const episodeID = ep !== undefined ? ep.id : 0;
 
-                currentEpisodesInfo[filename] = this._constructEpisodeInfo(episodes, filename, episodeID);
+                currentEpisodesInfo[filename] = this._constructEpisodeInfo(
+                    episodes,
+                    filename,
+                    episodeID
+                );
             }
         });
 
@@ -168,83 +195,114 @@ class IDMultipleEpisodesModal extends Component {
         });
     }
 
-    _buildShowSeasonSelectors(){
-        const {
-            currentShowID,
-            currentSeasonID,
-            seasons,
-            shows
-        } = this.state;
+    _buildShowSeasonSelectors() {
+        const { currentShowID, currentSeasonID, seasons, shows } = this.state;
 
-        const showSelector = this._buildSelect(shows, 'title', this._getSeasons.bind(this), currentShowID);
+        const showSelector = this._buildSelect(
+            shows,
+            "title",
+            this._getSeasons.bind(this),
+            currentShowID
+        );
         let seasonsSelector = "Select a show...";
-        if(seasons.length > 0){
-            seasonsSelector = this._buildSelect(seasons, 'season_number', this._getEpisodes.bind(this), currentSeasonID, "Season ");
+        if (seasons.length > 0) {
+            seasonsSelector = this._buildSelect(
+                seasons,
+                "season_number",
+                this._getEpisodes.bind(this),
+                currentSeasonID,
+                "Season "
+            );
         }
-        
+
         return (
             <div>
-                <div key="show">
-                {showSelector}
-                </div>
-                <div key="season">
-                {seasonsSelector}
-                </div>
+                <div key="show">{showSelector}</div>
+                <div key="season">{seasonsSelector}</div>
             </div>
         );
     }
 
-    _buildEpisodeSelectors(){
-        const {
-            currentEpisodesInfo,
-            episodes
-        } = this.state;
+    _buildEpisodeSelectors() {
+        const { currentEpisodesInfo, episodes } = this.state;
 
         const filenames = Object.keys(currentEpisodesInfo);
         let editorList = [];
-        filenames.forEach((filename)=>{
+        filenames.forEach(filename => {
             const episodeInfo = currentEpisodesInfo[filename];
 
             let episodesSelector = "";
-            if(episodes.length > 0){
-                episodesSelector = this._buildSelect(episodes, 'episode_number', this._handleSelectEpisode.bind(this, filename), episodeInfo.selectedEpisodeID, "Episode ");
+            if (episodes.length > 0) {
+                episodesSelector = this._buildSelect(
+                    episodes,
+                    "episode_number",
+                    this._handleSelectEpisode.bind(this, filename),
+                    episodeInfo.selectedEpisodeID,
+                    "Episode "
+                );
             }
 
-            const episodeEditor = <div key={filename} className="ib-idmultiplemodal-episode-box">
-                                        <h4>{filename}</h4>
-                                        {episodesSelector}
-                                        <Input value={episodeInfo.newFilename} onChange={this._handleChangeEpisodeFilename.bind(this, filename)}/>
-                                  </div>;
+            const episodeEditor = (
+                <div key={filename} className="ib-idmultiplemodal-episode-box">
+                    <h4>{filename}</h4>
+                    {episodesSelector}
+                    <Input
+                        value={episodeInfo.newFilename}
+                        onChange={this._handleChangeEpisodeFilename.bind(
+                            this,
+                            filename
+                        )}
+                    />
+                </div>
+            );
             editorList.push(episodeEditor);
         });
-        
+
         return editorList;
     }
 
-    _buildSelect(items, titleKey, onChange, defaultValue, prefix = ""){
-        let options = [<Option key="0" value="0">Select...</Option>];
-        items.forEach((item)=>{
-            options.push(<Option key={item.id.toString()} value={item.id.toString()}>{prefix}{item[titleKey]}</Option>)
+    _buildSelect(items, titleKey, onChange, defaultValue, prefix = "") {
+        let options = [
+            <Option key="0" value="0">
+                Select...
+            </Option>
+        ];
+        items.forEach(item => {
+            options.push(
+                <Option key={item.id.toString()} value={item.id.toString()}>
+                    {prefix}
+                    {item[titleKey]}
+                </Option>
+            );
         });
 
         return (
-            <Select key={Math.random()} onChange={onChange} style={{ width: 200}} defaultValue={defaultValue.toString()}>
+            <Select
+                key={Math.random()}
+                onChange={onChange}
+                style={{ width: 200 }}
+                defaultValue={defaultValue.toString()}
+            >
                 {options}
             </Select>
         );
     }
 
-    _handleSelectEpisode(filename, episodeID){
+    _handleSelectEpisode(filename, episodeID) {
         const { episodes, currentEpisodesInfo } = this.state;
 
-        currentEpisodesInfo[filename] = this._constructEpisodeInfo(episodes, filename, episodeID);
+        currentEpisodesInfo[filename] = this._constructEpisodeInfo(
+            episodes,
+            filename,
+            episodeID
+        );
 
         this.setState({
             currentEpisodesInfo
         });
     }
 
-    _constructEpisodeInfo(episodes, originalFilename, episodeIDString){
+    _constructEpisodeInfo(episodes, originalFilename, episodeIDString) {
         const {
             currentShowInfo,
             currentSeasonInfo,
@@ -253,15 +311,15 @@ class IDMultipleEpisodesModal extends Component {
         let newEpisodeInfo = currentEpisodesInfo[originalFilename];
 
         const episodeID = parseInt(episodeIDString);
-        let currentEpisode = episodes.find((ep)=>ep.id === episodeID);
-        if(currentEpisode === undefined){
+        let currentEpisode = episodes.find(ep => ep.id === episodeID);
+        if (currentEpisode === undefined) {
             newEpisodeInfo.newFilename = originalFilename;
             newEpisodeInfo.selectedEpisodeID = episodeID;
             return newEpisodeInfo;
         }
 
         let episodeNum = "E";
-        if(currentEpisode.episode_number < 10){
+        if (currentEpisode.episode_number < 10) {
             episodeNum += "0";
         }
         episodeNum += currentEpisode.episode_number.toString();
@@ -270,13 +328,14 @@ class IDMultipleEpisodesModal extends Component {
 
         const showTitle = Regex.sanitizeShowTitle(currentShowInfo.title);
         const seasonNum = this._getSeasonString(currentSeasonInfo);
-        
-        newEpisodeInfo.newFilename = showTitle + "." + seasonNum + episodeNum + "." + ext;
+
+        newEpisodeInfo.newFilename =
+            showTitle + "." + seasonNum + episodeNum + "." + ext;
         newEpisodeInfo.selectedEpisodeID = episodeID;
         return newEpisodeInfo;
     }
 
-    _handleChangeEpisodeFilename(filename, evt){
+    _handleChangeEpisodeFilename(filename, evt) {
         const { currentEpisodesInfo } = this.state;
 
         currentEpisodesInfo[filename].newFilename = evt.target.value;
@@ -286,7 +345,7 @@ class IDMultipleEpisodesModal extends Component {
         });
     }
 
-    _handleChangeCurrentPath(evt){
+    _handleChangeCurrentPath(evt) {
         const newPath = evt.target.value;
 
         this.setState({
@@ -294,22 +353,17 @@ class IDMultipleEpisodesModal extends Component {
         });
     }
 
-    _getSeasonString(seasonInfo){
-
+    _getSeasonString(seasonInfo) {
         let seasonNum = "S";
-        if(seasonInfo.season_number < 10){
+        if (seasonInfo.season_number < 10) {
             seasonNum += "0";
         }
         seasonNum += seasonInfo.season_number.toString();
         return seasonNum;
     }
 
-    _handleClickIDButton(){
-        const { 
-            currentFilename,
-            currentPathInfo,
-            emitAPIRequest,
-        } = this.props;
+    _handleClickIDButton() {
+        const { currentFilename, currentPathInfo, emitAPIRequest } = this.props;
 
         const {
             currentEpisodesInfo,
@@ -334,53 +388,69 @@ class IDMultipleEpisodesModal extends Component {
             },
             dest_subpath: episodeDestPath
         };
-        
-        emitAPIRequest("id.multiple_episodes.id_and_archive", options, this._handleIDMultipleComplete.bind(this), false);
+
+        emitAPIRequest(
+            "id.multiple_episodes.id_and_archive",
+            options,
+            this._handleIDMultipleComplete.bind(this),
+            false
+        );
     }
 
-    _handleIDMultipleComplete(){
+    _handleIDMultipleComplete() {
         const { onIDComplete } = this.props;
 
         onIDComplete();
     }
 
-    _areAllEpisodesSelected(){
+    _areAllEpisodesSelected() {
         const { currentEpisodesInfo } = this.state;
 
         const epFilenames = Object.keys(currentEpisodesInfo);
-        for(let i=0; i<epFilenames.length; i++){
+        for (let i = 0; i < epFilenames.length; i++) {
             const filename = epFilenames[i];
-            if(currentEpisodesInfo[filename].selectedEpisodeID === 0){
+            if (currentEpisodesInfo[filename].selectedEpisodeID === 0) {
                 return false;
             }
         }
         return true;
     }
 
-    _buildShowSeasonPathInput(){
+    _buildShowSeasonPathInput() {
         const { episodeDestPath } = this.state;
 
         let input = "";
-        if(episodeDestPath !== ""){
-            input = <Input value={episodeDestPath} onChange={this._handleChangeCurrentPath.bind(this)}/>
+        if (episodeDestPath !== "") {
+            input = (
+                <Input
+                    value={episodeDestPath}
+                    onChange={this._handleChangeCurrentPath.bind(this)}
+                />
+            );
         }
         return input;
     }
 
-    _handleChangeEpisodeRegex(evt){
+    _handleChangeEpisodeRegex(evt) {
         const { episodes } = this.state;
         const seasonParseRegexStr = evt.target.value;
         this._collateEpisodeInfo(seasonParseRegexStr, episodes);
     }
 
-    _buildEpisodeRegexInput(){
+    _buildEpisodeRegexInput() {
         const { seasonParseRegexStr } = this.state;
 
-        const el = <Input.Group size="large">
-                        <Col span="10">
-                            <Input addonBefore="Episode Regex: " value={seasonParseRegexStr} onChange={this._handleChangeEpisodeRegex.bind(this)}/>
-                        </Col>
-                    </Input.Group>;
+        const el = (
+            <Input.Group size="large">
+                <Col span="10">
+                    <Input
+                        addonBefore="Episode Regex: "
+                        value={seasonParseRegexStr}
+                        onChange={this._handleChangeEpisodeRegex.bind(this)}
+                    />
+                </Col>
+            </Input.Group>
+        );
         return el;
     }
 
@@ -389,58 +459,62 @@ class IDMultipleEpisodesModal extends Component {
             currentShowID,
             currentSeasonID,
             isVisible,
-            onCancel,
+            onCancel
         } = this.props;
 
-        const {
-            episodes,
-            isIDing
-        } = this.state;
+        const { episodes, isIDing } = this.state;
 
         const showSeasonSelectors = this._buildShowSeasonSelectors();
         const pathInput = this._buildShowSeasonPathInput();
         let episodesSelectors = "";
-        if(episodes.length > 0){
+        if (episodes.length > 0) {
             episodesSelectors = this._buildEpisodeSelectors();
         }
 
         const episodeRegexInput = this._buildEpisodeRegexInput();
 
-        const buttonDisabled = !(this._areAllEpisodesSelected());
+        const buttonDisabled = !this._areAllEpisodesSelected();
 
         return (
             <Modal
-                    title="ID Multiple Episodes"
-                    visible={isVisible}
-                    onCancel={onCancel}
-                    footer={[
-                        <Button key="cancel" size="large" onClick={onCancel}>Cancel</Button>
-                    ]}
-                    width={700}
-                >
+                title="ID Multiple Episodes"
+                visible={isVisible}
+                onCancel={onCancel}
+                footer={[
+                    <Button key="cancel" size="large" onClick={onCancel}>
+                        Cancel
+                    </Button>
+                ]}
+                width={700}
+            >
                 {showSeasonSelectors}
                 {pathInput}
                 {episodeRegexInput}
-                <div>
-                    {episodesSelectors}
-                </div>
+                <div>{episodesSelectors}</div>
                 <div key="button" className="ib-idmodal-button-box">
-                    <Button onClick={this._handleClickIDButton.bind(this)}
-                            disabled={buttonDisabled}
-                            loading={isIDing}>ID Episodes</Button>
+                    <Button
+                        onClick={this._handleClickIDButton.bind(this)}
+                        disabled={buttonDisabled}
+                        loading={isIDing}
+                    >
+                        ID Episodes
+                    </Button>
                 </div>
             </Modal>
-        )
+        );
     }
 }
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = state => {
     return {};
-}
-const mapDispatchToProps = (dispatch) => {
+};
+const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
-    }
-}
+        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+    };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(IDMultipleEpisodesModal);
+export default connect(mapStateToProps, mapDispatchToProps)(
+    IDMultipleEpisodesModal
+);
