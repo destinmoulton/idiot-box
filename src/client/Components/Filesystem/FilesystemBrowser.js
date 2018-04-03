@@ -295,6 +295,7 @@ class FilesystemBrowser extends Component {
 
         return (
             <Table
+                className="ib-filemanager-table"
                 columns={columns}
                 dataSource={rows}
                 pagination={false}
