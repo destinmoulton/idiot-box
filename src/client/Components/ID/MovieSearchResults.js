@@ -86,13 +86,15 @@ class MovieSearchResults extends Component {
         return (
             <div>
                 <h4>Movie - Search Results</h4>
-                <Input.Search
-                    value={currentSearchString}
-                    onChange={this._handleChangeSearchInput.bind(this)}
-                    style={{ width: 400 }}
-                    onSearch={this._handleSearchPress.bind(this)}
-                    enterButton
-                />
+                <div id="ib-idmodal-movieresults-searchbox">
+                    <Input.Search
+                        value={currentSearchString}
+                        onChange={this._handleChangeSearchInput.bind(this)}
+                        style={{ width: 400 }}
+                        onSearch={this._handleSearchPress.bind(this)}
+                        enterButton
+                    />
+                </div>
                 <Row>{movieList}</Row>
             </div>
         );

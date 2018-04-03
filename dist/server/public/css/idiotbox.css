@@ -70,6 +70,20 @@ button.ib-filemanager-button-active {
     border-width: 2px;
 }
 
+div.ib-idmodal-archivesingle-episodeinfo {
+    font-size: 1.1em;
+    font-weight: bold;
+    border: 1px solid gray;
+    padding: 5px;
+    margin: 5px;
+}
+
+div.ib-idmodal-archivesingle-form-box {
+    border: 1px solid gray;
+    padding: 5px;
+    margin: 5px;
+}
+
 div.ib-idmodal-button-box {
     width: 100%;
     padding: 5px;
@@ -85,18 +99,18 @@ div.ib-idmodal-filename {
     margin-bottom: 10px;
 }
 
+div.ib-idmodal-idepisode-box {
+    padding-left: 25px;
+    border-left: 1px solid gray;
+    width: 100%;
+}
+
 div.ib-idmodal-item-search-details-box {
     height: 275px;
     padding: 15px;
     border-radius: 5px;
     background-color: #d9d9d9;
     margin: 5px;
-}
-
-div.ib-idmodal-idepisode-box {
-    padding-left: 25px;
-    border-left: 1px solid gray;
-    width: 100%;
 }
 
 div.ib-idmodal-item-search-details-img-box {
@@ -108,18 +122,8 @@ img.ib-idmodal-item-search-details-img {
     width: 100%;
 }
 
-div.ib-idmodal-archivesingle-episodeinfo {
-    font-size: 1.1em;
-    font-weight: bold;
-    border: 1px solid gray;
-    padding: 5px;
-    margin: 5px;
-}
-
-div.ib-idmodal-archivesingle-form-box {
-    border: 1px solid gray;
-    padding: 5px;
-    margin: 5px;
+div#ib-idmodal-movieresults-searchbox {
+    text-align: center;
 }
 
 div.ib-idmultiplemodal-episode-box {
@@ -127,7 +131,6 @@ div.ib-idmultiplemodal-episode-box {
     padding: 5px;
     margin: 5px;
 }
-
 
 /** The main content box **/
 
