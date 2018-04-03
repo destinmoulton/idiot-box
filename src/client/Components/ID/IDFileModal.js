@@ -1,20 +1,13 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import { 
-    Button,
-    Checkbox,
-    Col,
-    Input,
-    Modal,
-    Row
-} from 'antd';
+import { Button, Checkbox, Col, Input, Modal, Row } from "antd";
 
-import ArchiveSingleEpisode from './ArchiveSingleEpisode';
-import EpisodeIDSelector from './EpisodeIDSelector';
-import MovieCheckForm from './MovieCheckForm';
-import MovieID from './MovieID';
+import ArchiveSingleEpisode from "./ArchiveSingleEpisode";
+import EpisodeIDSelector from "./EpisodeIDSelector";
+import MovieCheckForm from "./MovieCheckForm";
+import MovieID from "./MovieID";
 
 class IDFileModal extends Component {
     INITIAL_VIEW = "two_column_single_id";
@@ -22,7 +15,7 @@ class IDFileModal extends Component {
     ARCHIVE_EPISODE_VIEW = "archive_episode";
 
     INITIAL_STATE = {
-        currentView: 'two_column_single_id',
+        currentView: "two_column_single_id",
         episodeInfo: {},
         movieSearchString: ""
     };
@@ -35,40 +28,40 @@ class IDFileModal extends Component {
         onIDComplete: PropTypes.func.isRequired
     };
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = this.INITIAL_STATE;
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this.setState(this.INITIAL_STATE);
     }
 
-    _handleCancel(){
+    _handleCancel() {
         const { onCancel } = this.props;
         this.setState({
-            currentView: 'two_column_single_id',
+            currentView: "two_column_single_id",
             movieSearchString: ""
         });
         onCancel();
     }
 
-    _handleClickSearchMovies(movieSearchString){
+    _handleClickSearchMovies(movieSearchString) {
         this.setState({
-            currentView: 'movie_search_results',
+            currentView: "movie_search_results",
             movieSearchString
         });
     }
 
-    _handleClickIDEpisode(episodeInfo){
+    _handleClickIDEpisode(episodeInfo) {
         this.setState({
-            currentView: 'archive_episode',
+            currentView: "archive_episode",
             episodeInfo
         });
     }
 
-    _buildTwoColumnSingleID(){
+    _buildTwoColumnSingleID() {
         const { currentFilename } = this.props;
         return (
             <div>
@@ -76,56 +69,65 @@ class IDFileModal extends Component {
                     <h4>Movie</h4>
                     <MovieCheckForm
                         currentFilename={currentFilename}
-                        onSearchMovies={this._handleClickSearchMovies.bind(this)}
+                        onSearchMovies={this._handleClickSearchMovies.bind(
+                            this
+                        )}
                     />
                 </Col>
                 <Col span={12} offset={1}>
-                    
                     <div className="ib-idmodal-idepisode-box">
                         <h4>Episode</h4>
-                        <EpisodeIDSelector onIDEpisode={this._handleClickIDEpisode.bind(this)}/>
+                        <EpisodeIDSelector
+                            onIDEpisode={this._handleClickIDEpisode.bind(this)}
+                        />
                     </div>
                 </Col>
             </div>
         );
     }
 
-    _buildMovieIDView(){
+    _buildMovieIDView() {
         const { movieSearchString } = this.state;
         const { currentFilename, currentPathInfo, onIDComplete } = this.props;
 
-        return <MovieID 
-                    currentFilename={currentFilename}
-                    currentPathInfo={currentPathInfo}
-                    movieSearchString={movieSearchString}
-                    onIDComplete={onIDComplete}/>;
+        return (
+            <MovieID
+                currentFilename={currentFilename}
+                currentPathInfo={currentPathInfo}
+                movieSearchString={movieSearchString}
+                onIDComplete={onIDComplete}
+            />
+        );
     }
 
-    _buildArchiveEpisodeView(){
+    _buildArchiveEpisodeView() {
         const { episodeInfo } = this.state;
-        const { 
+        const {
             currentFilename,
             currentPathInfo,
             currentToplevelDirectory,
             onIDComplete
         } = this.props;
 
-        return <ArchiveSingleEpisode 
-                    episodeInfo={episodeInfo}
-                    currentFilename={currentFilename}
-                    currentPathInfo={currentPathInfo}
-                    onIDComplete={onIDComplete}/>
+        return (
+            <ArchiveSingleEpisode
+                episodeInfo={episodeInfo}
+                currentFilename={currentFilename}
+                currentPathInfo={currentPathInfo}
+                onIDComplete={onIDComplete}
+            />
+        );
     }
 
-    _changeCurrentView(newView){
+    _changeCurrentView(newView) {
         this.setState({
-           currentView: newView 
+            currentView: newView
         });
     }
 
-    _selectCurrentView(){
+    _selectCurrentView() {
         const { currentView } = this.state;
-        switch(currentView){
+        switch (currentView) {
             case this.INITIAL_VIEW:
                 return this._buildTwoColumnSingleID();
             case this.MOVIE_SEARCH_VIEW:
@@ -142,27 +144,44 @@ class IDFileModal extends Component {
         const contents = this._selectCurrentView();
 
         let backButton = "";
-        if(currentView !== this.INITIAL_VIEW){
-            backButton = <Button onClick={this._changeCurrentView.bind(this, this.INITIAL_VIEW)} icon="caret-left">Back</Button>
+        if (currentView !== this.INITIAL_VIEW) {
+            backButton = (
+                <Button
+                    onClick={this._changeCurrentView.bind(
+                        this,
+                        this.INITIAL_VIEW
+                    )}
+                    icon="caret-left"
+                >
+                    Back
+                </Button>
+            );
         }
-            
+
         return (
             <div>
                 <Modal
                     title="ID File"
                     visible={isVisible}
                     onCancel={this._handleCancel.bind(this)}
-                    onOk={()=>{}}
+                    onOk={() => {}}
                     footer={[
-                        <Button key="cancel" size="large" onClick={this._handleCancel.bind(this)}>Cancel</Button>,
+                        <Button
+                            key="cancel"
+                            size="large"
+                            onClick={this._handleCancel.bind(this)}
+                        >
+                            Cancel
+                        </Button>
                     ]}
-                    width={700}>
+                    width={700}
+                >
                     <Row>
-                        <div className='ib-idmodal-filename'>{backButton}&nbsp;&nbsp;{currentFilename}</div>
+                        <div className="ib-idmodal-filename">
+                            {backButton}&nbsp;&nbsp;{currentFilename}
+                        </div>
                     </Row>
-                    <Row>
-                        {contents}
-                    </Row>
+                    <Row>{contents}</Row>
                 </Modal>
             </div>
         );
