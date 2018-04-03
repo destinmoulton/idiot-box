@@ -387,16 +387,20 @@ class FileManager extends Component {
         return (
             <div>
                 <div className="ib-filemanager-button-bar">
-                    <Button
-                        type="primary"
-                        icon="video-camera"
-                        onClick={this._handleSelectVideos.bind(this)}
-                    >
-                        Select Videos
-                    </Button>&nbsp;&nbsp;
+                    <Button.Group>
+                        <Button
+                            type="primary"
+                            icon="video-camera"
+                            size="small"
+                            onClick={this._handleSelectVideos.bind(this)}
+                        >
+                            Select Videos
+                        </Button>
+                    </Button.Group>&nbsp;
                     <Button.Group>
                         <Button
                             icon="tag"
+                            size="small"
                             disabled={buttonDisabled}
                             onClick={this._handleClickIDMultipleEpisodes.bind(
                                 this
@@ -406,22 +410,25 @@ class FileManager extends Component {
                         </Button>
                         <Button
                             icon="export"
+                            size="small"
                             disabled={buttonDisabled}
                             onClick={this._handleClickMoveRename.bind(this)}
                         >
                             Move or Rename
                         </Button>
                         <Button
-                            type="danger"
                             icon="delete"
+                            size="small"
+                            type="danger"
                             disabled={buttonDisabled}
                             onClick={this._handleClickTrash.bind(this)}
                         >
                             Trash
                         </Button>
                         <Button
-                            type="danger"
                             icon="disconnect"
+                            size="small"
+                            type="danger"
                             disabled={buttonDisabled}
                             onClick={this._handleClickUntag.bind(this)}
                         >

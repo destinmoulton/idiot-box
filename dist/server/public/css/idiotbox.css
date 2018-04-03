@@ -22,7 +22,7 @@
     background: #44484c;
 }
 
-.ant-menu-dark .ant-menu-item>a {
+.ant-menu-dark .ant-menu-item > a {
     font-weight: bold;
 }
 
@@ -55,6 +55,11 @@ div.ib-filebrowser-media-title {
 
 div.ib-filemanager-button-bar {
     padding: 10px;
+}
+
+.ib-filemanager-button-bar button.ant-btn-sm {
+    font-size: 0.9em;
+    line-height: 0.9em;
 }
 
 button.ib-filemanager-button:hover,
