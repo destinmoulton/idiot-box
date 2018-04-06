@@ -6,6 +6,7 @@ import { connect } from "react-redux";
 import { Col, Input, Row, Spin } from "antd";
 import MovieInfoModal from "./MovieInfoModal";
 import MovieThumbInfo from "./MovieThumbInfo";
+import StatusTagsLib from "../../lib/StatusTags.lib";
 
 import { emitAPIRequest } from "../../actions/api.actions";
 
@@ -112,12 +113,14 @@ class MoviesList extends Component {
         });
     }
 
-    _handlePressToggleStatusTag(movie, tag) {
+    _handlePressToggleStatusTag(movie, tagToToggle) {
         const { emitAPIRequest } = this.props;
+
+        const statusTagsLib = new StatusTagsLib();
 
         const params = {
             movie_id: movie.id,
-            status_tags: statusTags
+            status_tags: statusTagsLib.toggleTag(movie.status_tags, tagToToggle)
         };
 
         emitAPIRequest(
@@ -128,7 +131,20 @@ class MoviesList extends Component {
         );
     }
 
-    _toggleStatusTagComplete(oldMovie, newMovie) {}
+    _toggleStatusTagComplete(oldMovie, newMovie) {
+        const { movies } = this.state;
+
+        const newMovies = movies.map(movie => {
+            if (movie.id === newMovie.id) {
+                return newMovie;
+            }
+            return movie;
+        });
+
+        this.setState({
+            movies: newMovies
+        });
+    }
 
     _handleChangeFilter(evt) {
         const { movies } = this.state;
