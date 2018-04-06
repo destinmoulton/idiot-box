@@ -37,7 +37,8 @@ var MoviesModel = function () {
                 imdb_id: apiData.ids.imdb,
                 tmdb_id: apiData.ids.tmdb,
                 image_filename: imageFilename,
-                has_watched: 0
+                has_watched: 0,
+                status_tags: ""
             };
 
             return this._ibdb.insert(data, this._tableName).then(function () {
@@ -62,6 +63,23 @@ var MoviesModel = function () {
 
             return this._ibdb.update(data, where, this._tableName).then(function () {
                 return _this2.getSingle(movieID);
+            });
+        }
+    }, {
+        key: "updateStatusTags",
+        value: function updateStatusTags(movieID, statusTags) {
+            var _this3 = this;
+
+            var where = {
+                id: movieID
+            };
+
+            var data = {
+                status_tags: statusTags
+            };
+
+            return this._ibdb.update(data, where, this._tableName).then(function () {
+                return _this3.getSingle(movieID);
             });
         }
     }, {
