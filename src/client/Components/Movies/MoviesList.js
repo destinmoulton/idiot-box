@@ -49,9 +49,10 @@ class MoviesList extends Component {
             movie["searchable_text"] = this._prepStringForFilter(movie.title);
             processedMovies.push(movie);
         });
+
         this.setState({
-            isLoadingMovies: false,
-            movies: processedMovies
+            movies: processedMovies,
+            isLoadingMovies: false
         });
     }
 
@@ -132,17 +133,22 @@ class MoviesList extends Component {
     }
 
     _toggleStatusTagComplete(oldMovie, newMovie) {
-        const { movies } = this.state;
+        const { infomodalIsVisible, infomodalMovie, movies } = this.state;
 
-        const newMovies = movies.map(movie => {
+        let newInfomodalMovie = {};
+        const updatedMovies = movies.map(movie => {
             if (movie.id === newMovie.id) {
-                return newMovie;
+                movie.status_tags = newMovie.status_tags;
+                newInfomodalMovie = infomodalIsVisible
+                    ? newMovie
+                    : infomodalMovie;
             }
             return movie;
         });
 
         this.setState({
-            movies: newMovies
+            infomodalMovie: newInfomodalMovie,
+            movies: updatedMovies
         });
     }
 
