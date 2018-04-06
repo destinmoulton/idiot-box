@@ -3,7 +3,7 @@
  *
  * Encode and decode status_tags column.
  */
-export default class StatusTags {
+export default class StatusTagsLib {
     decodeTags(tagString) {
         return tagString.split(",");
     }
