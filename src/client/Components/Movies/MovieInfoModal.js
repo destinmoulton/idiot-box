@@ -4,13 +4,16 @@ import { connect } from "react-redux";
 
 import { Button, Col, Modal, Row } from "antd";
 
+import StatusTagIcons from "./StatusTagIcons";
+
 import { emitAPIRequest } from "../../actions/api.actions";
 class MovieInfoModal extends Component {
     static propTypes = {
         isVisible: PropTypes.bool.isRequired,
         movie: PropTypes.object.isRequired,
         onClose: PropTypes.func.isRequired,
-        onClickDelete: PropTypes.func.isRequired
+        onClickDelete: PropTypes.func.isRequired,
+        onClickToggleStatusTag: PropTypes.func.isRequired
     };
 
     constructor(props) {
@@ -29,7 +32,12 @@ class MovieInfoModal extends Component {
     }
 
     render() {
-        const { onClickDelete, isVisible, movie } = this.props;
+        const {
+            onClickDelete,
+            onClickToggleStatusTag,
+            isVisible,
+            movie
+        } = this.props;
         return (
             <Modal
                 title="Movie Info"
@@ -65,6 +73,10 @@ class MovieInfoModal extends Component {
                             >
                                 IMDB
                             </a>&nbsp;
+                            <StatusTagIcons
+                                movie={movie}
+                                onClickToggleStatusTag={onClickToggleStatusTag}
+                            />
                             <Button
                                 onClick={this._handleClickDelete}
                                 type="danger"
