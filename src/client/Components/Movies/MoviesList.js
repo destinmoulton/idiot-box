@@ -112,6 +112,24 @@ class MoviesList extends Component {
         });
     }
 
+    _handlePressToggleStatusTag(movie, tag) {
+        const { emitAPIRequest } = this.props;
+
+        const params = {
+            movie_id: movie.id,
+            status_tags: statusTags
+        };
+
+        emitAPIRequest(
+            "movies.movie.update_status_tags",
+            params,
+            this._toggleStatusTagComplete.bind(this, movie),
+            false
+        );
+    }
+
+    _toggleStatusTagComplete(oldMovie, newMovie) {}
+
     _handleChangeFilter(evt) {
         const { movies } = this.state;
 
@@ -210,6 +228,9 @@ class MoviesList extends Component {
                     onClose={this._handleCloseModal.bind(this)}
                     movie={infomodalMovie}
                     isVisible={infomodalIsVisible}
+                    onClickToggleStatusTag={this._handlePressToggleStatusTag.bind(
+                        this
+                    )}
                 />
             </div>
         );
