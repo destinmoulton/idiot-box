@@ -129,6 +129,11 @@ var MovieAPI = function () {
             }
             return Promise.resolve(_fs2.default.unlinkSync(fullPath));
         }
+    }, {
+        key: "updateStatusTags",
+        value: function updateStatusTags(movieID, statusTags) {
+            return this.moviesModel.updateStatusTags(movieID, statusTags);
+        }
     }]);
 
     return MovieAPI;

@@ -109,6 +109,10 @@ class MovieAPI {
         }
         return Promise.resolve(fs.unlinkSync(fullPath));
     }
+
+    updateStatusTags(movieID, statusTags) {
+        return this.moviesModel.updateStatusTags(movieID, statusTags);
+    }
 }
 
 export default MovieAPI;
