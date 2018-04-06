@@ -11,4 +11,15 @@ export default class StatusTagsLib {
     encodeTags(tagsArr) {
         return tagsArr.join(",");
     }
+
+    toggleTag(currentTagsStr, tagToToggle) {
+        const currTags = this.decodeTags(currentTagsStr);
+
+        const idxTag = currTags.indexOf(tagToToggle);
+        if (idxTag > -1) {
+            return this.encodeTags(currTags.splice(idxTag, 1));
+        } else {
+            return this.encodeTags(currTags.push(tagToToggle));
+        }
+    }
 }
