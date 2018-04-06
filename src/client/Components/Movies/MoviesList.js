@@ -199,6 +199,9 @@ class MoviesList extends Component {
                             directories={this.props.directories}
                             onClickDelete={this._handlePressDelete.bind(this)}
                             onClickMovie={this._handleClickMovie.bind(this)}
+                            onClickToggleStatusTag={this._handlePressToggleStatusTag.bind(
+                                this
+                            )}
                         />
                     </Col>
                 );
