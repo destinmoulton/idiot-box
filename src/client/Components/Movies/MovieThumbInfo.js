@@ -4,6 +4,7 @@ import { truncate } from "lodash";
 import { Col, Icon } from "antd";
 
 import PlayButton from "../PlayButton";
+import StatusTagIcons from "./StatusTagIcons";
 
 class MovieThumbInfo extends React.Component {
     constructor(props) {
@@ -36,7 +37,12 @@ class MovieThumbInfo extends React.Component {
     }
 
     render() {
-        const { directories, movie, onClickMovie } = this.props;
+        const {
+            directories,
+            movie,
+            onClickMovie,
+            onClickToggleStatusTag
+        } = this.props;
         const fullPath = directories.Movies + "/" + movie.file_info.subpath;
         const movieTitle = {
             __html: truncate(movie.title, { length: 30 })
@@ -80,6 +86,12 @@ class MovieThumbInfo extends React.Component {
                 >
                     <span dangerouslySetInnerHTML={movieTitle} />
                 </a>
+                <div class="ib-movies-thumbnail-statustags">
+                    <StatusTagIcons
+                        movie={movie}
+                        onClickToggleStatusTag={onClickToggleStatusTag}
+                    />
+                </div>
             </div>
         );
     }
