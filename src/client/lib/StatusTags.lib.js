@@ -5,12 +5,18 @@
  */
 export default class StatusTagsLib {
     decodeTags(tagString) {
-        if (tagString === null) return [];
+        if (tagString == null) return [];
         return tagString.split(",");
     }
 
     encodeTags(tagsArr) {
         return tagsArr.join(",");
+    }
+
+    isTagEnabled(tagStr, tagToCheck) {
+        const currTags = this.decodeTags(tagStr);
+
+        return currTags.indexOf(tagToCheck) > -1 ? true : false;
     }
 
     toggleTag(currentTagsStr, tagToToggle) {
