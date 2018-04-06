@@ -5,6 +5,7 @@
  */
 export default class StatusTagsLib {
     decodeTags(tagString) {
+        if (tagString === null) return [];
         return tagString.split(",");
     }
 
@@ -14,12 +15,13 @@ export default class StatusTagsLib {
 
     toggleTag(currentTagsStr, tagToToggle) {
         const currTags = this.decodeTags(currentTagsStr);
-
         const idxTag = currTags.indexOf(tagToToggle);
+        let statusTags = "";
         if (idxTag > -1) {
-            return this.encodeTags(currTags.splice(idxTag, 1));
+            currTags.splice(idxTag, 1);
         } else {
-            return this.encodeTags(currTags.push(tagToToggle));
+            currTags.push(tagToToggle);
         }
+        return this.encodeTags(currTags);
     }
 }
