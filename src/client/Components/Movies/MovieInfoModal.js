@@ -73,10 +73,14 @@ class MovieInfoModal extends Component {
                             >
                                 IMDB
                             </a>&nbsp;
-                            <StatusTagIcons
-                                movie={movie}
-                                onClickToggleStatusTag={onClickToggleStatusTag}
-                            />
+                            <span className="ib-moviemodal-statustags">
+                                <StatusTagIcons
+                                    movie={movie}
+                                    onClickToggleStatusTag={
+                                        onClickToggleStatusTag
+                                    }
+                                />
+                            </span>&nbsp;
                             <Button
                                 onClick={this._handleClickDelete}
                                 type="danger"

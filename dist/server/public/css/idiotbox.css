@@ -186,22 +186,32 @@ div.ib-moverename-input-box {
     padding: 5px;
 }
 
+span.ib-moviemodal-statustags {
+    font-size: 1.3em;
+}
+
 div.ib-movies-searchbar {
     text-align: center;
     padding: 5px;
 }
 
 .ib-movies-statustag-favorite-active {
+    cursor: pointer;
     color: gold;
 }
 
-.ib-movies-statustag-favorite-inactive {}
-
-.ib-movies-statustag-towatch-active {
-    color: blue;
+.ib-movies-statustag-favorite-inactive {
+    cursor: pointer;
 }
 
-.ib-movies-statustag-towatch-inactive {}
+.ib-movies-statustag-towatch-active {
+    cursor: pointer;
+    color: forestgreen;
+}
+
+.ib-movies-statustag-towatch-inactive {
+    cursor: pointer;
+}
 
 div.ib-movies-thumbnail-box {
     float: left;
