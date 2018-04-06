@@ -63,11 +63,15 @@ class StatusTagIcons extends React.Component {
                 ? tag.icons.active
                 : tag.icons.inactive;
 
+            const tagClass = isTagEnabled
+                ? tag.classes.active
+                : tag.classes.inactive;
             return (
                 <Tooltip key={tagIndex} title={tag.title}>
                     <Icon
                         type={tagType}
                         size="large"
+                        className={tagClass}
                         onClick={this._handleToggleStatusTag.bind(
                             this,
                             tag.tag
@@ -77,7 +81,7 @@ class StatusTagIcons extends React.Component {
             );
         });
 
-        return <div className="">{tagList}</div>;
+        return <span>{tagList}</span>;
     }
 }
 

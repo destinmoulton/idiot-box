@@ -191,6 +191,18 @@ div.ib-movies-searchbar {
     padding: 5px;
 }
 
+.ib-movies-statustag-favorite-active {
+    color: gold;
+}
+
+.ib-movies-statustag-favorite-inactive {}
+
+.ib-movies-statustag-towatch-active {
+    color: blue;
+}
+
+.ib-movies-statustag-towatch-inactive {}
+
 div.ib-movies-thumbnail-box {
     float: left;
     width: 150px;
