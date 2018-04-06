@@ -51,8 +51,17 @@ class StatusTagIcons extends React.Component {
     render() {
         const { movie } = this.props;
 
+        const statusTagsLib = new StatusTagsLib();
+
         const tagList = STATUS_TAGS.map((tag, tagIndex) => {
-            let tagType = tag.icons.inactive;
+            const isTagEnabled = statusTagsLib.isTagEnabled(
+                movie.status_tags,
+                tag.tag
+            );
+
+            const tagType = isTagEnabled
+                ? tag.icons.active
+                : tag.icons.inactive;
 
             return (
                 <Tooltip key={tagIndex} title={tag.title}>
