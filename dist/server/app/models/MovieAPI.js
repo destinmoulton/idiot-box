@@ -132,7 +132,7 @@ var MovieAPI = function () {
     }, {
         key: "updateStatusTags",
         value: function updateStatusTags(movieID, statusTags) {
-            return this.moviesModel.updateStatusTags(movieID, statusTags);
+            return this._moviesModel.updateStatusTags(movieID, statusTags);
         }
     }]);
 
