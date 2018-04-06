@@ -1,38 +1,38 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
-var _IBDB = require('../../db/IBDB');
+var _IBDB = require("../../db/IBDB");
 
 var _IBDB2 = _interopRequireDefault(_IBDB);
 
-var _logger = require('../../logger');
+var _logger = require("../../logger");
 
 var _logger2 = _interopRequireDefault(_logger);
 
-var _FilesModel = require('../../models/db/FilesModel');
+var _FilesModel = require("../../models/db/FilesModel");
 
 var _FilesModel2 = _interopRequireDefault(_FilesModel);
 
-var _FileToMovieModel = require('../../models/db/FileToMovieModel');
+var _FileToMovieModel = require("../../models/db/FileToMovieModel");
 
 var _FileToMovieModel2 = _interopRequireDefault(_FileToMovieModel);
 
-var _GenresModel = require('../../models/db/GenresModel');
+var _GenresModel = require("../../models/db/GenresModel");
 
 var _GenresModel2 = _interopRequireDefault(_GenresModel);
 
-var _MovieAPI = require('../../models/MovieAPI');
+var _MovieAPI = require("../../models/MovieAPI");
 
 var _MovieAPI2 = _interopRequireDefault(_MovieAPI);
 
-var _MovieToGenreModel = require('../../models/db/MovieToGenreModel');
+var _MovieToGenreModel = require("../../models/db/MovieToGenreModel");
 
 var _MovieToGenreModel2 = _interopRequireDefault(_MovieToGenreModel);
 
-var _MoviesModel = require('../../models/db/MoviesModel');
+var _MoviesModel = require("../../models/db/MoviesModel");
 
 var _MoviesModel2 = _interopRequireDefault(_MoviesModel);
 
@@ -56,9 +56,15 @@ var movieAPI = new _MovieAPI2.default(movieAPIModels);
 var movies = {
     movie: {
         delete: {
-            params: ['movie_id'],
+            params: ["movie_id"],
             func: function func(movieID) {
                 return movieAPI.deleteSingle(movieID);
+            }
+        },
+        update_status_tags: {
+            params: ["movie_id", "status_tags"],
+            func: function func(movieID, statusTags) {
+                return movieAPI.updateStatusTags(movieID, statusTags);
             }
         }
     },
