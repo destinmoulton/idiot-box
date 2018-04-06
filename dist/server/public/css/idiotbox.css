@@ -218,8 +218,9 @@ div.ib-movies-thumbnail-box {
     width: 150px;
     height: 260px;
     padding: 5px;
-    text-align: center;
-    font-size: 1.1em;
+    text-align: left;
+    font-size: 1em;
+    font-weight: bold;
     margin: 4px;
     border: 2px solid gray;
     overflow: hidden;
