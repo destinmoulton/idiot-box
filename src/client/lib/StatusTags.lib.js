@@ -3,7 +3,7 @@
  *
  * Encode and decode status_tags column.
  */
-export default class StatusTagsLib {
+export class StatusTagsLib {
     decodeTags(tagString) {
         if (tagString == null) return [];
         return tagString.split(",");
@@ -31,3 +31,30 @@ export default class StatusTagsLib {
         return this.encodeTags(currTags);
     }
 }
+
+export const STATUS_TAGS = [
+    {
+        title: "Watch List",
+        tag: "towatch",
+        icons: {
+            active: "eye",
+            inactive: "eye-o"
+        },
+        classes: {
+            active: "ib-movies-statustag-towatch-active",
+            inactive: "ib-movies-statustag-towatch-inactive"
+        }
+    },
+    {
+        title: "Favorite",
+        tag: "favorite",
+        icons: {
+            active: "star",
+            inactive: "star-o"
+        },
+        classes: {
+            active: "ib-movies-statustag-favorite-active",
+            inactive: "ib-movies-statustag-favorite-inactive"
+        }
+    }
+];
