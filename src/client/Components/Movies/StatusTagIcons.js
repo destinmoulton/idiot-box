@@ -4,35 +4,8 @@ import { connect } from "react-redux";
 
 import { Icon, Tooltip } from "antd";
 
-import StatusTagsLib from "../../lib/StatusTags.lib";
+import { StatusTagsLib, STATUS_TAGS } from "../../lib/StatusTags.lib";
 import { emitAPIRequest } from "../../actions/api.actions";
-
-const STATUS_TAGS = [
-    {
-        title: "Watch List",
-        tag: "towatch",
-        icons: {
-            active: "eye",
-            inactive: "eye-o"
-        },
-        classes: {
-            active: "ib-movies-statustag-towatch-active",
-            inactive: "ib-movies-statustag-towatch-inactive"
-        }
-    },
-    {
-        title: "Favorite",
-        tag: "favorite",
-        icons: {
-            active: "star",
-            inactive: "star-o"
-        },
-        classes: {
-            active: "ib-movies-statustag-favorite-active",
-            inactive: "ib-movies-statustag-favorite-inactive"
-        }
-    }
-];
 
 class StatusTagIcons extends React.Component {
     static propTypes = {

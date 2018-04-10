@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { Col, Input, Row, Spin } from "antd";
 import MovieInfoModal from "./MovieInfoModal";
 import MovieThumbInfo from "./MovieThumbInfo";
-import StatusTagsLib from "../../lib/StatusTags.lib";
+import { StatusTagsLib } from "../../lib/StatusTags.lib";
 
 import { emitAPIRequest } from "../../actions/api.actions";
 
