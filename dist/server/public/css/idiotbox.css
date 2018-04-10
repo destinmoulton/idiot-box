@@ -190,6 +190,7 @@ div.ib-moviemodal-title {
     border-bottom: 1px solid lightgray;
     line-height: 2em;
     font-size: 1.2em;
+    font-weight: bold;
 }
 
 div.ib-moviemodal-byline {
