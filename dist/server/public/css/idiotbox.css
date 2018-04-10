@@ -206,7 +206,7 @@ div.ib-movies-searchbar {
 
 .ib-movies-statustag-towatch-active {
     cursor: pointer;
-    color: green;
+    color: #439e3f;
 }
 
 .ib-movies-statustag-towatch-inactive {
