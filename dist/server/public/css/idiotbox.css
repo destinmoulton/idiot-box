@@ -226,6 +226,10 @@ div.ib-moviemodal-byline-statustags {
     float: left;
 }
 
+div.ib-moviemodal-description {
+    padding: 5px;
+}
+
 div.ib-moviemodal-thumbnail-box {
     float: left;
     width: 150px;

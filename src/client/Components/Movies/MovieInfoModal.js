@@ -99,7 +99,9 @@ class MovieInfoModal extends Component {
                             </div>
                         </div>
 
-                        <p>{movie.overview}</p>
+                        <div className="ib-moviemodal-description">
+                            {movie.overview}
+                        </div>
                     </Col>
                 </Row>
             </Modal>
