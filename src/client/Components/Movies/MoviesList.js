@@ -3,10 +3,12 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { Col, Input, Row, Spin } from "antd";
+import { Col, Icon, Input, Row, Select, Spin } from "antd";
+const Option = Select.Option;
+
 import MovieInfoModal from "./MovieInfoModal";
 import MovieThumbInfo from "./MovieThumbInfo";
-import { StatusTagsLib } from "../../lib/StatusTags.lib";
+import { STATUS_TAGS, StatusTagsLib } from "../../lib/StatusTags.lib";
 
 import { emitAPIRequest } from "../../actions/api.actions";
 
@@ -16,6 +18,7 @@ class MoviesList extends Component {
 
         this.state = {
             currentSearchString: "",
+            currentStatusTagSelected: "all",
             infomodalIsVisible: false,
             infomodalMovie: {},
             isLoadingMovies: false,
@@ -211,6 +214,30 @@ class MoviesList extends Component {
         return movieList;
     }
 
+    _buildStatusTagFilterSelect() {
+        const { currentStatusTagSelected } = this.state;
+
+        let selectOptions = [
+            <Option key="all" value="all">
+                All
+            </Option>
+        ];
+
+        for (let tag of STATUS_TAGS) {
+            selectOptions.push(
+                <Option key={tag.tag} value={tag.tag}>
+                    <Icon type={tag.icons.active} />&nbsp;
+                    {tag.title}
+                </Option>
+            );
+        }
+        return (
+            <Select defaultValue={currentStatusTagSelected}>
+                {selectOptions}
+            </Select>
+        );
+    }
+
     render() {
         const {
             currentSearchString,
@@ -232,6 +259,7 @@ class MoviesList extends Component {
         }
 
         const filterPlaceholder = `Filter ${movies.length} movies...`;
+        const filterSelect = this._buildStatusTagFilterSelect();
         return (
             <div>
                 <Row>
@@ -246,6 +274,7 @@ class MoviesList extends Component {
                         onSearch={this._handleChangeFilter.bind(this)}
                         placeholder={filterPlaceholder}
                     />
+                    {filterSelect}
                 </Row>
                 <Row>{content}</Row>
                 <MovieInfoModal
