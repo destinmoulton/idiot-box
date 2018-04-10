@@ -186,8 +186,52 @@ div.ib-moverename-input-box {
     padding: 5px;
 }
 
-span.ib-moviemodal-statustags {
+div.ib-moviemodal-title {
+    border-bottom: 1px solid lightgray;
+    line-height: 2em;
+    font-size: 1.2em;
+}
+
+div.ib-moviemodal-byline {
+    width: 100%;
+    border-bottom: 1px solid lightgray;
+    height: 35px;
+    font-size: 1.1em;
+}
+
+div.ib-moviemodal-byline-button {
+    width: 50px;
+    height: 30px;
+    position: relative;
+    float: right;
+    padding: 4px 4px 0px 0px;
+    margin-right: 13px;
+}
+
+div.ib-moviemodal-byline-movieinfo {
+    width: 100px;
+    height: 30px;
+    padding-top: 5px;
+    position: relative;
+    float: left;
+}
+
+div.ib-moviemodal-byline-statustags {
+    width: 50px;
+    height: 30px;
     font-size: 1.3em;
+    padding-top: 2px;
+    position: relative;
+    float: left;
+}
+
+div.ib-moviemodal-thumbnail-box {
+    float: left;
+    width: 150px;
+    height: 215px;
+    padding: 5px;
+    margin: 4px;
+    border: 2px solid gray;
 }
 
 div.ib-movies-searchbar {

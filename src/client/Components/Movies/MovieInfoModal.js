@@ -56,7 +56,7 @@ class MovieInfoModal extends Component {
             >
                 <Row>
                     <Col span={5}>
-                        <div className="ib-movies-thumbnail-box">
+                        <div className="ib-moviemodal-thumbnail-box">
                             <img
                                 className="ib-movies-thumbnail"
                                 src={"/images/movies/" + movie.image_filename}
@@ -64,31 +64,40 @@ class MovieInfoModal extends Component {
                         </div>
                     </Col>
                     <Col span={18} offset={1}>
-                        <h3 dangerouslySetInnerHTML={{ __html: movie.title }} />
-                        <h4>
-                            {movie.year}&nbsp;|&nbsp;
-                            <a
-                                href={"http://imdb.com/title/" + movie.imdb_id}
-                                target="_blank"
-                            >
-                                IMDB
-                            </a>&nbsp;
-                            <span className="ib-moviemodal-statustags">
+                        <div
+                            className="ib-moviemodal-title"
+                            dangerouslySetInnerHTML={{ __html: movie.title }}
+                        />
+                        <div className="ib-moviemodal-byline">
+                            <div className="ib-moviemodal-byline-movieinfo">
+                                {movie.year}&nbsp;|&nbsp;
+                                <a
+                                    href={
+                                        "http://imdb.com/title/" + movie.imdb_id
+                                    }
+                                    target="_blank"
+                                >
+                                    IMDB
+                                </a>
+                            </div>
+                            <div className="ib-moviemodal-byline-statustags">
                                 <StatusTagIcons
                                     movie={movie}
                                     onClickToggleStatusTag={
                                         onClickToggleStatusTag
                                     }
                                 />
-                            </span>&nbsp;
-                            <Button
-                                onClick={this._handleClickDelete}
-                                type="danger"
-                                size="small"
-                            >
-                                Delete
-                            </Button>
-                        </h4>
+                            </div>&nbsp;
+                            <div className="ib-moviemodal-byline-button">
+                                <Button
+                                    onClick={this._handleClickDelete}
+                                    type="danger"
+                                    size="small"
+                                >
+                                    Delete
+                                </Button>
+                            </div>
+                        </div>
 
                         <p>{movie.overview}</p>
                     </Col>
