@@ -48,6 +48,7 @@ class MoviesList extends Component {
     _moviesReceived(movies) {
         let processedMovies = [];
         movies.forEach(movie => {
+            // Add properties to each movie
             movie["is_visible"] = true;
             movie["searchable_text"] = this._prepStringForFilter(movie.title);
             processedMovies.push(movie);
@@ -163,8 +164,6 @@ class MoviesList extends Component {
         this.setState({
             currentSearchString
         });
-
-        this._filterMovies(currentSearchString, currentStatusTagSelected);
     }
 
     _handleChangeStatusTagFilter(tag) {
@@ -173,40 +172,52 @@ class MoviesList extends Component {
         this.setState({
             currentStatusTagSelected: tag
         });
-
-        this._filterMovies(currentSearchString, tag);
     }
 
-    _filterMovies(stringFilter, statusTagFilter) {
-        const { movies } = this.state;
+    _filterMovies() {
+        const {
+            currentSearchString,
+            currentStatusTagSelected,
+            movies
+        } = this.state;
 
-        const filterText = this._prepStringForFilter(stringFilter);
+        const filterText = this._prepStringForFilter(currentSearchString);
 
         let filteredMovies = [];
         movies.forEach(movie => {
-            let isMovieVisible = true;
-
-            if (stringFilter !== "") {
-                isMovieVisible = false;
-                if (!movie.searchable_text.includes(stringFilter)) {
-                    isMovieVisible = true;
+            if (filterText === "" && currentStatusTagSelected === "all") {
+                movie.is_visible = true;
+            } else {
+                let hasFilterText = false;
+                if (filterText === "") {
+                    // Show all
+                    hasFilterText = true;
+                } else {
+                    if (movie.searchable_text.includes(filterText)) {
+                        hasFilterText = true;
+                    }
                 }
+
+                let hasStatusTag = false;
+                if (currentStatusTagSelected === "all") {
+                    // Show all
+                    hasStatusTag = true;
+                } else {
+                    if (
+                        movie.status_tags !== null &&
+                        movie.status_tags.includes(currentStatusTagSelected)
+                    ) {
+                        hasStatusTag = true;
+                    }
+                }
+
+                movie.is_visible = hasFilterText && hasStatusTag;
             }
 
-            if (statusTagFilter !== "all") {
-                isMovieVisible = false;
-                if (movie.status_tags.includes(statusTagFilter)) {
-                    isMovieVisible = true;
-                }
-            }
-
-            movie.is_visible = isMovieVisible;
             filteredMovies.push(movie);
         });
 
-        this.setState({
-            movies: filteredMovies
-        });
+        return filteredMovies;
     }
 
     _prepStringForFilter(title) {
@@ -215,10 +226,9 @@ class MoviesList extends Component {
     }
 
     _buildMovieList() {
-        const { movies } = this.state;
-
+        const filteredMovies = this._filterMovies();
         let movieList = [];
-        movies.forEach(movie => {
+        filteredMovies.forEach(movie => {
             if (movie.is_visible) {
                 movieList.push(
                     <Col
