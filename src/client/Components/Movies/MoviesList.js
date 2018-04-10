@@ -232,7 +232,10 @@ class MoviesList extends Component {
             );
         }
         return (
-            <Select defaultValue={currentStatusTagSelected}>
+            <Select
+                className="ib-movies-selectstatustag"
+                defaultValue={currentStatusTagSelected}
+            >
                 {selectOptions}
             </Select>
         );
