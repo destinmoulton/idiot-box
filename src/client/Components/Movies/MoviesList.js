@@ -156,26 +156,55 @@ class MoviesList extends Component {
     }
 
     _handleChangeFilter(evt) {
-        const { movies } = this.state;
+        const { currentStatusTagSelected } = this.state;
 
         const currentSearchString = evt.currentTarget.value;
-        const filterText = this._prepStringForFilter(currentSearchString);
+
+        this.setState({
+            currentSearchString
+        });
+
+        this._filterMovies(currentSearchString, currentStatusTagSelected);
+    }
+
+    _handleChangeStatusTagFilter(tag) {
+        const { currentSearchString } = this.state;
+
+        this.setState({
+            currentStatusTagSelected: tag
+        });
+
+        this._filterMovies(currentSearchString, tag);
+    }
+
+    _filterMovies(stringFilter, statusTagFilter) {
+        const { movies } = this.state;
+
+        const filterText = this._prepStringForFilter(stringFilter);
 
         let filteredMovies = [];
         movies.forEach(movie => {
-            if (filterText === "") {
-                movie.is_visible = true;
-            } else {
-                movie.is_visible = true;
-                if (movie.searchable_text.search(filterText) === -1) {
-                    movie.is_visible = false;
+            let isMovieVisible = true;
+
+            if (stringFilter !== "") {
+                isMovieVisible = false;
+                if (!movie.searchable_text.includes(stringFilter)) {
+                    isMovieVisible = true;
                 }
             }
+
+            if (statusTagFilter !== "all") {
+                isMovieVisible = false;
+                if (movie.status_tags.includes(statusTagFilter)) {
+                    isMovieVisible = true;
+                }
+            }
+
+            movie.is_visible = isMovieVisible;
             filteredMovies.push(movie);
         });
 
         this.setState({
-            currentSearchString,
             movies: filteredMovies
         });
     }
@@ -235,6 +264,7 @@ class MoviesList extends Component {
             <Select
                 className="ib-movies-selectstatustag"
                 defaultValue={currentStatusTagSelected}
+                onChange={this._handleChangeStatusTagFilter.bind(this)}
             >
                 {selectOptions}
             </Select>
