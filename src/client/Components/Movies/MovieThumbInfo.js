@@ -86,7 +86,7 @@ class MovieThumbInfo extends React.Component {
                 >
                     <span dangerouslySetInnerHTML={movieTitle} />
                 </a>
-                <div class="ib-movies-thumbnail-statustags">
+                <div className="ib-movies-thumbnail-statustags">
                     <StatusTagIcons
                         movie={movie}
                         onClickToggleStatusTag={onClickToggleStatusTag}
