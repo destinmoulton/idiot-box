@@ -22,7 +22,7 @@
     background: #44484c;
 }
 
-.ant-menu-dark .ant-menu-item > a {
+.ant-menu-dark .ant-menu-item>a {
     font-weight: bold;
 }
 
@@ -206,7 +206,7 @@ div.ib-movies-searchbar {
 
 .ib-movies-statustag-towatch-active {
     cursor: pointer;
-    color: forestgreen;
+    color: green;
 }
 
 .ib-movies-statustag-towatch-inactive {
@@ -224,6 +224,7 @@ div.ib-movies-thumbnail-box {
     margin: 4px;
     border: 2px solid gray;
     overflow: hidden;
+    line-height: 1.3em;
 }
 
 img.ib-movies-thumbnail {
@@ -235,6 +236,7 @@ div.ib-movies-thumbnail-statustags {
     right: 0px;
     bottom: 0px;
     font-size: 1.2em;
+    margin-bottom: -2px;
 }
 
 div.ib-movies-veil {
