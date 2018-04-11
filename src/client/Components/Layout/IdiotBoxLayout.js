@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Redirect, Route } from "react-router-dom";
 
 import { Layout, Menu } from "antd";
 const { Header, Content, Footer } = Layout;
@@ -20,6 +20,7 @@ class IdiotBoxLayout extends Component {
                     <IdiotBoxHeader />
                     <Content style={{ padding: "0 50px" }}>
                         <div id="ib-layout-content-box">
+                            <Redirect from="/" to="/newepisodes" />
                             <Route
                                 path="/newepisodes"
                                 component={NewEpisodes}
