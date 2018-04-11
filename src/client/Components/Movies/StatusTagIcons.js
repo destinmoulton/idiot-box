@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Icon, Tooltip } from "antd";
 
 import { StatusTagsLib, STATUS_TAGS } from "../../lib/StatusTags.lib";
-import { emitAPIRequest } from "../../actions/api.actions";
+import { callAPI } from "../../actions/api.actions";
 
 class StatusTagIcons extends React.Component {
     static propTypes = {

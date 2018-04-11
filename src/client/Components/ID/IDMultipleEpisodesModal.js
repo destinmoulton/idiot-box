@@ -5,7 +5,7 @@ import { connect } from "react-redux";
 import { Button, Col, Input, Modal, Select } from "antd";
 const Option = Select.Option;
 
-import { emitAPIRequest } from "../../actions/api.actions";
+import { callAPI } from "../../actions/api.actions";
 
 import Regex from "../../lib/Regex.lib";
 
@@ -63,9 +63,9 @@ class IDMultipleEpisodesModal extends Component {
     }
 
     _getShows() {
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
 
-        emitAPIRequest(
+        callAPI(
             "shows.shows.get",
             {},
             this._showsReceived.bind(this),
@@ -84,7 +84,7 @@ class IDMultipleEpisodesModal extends Component {
     }
 
     _getSeasons(showID) {
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
         const { shows } = this.state;
 
         const currentShowInfo = shows.find(
@@ -102,7 +102,7 @@ class IDMultipleEpisodesModal extends Component {
         const options = {
             show_id: showID
         };
-        emitAPIRequest(
+        callAPI(
             "shows.seasons.get",
             options,
             this._seasonsReceived.bind(this),
@@ -117,7 +117,7 @@ class IDMultipleEpisodesModal extends Component {
     }
 
     _getEpisodes(seasonID) {
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
         const { currentShowInfo, seasons } = this.state;
 
         const currentSeasonInfo = seasons.find(
@@ -138,7 +138,7 @@ class IDMultipleEpisodesModal extends Component {
             show_id: this.state.currentShowID,
             season_id: parseInt(seasonID)
         };
-        emitAPIRequest(
+        callAPI(
             "shows.episodes.get",
             options,
             this._episodesReceived.bind(this),
@@ -371,7 +371,7 @@ class IDMultipleEpisodesModal extends Component {
     }
 
     _handleClickIDButton() {
-        const { currentFilename, currentPathInfo, emitAPIRequest } = this.props;
+        const { currentFilename, currentPathInfo, callAPI } = this.props;
 
         const {
             currentEpisodesInfo,
@@ -397,7 +397,7 @@ class IDMultipleEpisodesModal extends Component {
             dest_subpath: episodeDestPath
         };
 
-        emitAPIRequest(
+        callAPI(
             "id.multiple_episodes.id_and_archive",
             options,
             this._handleIDMultipleComplete.bind(this),
@@ -518,8 +518,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     };
 };
 

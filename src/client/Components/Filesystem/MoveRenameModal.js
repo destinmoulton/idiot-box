@@ -6,7 +6,7 @@ import { Col, Input, Modal } from 'antd';
 
 import FilesystemBrowser from './FilesystemBrowser';
 
-import { emitAPIRequest } from '../../actions/api.actions';
+import { callAPI } from '../../actions/api.actions';
 
 class MoveRenameModal extends Component {
     static propTypes = {
@@ -45,7 +45,7 @@ class MoveRenameModal extends Component {
     }
 
     _performRename(){
-        const { emitAPIRequest, initialPath } = this.props;
+        const { callAPI, initialPath } = this.props;
         const { destinationPath, itemsRenamed } = this.state;
 
         this.setState({
@@ -58,7 +58,7 @@ class MoveRenameModal extends Component {
             items_to_rename: itemsRenamed
         };
 
-        emitAPIRequest("filesystem.rename.multiple", params, this._renameComplete.bind(this), false);
+        callAPI("filesystem.rename.multiple", params, this._renameComplete.bind(this), false);
     }
 
     _renameComplete(){
@@ -159,7 +159,7 @@ const mapStateToProps = (state)=>{
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch)=>dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     }
 }
 

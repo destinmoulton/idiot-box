@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { Button, Input, Spin } from 'antd';
 
-import { emitAPIRequest } from '../../actions/api.actions';
+import { callAPI } from '../../actions/api.actions';
 
 import Regex from '../../lib/Regex.lib';
 
@@ -35,7 +35,7 @@ class ArchiveSingleEpisode extends Component {
     }
 
     _getEpisodeCollation(){
-        const { emitAPIRequest, episodeInfo } = this.props;
+        const { callAPI, episodeInfo } = this.props;
 
         this.setState({
             isCollating: true
@@ -48,7 +48,7 @@ class ArchiveSingleEpisode extends Component {
                 episode_id: episodeInfo.currentEpisodeID
             }
         };
-        emitAPIRequest("shows.episode.collate", options, this._handleCollationReceived.bind(this), false);
+        callAPI("shows.episode.collate", options, this._handleCollationReceived.bind(this), false);
     }
 
     _handleCollationReceived(data){
@@ -66,7 +66,7 @@ class ArchiveSingleEpisode extends Component {
         const { 
             currentFilename,
             currentPathInfo,
-            emitAPIRequest,
+            callAPI,
             episodeInfo
         } = this.props;
         const { newDirectory, newFilename } = this.state;
@@ -91,7 +91,7 @@ class ArchiveSingleEpisode extends Component {
                 subpath: newDirectory
             }
         };
-        emitAPIRequest("id.episode.id_and_archive", options, this._handleArchiveComplete.bind(this), false);
+        callAPI("id.episode.id_and_archive", options, this._handleArchiveComplete.bind(this), false);
     }
 
     _handleArchiveComplete(data){
@@ -196,7 +196,7 @@ const mapStateToProps = (state)=>{
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch)=>dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     }
 }
 

@@ -5,7 +5,7 @@ import { Button, Icon, Modal } from 'antd';
 
 import { connect } from 'react-redux';
 
-import { emitAPIRequest } from '../actions/api.actions';
+import { callAPI } from '../actions/api.actions';
 class VideoPlayerRemoteModal extends Component {
 
     BUTTONS = {
@@ -58,9 +58,9 @@ class VideoPlayerRemoteModal extends Component {
     }
 
     _handlePressCmd(cmd){
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
 
-        emitAPIRequest("videoplayer.cmd." + cmd, {}, this._sendCommandComplete.bind(this), false);
+        callAPI("videoplayer.cmd." + cmd, {}, this._sendCommandComplete.bind(this), false);
 
         this.setState({
             activeCmd: cmd
@@ -141,7 +141,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch)=>dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     }
 }
 

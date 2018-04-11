@@ -48,7 +48,7 @@ function listenForAPIResponse(dispatch){
     }
 }
 
-export function emitAPIRequest(endpoint, params, dispatchCallback, shouldDispatch = true){
+export function callAPI(endpoint, params, dispatchCallback, shouldDispatch = true){
     apiID++;
     apiRequests[apiID] = {
         endpoint,

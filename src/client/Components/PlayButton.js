@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 
 import { connect } from 'react-redux';
 import { Icon } from 'antd';
-import { emitAPIRequest } from '../actions/api.actions';
+import { callAPI } from '../actions/api.actions';
 class PlayButton extends Component {
 
     static propTypes = {
@@ -12,12 +12,12 @@ class PlayButton extends Component {
     }
 
     _startPlayback(){
-        const { emitAPIRequest, filename, fullPath } = this.props;
+        const { callAPI, filename, fullPath } = this.props;
         const options = {
             path: fullPath,
             filename: filename
         }
-        emitAPIRequest("videoplayer.cmd.start", options, this._playbackStarted.bind(this), false);
+        callAPI("videoplayer.cmd.start", options, this._playbackStarted.bind(this), false);
     }
 
     _playbackStarted(){
@@ -40,7 +40,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch)=>dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     }
 }
 

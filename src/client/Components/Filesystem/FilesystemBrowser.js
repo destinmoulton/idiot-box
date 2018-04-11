@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { Button, Checkbox, Icon, Spin, Table } from "antd";
 
-import { emitAPIRequest } from "../../actions/api.actions";
+import { callAPI } from "../../actions/api.actions";
 import { socketClient } from "../../store";
 
 import FileDetails from "./FileDetails";
@@ -79,14 +79,14 @@ class FilesystemBrowser extends Component {
     }
 
     _getDirFromServer(fullPath, basePath) {
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
 
         const options = {
             base_path: basePath,
             full_path: fullPath
         };
 
-        emitAPIRequest(
+        callAPI(
             "filesystem.dir.get",
             options,
             this._dirListReceived.bind(this),
@@ -340,8 +340,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     };
 };
 

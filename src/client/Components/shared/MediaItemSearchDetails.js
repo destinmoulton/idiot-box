@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 import { Button, Col, Spin } from 'antd';
 
-import { emitAPIRequest } from '../../actions/api.actions';
+import { callAPI } from '../../actions/api.actions';
 
 const MAX_IMAGE_RETRIES = 5;
 
@@ -29,7 +29,7 @@ class MediaItemSearchDetails extends Component {
     }
 
     _getImageFromServer(){
-        const { emitAPIRequest, item } = this.props;
+        const { callAPI, item } = this.props;
 
         if(item.ids.imdb === null){
             this.setState({
@@ -43,7 +43,7 @@ class MediaItemSearchDetails extends Component {
             imdb_id: item.ids.imdb
         };
         
-        emitAPIRequest("imdb.image.get", options, this._imageReceived.bind(this), false);
+        callAPI("imdb.image.get", options, this._imageReceived.bind(this), false);
     }
 
     _handleSelectMovie(item){
@@ -113,7 +113,7 @@ const mapStateToProps = (state)=>{
 }
 const mapDispatchToProps = (dispatch) => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch)=>dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     }
 }
 

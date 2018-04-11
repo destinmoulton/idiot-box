@@ -10,7 +10,7 @@ import MovieInfoModal from "./MovieInfoModal";
 import MovieThumbInfo from "./MovieThumbInfo";
 import { STATUS_TAGS, StatusTagsLib } from "../../lib/StatusTags.lib";
 
-import { emitAPIRequest } from "../../actions/api.actions";
+import { callAPI } from "../../actions/api.actions";
 
 class MoviesList extends Component {
     constructor(props) {
@@ -31,13 +31,13 @@ class MoviesList extends Component {
     }
 
     _getMovies() {
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
 
         this.setState({
             isLoadingMovies: true
         });
 
-        emitAPIRequest(
+        callAPI(
             "movies.movies.get_all_with_file_info",
             {},
             this._moviesReceived.bind(this),
@@ -89,13 +89,13 @@ class MoviesList extends Component {
     }
 
     _deleteMovie(movie) {
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
 
         const params = {
             movie_id: movie.id
         };
 
-        emitAPIRequest(
+        callAPI(
             "movies.movie.delete",
             params,
             this._movieDeleteComplete.bind(this, movie.id),
@@ -119,7 +119,7 @@ class MoviesList extends Component {
     }
 
     _handlePressToggleStatusTag(movie, tagToToggle) {
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
 
         const statusTagsLib = new StatusTagsLib();
 
@@ -128,7 +128,7 @@ class MoviesList extends Component {
             status_tags: statusTagsLib.toggleTag(movie.status_tags, tagToToggle)
         };
 
-        emitAPIRequest(
+        callAPI(
             "movies.movie.update_status_tags",
             params,
             this._toggleStatusTagComplete.bind(this, movie),
@@ -343,8 +343,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     };
 };
 

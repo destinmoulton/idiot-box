@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { Card, Icon, Row, Spin, Table, Tabs } from "antd";
 const TabPane = Tabs.TabPane;
 
-import { emitAPIRequest } from "../../actions/api.actions";
+import { callAPI } from "../../actions/api.actions";
 
 import EpisodesTable from "./EpisodesTable";
 import PlayButton from "../PlayButton";
@@ -58,7 +58,7 @@ class SeasonTabs extends Component {
     }
 
     _getSeasons() {
-        const { emitAPIRequest, show } = this.props;
+        const { callAPI, show } = this.props;
 
         this.setState({
             isLoadingSeasons: true
@@ -68,7 +68,7 @@ class SeasonTabs extends Component {
             show_id: show.id
         };
 
-        emitAPIRequest(
+        callAPI(
             "shows.seasons.get",
             options,
             this._seasonsReceived.bind(this),
@@ -98,7 +98,7 @@ class SeasonTabs extends Component {
     }
 
     _handleToggleSeasonLock(newLockStatus) {
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
         const { activeSeason } = this.state;
 
         const params = {
@@ -106,7 +106,7 @@ class SeasonTabs extends Component {
             lock_status: newLockStatus
         };
 
-        emitAPIRequest(
+        callAPI(
             "shows.season.toggle_lock",
             params,
             this._getSeasons.bind(this),
@@ -185,8 +185,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     };
 };
 

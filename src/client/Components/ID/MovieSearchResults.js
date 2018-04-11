@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { Input, Row } from "antd";
 
-import { emitAPIRequest } from "../../actions/api.actions";
+import { callAPI } from "../../actions/api.actions";
 
 import MediaItemSearchDetails from "../shared/MediaItemSearchDetails";
 
@@ -47,13 +47,13 @@ class MovieSearchResults extends Component {
 
     _getSearchResultsFromServer() {
         const { currentSearchString } = this.state;
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
 
         const options = {
             search_string: currentSearchString
         };
 
-        emitAPIRequest(
+        callAPI(
             "mediascraper.movies.search",
             options,
             this._searchResultsReceived.bind(this),
@@ -105,8 +105,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     };
 };
 

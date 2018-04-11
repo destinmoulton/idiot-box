@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import { Button, Card, Col, Icon, Row, Spin } from "antd";
 
-import { emitAPIRequest } from "../../actions/api.actions";
+import { callAPI } from "../../actions/api.actions";
 
 import SeasonTabs from "./SeasonTabs";
 
@@ -22,7 +22,7 @@ class ShowInfo extends Component {
     }
 
     _getShowInfo() {
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
 
         this.setState({
             isLoadingShow: true
@@ -31,7 +31,7 @@ class ShowInfo extends Component {
             slug: this.props.match.params.slug
         };
 
-        emitAPIRequest(
+        callAPI(
             "shows.show.get_for_slug",
             params,
             this._showInfoReceived.bind(this),
@@ -47,14 +47,14 @@ class ShowInfo extends Component {
     }
 
     _deleteShow() {
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
         const { show } = this.state;
 
         const params = {
             show_id: show.id
         };
 
-        emitAPIRequest(
+        callAPI(
             "shows.show.delete",
             params,
             this._showDeleted.bind(this),
@@ -150,8 +150,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     };
 };
 

@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 
 import { Button, Col, Input, Row, Spin } from "antd";
 
-import { emitAPIRequest } from "../../actions/api.actions";
+import { callAPI } from "../../actions/api.actions";
 
 import AddShowModal from "./AddShowModal";
 import ShowListThumbInfo from "./ShowListThumbInfo";
@@ -27,13 +27,13 @@ class ShowsList extends Component {
     }
 
     _getShows() {
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
 
         this.setState({
             isLoadingShows: true
         });
 
-        emitAPIRequest(
+        callAPI(
             "shows.shows.get_all_with_locked_info",
             {},
             this._showsReceived.bind(this),
@@ -197,8 +197,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     };
 };
 

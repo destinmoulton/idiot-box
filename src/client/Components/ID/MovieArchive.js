@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 
 import { Button, Input, Spin } from "antd";
 
-import { emitAPIRequest } from "../../actions/api.actions";
+import { callAPI } from "../../actions/api.actions";
 
 class MovieArchive extends Component {
     static propTypes = {
@@ -65,7 +65,7 @@ class MovieArchive extends Component {
         const {
             currentFilename,
             currentPathInfo,
-            emitAPIRequest,
+            callAPI,
             movie,
             movieImageURL
         } = this.props;
@@ -90,7 +90,7 @@ class MovieArchive extends Component {
             }
         };
 
-        emitAPIRequest(
+        callAPI(
             "id.movie.id_and_archive",
             options,
             this._idMovieComplete.bind(this),
@@ -175,8 +175,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     };
 };
 

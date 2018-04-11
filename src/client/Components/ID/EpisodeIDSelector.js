@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import { Button, Select } from "antd";
 const Option = Select.Option;
 
-import { emitAPIRequest } from "../../actions/api.actions";
+import { callAPI } from "../../actions/api.actions";
 
 class EpisodeIDSelector extends Component {
     static propTypes = {
@@ -31,9 +31,9 @@ class EpisodeIDSelector extends Component {
     }
 
     _getShows() {
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
 
-        emitAPIRequest(
+        callAPI(
             "shows.shows.get",
             {},
             this._showsReceived.bind(this),
@@ -52,7 +52,7 @@ class EpisodeIDSelector extends Component {
     }
 
     _getSeasons(showID) {
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
 
         this.setState({
             currentEpisodeID: 0,
@@ -65,7 +65,7 @@ class EpisodeIDSelector extends Component {
         const options = {
             show_id: showID
         };
-        emitAPIRequest(
+        callAPI(
             "shows.seasons.get",
             options,
             this._seasonsReceived.bind(this),
@@ -80,7 +80,7 @@ class EpisodeIDSelector extends Component {
     }
 
     _getEpisodes(seasonID) {
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
 
         this.setState({
             currentSeasonID: parseInt(seasonID),
@@ -92,7 +92,7 @@ class EpisodeIDSelector extends Component {
             show_id: this.state.currentShowID,
             season_id: seasonID
         };
-        emitAPIRequest(
+        callAPI(
             "shows.episodes.get",
             options,
             this._episodesReceived.bind(this),
@@ -234,8 +234,8 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     };
 };
 

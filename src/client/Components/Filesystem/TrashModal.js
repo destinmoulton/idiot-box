@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { Button, Modal } from 'antd';
-import { emitAPIRequest } from '../../actions/api.actions';
+import { callAPI } from '../../actions/api.actions';
 
 class TrashModal extends Component {
     static propTypes = {
@@ -35,7 +35,7 @@ class TrashModal extends Component {
     _trashFiles(){
         const { 
             currentPath,
-            emitAPIRequest,
+            callAPI,
             itemsToTrash } = this.props;
 
         const options = {
@@ -43,7 +43,7 @@ class TrashModal extends Component {
             filenames: itemsToTrash
         };
 
-        emitAPIRequest("filesystem.trash.execute", options, this._trashComplete.bind(this), false);
+        callAPI("filesystem.trash.execute", options, this._trashComplete.bind(this), false);
 
         this.setState({
             isTrashing: true
@@ -104,7 +104,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch)=>dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     }
 }
 

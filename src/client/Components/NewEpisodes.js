@@ -6,7 +6,7 @@ import { truncate } from "lodash";
 
 import { Col, Icon, Row, Spin } from "antd";
 
-import { emitAPIRequest } from "../actions/api.actions";
+import { callAPI } from "../actions/api.actions";
 
 class NewEpisodes extends Component {
     constructor(props) {
@@ -32,7 +32,7 @@ class NewEpisodes extends Component {
     }
 
     _getNewEpisodes(dayMoment) {
-        const { emitAPIRequest } = this.props;
+        const { callAPI } = this.props;
 
         const startUnixTimestamp = dayMoment
             .hours(0)
@@ -49,7 +49,7 @@ class NewEpisodes extends Component {
             end_unix_timestamp: endUnixTimestamp
         };
 
-        emitAPIRequest(
+        callAPI(
             "shows.episodes.get_between_unix_timestamps",
             params,
             this._episodesReceived.bind(this, dayMoment),
@@ -175,8 +175,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     };
 };
 

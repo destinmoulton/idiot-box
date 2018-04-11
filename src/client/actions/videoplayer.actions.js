@@ -1,4 +1,4 @@
-import { emitAPIRequest } from './api.actions';
+import { callAPI } from './api.actions';
 
 import {
     VP_CHANGE_STATE,
@@ -9,7 +9,7 @@ export function isPlayerRunning(){
     return (dispatch)=>{
         setTimeout(()=>{
             const endpoint = 'videoplayer.cmd.isRunning';
-            dispatch(emitAPIRequest(endpoint, {}, playerRunningChangeState));
+            dispatch(callAPI(endpoint, {}, playerRunningChangeState));
             isPlayerRunning();
         }, 200);
     }
@@ -25,7 +25,7 @@ function playerRunningChangeState(playerState){
 export function getVideoInfo(){
     return (dispatch)=>{
         const endpoint = 'videoplayer.cmd.info';
-        dispatch(emitAPIRequest(endpoint, {}, videoReceivedInfo));
+        dispatch(callAPI(endpoint, {}, videoReceivedInfo));
     }
 }
 

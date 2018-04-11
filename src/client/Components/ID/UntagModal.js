@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 import { Button, Modal } from 'antd';
-import { emitAPIRequest } from '../../actions/api.actions';
+import { callAPI } from '../../actions/api.actions';
 
 class UntagModal extends Component {
     static propTypes = {
@@ -26,7 +26,7 @@ class UntagModal extends Component {
     }
 
     _untagItems(){
-        const { emitAPIRequest, itemsToUntag } = this.props;
+        const { callAPI, itemsToUntag } = this.props;
 
         this.setState({
             isUntagging: true
@@ -36,7 +36,7 @@ class UntagModal extends Component {
             items_to_remove: itemsToUntag
         };
 
-        emitAPIRequest("id.movie_or_episode.remove_ids", options, this._untagComplete.bind(this), false);
+        callAPI("id.movie_or_episode.remove_ids", options, this._untagComplete.bind(this), false);
     }
 
     _untagComplete(recd){
@@ -92,7 +92,7 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch)=>dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch)=>dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     }
 }
 

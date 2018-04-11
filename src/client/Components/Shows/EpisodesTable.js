@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { Button, Icon, Row, Spin, Table } from "antd";
 
 import moment from "moment";
-import { emitAPIRequest } from "../../actions/api.actions";
+import { callAPI } from "../../actions/api.actions";
 
 import PlayButton from "../PlayButton";
 
@@ -44,7 +44,7 @@ class EpisodesTable extends Component {
     }
 
     _getEpisodes(seasonNum) {
-        const { emitAPIRequest, show } = this.props;
+        const { callAPI, show } = this.props;
 
         this.setState({
             isLoadingEpisodes: true
@@ -55,7 +55,7 @@ class EpisodesTable extends Component {
             season_number: seasonNum
         };
 
-        emitAPIRequest(
+        callAPI(
             "shows.episodes.get_all_with_file_info",
             options,
             this._episodesReceived.bind(this, seasonNum),
@@ -73,7 +73,7 @@ class EpisodesTable extends Component {
 
     _changeSelectedEpisodesWatchedStatus(newWatchedStatus) {
         const { selectedEpisodeKeys } = this.state;
-        const { activeSeasonNum, emitAPIRequest } = this.props;
+        const { activeSeasonNum, callAPI } = this.props;
 
         this.setState({
             isLoadingEpisodes: true
@@ -83,7 +83,7 @@ class EpisodesTable extends Component {
             episode_ids: selectedEpisodeKeys,
             watched_status: newWatchedStatus
         };
-        emitAPIRequest(
+        callAPI(
             "shows.episodes.toggle_watched",
             params,
             this._getEpisodes.bind(this, activeSeasonNum),
@@ -291,8 +291,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     };
 };
 

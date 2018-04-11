@@ -6,7 +6,7 @@ import { Button, Col, Modal, Row } from "antd";
 
 import StatusTagIcons from "./StatusTagIcons";
 
-import { emitAPIRequest } from "../../actions/api.actions";
+import { callAPI } from "../../actions/api.actions";
 class MovieInfoModal extends Component {
     static propTypes = {
         isVisible: PropTypes.bool.isRequired,
@@ -115,8 +115,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        emitAPIRequest: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(emitAPIRequest(endpoint, params, callback, shouldDispatch))
+        callAPI: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
     };
 };
 

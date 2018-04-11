@@ -1,4 +1,4 @@
-import { emitAPIRequest } from './api.actions';
+import { callAPI } from './api.actions';
 
 import {
     SETTINGS_ALL_RECEIVED,
@@ -13,7 +13,7 @@ export function getAllSettings(){
     return (dispatch)=>{
         const endpoint = 'settings.all.get';
         
-        dispatch(emitAPIRequest(endpoint, {}, settingsAllReceived));
+        dispatch(callAPI(endpoint, {}, settingsAllReceived));
     }
 }
 
@@ -45,7 +45,7 @@ export function saveSetting(settingID, category, key, value){
             };
         }
         dispatch(settingSaveInProgress(settingID));
-        dispatch(emitAPIRequest(endpoint, params, settingSaveComplete));
+        dispatch(callAPI(endpoint, params, settingSaveComplete));
     }
 }
 
@@ -70,7 +70,7 @@ export function deleteSetting(settingID, category){
             id: settingID
         };
         dispatch(settingDeleteStart(settingID, category));
-        dispatch(emitAPIRequest(endpoint, params, settingDeleteComplete));
+        dispatch(callAPI(endpoint, params, settingDeleteComplete));
     }
 }
 
