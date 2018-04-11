@@ -20,7 +20,7 @@ class IdiotBoxLayout extends Component {
                     <IdiotBoxHeader />
                     <Content style={{ padding: "0 50px" }}>
                         <div id="ib-layout-content-box">
-                            <Redirect from="/" to="/newepisodes" />
+                            <Route path="/" exact component={NewEpisodes} />
                             <Route
                                 path="/newepisodes"
                                 component={NewEpisodes}
