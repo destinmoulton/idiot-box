@@ -1,6 +1,5 @@
 import React from "react";
 
-import { truncate } from "lodash";
 import { Col, Icon } from "antd";
 
 import PlayButton from "../PlayButton";
@@ -45,7 +44,7 @@ class MovieThumbInfo extends React.Component {
         } = this.props;
         const fullPath = directories.Movies + "/" + movie.file_info.subpath;
         const movieTitle = {
-            __html: truncate(movie.title, { length: 30 })
+            __html: movie.title
         };
 
         let veilOptions = null;
@@ -80,12 +79,14 @@ class MovieThumbInfo extends React.Component {
                     />
                 </a>
                 {veilOptions}
-                <a
-                    href="javascript:void(0)"
-                    onClick={this._handleClick.bind(this, movie)}
-                >
-                    <span dangerouslySetInnerHTML={movieTitle} />
-                </a>
+                <div className="ib-movies-thumbnail-title">
+                    <a
+                        href="javascript:void(0)"
+                        onClick={this._handleClick.bind(this, movie)}
+                    >
+                        <span dangerouslySetInnerHTML={movieTitle} />
+                    </a>
+                </div>
                 <div className="ib-movies-thumbnail-statustags">
                     <StatusTagIcons
                         movie={movie}
