@@ -50,6 +50,7 @@ const IdiotBoxLayout = props => {
                                     {...routeParams}
                                     callAPI={props.callAPI}
                                     settings={props.settings}
+                                    serverInfo={props.server}
                                 />
                             )}
                         />
@@ -94,9 +95,10 @@ const IdiotBoxLayout = props => {
 };
 
 const mapStateToProps = state => {
-    const { settings } = state;
+    const { server, settings } = state;
     return {
-        settings: settings.settings
+        settings: settings.settings,
+        server: server.serverInfo
     };
 };
 
