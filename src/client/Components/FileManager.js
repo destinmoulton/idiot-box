@@ -439,6 +439,7 @@ class FileManager extends Component {
                 <FilesystemBrowser
                     actionColumns={this._buildActionColumns()}
                     basePath={currentToplevelDirectory}
+                    callAPI={this.props.callAPI}
                     currentPath={currentPath}
                     forceReload={isReloading}
                     hasCheckboxes={true}
@@ -447,6 +448,7 @@ class FileManager extends Component {
                         this
                     )}
                     selectedRowKeys={selectedRows}
+                    serverInfo={this.props.serverInfo}
                     showDirectories={true}
                     showFiles={true}
                 />
@@ -465,6 +467,7 @@ class FileManager extends Component {
                     itemsToRename={moverenameSelectedItems}
                     onRenameComplete={this._handleMoveRenameComplete.bind(this)}
                     onCancel={this._handleMoveRenameCancel.bind(this)}
+                    serverInfo={this.props.serverInfo}
                 />
                 <IDFileModal
                     key={idsingleFilename}
@@ -541,6 +544,7 @@ class FileManager extends Component {
 
 FileManager.propTypes = {
     callAPI: PropTypes.func.isRequired,
+    serverInfo: PropTypes.object.isRequired,
     settings: PropTypes.object.isRequired
 };
 

@@ -105,7 +105,13 @@ class MoveRenameModal extends Component {
     }
 
     render() {
-        const { initialPath, isVisible, onCancel } = this.props;
+        const {
+            callAPI,
+            initialPath,
+            isVisible,
+            onCancel,
+            serverInfo
+        } = this.props;
 
         const posDim = {
             modalTop: 30,
@@ -134,11 +140,13 @@ class MoveRenameModal extends Component {
                     >
                         <h4>Destination Directory</h4>
                         <FilesystemBrowser
+                            callAPI={callAPI}
                             basePath={initialPath}
                             lockToBasePath={false}
                             onChangeDirectory={this._handleChangeDirectory.bind(
                                 this
                             )}
+                            serverInfo={serverInfo}
                             showDirectories={true}
                             showFiles={false}
                         />
@@ -159,7 +167,8 @@ MoveRenameModal.propTypes = {
     isVisible: PropTypes.bool.isRequired,
     itemsToRename: PropTypes.array.isRequired,
     onCancel: PropTypes.func.isRequired,
-    onRenameComplete: PropTypes.func.isRequired
+    onRenameComplete: PropTypes.func.isRequired,
+    serverInfo: PropTypes.object.isRequired
 };
 
 export default MoveRenameModal;
