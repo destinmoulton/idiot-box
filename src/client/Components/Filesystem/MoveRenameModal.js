@@ -1,12 +1,9 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import { Col, Input, Modal } from "antd";
 
 import FilesystemBrowser from "./FilesystemBrowser";
-
-import { callAPI } from "../../actions/api.actions";
 
 class MoveRenameModal extends Component {
     constructor(props) {
