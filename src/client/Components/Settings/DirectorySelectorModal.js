@@ -3,14 +3,16 @@ import React from "react";
 
 import { Modal } from "antd";
 
-import FilesystemBrowser from "./FilesystemBrowser";
+import FilesystemBrowser from "../Filesystem/FilesystemBrowser";
 
 const DirectorySelectorModal = props => {
     const {
+        callAPI,
         initialPath,
         onCancel,
         onChangeDirectory,
         onOk,
+        serverInfo,
         title,
         visible
     } = props;
@@ -37,8 +39,10 @@ const DirectorySelectorModal = props => {
                     style={{ height: posDim.fileBrowserHeight }}
                 >
                     <FilesystemBrowser
+                        callAPI={callAPI}
                         basePath={initialPath}
                         onChangeDirectory={onChangeDirectory}
+                        serverInfo={serverInfo}
                         showDirectories={true}
                         showFiles={false}
                     />
@@ -49,12 +53,14 @@ const DirectorySelectorModal = props => {
 };
 
 DirectorySelectorModal.propTypes = {
+    callAPI: PropTypes.func.isRequired,
     initialPath: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    visible: PropTypes.bool,
     onCancel: PropTypes.func,
     onChangeDirectory: PropTypes.func.isRequired,
-    onOk: PropTypes.func.isRequired
+    onOk: PropTypes.func.isRequired,
+    serverInfo: PropTypes.object.isRequired,
+    title: PropTypes.string.isRequired,
+    visible: PropTypes.bool
 };
 
 DirectorySelectorModal.defaultProps = {
