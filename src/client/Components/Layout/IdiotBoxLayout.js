@@ -64,7 +64,15 @@ const IdiotBoxLayout = props => {
                             )}
                         />
                         <Route path="/settings" component={Settings} />
-                        <Route path="/shows" component={ShowsList} />
+                        <Route
+                            path="/shows"
+                            render={routeParams => (
+                                <ShowsList
+                                    {...routeParams}
+                                    callAPI={props.callAPI}
+                                />
+                            )}
+                        />
                         <Route
                             path={`/show/:slug/:season_number?`}
                             render={routeParams => (
