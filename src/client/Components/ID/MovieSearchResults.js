@@ -1,21 +1,11 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import { Input, Row } from "antd";
-
-import { callAPI } from "../../actions/api.actions";
 
 import MediaItemSearchDetails from "../shared/MediaItemSearchDetails";
 
 class MovieSearchResults extends Component {
-    static propTypes = {
-        currentFilename: PropTypes.string.isRequired,
-        currentPathInfo: PropTypes.object.isRequired,
-        initialSearchString: PropTypes.string.isRequired,
-        onSelectMovie: PropTypes.func.isRequired
-    };
-
     constructor(props) {
         super(props);
 
@@ -100,14 +90,12 @@ class MovieSearchResults extends Component {
         );
     }
 }
-const mapStateToProps = state => {
-    return {};
-};
-const mapDispatchToProps = dispatch => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    };
+MovieSearchResults.propTypes = {
+    callAPI: PropTypes.func.isRequired,
+    currentFilename: PropTypes.string.isRequired,
+    currentPathInfo: PropTypes.object.isRequired,
+    initialSearchString: PropTypes.string.isRequired,
+    onSelectMovie: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MovieSearchResults);
+export default MovieSearchResults;

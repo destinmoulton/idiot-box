@@ -80,10 +80,16 @@ class IDFileModal extends Component {
 
     _buildMovieIDView() {
         const { movieSearchString } = this.state;
-        const { currentFilename, currentPathInfo, onIDComplete } = this.props;
+        const {
+            callAPI,
+            currentFilename,
+            currentPathInfo,
+            onIDComplete
+        } = this.props;
 
         return (
             <MovieID
+                callAPI={callAPI}
                 currentFilename={currentFilename}
                 currentPathInfo={currentPathInfo}
                 movieSearchString={movieSearchString}

@@ -1,18 +1,11 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
 
-import MovieArchive from './MovieArchive';
-import MovieSearchResults from './MovieSearchResults';
+import MovieArchive from "./MovieArchive";
+import MovieSearchResults from "./MovieSearchResults";
 
 class MovieID extends Component {
-    static propTypes = {
-        currentFilename: PropTypes.string.isRequired,
-        currentPathInfo: PropTypes.object.isRequired,
-        movieSearchString: PropTypes.string.isRequired,
-        onIDComplete: PropTypes.func.isRequired
-    };
-
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -22,7 +15,7 @@ class MovieID extends Component {
         };
     }
 
-    _handleSetSelectedMovie(movie, imageURL){
+    _handleSetSelectedMovie(movie, imageURL) {
         this.setState({
             currentMovieIDView: "movie_archive",
             selectedMovie: movie,
@@ -31,13 +24,14 @@ class MovieID extends Component {
     }
 
     render() {
-        const { 
+        const {
             currentMovieIDView,
             selectedMovie,
             selectedMovieImageURL
         } = this.state;
 
         const {
+            callAPI,
             currentFilename,
             currentPathInfo,
             movieSearchString,
@@ -45,28 +39,37 @@ class MovieID extends Component {
         } = this.props;
 
         let contents = "";
-        if(currentMovieIDView === "movie_search_results"){
-            contents = <MovieSearchResults
-                            currentFilename={currentFilename}
-                            currentPathInfo={currentPathInfo}
-                            initialSearchString={movieSearchString}
-                            onSelectMovie={this._handleSetSelectedMovie.bind(this)}
-                        />;
+        if (currentMovieIDView === "movie_search_results") {
+            contents = (
+                <MovieSearchResults
+                    callAPI={callAPI}
+                    currentFilename={currentFilename}
+                    currentPathInfo={currentPathInfo}
+                    initialSearchString={movieSearchString}
+                    onSelectMovie={this._handleSetSelectedMovie.bind(this)}
+                />
+            );
         } else {
-            contents = <MovieArchive
-                            currentFilename={currentFilename}
-                            currentPathInfo={currentPathInfo}
-                            movie={selectedMovie}
-                            movieImageURL={selectedMovieImageURL}
-                            onIDComplete={onIDComplete}
-                        />;
+            contents = (
+                <MovieArchive
+                    callAPI={callAPI}
+                    currentFilename={currentFilename}
+                    currentPathInfo={currentPathInfo}
+                    movie={selectedMovie}
+                    movieImageURL={selectedMovieImageURL}
+                    onIDComplete={onIDComplete}
+                />
+            );
         }
-        return (
-            <div>
-                {contents}
-            </div>
-        );
+        return <div>{contents}</div>;
     }
 }
+MovieID.propTypes = {
+    callAPI: PropTypes.func.isRequired,
+    currentFilename: PropTypes.string.isRequired,
+    currentPathInfo: PropTypes.object.isRequired,
+    movieSearchString: PropTypes.string.isRequired,
+    onIDComplete: PropTypes.func.isRequired
+};
 
 export default MovieID;

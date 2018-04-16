@@ -7,14 +7,6 @@ import { Button, Input, Spin } from "antd";
 import { callAPI } from "../../actions/api.actions";
 
 class MovieArchive extends Component {
-    static propTypes = {
-        currentFilename: PropTypes.string.isRequired,
-        currentPathInfo: PropTypes.object.isRequired,
-        movie: PropTypes.object.isRequired,
-        movieImageURL: PropTypes.string.isRequired,
-        onIDComplete: PropTypes.func.isRequired
-    };
-
     constructor(props) {
         super(props);
 
@@ -170,14 +162,13 @@ class MovieArchive extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {};
-};
-const mapDispatchToProps = dispatch => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    };
+MovieArchive.propTypes = {
+    callAPI: PropTypes.func.isRequired,
+    currentFilename: PropTypes.string.isRequired,
+    currentPathInfo: PropTypes.object.isRequired,
+    movie: PropTypes.object.isRequired,
+    movieImageURL: PropTypes.string.isRequired,
+    onIDComplete: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(MovieArchive);
+export default MovieArchive;
