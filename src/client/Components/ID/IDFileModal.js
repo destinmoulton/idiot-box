@@ -20,14 +20,6 @@ class IDFileModal extends Component {
         movieSearchString: ""
     };
 
-    static propTypes = {
-        currentFilename: PropTypes.string.isRequired,
-        currentPathInfo: PropTypes.object.isRequired,
-        isVisible: PropTypes.bool.isRequired,
-        onCancel: PropTypes.func.isRequired,
-        onIDComplete: PropTypes.func.isRequired
-    };
-
     constructor(props) {
         super(props);
 
@@ -187,5 +179,13 @@ class IDFileModal extends Component {
         );
     }
 }
+
+IDFileModal.propTypes = {
+    currentFilename: PropTypes.string.isRequired,
+    currentPathInfo: PropTypes.object.isRequired,
+    isVisible: PropTypes.bool.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    onIDComplete: PropTypes.func.isRequired
+};
 
 export default IDFileModal;
