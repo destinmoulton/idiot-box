@@ -139,7 +139,7 @@ class SeasonTabs extends Component {
 
     render() {
         const { activeSeason, activeSeasonNum, isLoadingSeasons } = this.state;
-        const { show } = this.props;
+        const { callAPI, settings, show } = this.props;
 
         let seasonBar = "";
         if (isLoadingSeasons) {
@@ -153,7 +153,9 @@ class SeasonTabs extends Component {
             episodesTable = (
                 <EpisodesTable
                     activeSeasonNum={activeSeasonNum}
+                    callAPI={callAPI}
                     season={activeSeason}
+                    settings={settings}
                     show={show}
                     onToggleSeasonLock={this._handleToggleSeasonLock.bind(this)}
                 />
