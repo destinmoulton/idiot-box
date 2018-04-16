@@ -9,10 +9,6 @@ const Option = Select.Option;
 import { callAPI } from "../../actions/api.actions";
 
 class EpisodeIDSelector extends Component {
-    static propTypes = {
-        onIDEpisode: PropTypes.func.isRequired
-    };
-
     constructor(props) {
         super(props);
 
@@ -33,12 +29,7 @@ class EpisodeIDSelector extends Component {
     _getShows() {
         const { callAPI } = this.props;
 
-        callAPI(
-            "shows.shows.get",
-            {},
-            this._showsReceived.bind(this),
-            false
-        );
+        callAPI("shows.shows.get", {}, this._showsReceived.bind(this), false);
     }
 
     _showsReceived(shows) {
@@ -229,14 +220,10 @@ class EpisodeIDSelector extends Component {
         );
     }
 }
-const mapStateToProps = state => {
-    return {};
-};
-const mapDispatchToProps = dispatch => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    };
+
+EpisodeIDSelector.propTypes = {
+    callAPI: PropTypes.func.isRequired,
+    onIDEpisode: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EpisodeIDSelector);
+export default EpisodeIDSelector;

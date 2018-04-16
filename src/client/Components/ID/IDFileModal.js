@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import { Button, Checkbox, Col, Input, Modal, Row } from "antd";
 
@@ -54,7 +53,7 @@ class IDFileModal extends Component {
     }
 
     _buildTwoColumnSingleID() {
-        const { currentFilename } = this.props;
+        const { callAPI, currentFilename } = this.props;
         return (
             <div>
                 <Col span={10}>
@@ -70,6 +69,7 @@ class IDFileModal extends Component {
                     <div className="ib-idmodal-idepisode-box">
                         <h4>Episode</h4>
                         <EpisodeIDSelector
+                            callAPI={callAPI}
                             onIDEpisode={this._handleClickIDEpisode.bind(this)}
                         />
                     </div>
@@ -95,6 +95,7 @@ class IDFileModal extends Component {
     _buildArchiveEpisodeView() {
         const { episodeInfo } = this.state;
         const {
+            callAPI,
             currentFilename,
             currentPathInfo,
             currentToplevelDirectory,
@@ -103,9 +104,10 @@ class IDFileModal extends Component {
 
         return (
             <ArchiveSingleEpisode
-                episodeInfo={episodeInfo}
+                callAPI={callAPI}
                 currentFilename={currentFilename}
                 currentPathInfo={currentPathInfo}
+                episodeInfo={episodeInfo}
                 onIDComplete={onIDComplete}
             />
         );
@@ -181,6 +183,7 @@ class IDFileModal extends Component {
 }
 
 IDFileModal.propTypes = {
+    callAPI: PropTypes.func.isRequired,
     currentFilename: PropTypes.string.isRequired,
     currentPathInfo: PropTypes.object.isRequired,
     isVisible: PropTypes.bool.isRequired,

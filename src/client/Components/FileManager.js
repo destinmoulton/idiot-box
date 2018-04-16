@@ -470,13 +470,14 @@ class FileManager extends Component {
                     serverInfo={this.props.serverInfo}
                 />
                 <IDFileModal
-                    key={idsingleFilename}
-                    isVisible={idsingleIsModalVisible}
-                    onIDComplete={this._handleIDModalComplete.bind(this)}
-                    onCancel={this._handleIDModalCancel.bind(this)}
+                    callAPI={this.props.callAPI}
                     currentFilename={idsingleFilename}
                     currentPathInfo={currentPathInfo}
                     currentToplevelDirectory={currentToplevelDirectory}
+                    isVisible={idsingleIsModalVisible}
+                    key={idsingleFilename}
+                    onCancel={this._handleIDModalCancel.bind(this)}
+                    onIDComplete={this._handleIDModalComplete.bind(this)}
                 />
                 <IDMultipleEpisodesModal
                     callAPI={this.props.callAPI}
