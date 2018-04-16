@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { Button, Icon, Layout, Menu } from "antd";
 const { Header } = Layout;
 
-import VideoPlayerRemoteModal from "../VideoPlayerRemoteModal";
+import VideoPlayerRemoteModal from "./VideoPlayerRemoteModal";
 
 class IdiotBoxHeader extends Component {
     constructor(props) {
