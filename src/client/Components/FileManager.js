@@ -488,6 +488,7 @@ class FileManager extends Component {
                     onIDComplete={this._handleIDMultipleComplete.bind(this)}
                 />
                 <UntagModal
+                    callAPI={this.props.callAPI}
                     isVisible={untagIsModalVisible}
                     onUntagComplete={this._handleUntagModalComplete.bind(this)}
                     onCancel={this._handleUntagCancel.bind(this)}
