@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { connect } from "react-redux";
 
 import { Button, Col, Input, Modal, Select } from "antd";
 
@@ -8,6 +7,7 @@ import ShowResults from "./ShowResults";
 
 const AddShowModal = props => {
     const {
+        callAPI,
         currentSearchString,
         isVisible,
         onAddShowComplete,
@@ -19,6 +19,7 @@ const AddShowModal = props => {
     if (isVisible) {
         showResults = (
             <ShowResults
+                callAPI={callAPI}
                 currentSearchString={currentSearchString}
                 onAddShowComplete={onAddShowComplete}
             />
@@ -43,6 +44,7 @@ const AddShowModal = props => {
 };
 
 AddShowModal.propTypes = {
+    callAPI: PropTypes.func.isRequired,
     currentSearchString: PropTypes.string.isRequired,
     isVisible: PropTypes.bool.isRequired,
     onAddShowComplete: PropTypes.func.isRequired,
