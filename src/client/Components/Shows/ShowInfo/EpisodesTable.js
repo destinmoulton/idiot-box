@@ -6,7 +6,7 @@ import { Button, Icon, Row, Spin, Table } from "antd";
 
 import moment from "moment";
 
-import PlayButton from "../PlayButton";
+import PlayButton from "../../PlayButton";
 
 class EpisodesTable extends Component {
     constructor(props) {

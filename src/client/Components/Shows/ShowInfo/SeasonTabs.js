@@ -6,7 +6,7 @@ import { Card, Icon, Row, Spin, Table, Tabs } from "antd";
 const TabPane = Tabs.TabPane;
 
 import EpisodesTable from "./EpisodesTable";
-import PlayButton from "../PlayButton";
+import PlayButton from "../../PlayButton";
 
 class SeasonTabs extends Component {
     constructor(props) {

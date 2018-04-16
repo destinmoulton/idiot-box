@@ -12,7 +12,7 @@ import IdiotBoxHeader from "./IdiotBoxHeader";
 import MoviesList from "../Movies/MoviesList";
 import NewEpisodes from "../NewEpisodes";
 import Settings from "../Settings/Settings";
-import ShowInfo from "../Shows/ShowInfo";
+import ShowInfo from "../Shows/ShowInfo/ShowInfo";
 import ShowsList from "../Shows/ShowsList";
 
 const IdiotBoxLayout = props => {
