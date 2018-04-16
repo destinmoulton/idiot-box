@@ -458,6 +458,7 @@ class FileManager extends Component {
                     onCancel={this._handleCancelTrash.bind(this)}
                 />
                 <MoveRenameModal
+                    callAPI={this.props.callAPI}
                     initialPath={currentPath}
                     isVisible={moverenameIsModalVisible}
                     itemsToRename={moverenameSelectedItems}
@@ -538,6 +539,7 @@ class FileManager extends Component {
 }
 
 FileManager.propTypes = {
+    callAPI: PropTypes.func.isRequired,
     settings: PropTypes.object.isRequired
 };
 
