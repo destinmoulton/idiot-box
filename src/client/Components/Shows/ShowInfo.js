@@ -1,9 +1,7 @@
+import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import { Button, Card, Col, Icon, Row, Spin } from "antd";
-
-import { callAPI } from "../../actions/api.actions";
 
 import SeasonTabs from "./SeasonTabs";
 
@@ -141,18 +139,9 @@ class ShowInfo extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    const { settings } = state;
-    return {
-        directories: settings.settings.directories
-    };
+ShowInfo.propTypes = {
+    callAPI: PropTypes.func.isRequired,
+    settings: PropTypes.object.isRequired
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ShowInfo);
+export default ShowInfo;
