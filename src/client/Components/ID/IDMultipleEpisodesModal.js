@@ -1,23 +1,12 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import { Button, Col, Input, Modal, Select } from "antd";
 const Option = Select.Option;
 
-import { callAPI } from "../../actions/api.actions";
-
 import Regex from "../../lib/Regex.lib";
 
 class IDMultipleEpisodesModal extends Component {
-    static propTypes = {
-        currentPathInfo: PropTypes.object.isRequired,
-        episodesToID: PropTypes.array.isRequired,
-        isVisible: PropTypes.bool.isRequired,
-        onCancel: PropTypes.func.isRequired,
-        onIDComplete: PropTypes.func.isRequired
-    };
-
     INITIAL_STATE = {
         currentEpisodesInfo: {},
         episodeDestPath: "",
@@ -65,12 +54,7 @@ class IDMultipleEpisodesModal extends Component {
     _getShows() {
         const { callAPI } = this.props;
 
-        callAPI(
-            "shows.shows.get",
-            {},
-            this._showsReceived.bind(this),
-            false
-        );
+        callAPI("shows.shows.get", {}, this._showsReceived.bind(this), false);
     }
 
     _showsReceived(shows) {
@@ -513,16 +497,13 @@ class IDMultipleEpisodesModal extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {};
-};
-const mapDispatchToProps = dispatch => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    };
+IDMultipleEpisodesModal.propTypes = {
+    callAPI: PropTypes.func.isRequired,
+    currentPathInfo: PropTypes.object.isRequired,
+    episodesToID: PropTypes.array.isRequired,
+    isVisible: PropTypes.bool.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    onIDComplete: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-    IDMultipleEpisodesModal
-);
+export default IDMultipleEpisodesModal;

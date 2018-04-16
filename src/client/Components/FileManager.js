@@ -479,6 +479,7 @@ class FileManager extends Component {
                     currentToplevelDirectory={currentToplevelDirectory}
                 />
                 <IDMultipleEpisodesModal
+                    callAPI={this.props.callAPI}
                     currentPathInfo={currentPathInfo}
                     episodesToID={idmultipleEpisodes}
                     isVisible={idmultipleIsModalVisible}
