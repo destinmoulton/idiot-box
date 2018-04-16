@@ -19,7 +19,7 @@ const IdiotBoxLayout = props => {
     return (
         <BrowserRouter>
             <Layout className="layout">
-                <IdiotBoxHeader />
+                <IdiotBoxHeader callAPI={props.callAPI} />
                 <Content style={{ padding: "0 50px" }}>
                     <div id="ib-layout-content-box">
                         <Route

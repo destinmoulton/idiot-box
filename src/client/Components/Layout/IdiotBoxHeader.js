@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
@@ -63,6 +64,7 @@ class IdiotBoxHeader extends Component {
                             <Icon type="video-camera" />
                         </div>
                         <VideoPlayerRemoteModal
+                            callAPI={this.props.callAPI}
                             onCancel={this._handleRemoteModalClose}
                             isVisible={remoteModalIsVisible}
                         />
@@ -72,5 +74,9 @@ class IdiotBoxHeader extends Component {
         );
     }
 }
+
+IdiotBoxHeader.propTypes = {
+    callAPI: PropTypes.func.isRequired
+};
 
 export default IdiotBoxHeader;

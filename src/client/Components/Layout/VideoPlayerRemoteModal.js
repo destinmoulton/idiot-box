@@ -1,13 +1,9 @@
 import PropTypes from "prop-types";
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
-import { Button, Icon, Modal } from 'antd';
+import { Button, Icon, Modal } from "antd";
 
-import { connect } from 'react-redux';
-
-import { callAPI } from '../actions/api.actions';
 class VideoPlayerRemoteModal extends Component {
-
     BUTTONS = {
         reverse: [
             {
@@ -44,12 +40,7 @@ class VideoPlayerRemoteModal extends Component {
 
     BUTTON_ACTIVE_CLASS = "ib-remote-button-active";
 
-    static propTypes = {
-        onCancel: PropTypes.func.isRequired,
-        isVisible: PropTypes.bool.isRequired
-    }
-
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -57,69 +48,81 @@ class VideoPlayerRemoteModal extends Component {
         };
     }
 
-    _handlePressCmd(cmd){
+    _handlePressCmd(cmd) {
         const { callAPI } = this.props;
 
-        callAPI("videoplayer.cmd." + cmd, {}, this._sendCommandComplete.bind(this), false);
+        callAPI(
+            "videoplayer.cmd." + cmd,
+            {},
+            this._sendCommandComplete.bind(this),
+            false
+        );
 
         this.setState({
             activeCmd: cmd
         });
     }
 
-    _sendCommandComplete(){
-        console.log("VideoPlayerRemoteModal :: command sent :: " + this.state.activeCmd);
+    _sendCommandComplete() {
+        console.log(
+            "VideoPlayerRemoteModal :: command sent :: " + this.state.activeCmd
+        );
     }
 
-    _buildButtonSet(buttonSection){
+    _buildButtonSet(buttonSection) {
         const { activeCmd, isPlaying } = this.state;
 
         const buttonSet = this.BUTTONS[buttonSection];
 
         let buttons = [];
-        buttonSet.forEach((but)=>{
+        buttonSet.forEach(but => {
             let className = "ib-remote-button ";
-            if(activeCmd === but.cmd){
+            if (activeCmd === but.cmd) {
                 className += this.BUTTON_ACTIVE_CLASS;
             }
 
             buttons.push(
-                <Button 
+                <Button
                     className={className}
                     key={but.cmd}
-                    onClick={this._handlePressCmd.bind(this, but.cmd)}>&nbsp;<Icon className="ib-remote-icon" type={but.icon}/></Button>
+                    onClick={this._handlePressCmd.bind(this, but.cmd)}
+                >
+                    &nbsp;<Icon className="ib-remote-icon" type={but.icon} />
+                </Button>
             );
         });
         return buttons;
     }
 
-    _buildPlayPauseButton(){
-        return (<Button 
-                    className="ib-remote-button"
-                    key="playpause"
-                    onClick={this._handlePressCmd.bind(this, "play")}>
-                    &nbsp;<Icon className="ib-remote-icon" type="caret-right"/>
-                    &nbsp;/&nbsp;<Icon className="ib-remote-icon" type="pause"/>
-                </Button>);
+    _buildPlayPauseButton() {
+        return (
+            <Button
+                className="ib-remote-button"
+                key="playpause"
+                onClick={this._handlePressCmd.bind(this, "play")}
+            >
+                &nbsp;<Icon className="ib-remote-icon" type="caret-right" />
+                &nbsp;/&nbsp;<Icon className="ib-remote-icon" type="pause" />
+            </Button>
+        );
     }
 
     render() {
-        const {
-            isVisible,
-            onCancel
-        } = this.props;
+        const { isVisible, onCancel } = this.props;
 
-        let revButtons = this._buildButtonSet('reverse');
+        let revButtons = this._buildButtonSet("reverse");
         let playpauseButtons = this._buildPlayPauseButton();
-        let forwardButtons = this._buildButtonSet('forward');
-        let closeButton = this._buildButtonSet('close');
+        let forwardButtons = this._buildButtonSet("forward");
+        let closeButton = this._buildButtonSet("close");
         return (
             <Modal
                 title="ID Multiple Episodes"
                 visible={isVisible}
                 onCancel={onCancel}
                 footer={[
-                    <Button key="cancel" size="large" onClick={onCancel}>Close</Button>
+                    <Button key="cancel" size="large" onClick={onCancel}>
+                        Close
+                    </Button>
                 ]}
                 width={700}
             >
@@ -135,14 +138,11 @@ class VideoPlayerRemoteModal extends Component {
         );
     }
 }
-const mapStateToProps = (state) => {
-    return { }
+
+VideoPlayerRemoteModal.propTypes = {
+    callAPI: PropTypes.func.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    isVisible: PropTypes.bool.isRequired
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch)=>dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(VideoPlayerRemoteModal);
+export default VideoPlayerRemoteModal;
