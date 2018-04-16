@@ -1,20 +1,10 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
 
-import { Button, Modal } from 'antd';
-import { callAPI } from '../../actions/api.actions';
+import { Button, Modal } from "antd";
 
 class TrashModal extends Component {
-    static propTypes = {
-        currentPath: PropTypes.string.isRequired,
-        isVisible: PropTypes.bool.isRequired,
-        itemsToTrash: PropTypes.array.isRequired,
-        onTrashComplete: PropTypes.func.isRequired,
-        onCancel: PropTypes.func.isRequired,
-    };
-
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -22,35 +12,37 @@ class TrashModal extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps){
+    componentWillReceiveProps(nextProps) {
         this.setState({
             isTrashing: false
         });
     }
 
-    _handlePressOk(){
+    _handlePressOk() {
         this._trashFiles();
     }
 
-    _trashFiles(){
-        const { 
-            currentPath,
-            callAPI,
-            itemsToTrash } = this.props;
+    _trashFiles() {
+        const { currentPath, callAPI, itemsToTrash } = this.props;
 
         const options = {
             source_path: currentPath,
             filenames: itemsToTrash
         };
 
-        callAPI("filesystem.trash.execute", options, this._trashComplete.bind(this), false);
+        callAPI(
+            "filesystem.trash.execute",
+            options,
+            this._trashComplete.bind(this),
+            false
+        );
 
         this.setState({
             isTrashing: true
         });
     }
 
-    _trashComplete(recd){
+    _trashComplete(recd) {
         const { onTrashComplete } = this.props;
 
         this.setState({
@@ -61,16 +53,12 @@ class TrashModal extends Component {
     }
 
     render() {
-        const { 
-            currentPath,
-            isVisible,
-            itemsToTrash,
-            onCancel } = this.props;
+        const { currentPath, isVisible, itemsToTrash, onCancel } = this.props;
 
         const { isTrashing } = this.state;
 
         let list = [];
-        itemsToTrash.forEach((item)=>{
+        itemsToTrash.forEach(item => {
             list.push(<li key={item}>{item}</li>);
         });
 
@@ -82,13 +70,21 @@ class TrashModal extends Component {
                     onCancel={onCancel}
                     onOk={this._handlePressOk.bind(this)}
                     footer={[
-                        <Button key="cancel" size="large" onClick={onCancel}>Cancel</Button>,
-                        <Button key="submit" type="primary" size="large" loading={isTrashing} onClick={this._handlePressOk.bind(this)}>
-                        Confirm Delete
+                        <Button key="cancel" size="large" onClick={onCancel}>
+                            Cancel
                         </Button>,
+                        <Button
+                            key="submit"
+                            type="primary"
+                            size="large"
+                            loading={isTrashing}
+                            onClick={this._handlePressOk.bind(this)}
+                        >
+                            Confirm Delete
+                        </Button>
                     ]}
                 >
-                    <div className="ib-trashmodal-list-box" >
+                    <div className="ib-trashmodal-list-box">
                         <h4>{currentPath}</h4>
                         <ul className="ib-trashmodal-list">{list}</ul>
                     </div>
@@ -98,14 +94,13 @@ class TrashModal extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return {};
+TrashModal.propTypes = {
+    callAPI: PropTypes.func.isRequired,
+    currentPath: PropTypes.string.isRequired,
+    isVisible: PropTypes.bool.isRequired,
+    itemsToTrash: PropTypes.array.isRequired,
+    onCancel: PropTypes.func.isRequired,
+    onTrashComplete: PropTypes.func.isRequired
 };
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch)=>dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(TrashModal);
+export default TrashModal;

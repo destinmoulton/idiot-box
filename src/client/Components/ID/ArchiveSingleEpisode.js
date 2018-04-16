@@ -1,22 +1,12 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
 
-import { Button, Input, Spin } from 'antd';
+import { Button, Input, Spin } from "antd";
 
-import { callAPI } from '../../actions/api.actions';
-
-import Regex from '../../lib/Regex.lib';
+import Regex from "../../lib/Regex.lib";
 
 class ArchiveSingleEpisode extends Component {
-    static propTypes = {
-        currentFilename: PropTypes.string.isRequired,
-        currentPathInfo: PropTypes.object.isRequired,
-        episodeInfo: PropTypes.object.isRequired,
-        onIDComplete: PropTypes.func.isRequired
-    };
-
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
@@ -30,11 +20,11 @@ class ArchiveSingleEpisode extends Component {
         };
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this._getEpisodeCollation();
     }
 
-    _getEpisodeCollation(){
+    _getEpisodeCollation() {
         const { callAPI, episodeInfo } = this.props;
 
         this.setState({
@@ -48,10 +38,15 @@ class ArchiveSingleEpisode extends Component {
                 episode_id: episodeInfo.currentEpisodeID
             }
         };
-        callAPI("shows.episode.collate", options, this._handleCollationReceived.bind(this), false);
+        callAPI(
+            "shows.episode.collate",
+            options,
+            this._handleCollationReceived.bind(this),
+            false
+        );
     }
 
-    _handleCollationReceived(data){
+    _handleCollationReceived(data) {
         this.setState({
             isCollating: false,
             episode: data.episode,
@@ -62,8 +57,8 @@ class ArchiveSingleEpisode extends Component {
         });
     }
 
-    _idAndArchiveEpisode(){
-        const { 
+    _idAndArchiveEpisode() {
+        const {
             currentFilename,
             currentPathInfo,
             callAPI,
@@ -91,70 +86,68 @@ class ArchiveSingleEpisode extends Component {
                 subpath: newDirectory
             }
         };
-        callAPI("id.episode.id_and_archive", options, this._handleArchiveComplete.bind(this), false);
+        callAPI(
+            "id.episode.id_and_archive",
+            options,
+            this._handleArchiveComplete.bind(this),
+            false
+        );
     }
 
-    _handleArchiveComplete(data){
+    _handleArchiveComplete(data) {
         const { onIDComplete } = this.props;
         onIDComplete();
     }
-    
 
-    _getDirectory(show, episode){
+    _getDirectory(show, episode) {
         const showTitle = Regex.sanitizeShowTitle(show.title);
         const seasonID = this._getSeasonID(episode.season_number);
         return showTitle + "/" + seasonID;
     }
 
-    _getFilename(show, episode){
+    _getFilename(show, episode) {
         const { currentFilename } = this.props;
 
         const ext = currentFilename.split(".").pop();
-        
+
         const episodeID = this._getEpisodeID(episode.episode_number);
         const seasonID = this._getSeasonID(episode.season_number);
-        
+
         const showTitle = Regex.sanitizeShowTitle(show.title);
         return showTitle + "." + seasonID + episodeID + "." + ext;
     }
 
-    _getEpisodeID(episodeNumber){
+    _getEpisodeID(episodeNumber) {
         let episodeID = "E";
-        if(episodeNumber < 10){
+        if (episodeNumber < 10) {
             episodeID += "0";
         }
         return episodeID + episodeNumber.toString();
     }
 
-    _getSeasonID(seasonNumber){
+    _getSeasonID(seasonNumber) {
         let seasonID = "S";
-        if(seasonNumber < 10){
+        if (seasonNumber < 10) {
             seasonID += "0";
         }
         return seasonID + seasonNumber.toString();
     }
 
-    _handleChangeFilename(evt){
+    _handleChangeFilename(evt) {
         this.setState({
             newFilename: evt.target.value
         });
     }
 
-    _handleChangeDirectory(evt){
+    _handleChangeDirectory(evt) {
         this.setState({
             newDirectory: evt.target.value
         });
     }
 
-    _buildEpisodeForm(){
-        const {
-            episode,
-            season,
-            show,
-            newDirectory,
-            newFilename
-        } = this.state;
-        
+    _buildEpisodeForm() {
+        const { episode, season, show, newDirectory, newFilename } = this.state;
+
         return (
             <div>
                 <div className="ib-idmodal-archivesingle-episodeinfo">
@@ -163,16 +156,25 @@ class ArchiveSingleEpisode extends Component {
                     <div>Episode {episode.episode_number}</div>
                 </div>
                 <div className="ib-idmodal-archivesingle-form-box">
-                    Directory: <Input onChange={this._handleChangeDirectory.bind(this)}
-                                    value={newDirectory}/>
-                    Filename: <Input onChange={this._handleChangeFilename.bind(this)}
-                                    value={newFilename}/>
+                    Directory:{" "}
+                    <Input
+                        onChange={this._handleChangeDirectory.bind(this)}
+                        value={newDirectory}
+                    />
+                    Filename:{" "}
+                    <Input
+                        onChange={this._handleChangeFilename.bind(this)}
+                        value={newFilename}
+                    />
                     <div className="ib-idmodal-button-box">
-                        <Button className="ib-button-green"
-                                onClick={this._idAndArchiveEpisode.bind(this)}>Archive Episode</Button>
+                        <Button
+                            className="ib-button-green"
+                            onClick={this._idAndArchiveEpisode.bind(this)}
+                        >
+                            Archive Episode
+                        </Button>
                     </div>
                 </div>
-                
             </div>
         );
     }
@@ -181,23 +183,20 @@ class ArchiveSingleEpisode extends Component {
         const { isCollating } = this.state;
 
         let content = <Spin />;
-        if(!isCollating){
+        if (!isCollating) {
             content = this._buildEpisodeForm();
         }
 
-        return (
-            <div>{content}</div>
-        );
-    }
-}
-const mapStateToProps = (state)=>{
-    return {};
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch)=>dispatch(callAPI(endpoint, params, callback, shouldDispatch))
+        return <div>{content}</div>;
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ArchiveSingleEpisode);
+ArchiveSingleEpisode.propTypes = {
+    callAPI: PropTypes.func.isRequired,
+    currentFilename: PropTypes.string.isRequired,
+    currentPathInfo: PropTypes.object.isRequired,
+    episodeInfo: PropTypes.object.isRequired,
+    onIDComplete: PropTypes.func.isRequired
+};
+
+export default ArchiveSingleEpisode;

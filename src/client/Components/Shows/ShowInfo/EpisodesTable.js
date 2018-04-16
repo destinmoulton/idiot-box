@@ -1,23 +1,14 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import { Link } from "react-router-dom";
 import { Button, Icon, Row, Spin, Table } from "antd";
 
 import moment from "moment";
-import { callAPI } from "../../actions/api.actions";
 
-import PlayButton from "../PlayButton";
+import PlayButton from "../../PlayButton";
 
 class EpisodesTable extends Component {
-    static propTypes = {
-        activeSeasonNum: PropTypes.number.isRequired,
-        onToggleSeasonLock: PropTypes.func.isRequired,
-        season: PropTypes.object.isRequired,
-        show: PropTypes.object.isRequired
-    };
-
     constructor(props) {
         super(props);
 
@@ -103,7 +94,7 @@ class EpisodesTable extends Component {
 
     _buildEpisodesTable() {
         const { episodes, selectedEpisodeKeys } = this.state;
-        const { directories } = this.props;
+        const { directories } = this.props.settings;
 
         let columns = this._episodeTableColumns();
 
@@ -130,7 +121,7 @@ class EpisodesTable extends Component {
     }
 
     _episodeTableColumns() {
-        const { directories } = this.props;
+        const { directories } = this.props.settings;
 
         return [
             {
@@ -183,7 +174,7 @@ class EpisodesTable extends Component {
 
     _buildEpisodesList() {
         const { episodes } = this.state;
-        const { directories } = this.props;
+        const { directories } = this.props.settings;
 
         let episodeList = [];
 
@@ -282,18 +273,13 @@ class EpisodesTable extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    const { settings } = state;
-    return {
-        directories: settings.settings.directories
-    };
+EpisodesTable.propTypes = {
+    activeSeasonNum: PropTypes.number.isRequired,
+    callAPI: PropTypes.func.isRequired,
+    onToggleSeasonLock: PropTypes.func.isRequired,
+    season: PropTypes.object.isRequired,
+    settings: PropTypes.object.isRequired,
+    show: PropTypes.object.isRequired
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(EpisodesTable);
+export default EpisodesTable;

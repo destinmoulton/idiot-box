@@ -1,13 +1,10 @@
-import _ from "lodash";
+import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { Button, Col, Input, Row, Spin } from "antd";
 
-import { callAPI } from "../../actions/api.actions";
-
-import AddShowModal from "./AddShowModal";
+import AddShowModal from "./AddShowModal/AddShowModal";
 import ShowListThumbInfo from "./ShowListThumbInfo";
 
 class ShowsList extends Component {
@@ -181,6 +178,7 @@ class ShowsList extends Component {
                 </Row>
                 <Row>{content}</Row>
                 <AddShowModal
+                    callAPI={this.props.callAPI}
                     isVisible={isAddShowModalVisible}
                     onCancel={this._cancelAddShowModal.bind(this)}
                     onAddShowComplete={this._addShowComplete.bind(this)}
@@ -191,15 +189,8 @@ class ShowsList extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {};
+ShowsList.propTypes = {
+    callAPI: PropTypes.func.isRequired
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ShowsList);
+export default ShowsList;

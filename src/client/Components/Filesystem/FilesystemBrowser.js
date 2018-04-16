@@ -1,43 +1,14 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import { Button, Checkbox, Icon, Spin, Table } from "antd";
 
-import { callAPI } from "../../actions/api.actions";
 import { socketClient } from "../../store";
 
 import FileDetails from "./FileDetails";
 
 class FilesystemBrowser extends Component {
     PARENT_DIR_NAME = "..";
-
-    static propTypes = {
-        forceReload: PropTypes.bool,
-        hasCheckboxes: PropTypes.bool,
-        basePath: PropTypes.string.isRequired,
-        currentPath: PropTypes.string,
-        lockToBasePath: PropTypes.bool,
-        onChangeDirectory: PropTypes.func,
-        parentHandleSelectChange: PropTypes.func,
-        selectedRowKeys: PropTypes.array,
-        serverInfo: PropTypes.object.isRequired,
-        showDirectories: PropTypes.bool,
-        showFiles: PropTypes.bool
-    };
-
-    static defaultProps = {
-        actionColumns: [],
-        currentPath: "",
-        forceReload: false,
-        hasCheckboxes: false,
-        lockToBasePath: true,
-        onChangeDirectory: () => {},
-        parentHandleSelectChange: () => {},
-        selectedRowKeys: [],
-        showDirectories: true,
-        showFiles: true
-    };
 
     constructor(props) {
         super(props);
@@ -330,19 +301,32 @@ class FilesystemBrowser extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    const { server } = state;
-
-    return {
-        serverInfo: server.serverInfo
-    };
+FilesystemBrowser.propTypes = {
+    callAPI: PropTypes.func.isRequired,
+    basePath: PropTypes.string.isRequired,
+    currentPath: PropTypes.string,
+    forceReload: PropTypes.bool,
+    hasCheckboxes: PropTypes.bool,
+    lockToBasePath: PropTypes.bool,
+    onChangeDirectory: PropTypes.func,
+    parentHandleSelectChange: PropTypes.func,
+    selectedRowKeys: PropTypes.array,
+    serverInfo: PropTypes.object.isRequired,
+    showDirectories: PropTypes.bool,
+    showFiles: PropTypes.bool
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    };
+FilesystemBrowser.defaultProps = {
+    actionColumns: [],
+    currentPath: "",
+    forceReload: false,
+    hasCheckboxes: false,
+    lockToBasePath: true,
+    onChangeDirectory: () => {},
+    parentHandleSelectChange: () => {},
+    selectedRowKeys: [],
+    showDirectories: true,
+    showFiles: true
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(FilesystemBrowser);
+export default FilesystemBrowser;

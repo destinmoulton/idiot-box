@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
+
 import { Link } from "react-router-dom";
 import { Icon, Button, Menu, Modal } from "antd";
 
@@ -45,7 +45,7 @@ class FileManager extends Component {
     }
 
     _parseURL(props) {
-        const { toplevelDirectories } = this.props;
+        const settingDirectories = props.settings.directories;
 
         const settingKey = props.match.params.setting_key;
 
@@ -67,7 +67,7 @@ class FileManager extends Component {
             subpath = decodeURIComponent(newSubpath);
         }
 
-        const dir = toplevelDirectories.find(dir => dir.key === settingKey);
+        const dir = settingDirectories.find(dir => dir.key === settingKey);
 
         const pathInfo = {
             setting_id: dir.id,
@@ -439,6 +439,7 @@ class FileManager extends Component {
                 <FilesystemBrowser
                     actionColumns={this._buildActionColumns()}
                     basePath={currentToplevelDirectory}
+                    callAPI={this.props.callAPI}
                     currentPath={currentPath}
                     forceReload={isReloading}
                     hasCheckboxes={true}
@@ -447,10 +448,12 @@ class FileManager extends Component {
                         this
                     )}
                     selectedRowKeys={selectedRows}
+                    serverInfo={this.props.serverInfo}
                     showDirectories={true}
                     showFiles={true}
                 />
                 <TrashModal
+                    callAPI={this.props.callAPI}
                     currentPath={currentPath}
                     isVisible={trashIsModalVisible}
                     itemsToTrash={trashSelectedItems}
@@ -458,22 +461,26 @@ class FileManager extends Component {
                     onCancel={this._handleCancelTrash.bind(this)}
                 />
                 <MoveRenameModal
+                    callAPI={this.props.callAPI}
                     initialPath={currentPath}
                     isVisible={moverenameIsModalVisible}
                     itemsToRename={moverenameSelectedItems}
                     onRenameComplete={this._handleMoveRenameComplete.bind(this)}
                     onCancel={this._handleMoveRenameCancel.bind(this)}
+                    serverInfo={this.props.serverInfo}
                 />
                 <IDFileModal
-                    key={idsingleFilename}
-                    isVisible={idsingleIsModalVisible}
-                    onIDComplete={this._handleIDModalComplete.bind(this)}
-                    onCancel={this._handleIDModalCancel.bind(this)}
+                    callAPI={this.props.callAPI}
                     currentFilename={idsingleFilename}
                     currentPathInfo={currentPathInfo}
                     currentToplevelDirectory={currentToplevelDirectory}
+                    isVisible={idsingleIsModalVisible}
+                    key={idsingleFilename}
+                    onCancel={this._handleIDModalCancel.bind(this)}
+                    onIDComplete={this._handleIDModalComplete.bind(this)}
                 />
                 <IDMultipleEpisodesModal
+                    callAPI={this.props.callAPI}
                     currentPathInfo={currentPathInfo}
                     episodesToID={idmultipleEpisodes}
                     isVisible={idmultipleIsModalVisible}
@@ -481,6 +488,7 @@ class FileManager extends Component {
                     onIDComplete={this._handleIDMultipleComplete.bind(this)}
                 />
                 <UntagModal
+                    callAPI={this.props.callAPI}
                     isVisible={untagIsModalVisible}
                     onUntagComplete={this._handleUntagModalComplete.bind(this)}
                     onCancel={this._handleUntagCancel.bind(this)}
@@ -491,11 +499,11 @@ class FileManager extends Component {
     }
 
     _buildDirectoryMenu() {
-        const { toplevelDirectories } = this.props;
+        const settingDirectories = this.props.settings.directories;
         const { currentToplevelDirectory } = this.state;
 
         const menuList = [];
-        toplevelDirectories.forEach(dir => {
+        settingDirectories.forEach(dir => {
             const activeClass =
                 dir.value === currentToplevelDirectory
                     ? "ib-filemanager-button ib-filemanager-button-active"
@@ -537,12 +545,10 @@ class FileManager extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    const { settings } = state;
-
-    return {
-        toplevelDirectories: settings.settings.directories
-    };
+FileManager.propTypes = {
+    callAPI: PropTypes.func.isRequired,
+    serverInfo: PropTypes.object.isRequired,
+    settings: PropTypes.object.isRequired
 };
 
-export default connect(mapStateToProps)(FileManager);
+export default FileManager;

@@ -4,9 +4,7 @@ import { connect } from "react-redux";
 
 import { Input, Row, Spin } from "antd";
 
-import { callAPI } from "../../actions/api.actions";
-
-import MediaItemSearchDetails from "../shared/MediaItemSearchDetails";
+import MediaItemSearchDetails from "../../shared/MediaItemSearchDetails";
 
 class ShowResults extends Component {
     static propTypes = {
@@ -48,12 +46,7 @@ class ShowResults extends Component {
             }
         };
 
-        callAPI(
-            "id.show.add",
-            options,
-            this._idShowComplete.bind(this),
-            false
-        );
+        callAPI("id.show.add", options, this._idShowComplete.bind(this), false);
     }
 
     _idShowComplete(recd) {
@@ -151,14 +144,8 @@ class ShowResults extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {};
-};
-const mapDispatchToProps = dispatch => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    };
+ShowResults.propTypes = {
+    callAPI: PropTypes.func.isRequired
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShowResults);
+export default ShowResults;

@@ -238,7 +238,7 @@ class MoviesList extends Component {
                     >
                         <MovieThumbInfo
                             movie={movie}
-                            directories={this.props.directories}
+                            directories={this.props.settings.directories}
                             onClickDelete={this._handlePressDelete.bind(this)}
                             onClickMovie={this._handleClickMovie.bind(this)}
                             onClickToggleStatusTag={this._handlePressToggleStatusTag.bind(
@@ -334,18 +334,9 @@ class MoviesList extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    const { settings } = state;
-    return {
-        directories: settings.settings.directories
-    };
+MoviesList.propTypes = {
+    settings: PropTypes.object.isRequired,
+    callAPI: PropTypes.func.isRequired
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(MoviesList);
+export default MoviesList;
