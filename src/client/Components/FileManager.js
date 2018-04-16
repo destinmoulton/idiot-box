@@ -451,6 +451,7 @@ class FileManager extends Component {
                     showFiles={true}
                 />
                 <TrashModal
+                    callAPI={this.props.callAPI}
                     currentPath={currentPath}
                     isVisible={trashIsModalVisible}
                     itemsToTrash={trashSelectedItems}
