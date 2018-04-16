@@ -1,6 +1,6 @@
 import moment from "moment";
+import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { truncate } from "lodash";
 
@@ -169,15 +169,8 @@ class NewEpisodes extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {};
+NewEpisodes.propTypes = {
+    callAPI: PropTypes.func.isRequired
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(NewEpisodes);
+export default NewEpisodes;
