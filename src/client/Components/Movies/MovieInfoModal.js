@@ -1,12 +1,10 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import { Button, Col, Modal, Row } from "antd";
 
 import StatusTagIcons from "./StatusTagIcons";
 
-import { callAPI } from "../../actions/api.actions";
 class MovieInfoModal extends Component {
     static propTypes = {
         isVisible: PropTypes.bool.isRequired,
@@ -109,15 +107,4 @@ class MovieInfoModal extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {};
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(MovieInfoModal);
+export default MovieInfoModal;
