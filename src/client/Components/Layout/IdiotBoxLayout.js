@@ -26,7 +26,12 @@ const IdiotBoxLayout = props => {
                         <Route path="/newepisodes" component={NewEpisodes} />
                         <Route
                             path="/filemanager/:setting_key?/:subpath?"
-                            component={FileManager}
+                            render={routeParams => (
+                                <FileManager
+                                    {...routeParams}
+                                    settings={props.settings}
+                                />
+                            )}
                         />
                         <Route
                             path="/movies"
