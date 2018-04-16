@@ -1,21 +1,14 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import { Link } from "react-router-dom";
 import { Card, Icon, Row, Spin, Table, Tabs } from "antd";
 const TabPane = Tabs.TabPane;
 
-import { callAPI } from "../../actions/api.actions";
-
 import EpisodesTable from "./EpisodesTable";
 import PlayButton from "../PlayButton";
 
 class SeasonTabs extends Component {
-    static propTypes = {
-        show: PropTypes.object.isRequired
-    };
-
     constructor(props) {
         super(props);
 
@@ -176,18 +169,10 @@ class SeasonTabs extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    const { settings } = state;
-    return {
-        directories: settings.settings.directories
-    };
+SeasonTabs.propTypes = {
+    callAPI: PropTypes.func.isRequired,
+    settings: PropTypes.object.isRequired,
+    show: PropTypes.object.isRequired
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-        callAPI: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(SeasonTabs);
+export default SeasonTabs;

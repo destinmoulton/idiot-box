@@ -124,6 +124,8 @@ class ShowInfo extends Component {
             seasonsBar = (
                 <SeasonTabs
                     show={show}
+                    callAPI={this.props.callAPI}
+                    settings={this.props.settings}
                     history={this.props.history}
                     match={this.props.match}
                 />
