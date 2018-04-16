@@ -22,21 +22,32 @@ const IdiotBoxLayout = props => {
                 <IdiotBoxHeader />
                 <Content style={{ padding: "0 50px" }}>
                     <div id="ib-layout-content-box">
-                        <Route path="/" exact component={NewEpisodes} />
-                        <Route path="/newepisodes" component={NewEpisodes} />
+                        <Redirect path="/" exact to="/newepisodes" />
+                        <Route
+                            path="/newepisodes"
+                            render={routeParams => (
+                                <NewEpisodes
+                                    {...routeParams}
+                                    callAPI={props.callAPI}
+                                    settings={props.settings}
+                                />
+                            )}
+                        />
                         <Route
                             path="/filemanager/:setting_key?/:subpath?"
                             render={routeParams => (
                                 <FileManager
                                     {...routeParams}
+                                    callAPI={props.callAPI}
                                     settings={props.settings}
                                 />
                             )}
                         />
                         <Route
                             path="/movies"
-                            render={() => (
+                            render={routeParams => (
                                 <MoviesList
+                                    {...routeParams}
                                     settings={props.settings}
                                     callAPI={props.callAPI}
                                 />
