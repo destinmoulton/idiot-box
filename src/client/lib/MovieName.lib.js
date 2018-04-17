@@ -2,7 +2,7 @@ class MovieNameLib {
     getMovieFilename(movieFilename, movie) {
         const ext = movieFilename.split(".").pop();
 
-        const movieName = this._getMovieTitleAndYear(movie);
+        const movieName = this.getMovieTitleAndYear(movie);
 
         return movieName + "." + ext;
     }
