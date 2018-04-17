@@ -3,6 +3,8 @@ import React, { Component } from "react";
 
 import { Button, Input, Spin } from "antd";
 
+import MovieNameLib from "../../lib/MovieName.lib";
+
 class MovieArchive extends Component {
     constructor(props) {
         super(props);
@@ -12,12 +14,18 @@ class MovieArchive extends Component {
             newMovieFilename: "",
             isIDing: false
         };
+
+        this.movieNameLib = new MovieNameLib();
     }
 
     componentWillMount() {
+        const { currentFilename, movie } = this.props;
         this.setState({
-            newMovieDirectory: this._getMovieTitleAndYear(),
-            newMovieFilename: this._getMovieFilename()
+            newMovieDirectory: this.movieNameLib.getMovieTitleAndYear(movie),
+            newMovieFilename: this.movieNameLib.getMovieFilename(
+                currentFilename,
+                movie
+            )
         });
     }
 
