@@ -3,7 +3,7 @@ import React, { Component } from "react";
 
 import { Button, Input, Spin } from "antd";
 
-import MovieNameLib from "../../lib/MovieName.lib";
+import MovieNameLib from "../../../lib/MovieName.lib";
 
 class MovieArchive extends Component {
     constructor(props) {

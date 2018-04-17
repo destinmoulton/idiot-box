@@ -3,7 +3,7 @@ import React, { Component } from "react";
 
 import { Input, Row } from "antd";
 
-import MediaItemSearchDetails from "../shared/MediaItemSearchDetails";
+import MediaItemSearchDetails from "../../shared/MediaItemSearchDetails";
 
 class MovieSearchResults extends Component {
     constructor(props) {

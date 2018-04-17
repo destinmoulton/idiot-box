@@ -3,7 +3,7 @@ import React, { Component } from "react";
 
 import { Checkbox, Input } from "antd";
 
-import MovieNameLib from "../../lib/MovieName.lib";
+import MovieNameLib from "../../../lib/MovieName.lib";
 
 class MovieCheckForm extends Component {
     static propTypes = {
