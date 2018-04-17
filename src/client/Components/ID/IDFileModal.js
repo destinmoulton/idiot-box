@@ -5,8 +5,8 @@ import { Button, Checkbox, Col, Input, Modal, Row } from "antd";
 
 import ArchiveSingleEpisode from "./ArchiveSingleEpisode";
 import EpisodeIDSelector from "./EpisodeIDSelector";
-import MovieCheckForm from "./MovieCheckForm";
-import MovieID from "./MovieID";
+import MovieCheckForm from "./MovieID/MovieCheckForm";
+import MovieID from "./MovieID/MovieID";
 
 class IDFileModal extends Component {
     INITIAL_VIEW = "two_column_single_id";
