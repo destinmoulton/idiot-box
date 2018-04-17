@@ -1,10 +1,9 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import { Button, Input, Spin } from "antd";
 
-import { callAPI } from "../../actions/api.actions";
+import MovieNameLib from "../../lib/MovieName.lib";
 
 class MovieArchive extends Component {
     constructor(props) {
@@ -15,42 +14,19 @@ class MovieArchive extends Component {
             newMovieFilename: "",
             isIDing: false
         };
+
+        this.movieNameLib = new MovieNameLib();
     }
 
     componentWillMount() {
-        this.setState({
-            newMovieDirectory: this._getMovieTitleAndYear(),
-            newMovieFilename: this._getMovieFilename()
-        });
-    }
-
-    _getMovieFilename() {
         const { currentFilename, movie } = this.props;
-
-        const ext = currentFilename.split(".").pop();
-
-        const movieName = this._getMovieTitleAndYear(movie);
-
-        return movieName + "." + ext;
-    }
-
-    _getMovieTitleAndYear() {
-        const { movie } = this.props;
-
-        const movieName = this._getCleanMovieName(movie);
-
-        return movieName + "." + movie.year.toString();
-    }
-
-    _getCleanMovieName(movie) {
-        // Replace current periods
-        let newName = movie.title.replace(/\./g, "");
-
-        // Replace spaces and dashes with periods
-        newName = newName.replace(/(\s|\-)/g, ".");
-
-        // Replace everything else with blank
-        return newName.replace(/[^\.a-zA-Z0-9]/g, "");
+        this.setState({
+            newMovieDirectory: this.movieNameLib.getMovieTitleAndYear(movie),
+            newMovieFilename: this.movieNameLib.getMovieFilename(
+                currentFilename,
+                movie
+            )
+        });
     }
 
     _idAndArchiveMovie() {
