@@ -3,6 +3,8 @@ import React, { Component } from "react";
 
 import { Checkbox, Input } from "antd";
 
+import MovieNameLib from "../../lib/MovieName.lib";
+
 class MovieCheckForm extends Component {
     static propTypes = {
         currentFilename: PropTypes.string.isRequired,
@@ -16,6 +18,8 @@ class MovieCheckForm extends Component {
             checkedMovieNames: [],
             searchString: ""
         };
+
+        this.movieNameLib = new MovieNameLib();
     }
 
     _handleClickMovieCheck(name) {
@@ -40,55 +44,13 @@ class MovieCheckForm extends Component {
         });
     }
 
-    _movieFilenameToCleanArray(filename) {
-        const unwantedFormats = [
-            "avi",
-            "ac3",
-            "aac",
-            "hevc",
-            "mkv",
-            "mp3",
-            "mp4",
-            "x264",
-            "x265"
-        ];
-        const unwantedMedia = [
-            "bluray",
-            "brrip",
-            "dvd",
-            "dvdr",
-            "dvdscr",
-            "hdrip",
-            "web",
-            "xvid"
-        ];
-        const unwantedRes = [
-            "480",
-            "480p",
-            "720",
-            "720p",
-            "1080",
-            "1080p",
-            "4k"
-        ];
-        const unwanted = [...unwantedFormats, ...unwantedMedia, ...unwantedRes];
-
-        // Make spaces into periods and split on periods
-        const parts = filename
-            .replace(/[^\w]/g, " ")
-            .replace(/(\s+)/g, ".")
-            .split(".");
-
-        return parts.filter(part => {
-            return unwanted.indexOf(part.toLowerCase()) < 0;
-        });
-    }
-
     render() {
         const { currentFilename, onSearchMovies } = this.props;
         const { checkedMovieNames, searchString } = this.state;
 
-        const possibleNames = this._movieFilenameToCleanArray(currentFilename);
+        const possibleNames = this.movieNameLib.getUsefulMovieNameParts(
+            currentFilename
+        );
 
         let possibleChecks = [];
         possibleNames.forEach(name => {
