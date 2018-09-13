@@ -45,4 +45,4 @@ npm run compile:react
 
 ### License
 
-Idiot Box is freely available under the MIT License.
+MIT
