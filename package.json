@@ -23,25 +23,24 @@
     "devDependencies": {
         "babel-cli": "^6.24.1",
         "babel-core": "^6.25.0",
-        "babel-jest": "^22.4.1",
-        "babel-loader": "^7.1.0",
+        "babel-jest": "^24.1.0",
+        "babel-loader": "^8.0.5",
         "babel-plugin-import": "^1.6.2",
         "babel-plugin-transform-class-properties": "^6.24.1",
         "babel-plugin-transform-object-rest-spread": "^6.23.0",
         "babel-preset-env": "^1.6.1",
         "babel-preset-react": "^6.24.1",
         "enzyme": "^3.3.0",
-        "jest": "^22.4.2",
+        "jest": "^24.1.0",
         "webpack": "^4.1.1",
-        "webpack-bundle-analyzer": "^2.11.1",
-        "webpack-cli": "^2.0.12"
+        "webpack-bundle-analyzer": "^3.0.3",
+        "webpack-cli": "^3.2.3"
     },
     "dependencies": {
         "antd": "^3.3.0",
         "bluebird": "^3.5.1",
-        "eslint-plugin-react": "^7.4.0",
         "express": "^4.16.2",
-        "fs-extra": "^5.0.0",
+        "fs-extra": "^7.0.1",
         "lodash": "^4.17.4",
         "mkdirp": "^0.5.1",
         "moment": "^2.19.2",
@@ -50,15 +49,15 @@
         "random-useragent": "^0.3.1",
         "react": "^16.1.1",
         "react-dom": "^16.1.1",
-        "react-redux": "^5.0.5",
+        "react-redux": "^6.0.0",
         "react-router-dom": "^4.1.1",
         "react-router-redux": "^4.0.8",
-        "redux": "^3.7.1",
+        "redux": "^4.0.1",
         "redux-thunk": "^2.2.0",
         "scraperjs": "^1.2.0",
         "socket.io": "^2.0.4",
-        "sqlite": "^2.8.0",
-        "trakt.tv": "^6.0.2"
+        "sqlite": "^3.0.1",
+        "trakt.tv": "^7.1.0"
     },
     "jest": {
         "testPathIgnorePatterns": [
