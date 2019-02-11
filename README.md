@@ -8,6 +8,18 @@ Dev URL: http://localhost:3000
 
 Update Script: `node ./dist/server/app/scripts/daily_update.js`
 
+### Installation
+
+Clone the repo:
+
+`git clone https://github.com/destinmoulton/idiot-box.git`
+
+Install dependencies:
+
+`yarn install`
+
+Add configurations.
+
 #### Starting, Stopping, and Monitoring
 
 The npm pm2 package is used to persist the server.
@@ -33,15 +45,17 @@ $ pm2 monit
 
 #### Debugging Server
 
+To build the server:
+
+`npm run compile:server`
+
 Open the Chrome Node.js DevTools.
 
 ### Dev Notes
 
 To build the frontend:
 
-```
-npm run compile:react
-```
+`npm run compile:react`
 
 ### License
 
