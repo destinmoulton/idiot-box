@@ -18,10 +18,10 @@ module.exports = {
                 use: {
                     loader: "babel-loader",
                     options: {
-                        presets: ["env", "react"],
+                        presets: ["@babel/env", "@babel/react"],
                         plugins: [
-                            "transform-class-properties",
-                            "transform-object-rest-spread"
+                            "@babel/plugin-proposal-class-properties",
+                            "@babel/plugin-proposal-object-rest-spread"
                         ]
                     }
                 }
