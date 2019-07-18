@@ -1,164 +1,128 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
+exports["default"] = void 0;
 
-var _trakt = require('trakt.tv');
+var _trakt = _interopRequireDefault(require("trakt.tv"));
 
-var _trakt2 = _interopRequireDefault(_trakt);
+var _trakt2 = _interopRequireDefault(require("../../config/trakt.config"));
 
-var _trakt3 = require('../../config/trakt.config');
+var _IBDB = _interopRequireDefault(require("../../db/IBDB"));
 
-var _trakt4 = _interopRequireDefault(_trakt3);
+var _logger = _interopRequireDefault(require("../../logger"));
 
-var _IBDB = require('../../db/IBDB');
+var _IDModel = _interopRequireDefault(require("../../models/IDModel"));
 
-var _IBDB2 = _interopRequireDefault(_IBDB);
+var _FilesystemModel = _interopRequireDefault(require("../../models/FilesystemModel"));
 
-var _logger = require('../../logger');
+var _FilesModel = _interopRequireDefault(require("../../models/db/FilesModel"));
 
-var _logger2 = _interopRequireDefault(_logger);
+var _FileToEpisodeModel = _interopRequireDefault(require("../../models/db/FileToEpisodeModel"));
 
-var _IDModel = require('../../models/IDModel');
+var _FileToMovieModel = _interopRequireDefault(require("../../models/db/FileToMovieModel"));
 
-var _IDModel2 = _interopRequireDefault(_IDModel);
+var _GenresModel = _interopRequireDefault(require("../../models/db/GenresModel"));
 
-var _FilesystemModel = require('../../models/FilesystemModel');
+var _MediaScraperModel = _interopRequireDefault(require("../../models/MediaScraperModel"));
 
-var _FilesystemModel2 = _interopRequireDefault(_FilesystemModel);
+var _MoviesModel = _interopRequireDefault(require("../../models/db/MoviesModel"));
 
-var _FilesModel = require('../../models/db/FilesModel');
+var _MovieToGenreModel = _interopRequireDefault(require("../../models/db/MovieToGenreModel"));
 
-var _FilesModel2 = _interopRequireDefault(_FilesModel);
+var _SettingsModel = _interopRequireDefault(require("../../models/db/SettingsModel"));
 
-var _FileToEpisodeModel = require('../../models/db/FileToEpisodeModel');
+var _ShowsModel = _interopRequireDefault(require("../../models/db/ShowsModel"));
 
-var _FileToEpisodeModel2 = _interopRequireDefault(_FileToEpisodeModel);
+var _ShowSeasonsModel = _interopRequireDefault(require("../../models/db/ShowSeasonsModel"));
 
-var _FileToMovieModel = require('../../models/db/FileToMovieModel');
+var _ShowSeasonEpisodesModel = _interopRequireDefault(require("../../models/db/ShowSeasonEpisodesModel"));
 
-var _FileToMovieModel2 = _interopRequireDefault(_FileToMovieModel);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var _GenresModel = require('../../models/db/GenresModel');
-
-var _GenresModel2 = _interopRequireDefault(_GenresModel);
-
-var _MediaScraperModel = require('../../models/MediaScraperModel');
-
-var _MediaScraperModel2 = _interopRequireDefault(_MediaScraperModel);
-
-var _MoviesModel = require('../../models/db/MoviesModel');
-
-var _MoviesModel2 = _interopRequireDefault(_MoviesModel);
-
-var _MovieToGenreModel = require('../../models/db/MovieToGenreModel');
-
-var _MovieToGenreModel2 = _interopRequireDefault(_MovieToGenreModel);
-
-var _SettingsModel = require('../../models/db/SettingsModel');
-
-var _SettingsModel2 = _interopRequireDefault(_SettingsModel);
-
-var _ShowsModel = require('../../models/db/ShowsModel');
-
-var _ShowsModel2 = _interopRequireDefault(_ShowsModel);
-
-var _ShowSeasonsModel = require('../../models/db/ShowSeasonsModel');
-
-var _ShowSeasonsModel2 = _interopRequireDefault(_ShowSeasonsModel);
-
-var _ShowSeasonEpisodesModel = require('../../models/db/ShowSeasonEpisodesModel');
-
-var _ShowSeasonEpisodesModel2 = _interopRequireDefault(_ShowSeasonEpisodesModel);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var settingsModel = new _SettingsModel2.default(_IBDB2.default);
-var filesModel = new _FilesModel2.default(_IBDB2.default);
-var fileToEpisodeModel = new _FileToEpisodeModel2.default(_IBDB2.default);
-var fileToMovieModel = new _FileToMovieModel2.default(_IBDB2.default);
-var genresModel = new _GenresModel2.default(_IBDB2.default);
-var mediaScraperModel = new _MediaScraperModel2.default(new _trakt2.default(_trakt4.default), settingsModel);
-var movieToGenreModel = new _MovieToGenreModel2.default(_IBDB2.default, genresModel);
-var moviesModel = new _MoviesModel2.default(_IBDB2.default, movieToGenreModel);
-var showsModel = new _ShowsModel2.default(_IBDB2.default);
-var showSeasonsModel = new _ShowSeasonsModel2.default(_IBDB2.default);
-var showSeasonEpisodesModel = new _ShowSeasonEpisodesModel2.default(_IBDB2.default);
-
+var settingsModel = new _SettingsModel["default"](_IBDB["default"]);
+var filesModel = new _FilesModel["default"](_IBDB["default"]);
+var fileToEpisodeModel = new _FileToEpisodeModel["default"](_IBDB["default"]);
+var fileToMovieModel = new _FileToMovieModel["default"](_IBDB["default"]);
+var genresModel = new _GenresModel["default"](_IBDB["default"]);
+var mediaScraperModel = new _MediaScraperModel["default"](new _trakt["default"](_trakt2["default"]), settingsModel);
+var movieToGenreModel = new _MovieToGenreModel["default"](_IBDB["default"], genresModel);
+var moviesModel = new _MoviesModel["default"](_IBDB["default"], movieToGenreModel);
+var showsModel = new _ShowsModel["default"](_IBDB["default"]);
+var showSeasonsModel = new _ShowSeasonsModel["default"](_IBDB["default"]);
+var showSeasonEpisodesModel = new _ShowSeasonEpisodesModel["default"](_IBDB["default"]);
 var filesystemConstructionModels = {
-    filesModel: filesModel,
-    fileToEpisodeModel: fileToEpisodeModel,
-    fileToMovieModel: fileToMovieModel,
-    moviesModel: moviesModel,
-    settingsModel: settingsModel,
-    showSeasonEpisodesModel: showSeasonEpisodesModel
+  filesModel: filesModel,
+  fileToEpisodeModel: fileToEpisodeModel,
+  fileToMovieModel: fileToMovieModel,
+  moviesModel: moviesModel,
+  settingsModel: settingsModel,
+  showSeasonEpisodesModel: showSeasonEpisodesModel
 };
-var filesystemModel = new _FilesystemModel2.default(filesystemConstructionModels);
-
+var filesystemModel = new _FilesystemModel["default"](filesystemConstructionModels);
 var idConstructionModels = {
-    filesystemModel: filesystemModel,
-    filesModel: filesModel,
-    fileToEpisodeModel: fileToEpisodeModel,
-    fileToMovieModel: fileToMovieModel,
-    mediaScraperModel: mediaScraperModel,
-    moviesModel: moviesModel,
-    settingsModel: settingsModel,
-    showsModel: showsModel,
-    showSeasonsModel: showSeasonsModel,
-    showSeasonEpisodesModel: showSeasonEpisodesModel
+  filesystemModel: filesystemModel,
+  filesModel: filesModel,
+  fileToEpisodeModel: fileToEpisodeModel,
+  fileToMovieModel: fileToMovieModel,
+  mediaScraperModel: mediaScraperModel,
+  moviesModel: moviesModel,
+  settingsModel: settingsModel,
+  showsModel: showsModel,
+  showSeasonsModel: showSeasonsModel,
+  showSeasonEpisodesModel: showSeasonEpisodesModel
 };
-var idModel = new _IDModel2.default(idConstructionModels);
-
+var idModel = new _IDModel["default"](idConstructionModels);
 var id = {
-    file: {
-        search: {
-            params: ['file_info'],
-            func: function func(fileInfo) {
-                return idModel.findID(fileInfo);
-            }
-        }
-    },
-    movie_or_episode: {
-        remove_ids: {
-            params: ['items_to_remove'],
-            func: function func(itemsToRemove) {
-                return idModel.removeMultipleIDs(itemsToRemove);
-            }
-        }
-    },
-    movie: {
-        id_and_archive: {
-            params: ['movie_info', 'image_url', 'source_info', 'dest_info'],
-            func: function func(movieInfo, imageURL, sourceInfo, destInfo) {
-                return idModel.idAndArchiveMovie(movieInfo, imageURL, sourceInfo, destInfo);
-            }
-        }
-    },
-    show: {
-        add: {
-            params: ['show_info', 'image_info'],
-            func: function func(showInfo, imageInfo) {
-                return idModel.addShow(showInfo, imageInfo);
-            }
-        }
-    },
-    episode: {
-        id_and_archive: {
-            params: ['episode_info', 'source_info', 'dest_info'],
-            func: function func(epInfo, sourceInfo, destInfo) {
-                return idModel.idAndArchiveEpisode(epInfo, sourceInfo, destInfo);
-            }
-        }
-    },
-    multiple_episodes: {
-        id_and_archive: {
-            params: ['source_path_info', 'dest_subpath', 'id_info'],
-            func: function func(sourcePathInfo, destSubpath, idInfo) {
-                return idModel.idAndArchiveMultipleEpisodes(sourcePathInfo, destSubpath, idInfo);
-            }
-        }
+  file: {
+    search: {
+      params: ['file_info'],
+      func: function func(fileInfo) {
+        return idModel.findID(fileInfo);
+      }
     }
+  },
+  movie_or_episode: {
+    remove_ids: {
+      params: ['items_to_remove'],
+      func: function func(itemsToRemove) {
+        return idModel.removeMultipleIDs(itemsToRemove);
+      }
+    }
+  },
+  movie: {
+    id_and_archive: {
+      params: ['movie_info', 'image_url', 'source_info', 'dest_info'],
+      func: function func(movieInfo, imageURL, sourceInfo, destInfo) {
+        return idModel.idAndArchiveMovie(movieInfo, imageURL, sourceInfo, destInfo);
+      }
+    }
+  },
+  show: {
+    add: {
+      params: ['show_info', 'image_info'],
+      func: function func(showInfo, imageInfo) {
+        return idModel.addShow(showInfo, imageInfo);
+      }
+    }
+  },
+  episode: {
+    id_and_archive: {
+      params: ['episode_info', 'source_info', 'dest_info'],
+      func: function func(epInfo, sourceInfo, destInfo) {
+        return idModel.idAndArchiveEpisode(epInfo, sourceInfo, destInfo);
+      }
+    }
+  },
+  multiple_episodes: {
+    id_and_archive: {
+      params: ['source_path_info', 'dest_subpath', 'id_info'],
+      func: function func(sourcePathInfo, destSubpath, idInfo) {
+        return idModel.idAndArchiveMultipleEpisodes(sourcePathInfo, destSubpath, idInfo);
+      }
+    }
+  }
 };
-
-exports.default = id;
+var _default = id;
+exports["default"] = _default;

@@ -1,20 +1,14 @@
-'use strict';
+"use strict";
 
-var _moment = require('moment');
+var _moment = _interopRequireDefault(require("moment"));
 
-var _moment2 = _interopRequireDefault(_moment);
+var _trakt = _interopRequireDefault(require("trakt.tv"));
 
-var _trakt = require('trakt.tv');
+var _trakt2 = _interopRequireDefault(require("./config/trakt.config"));
 
-var _trakt2 = _interopRequireDefault(_trakt);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var _trakt3 = require('./config/trakt.config');
-
-var _trakt4 = _interopRequireDefault(_trakt3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var trakt = new _trakt2.default(_trakt4.default);
+var trakt = new _trakt["default"](_trakt2["default"]);
 /**
 trakt.search.text({
             query: 'days',
@@ -26,13 +20,13 @@ trakt.search.text({
         });
         
 **/
-trakt.seasons.summary({
-    id: 107460,
-    extended: 'full'
-}).then(function (res) {
-    console.log(res);
-});
 
+trakt.seasons.summary({
+  id: 107460,
+  extended: 'full'
+}).then(function (res) {
+  console.log(res);
+});
 /**
 trakt.seasons.season({
             id: 107460,

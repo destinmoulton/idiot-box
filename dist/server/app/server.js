@@ -1,55 +1,45 @@
-'use strict';
+"use strict";
 
-var _path = require('path');
+var _path = _interopRequireDefault(require("path"));
 
-var _path2 = _interopRequireDefault(_path);
+var _express = _interopRequireDefault(require("express"));
 
-var _express = require('express');
+var _IBDB = _interopRequireDefault(require("./db/IBDB"));
 
-var _express2 = _interopRequireDefault(_express);
+var _io = require("./socket.io/io");
 
-var _IBDB = require('./db/IBDB');
+var _logger = _interopRequireDefault(require("./logger"));
 
-var _IBDB2 = _interopRequireDefault(_IBDB);
+var _db = _interopRequireDefault(require("./config/db.config"));
 
-var _io = require('./socket.io/io');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var _logger = require('./logger');
-
-var _logger2 = _interopRequireDefault(_logger);
-
-var _db = require('./config/db.config');
-
-var _db2 = _interopRequireDefault(_db);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var app = (0, _express2.default)();
-
+var app = (0, _express["default"])();
 var PORT = 3000;
 
-var PUBLIC_PATH = _path2.default.resolve(__dirname, '../public');
-app.use(_express2.default.static(PUBLIC_PATH));
+var PUBLIC_PATH = _path["default"].resolve(__dirname, '../public');
 
-// Allow all URI's; handle by react router
+app.use(_express["default"]["static"](PUBLIC_PATH)); // Allow all URI's; handle by react router
+
 app.get('*', function (req, res) {
-    res.sendFile(_path2.default.join(PUBLIC_PATH, '/index.html'));
+  res.sendFile(_path["default"].join(PUBLIC_PATH, '/index.html'));
 });
-
 Promise.resolve().then(function () {
-    _IBDB2.default.connect(_db2.default);
+  _IBDB["default"].connect(_db["default"]);
 }).then(function () {
-    try {
-        return app.listen(PORT, function () {
-            _logger2.default.log("\n---------------------------------------");
-            _logger2.default.log("Idiot Box Server running on Port " + PORT);
-            _logger2.default.log("---------------------------------------");
-        });
-    } catch (err) {
-        return Promise.reject(err);
-    }
+  try {
+    return app.listen(PORT, function () {
+      _logger["default"].log("\n---------------------------------------");
+
+      _logger["default"].log("Idiot Box Server running on Port " + PORT);
+
+      _logger["default"].log("---------------------------------------");
+    });
+  } catch (err) {
+    return Promise.reject(err);
+  }
 }).then(function (server) {
-    (0, _io.setupSocketIO)(server);
-}).catch(function (err) {
-    _logger2.default.error(err);
+  (0, _io.setupSocketIO)(server);
+})["catch"](function (err) {
+  _logger["default"].error(err);
 });

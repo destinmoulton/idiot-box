@@ -1,127 +1,103 @@
-'use strict';
+"use strict";
 
-var _trakt = require('trakt.tv');
+var _trakt = _interopRequireDefault(require("trakt.tv"));
 
-var _trakt2 = _interopRequireDefault(_trakt);
+var _IBDB = _interopRequireDefault(require("../db/IBDB"));
 
-var _IBDB = require('../db/IBDB');
+var _FilesModel = _interopRequireDefault(require("../models/db/FilesModel"));
 
-var _IBDB2 = _interopRequireDefault(_IBDB);
+var _FileToEpisodeModel = _interopRequireDefault(require("../models/db/FileToEpisodeModel"));
 
-var _FilesModel = require('../models/db/FilesModel');
+var _MediaScraperModel = _interopRequireDefault(require("../models/MediaScraperModel"));
 
-var _FilesModel2 = _interopRequireDefault(_FilesModel);
+var _SettingsModel = _interopRequireDefault(require("../models/db/SettingsModel"));
 
-var _FileToEpisodeModel = require('../models/db/FileToEpisodeModel');
+var _ShowsModel = _interopRequireDefault(require("../models/db/ShowsModel"));
 
-var _FileToEpisodeModel2 = _interopRequireDefault(_FileToEpisodeModel);
+var _ShowSeasonsModel = _interopRequireDefault(require("../models/db/ShowSeasonsModel"));
 
-var _MediaScraperModel = require('../models/MediaScraperModel');
+var _ShowSeasonEpisodesModel = _interopRequireDefault(require("../models/db/ShowSeasonEpisodesModel"));
 
-var _MediaScraperModel2 = _interopRequireDefault(_MediaScraperModel);
+var _db = _interopRequireDefault(require("../config/db.config"));
 
-var _SettingsModel = require('../models/db/SettingsModel');
+var _thumbnails = _interopRequireDefault(require("../config/thumbnails.config"));
 
-var _SettingsModel2 = _interopRequireDefault(_SettingsModel);
+var _trakt2 = _interopRequireDefault(require("../config/trakt.config"));
 
-var _ShowsModel = require('../models/db/ShowsModel');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var _ShowsModel2 = _interopRequireDefault(_ShowsModel);
-
-var _ShowSeasonsModel = require('../models/db/ShowSeasonsModel');
-
-var _ShowSeasonsModel2 = _interopRequireDefault(_ShowSeasonsModel);
-
-var _ShowSeasonEpisodesModel = require('../models/db/ShowSeasonEpisodesModel');
-
-var _ShowSeasonEpisodesModel2 = _interopRequireDefault(_ShowSeasonEpisodesModel);
-
-var _db = require('../config/db.config');
-
-var _db2 = _interopRequireDefault(_db);
-
-var _thumbnails = require('../config/thumbnails.config');
-
-var _thumbnails2 = _interopRequireDefault(_thumbnails);
-
-var _trakt3 = require('../config/trakt.config');
-
-var _trakt4 = _interopRequireDefault(_trakt3);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var settingsModel = new _SettingsModel2.default(_IBDB2.default);
-var filesModel = new _FilesModel2.default(_IBDB2.default);
-var fileToEpisodeModel = new _FileToEpisodeModel2.default(_IBDB2.default);
-var mediaScraperModel = new _MediaScraperModel2.default(new _trakt2.default(_trakt4.default), settingsModel);
-var showsModel = new _ShowsModel2.default(_IBDB2.default);
-var showSeasonsModel = new _ShowSeasonsModel2.default(_IBDB2.default);
-var showSeasonEpisodesModel = new _ShowSeasonEpisodesModel2.default(_IBDB2.default);
-
+var settingsModel = new _SettingsModel["default"](_IBDB["default"]);
+var filesModel = new _FilesModel["default"](_IBDB["default"]);
+var fileToEpisodeModel = new _FileToEpisodeModel["default"](_IBDB["default"]);
+var mediaScraperModel = new _MediaScraperModel["default"](new _trakt["default"](_trakt2["default"]), settingsModel);
+var showsModel = new _ShowsModel["default"](_IBDB["default"]);
+var showSeasonsModel = new _ShowSeasonsModel["default"](_IBDB["default"]);
+var showSeasonEpisodesModel = new _ShowSeasonEpisodesModel["default"](_IBDB["default"]);
 Promise.resolve().then(function () {
-    return _IBDB2.default.connect(_db2.default);
+  return _IBDB["default"].connect(_db["default"]);
 }).then(function () {
-    return compareShows();
-}).catch(function (err) {
-    return console.error(err);
+  return compareShows();
+})["catch"](function (err) {
+  return console.error(err);
 });
 
 function compareShows() {
-    return showsModel.getAll().then(function (shows) {
-        var promisesToRun = [];
-        shows.forEach(function (show) {
-            var cmd = compareSeasons(show.id, show.trakt_id);
-            promisesToRun.push(cmd);
-        });
-        Promise.all(promisesToRun);
+  return showsModel.getAll().then(function (shows) {
+    var promisesToRun = [];
+    shows.forEach(function (show) {
+      var cmd = compareSeasons(show.id, show.trakt_id);
+      promisesToRun.push(cmd);
     });
+    Promise.all(promisesToRun);
+  });
 }
 
 function compareSeasons(showID, showTraktID) {
-    return mediaScraperModel.getShowSeasonsList(showTraktID).then(function (traktSeasons) {
-        var promisesToRun = [];
-        traktSeasons.forEach(function (traktSeason) {
-            var cmd = processSeason(traktSeason, showID, showTraktID);
-            promisesToRun.push(cmd);
-        });
-        return Promise.all(promisesToRun);
+  return mediaScraperModel.getShowSeasonsList(showTraktID).then(function (traktSeasons) {
+    var promisesToRun = [];
+    traktSeasons.forEach(function (traktSeason) {
+      var cmd = processSeason(traktSeason, showID, showTraktID);
+      promisesToRun.push(cmd);
     });
+    return Promise.all(promisesToRun);
+  });
 }
 
 function processSeason(traktSeason, showID, showTraktID) {
-    return showSeasonsModel.getSingleByTraktID(traktSeason.ids.trakt).then(function (showSeason) {
+  return showSeasonsModel.getSingleByTraktID(traktSeason.ids.trakt).then(function (showSeason) {
+    if (!showSeason.hasOwnProperty('id')) {
+      // Add the season
+      return showSeasonsModel.addShowSeason(showID, traktSeason);
+    }
 
-        if (!showSeason.hasOwnProperty('id')) {
-            // Add the season
-            return showSeasonsModel.addShowSeason(showID, traktSeason);
-        }
-        return Promise.resolve(showSeason);
-    }).then(function (showSeason) {
-        if (showSeason.locked !== 1) {
-            return compareEpisodes(showID, showSeason.id, showTraktID, showSeason.season_number);
-        }
-        return Promise.resolve(true);
-    });
+    return Promise.resolve(showSeason);
+  }).then(function (showSeason) {
+    if (showSeason.locked !== 1) {
+      return compareEpisodes(showID, showSeason.id, showTraktID, showSeason.season_number);
+    }
+
+    return Promise.resolve(true);
+  });
 }
 
 function compareEpisodes(showID, seasonID, showTraktID, seasonNum) {
-    return mediaScraperModel.getEpisodesForSeason(showTraktID, seasonNum).then(function (traktEpisodes) {
-        var promisesToRun = [];
-        traktEpisodes.forEach(function (traktEpisode) {
-            var cmd = processEpisode(showID, seasonID, traktEpisode);
-            promisesToRun.push(cmd);
-        });
-        return Promise.all(promisesToRun);
+  return mediaScraperModel.getEpisodesForSeason(showTraktID, seasonNum).then(function (traktEpisodes) {
+    var promisesToRun = [];
+    traktEpisodes.forEach(function (traktEpisode) {
+      var cmd = processEpisode(showID, seasonID, traktEpisode);
+      promisesToRun.push(cmd);
     });
+    return Promise.all(promisesToRun);
+  });
 }
 
 function processEpisode(showID, seasonID, traktEpisode) {
-    return showSeasonEpisodesModel.getSingleByTraktID(traktEpisode.ids.trakt).then(function (seasonEpisode) {
-        if (!seasonEpisode.hasOwnProperty('id')) {
-            // Add the episode
-            return showSeasonEpisodesModel.addEpisode(showID, seasonID, traktEpisode);
-        } else {
-            return showSeasonEpisodesModel.updateEpisode(showID, seasonID, seasonEpisode.id, traktEpisode);
-        }
-    });
+  return showSeasonEpisodesModel.getSingleByTraktID(traktEpisode.ids.trakt).then(function (seasonEpisode) {
+    if (!seasonEpisode.hasOwnProperty('id')) {
+      // Add the episode
+      return showSeasonEpisodesModel.addEpisode(showID, seasonID, traktEpisode);
+    } else {
+      return showSeasonEpisodesModel.updateEpisode(showID, seasonID, seasonEpisode.id, traktEpisode);
+    }
+  });
 }

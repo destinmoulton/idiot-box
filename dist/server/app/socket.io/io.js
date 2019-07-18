@@ -1,44 +1,40 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
 exports.setupSocketIO = setupSocketIO;
+exports["default"] = void 0;
 
-var _http = require('http');
+var _http = _interopRequireDefault(require("http"));
 
-var _http2 = _interopRequireDefault(_http);
+var _socket = _interopRequireDefault(require("socket.io"));
 
-var _socket = require('socket.io');
+var _logger = _interopRequireDefault(require("../logger"));
 
-var _socket2 = _interopRequireDefault(_socket);
+var _api = _interopRequireDefault(require("./api.io"));
 
-var _logger = require('../logger');
+var _server = _interopRequireDefault(require("./server.io"));
 
-var _logger2 = _interopRequireDefault(_logger);
-
-var _api = require('./api.io');
-
-var _api2 = _interopRequireDefault(_api);
-
-var _server = require('./server.io');
-
-var _server2 = _interopRequireDefault(_server);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var io = {};
+
 function setupSocketIO(server) {
-    io = _socket2.default.listen(server, { path: '/socket.io' });
-    setupListeners(io);
+  io = _socket["default"].listen(server, {
+    path: '/socket.io'
+  });
+  setupListeners(io);
 }
 
 function setupListeners(io) {
-    io.on('connection', function (socket) {
-        _logger2.default.info("socket.io :: client connected");
-        (0, _api2.default)(socket);
-        (0, _server2.default)(socket);
-    });
+  io.on('connection', function (socket) {
+    _logger["default"].info("socket.io :: client connected");
+
+    (0, _api["default"])(socket);
+    (0, _server["default"])(socket);
+  });
 }
 
-exports.default = io;
+var _default = io;
+exports["default"] = _default;

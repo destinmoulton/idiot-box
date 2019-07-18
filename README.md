@@ -31,7 +31,7 @@ $ npm install -g pm2
 To start the server, run:
 
 ```sh
-$ npm run start:server
+$ npm run start-server
 
 # To get info about running Idiot Box server instance:
 $ pm2 show idiot-box
@@ -47,7 +47,7 @@ $ pm2 monit
 
 To build the server:
 
-`npm run compile:server`
+`npm run compile-server`
 
 Open the Chrome Node.js DevTools.
 
@@ -55,7 +55,7 @@ Open the Chrome Node.js DevTools.
 
 To build the frontend:
 
-`npm run compile:react`
+`npm run compile-react`
 
 ### License
 

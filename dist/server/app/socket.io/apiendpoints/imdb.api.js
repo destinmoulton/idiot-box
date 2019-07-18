@@ -1,26 +1,24 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
+exports["default"] = void 0;
 
-var _IMDBScraperModel = require('../../models/IMDBScraperModel');
+var _IMDBScraperModel = _interopRequireDefault(require("../../models/IMDBScraperModel"));
 
-var _IMDBScraperModel2 = _interopRequireDefault(_IMDBScraperModel);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var imdbScraperModel = new _IMDBScraperModel2.default();
-
+var imdbScraperModel = new _IMDBScraperModel["default"]();
 var imdb = {
-    image: {
-        get: {
-            params: ['imdb_id'],
-            func: function func(imdbID) {
-                return imdbScraperModel.getPosterURL(imdbID);
-            }
-        }
+  image: {
+    get: {
+      params: ['imdb_id'],
+      func: function func(imdbID) {
+        return imdbScraperModel.getPosterURL(imdbID);
+      }
     }
+  }
 };
-
-exports.default = imdb;
+var _default = imdb;
+exports["default"] = _default;

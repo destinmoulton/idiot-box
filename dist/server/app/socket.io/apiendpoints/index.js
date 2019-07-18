@@ -1,52 +1,37 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
+exports["default"] = void 0;
 
-var _filesystem = require('./filesystem.api');
+var _filesystem = _interopRequireDefault(require("./filesystem.api"));
 
-var _filesystem2 = _interopRequireDefault(_filesystem);
+var _id = _interopRequireDefault(require("./id.api"));
 
-var _id = require('./id.api');
+var _imdb = _interopRequireDefault(require("./imdb.api"));
 
-var _id2 = _interopRequireDefault(_id);
+var _mediascraper = _interopRequireDefault(require("./mediascraper.api"));
 
-var _imdb = require('./imdb.api');
+var _movies = _interopRequireDefault(require("./movies.api"));
 
-var _imdb2 = _interopRequireDefault(_imdb);
+var _settings = _interopRequireDefault(require("./settings.api"));
 
-var _mediascraper = require('./mediascraper.api');
+var _shows = _interopRequireDefault(require("./shows.api"));
 
-var _mediascraper2 = _interopRequireDefault(_mediascraper);
+var _videoplayer = _interopRequireDefault(require("./videoplayer.api"));
 
-var _movies = require('./movies.api');
-
-var _movies2 = _interopRequireDefault(_movies);
-
-var _settings = require('./settings.api');
-
-var _settings2 = _interopRequireDefault(_settings);
-
-var _shows = require('./shows.api');
-
-var _shows2 = _interopRequireDefault(_shows);
-
-var _videoplayer = require('./videoplayer.api');
-
-var _videoplayer2 = _interopRequireDefault(_videoplayer);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var endpoints = {
-    filesystem: _filesystem2.default,
-    id: _id2.default,
-    imdb: _imdb2.default,
-    mediascraper: _mediascraper2.default,
-    movies: _movies2.default,
-    settings: _settings2.default,
-    shows: _shows2.default,
-    videoplayer: _videoplayer2.default
+  filesystem: _filesystem["default"],
+  id: _id["default"],
+  imdb: _imdb["default"],
+  mediascraper: _mediascraper["default"],
+  movies: _movies["default"],
+  settings: _settings["default"],
+  shows: _shows["default"],
+  videoplayer: _videoplayer["default"]
 };
-
-exports.default = endpoints;
+var _default = endpoints;
+exports["default"] = _default;

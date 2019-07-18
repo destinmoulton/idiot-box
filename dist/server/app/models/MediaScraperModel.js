@@ -1,128 +1,121 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
+exports["default"] = void 0;
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+var _fs = _interopRequireDefault(require("fs"));
 
-var _fs = require('fs');
+var _path = _interopRequireDefault(require("path"));
 
-var _fs2 = _interopRequireDefault(_fs);
+var _nodeFetch = _interopRequireDefault(require("node-fetch"));
 
-var _path = require('path');
+var _logger = _interopRequireDefault(require("../logger"));
 
-var _path2 = _interopRequireDefault(_path);
+var _thumbnails = _interopRequireDefault(require("../config/thumbnails.config"));
 
-var _nodeFetch = require('node-fetch');
-
-var _nodeFetch2 = _interopRequireDefault(_nodeFetch);
-
-var _logger = require('../logger');
-
-var _logger2 = _interopRequireDefault(_logger);
-
-var _thumbnails = require('../config/thumbnails.config');
-
-var _thumbnails2 = _interopRequireDefault(_thumbnails);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var MediaScraperModel = function () {
-    function MediaScraperModel(traktInstance, settingsModel) {
-        _classCallCheck(this, MediaScraperModel);
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-        this._trakt = traktInstance;
-        this._settingsModel = settingsModel;
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var MediaScraperModel =
+/*#__PURE__*/
+function () {
+  function MediaScraperModel(traktInstance, settingsModel) {
+    _classCallCheck(this, MediaScraperModel);
+
+    this._trakt = traktInstance;
+    this._settingsModel = settingsModel;
+  }
+
+  _createClass(MediaScraperModel, [{
+    key: "searchMovies",
+    value: function searchMovies(movieQuery) {
+      var options = {
+        query: movieQuery,
+        type: 'movie',
+        extended: 'full'
+      };
+      return this._trakt.search.text(options).then(function (results) {
+        return results.map(function (item) {
+          return item.movie;
+        });
+      });
     }
+  }, {
+    key: "searchShows",
+    value: function searchShows(tvQuery) {
+      var options = {
+        query: tvQuery,
+        type: 'show',
+        extended: 'full'
+      };
+      return this._trakt.search.text(options).then(function (results) {
+        return results.map(function (item) {
+          return item.show;
+        });
+      });
+    }
+  }, {
+    key: "getShowByTraktID",
+    value: function getShowByTraktID(traktID) {
+      var options = {
+        id: traktID,
+        extended: 'full'
+      };
+      return this._trakt.shows.summary(options);
+    }
+  }, {
+    key: "getShowSeasonsList",
+    value: function getShowSeasonsList(id) {
+      return this._trakt.seasons.summary({
+        id: id,
+        extended: 'full'
+      });
+    }
+  }, {
+    key: "getEpisodesForSeason",
+    value: function getEpisodesForSeason(showID, seasonNumber) {
+      return this._trakt.seasons.season({
+        id: showID,
+        season: seasonNumber,
+        extended: 'full'
+      });
+    }
+  }, {
+    key: "downloadThumbnail",
+    value: function downloadThumbnail(typeOfMedia, fileURL, destFilenameMinusExt) {
+      var origFilename = fileURL.split("/").pop();
+      var origFileExt = origFilename.split(".").pop();
+      var destFilename = this._sanitizeThumbFilename(destFilenameMinusExt) + "." + origFileExt;
+      var camelCaseType = typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
+      return (0, _nodeFetch["default"])(fileURL).then(function (res) {
+        var finalPath = _path["default"].join(_thumbnails["default"][typeOfMedia], destFilename);
 
-    _createClass(MediaScraperModel, [{
-        key: 'searchMovies',
-        value: function searchMovies(movieQuery) {
-            var options = {
-                query: movieQuery,
-                type: 'movie',
-                extended: 'full'
-            };
-            return this._trakt.search.text(options).then(function (results) {
-                return results.map(function (item) {
-                    return item.movie;
-                });
-            });
-        }
-    }, {
-        key: 'searchShows',
-        value: function searchShows(tvQuery) {
-            var options = {
-                query: tvQuery,
-                type: 'show',
-                extended: 'full'
-            };
-            return this._trakt.search.text(options).then(function (results) {
-                return results.map(function (item) {
-                    return item.show;
-                });
-            });
-        }
-    }, {
-        key: 'getShowByTraktID',
-        value: function getShowByTraktID(traktID) {
-            var options = {
-                id: traktID,
-                extended: 'full'
-            };
-            return this._trakt.shows.summary(options);
-        }
-    }, {
-        key: 'getShowSeasonsList',
-        value: function getShowSeasonsList(id) {
-            return this._trakt.seasons.summary({
-                id: id,
-                extended: 'full'
-            });
-        }
-    }, {
-        key: 'getEpisodesForSeason',
-        value: function getEpisodesForSeason(showID, seasonNumber) {
-            return this._trakt.seasons.season({
-                id: showID,
-                season: seasonNumber,
-                extended: 'full'
-            });
-        }
-    }, {
-        key: 'downloadThumbnail',
-        value: function downloadThumbnail(typeOfMedia, fileURL, destFilenameMinusExt) {
-            var origFilename = fileURL.split("/").pop();
-            var origFileExt = origFilename.split(".").pop();
-            var destFilename = this._sanitizeThumbFilename(destFilenameMinusExt) + "." + origFileExt;
+        var dest = _fs["default"].createWriteStream(finalPath);
 
-            var camelCaseType = typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
+        res.body.pipe(dest);
+        return destFilename;
+      });
+    }
+  }, {
+    key: "_sanitizeThumbFilename",
+    value: function _sanitizeThumbFilename(originalFilename) {
+      // Replace current periods
+      var newThumbFilename = originalFilename.replace(/\./g, ""); // Replace spaces and dashes with periods
 
-            return (0, _nodeFetch2.default)(fileURL).then(function (res) {
-                var finalPath = _path2.default.join(_thumbnails2.default[typeOfMedia], destFilename);
-                var dest = _fs2.default.createWriteStream(finalPath);
-                res.body.pipe(dest);
-                return destFilename;
-            });
-        }
-    }, {
-        key: '_sanitizeThumbFilename',
-        value: function _sanitizeThumbFilename(originalFilename) {
-            // Replace current periods
-            var newThumbFilename = originalFilename.replace(/\./g, "");
+      newThumbFilename = newThumbFilename.replace(/(\s|\-)/g, "."); // Replace everything else with blank
 
-            // Replace spaces and dashes with periods
-            newThumbFilename = newThumbFilename.replace(/(\s|\-)/g, ".");
+      return newThumbFilename.replace(/[^\.a-zA-Z0-9]/g, "");
+    }
+  }]);
 
-            // Replace everything else with blank
-            return newThumbFilename.replace(/[^\.a-zA-Z0-9]/g, "");
-        }
-    }]);
-
-    return MediaScraperModel;
+  return MediaScraperModel;
 }();
 
-exports.default = MediaScraperModel;
+exports["default"] = MediaScraperModel;

@@ -1,23 +1,19 @@
-'use strict';
+"use strict";
 
 Object.defineProperty(exports, "__esModule", {
-    value: true
+  value: true
 });
+exports["default"] = void 0;
 
-var _events = require('events');
+var _events = _interopRequireDefault(require("events"));
 
-var _events2 = _interopRequireDefault(_events);
+var _logger = _interopRequireDefault(require("./logger"));
 
-var _logger = require('./logger');
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-var _logger2 = _interopRequireDefault(_logger);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var emitter = new _events2.default();
-
+var emitter = new _events["default"]();
 emitter.on('uncaughtException', function (err) {
-    _logger2.default.error(err);
+  _logger["default"].error(err);
 });
-
-exports.default = emitter;
+var _default = emitter;
+exports["default"] = _default;
