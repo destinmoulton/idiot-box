@@ -1,37 +1,44 @@
-import scraperjs from "scraperjs";
+import rp from "request-promise";
+import cheerio from "cheerio";
 import randomUseragent from "random-useragent";
 
 export default class IMDBScraperModel {
-    constructor(){
+    constructor() {
         this._posterSelector = "div.poster > a > img";
         this._imdbPath = "http://www.imdb.com/title/";
     }
 
-    getPosterURL(imdbID){
+    getPosterURL(imdbID) {
         const url = this._buildImdbPath(imdbID);
-        return scraperjs.StaticScraper.create()
-            .request({
-                url,
-                method: "GET",
-                headers: {
-                    "user-agent":randomUseragent.getRandom((ua)=>{
-                        return parseFloat(ua.browserVersion) >= 20 && ua.browserName === 'Firefox'
-                    }),
-                    "accept":"text/html"
-                }
-            })
-            .scrape(($)=>{
+        const options = {
+            url,
+
+            headers: {
+                "User-Agent": randomUseragent.getRandom(ua => {
+                    return (
+                        parseFloat(ua.browserVersion) >= 20 &&
+                        ua.browserName === "Firefox"
+                    );
+                }),
+                accept: "text/html"
+            },
+            transform: function(body) {
+                return cheerio.load(body);
+            }
+        };
+        return rp(options)
+            .then($ => {
                 return $(this._posterSelector).attr("src");
             })
-            .then((parsedResult, utils)=>{
+            .then(parsedResult => {
                 return {
                     imageURL: parsedResult,
-                    url: utils.url
-                }
+                    url
+                };
             });
     }
 
-    _buildImdbPath(imdbID){
+    _buildImdbPath(imdbID) {
         return this._imdbPath + imdbID;
     }
 }
