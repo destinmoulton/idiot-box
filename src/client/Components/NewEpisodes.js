@@ -68,6 +68,17 @@ class NewEpisodes extends Component {
     }
 
     _buildEpisodeDetails(episode) {
+        let sNum =
+            episode.season_number < 10
+                ? "0" + episode.season_number
+                : episode.season_number;
+        let eNum =
+            episode.episode_number < 10
+                ? "0" + episode.episode_number
+                : episode.episode_number;
+        let searchString = encodeURIComponent(
+            episode.show_info.title + " S" + sNum + "E" + eNum
+        );
         return (
             <div key={episode.id} className="ib-newepisode-container">
                 <div className="ib-newepisode-img-box">
@@ -99,7 +110,7 @@ class NewEpisodes extends Component {
                             target="_blank"
                             href={
                                 "https://www.1337x.to/search/" +
-                                encodeURIComponent(episode.show_info.title) +
+                                searchString +
                                 "/1/"
                             }
                         >
@@ -110,7 +121,7 @@ class NewEpisodes extends Component {
                             target="_blank"
                             href={
                                 "https://thepiratebay.org/search/" +
-                                encodeURIComponent(episode.show_info.title) +
+                                searchString +
                                 "/0/99/0/"
                             }
                         >
@@ -130,9 +141,8 @@ class NewEpisodes extends Component {
             let unixDay = dayMoment.unix();
             const header = (
                 <h3>
-                    <Icon type="calendar" />&nbsp;{dayMoment.format(
-                        "dddd, MMMM Do YYYY"
-                    )}
+                    <Icon type="calendar" />
+                    &nbsp;{dayMoment.format("dddd, MMMM Do YYYY")}
                 </h3>
             );
 
