@@ -21,6 +21,7 @@
     "author": "Destin Moulton",
     "license": "MIT",
     "devDependencies": {
+        "@babel/cli": "^7.5.5",
         "@babel/core": "^7.5.5",
         "@babel/plugin-proposal-class-properties": "^7.5.5",
         "@babel/plugin-proposal-object-rest-spread": "^7.5.5",
@@ -36,7 +37,6 @@
         "webpack-cli": "^3.3.6"
     },
     "dependencies": {
-        "@babel/cli": "^7.5.5",
         "antd": "^3.20.3",
         "bluebird": "^3.5.5",
         "express": "^4.17.1",
