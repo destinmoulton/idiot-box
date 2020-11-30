@@ -1,6 +1,5 @@
-
 class Regex {
-    sanitizeShowTitle(showTitle){
+    sanitizeShowTitle(showTitle) {
         // Replace current periods
         let newTitle = showTitle.replace(/\./g, "");
 
@@ -13,12 +12,12 @@ class Regex {
 
     /**
      * Determine if a filename is a video.
-     * 
-     * @param string possibleVideoFilename 
+     *
+     * @param string possibleVideoFilename
      */
-    isVideoFile(possibleVideoFilename){
-        const regx = /(\.mp4|\.mkv|\.avi)$/;
-        return ( possibleVideoFilename.search(regx) > -1 ) ? true: false;
+    isVideoFile(possibleVideoFilename) {
+        const regx = /(\.mp4|\.mkv|\.avi|\.m4v)$/;
+        return possibleVideoFilename.search(regx) > -1 ? true : false;
     }
 }
 
