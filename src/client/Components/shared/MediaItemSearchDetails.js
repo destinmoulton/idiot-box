@@ -51,7 +51,7 @@ class MediaItemSearchDetails extends Component {
                 this._imageReceived.bind(this),
                 false
             );
-        }, 300 * this.props.resultNumber);
+        }, 500 * this.props.resultNumber);
     }
 
     _handleSelectMovie(item) {
