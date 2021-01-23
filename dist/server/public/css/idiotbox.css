@@ -124,10 +124,10 @@ div.ib-idmodal-idepisode-box {
 }
 
 div.ib-idmodal-item-search-details-box {
-    height: 275px;
+    min-height: 275px;
     padding: 15px;
+    border: 1px solid #d9d9d9;
     border-radius: 5px;
-    background-color: #d9d9d9;
     margin: 5px;
 }
 

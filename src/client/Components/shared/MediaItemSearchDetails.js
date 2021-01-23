@@ -110,6 +110,13 @@ class MediaItemSearchDetails extends Component {
                 key={item.ids.trakt}
                 className="ib-idmodal-item-search-details-box"
             >
+                <Button
+                    type="primary"
+                    icon="check"
+                    onClick={this._handleSelectMovie.bind(this, item)}
+                >
+                    This Is It
+                </Button>
                 <div className="ib-idmodal-item-search-details-img-box">
                     {image}
                 </div>
@@ -126,13 +133,6 @@ class MediaItemSearchDetails extends Component {
                         IMDB
                     </a>
                     <br />
-                    <Button
-                        type="primary"
-                        icon="check"
-                        onClick={this._handleSelectMovie.bind(this, item)}
-                    >
-                        This Is It
-                    </Button>
                 </div>
             </Col>
         );
