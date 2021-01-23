@@ -60,21 +60,23 @@ class MovieSearchResults extends Component {
     render() {
         const { currentFilename } = this.props;
         const { currentSearchString, movies } = this.state;
-
+        const numberToShow = 4;
         let movieList = [];
         let count = 0;
         movies.forEach((movie) => {
-            const movieDetails = (
-                <MediaItemSearchDetails
-                    key={movie.ids.trakt}
-                    item={movie}
-                    onSelectItem={this._handleSelectMovie.bind(this)}
-                    resultNumber={count}
-                />
-            );
+            if (count < numberToShow) {
+                const movieDetails = (
+                    <MediaItemSearchDetails
+                        key={movie.ids.trakt}
+                        item={movie}
+                        onSelectItem={this._handleSelectMovie.bind(this)}
+                        resultNumber={count}
+                    />
+                );
 
-            movieList.push(movieDetails);
-            count++;
+                movieList.push(movieDetails);
+                count++;
+            }
         });
         return (
             <div>
