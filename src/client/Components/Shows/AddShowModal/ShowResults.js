@@ -9,7 +9,7 @@ import MediaItemSearchDetails from "../../shared/MediaItemSearchDetails";
 class ShowResults extends Component {
     static propTypes = {
         currentSearchString: PropTypes.string.isRequired,
-        onAddShowComplete: PropTypes.func.isRequired
+        onAddShowComplete: PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -18,7 +18,7 @@ class ShowResults extends Component {
         this.INITIAL_STATE = {
             currentSearchString: props.currentSearchString,
             isIDing: false,
-            shows: []
+            shows: [],
         };
 
         this.state = this.INITIAL_STATE;
@@ -36,14 +36,14 @@ class ShowResults extends Component {
         const { callAPI } = this.props;
 
         this.setState({
-            isIDing: true
+            isIDing: true,
         });
 
         const options = {
             show_info: show,
             image_info: {
-                url: imageURL
-            }
+                url: imageURL,
+            },
         };
 
         callAPI("id.show.add", options, this._idShowComplete.bind(this), false);
@@ -57,7 +57,7 @@ class ShowResults extends Component {
 
     _handleChangeSearchInput(evt) {
         this.setState({
-            currentSearchString: evt.currentTarget.value
+            currentSearchString: evt.currentTarget.value,
         });
     }
 
@@ -70,7 +70,7 @@ class ShowResults extends Component {
         const { callAPI } = this.props;
 
         const options = {
-            search_string: currentSearchString
+            search_string: currentSearchString,
         };
 
         callAPI(
@@ -83,7 +83,7 @@ class ShowResults extends Component {
 
     _searchResultsReceived(results) {
         this.setState({
-            shows: results
+            shows: results,
         });
     }
 
@@ -91,16 +91,19 @@ class ShowResults extends Component {
         const { currentSearchString, shows } = this.state;
 
         let showList = [];
-        shows.forEach(show => {
+        let count = 0;
+        shows.forEach((show) => {
             const showDetails = (
                 <MediaItemSearchDetails
                     key={show.ids.trakt}
                     item={show}
                     onSelectItem={this._handleSelectMovie.bind(this)}
+                    resultNumber={count}
                 />
             );
 
             showList.push(showDetails);
+            count++;
         });
 
         return (
@@ -124,7 +127,8 @@ class ShowResults extends Component {
         return (
             <div className="ib-spinner-container">
                 <Spin />
-                <br />Adding show. This could take a while...
+                <br />
+                Adding show. This could take a while...
             </div>
         );
     }
@@ -145,7 +149,7 @@ class ShowResults extends Component {
 }
 
 ShowResults.propTypes = {
-    callAPI: PropTypes.func.isRequired
+    callAPI: PropTypes.func.isRequired,
 };
 
 export default ShowResults;

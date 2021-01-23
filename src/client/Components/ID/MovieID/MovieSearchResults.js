@@ -11,7 +11,7 @@ class MovieSearchResults extends Component {
 
         this.state = {
             currentSearchString: props.initialSearchString,
-            movies: []
+            movies: [],
         };
     }
 
@@ -31,7 +31,7 @@ class MovieSearchResults extends Component {
 
     _handleChangeSearchInput(evt) {
         this.setState({
-            currentSearchString: evt.currentTarget.value
+            currentSearchString: evt.currentTarget.value,
         });
     }
 
@@ -40,7 +40,7 @@ class MovieSearchResults extends Component {
         const { callAPI } = this.props;
 
         const options = {
-            search_string: currentSearchString
+            search_string: currentSearchString,
         };
 
         callAPI(
@@ -53,7 +53,7 @@ class MovieSearchResults extends Component {
 
     _searchResultsReceived(results) {
         this.setState({
-            movies: results
+            movies: results,
         });
     }
 
@@ -62,16 +62,19 @@ class MovieSearchResults extends Component {
         const { currentSearchString, movies } = this.state;
 
         let movieList = [];
-        movies.forEach(movie => {
+        let count = 0;
+        movies.forEach((movie) => {
             const movieDetails = (
                 <MediaItemSearchDetails
                     key={movie.ids.trakt}
                     item={movie}
                     onSelectItem={this._handleSelectMovie.bind(this)}
+                    resultNumber={count}
                 />
             );
 
             movieList.push(movieDetails);
+            count++;
         });
         return (
             <div>
@@ -95,7 +98,7 @@ MovieSearchResults.propTypes = {
     currentFilename: PropTypes.string.isRequired,
     currentPathInfo: PropTypes.object.isRequired,
     initialSearchString: PropTypes.string.isRequired,
-    onSelectMovie: PropTypes.func.isRequired
+    onSelectMovie: PropTypes.func.isRequired,
 };
 
 export default MovieSearchResults;

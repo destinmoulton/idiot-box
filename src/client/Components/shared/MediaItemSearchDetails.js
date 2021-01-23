@@ -1,75 +1,86 @@
-import PropTypes from 'prop-types';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import { Button, Col, Spin } from 'antd';
+import { Button, Col, Spin } from "antd";
 
-import { callAPI } from '../../actions/api.actions';
+import { callAPI } from "../../actions/api.actions";
 
 const MAX_IMAGE_RETRIES = 5;
 
 class MediaItemSearchDetails extends Component {
-
     static propTypes = {
-        onSelectItem: PropTypes.func.isRequired
+        onSelectItem: PropTypes.func.isRequired,
     };
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
             imageURL: "",
             imageRetryCount: 0,
-            imageStatus: "loading"
+            imageStatus: "loading",
         };
     }
 
-    componentWillMount(){
+    componentWillMount() {
         this._getImageFromServer();
     }
 
-    _getImageFromServer(){
+    _getImageFromServer() {
         const { callAPI, item } = this.props;
 
-        if(item.ids.imdb === null){
+        if (item.ids.imdb === null) {
             this.setState({
-                imageStatus: "no_imdb_page"
-            })
-            
+                imageStatus: "no_imdb_page",
+            });
+
             return;
         }
 
         const options = {
-            imdb_id: item.ids.imdb
+            imdb_id: item.ids.imdb,
         };
-        
-        callAPI("imdb.image.get", options, this._imageReceived.bind(this), false);
+
+        setTimeout(() => {
+            // Get images staggered so the first
+            // item gets the image quicker
+            callAPI(
+                "imdb.image.get",
+                options,
+                this._imageReceived.bind(this),
+                false
+            );
+        }, 300 * this.props.resultNumber);
     }
 
-    _handleSelectMovie(item){
+    _handleSelectMovie(item) {
         const { onSelectItem } = this.props;
         const { imageURL } = this.state;
 
         onSelectItem(item, imageURL);
     }
 
-    _imageReceived(responseObj){
+    _imageReceived(responseObj) {
         const { imageRetryCount } = this.state;
-        if(responseObj.imageURL === undefined && imageRetryCount < MAX_IMAGE_RETRIES){
+        if (
+            responseObj.imageURL === undefined &&
+            imageRetryCount < MAX_IMAGE_RETRIES
+        ) {
             this.setState({
-                imageRetryCount: imageRetryCount + 1
-            })
+                imageRetryCount: imageRetryCount + 1,
+            });
 
             //Retry getting image
             this._getImageFromServer();
-        } else if(responseObj.imageURL === undefined){
+        } else if (responseObj.imageURL === undefined) {
             this.setState({
-                imageStatus: "no_imdb_image"
-            })
+                imageStatus: "no_imdb_image",
+            });
         } else {
             this.setState({
                 imageStatus: "found",
-                imageURL: responseObj.imageURL
+                imageURL: responseObj.imageURL,
             });
         }
     }
@@ -79,42 +90,66 @@ class MediaItemSearchDetails extends Component {
         const { item, onSelectItem } = this.props;
 
         let image = <Spin />;
-        if(imageStatus === "found"){
-            image = <img src={imageURL} className={"ib-idmodal-item-search-details-img"} />
-        } else if(imageStatus === "no_imdb_image"){
+        if (imageStatus === "found") {
+            image = (
+                <img
+                    src={imageURL}
+                    className={"ib-idmodal-item-search-details-img"}
+                />
+            );
+        } else if (imageStatus === "no_imdb_image") {
             image = <span>No IMDB image available.</span>;
-        } else if (imageStatus === "no_imdb_page"){
+        } else if (imageStatus === "no_imdb_page") {
             image = <span>No IMDB page.</span>;
         }
 
-        let itemTitle = {__html: item.title};
+        let itemTitle = { __html: item.title };
         return (
-            <Col 
-                span={5} 
-                key={item.ids.trakt} 
-                className="ib-idmodal-item-search-details-box">
+            <Col
+                span={5}
+                key={item.ids.trakt}
+                className="ib-idmodal-item-search-details-box"
+            >
                 <div className="ib-idmodal-item-search-details-img-box">
                     {image}
                 </div>
                 <div>
-                    <b><span dangerouslySetInnerHTML={itemTitle} /></b>
-                    <br/>
-                    {item.year} - <a href={"http://imdb.com/title/" + item.ids.imdb} target="_blank">IMDB</a>
-                    <br/>
-                    <Button type="primary" icon="check" onClick={this._handleSelectMovie.bind(this, item)}>This Is It</Button>
+                    <b>
+                        <span dangerouslySetInnerHTML={itemTitle} />
+                    </b>
+                    <br />
+                    {item.year} -{" "}
+                    <a
+                        href={"http://imdb.com/title/" + item.ids.imdb}
+                        target="_blank"
+                    >
+                        IMDB
+                    </a>
+                    <br />
+                    <Button
+                        type="primary"
+                        icon="check"
+                        onClick={this._handleSelectMovie.bind(this, item)}
+                    >
+                        This Is It
+                    </Button>
                 </div>
             </Col>
         );
     }
 }
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
     return {};
-}
+};
 const mapDispatchToProps = (dispatch) => {
     return {
-        callAPI: (endpoint, params, callback, shouldDispatch)=>dispatch(callAPI(endpoint, params, callback, shouldDispatch))
-    }
-}
+        callAPI: (endpoint, params, callback, shouldDispatch) =>
+            dispatch(callAPI(endpoint, params, callback, shouldDispatch)),
+    };
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(MediaItemSearchDetails);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(MediaItemSearchDetails);
