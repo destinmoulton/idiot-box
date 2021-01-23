@@ -134,6 +134,7 @@ div.ib-idmodal-item-search-details-box {
 div.ib-idmodal-item-search-details-img-box {
     width: 100%;
     text-align: center;
+    margin-top: 4px;
 }
 
 img.ib-idmodal-item-search-details-img {
