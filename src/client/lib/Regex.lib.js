@@ -17,7 +17,9 @@ class Regex {
      */
     isVideoFile(possibleVideoFilename) {
         const regx = /(\.mp4|\.mkv|\.avi|\.m4v)$/;
-        return possibleVideoFilename.search(regx) > -1 ? true : false;
+        return possibleVideoFilename.toLowerCase().search(regx) > -1
+            ? true
+            : false;
     }
 }
 
