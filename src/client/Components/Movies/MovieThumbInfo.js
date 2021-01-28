@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Col, Icon } from "antd";
-
+import { LazyLoadImage } from "react-lazy-load-image-component";
 import PlayButton from "../PlayButton";
 import StatusTagIcons from "./StatusTagIcons";
 
@@ -11,7 +11,7 @@ class MovieThumbInfo extends React.Component {
 
         this.state = {
             isMouseOverMovie: false,
-            isMouseOverVeil: false
+            isMouseOverVeil: false,
         };
     }
 
@@ -25,13 +25,13 @@ class MovieThumbInfo extends React.Component {
 
     _handleMouseOverMovie() {
         this.setState({
-            isMouseOverMovie: true
+            isMouseOverMovie: true,
         });
     }
 
     _handleMouseOutMovie() {
         this.setState({
-            isMouseOverMovie: false
+            isMouseOverMovie: false,
         });
     }
 
@@ -40,11 +40,11 @@ class MovieThumbInfo extends React.Component {
             directories,
             movie,
             onClickMovie,
-            onClickToggleStatusTag
+            onClickToggleStatusTag,
         } = this.props;
         const fullPath = directories.Movies + "/" + movie.file_info.subpath;
         const movieTitle = {
-            __html: movie.title
+            __html: movie.title,
         };
 
         let veilOptions = null;
@@ -73,8 +73,11 @@ class MovieThumbInfo extends React.Component {
                     href="javascript:void(0)"
                     onClick={this._handleClick.bind(this, movie)}
                 >
-                    <img
+                    <LazyLoadImage
                         className="ib-movies-thumbnail"
+                        width={136}
+                        height={200}
+                        alt={movieTitle}
                         src={"/images/movies/" + movie.image_filename}
                     />
                 </a>
