@@ -17,7 +17,7 @@ class FilesystemBrowser extends Component {
             isLoading: false,
             currentPath: "",
             dirList: [],
-            showHidden: false
+            showHidden: false,
         };
     }
 
@@ -54,7 +54,7 @@ class FilesystemBrowser extends Component {
 
         const options = {
             base_path: basePath,
-            full_path: fullPath
+            full_path: fullPath,
         };
 
         callAPI(
@@ -65,7 +65,7 @@ class FilesystemBrowser extends Component {
         );
 
         this.setState({
-            isLoading: true
+            isLoading: true,
         });
     }
 
@@ -82,7 +82,7 @@ class FilesystemBrowser extends Component {
         this.setState({
             currentPath: newPath,
             dirList,
-            isLoading: false
+            isLoading: false,
         });
     }
 
@@ -91,7 +91,7 @@ class FilesystemBrowser extends Component {
             basePath,
             lockToBasePath,
             showDirectories,
-            showFiles
+            showFiles,
         } = this.props;
         const { showHidden } = this.state;
 
@@ -103,14 +103,14 @@ class FilesystemBrowser extends Component {
             name: this.PARENT_DIR_NAME,
             isDirectory: true,
             size: "",
-            assocData: {}
+            assocData: {},
         };
 
         if (!lockToBasePath || (lockToBasePath && basePath !== newPath)) {
             directories.push(parentDirectory);
         }
 
-        dirList.forEach(item => {
+        dirList.forEach((item) => {
             let includeItem = true;
             if (!showHidden && item.name.startsWith(".")) {
                 includeItem = false;
@@ -121,7 +121,7 @@ class FilesystemBrowser extends Component {
                     ...item,
                     key: item.name,
                     size: this._humanFileSize(item.size, false),
-                    assocData: item.assocData
+                    assocData: item.assocData,
                 };
                 if (newItem.isDirectory) {
                     directories.push(newItem);
@@ -193,9 +193,9 @@ class FilesystemBrowser extends Component {
                 dataIndex: "name",
                 render: (text, record) => {
                     if (record.isDirectory) {
-                        let iconType = "folder";
+                        let icon = <Icon type={"folder"} />;
                         if (record.name === this.PARENT_DIR_NAME) {
-                            iconType = "arrow-up";
+                            icon = <span>🡡</span>;
                         }
                         return (
                             <a
@@ -205,9 +205,7 @@ class FilesystemBrowser extends Component {
                                     record.name
                                 )}
                             >
-                                <Icon type={iconType} />&nbsp;&nbsp;{
-                                    record.name
-                                }
+                                &nbsp;&nbsp;{record.name}
                             </a>
                         );
                     } else {
@@ -220,12 +218,12 @@ class FilesystemBrowser extends Component {
                             />
                         );
                     }
-                }
+                },
             },
             {
                 title: "Size",
-                dataIndex: "size"
-            }
+                dataIndex: "size",
+            },
         ];
     }
 
@@ -233,7 +231,8 @@ class FilesystemBrowser extends Component {
         return (
             <div className="ib-filebrowser-spin-box">
                 <Spin />
-                <br />Loading directory list...
+                <br />
+                Loading directory list...
             </div>
         );
     }
@@ -243,7 +242,7 @@ class FilesystemBrowser extends Component {
             actionColumns,
             hasCheckboxes,
             parentHandleSelectChange,
-            selectedRowKeys
+            selectedRowKeys,
         } = this.props;
 
         const { currentPath, dirList, isLoading } = this.state;
@@ -256,12 +255,12 @@ class FilesystemBrowser extends Component {
         if (hasCheckboxes) {
             rowSelection = {
                 selectedRowKeys,
-                onChange: parentHandleSelectChange
+                onChange: parentHandleSelectChange,
             };
         }
 
         const locale = {
-            emptyText: "Empty directory."
+            emptyText: "Empty directory.",
         };
 
         return (
@@ -313,7 +312,7 @@ FilesystemBrowser.propTypes = {
     selectedRowKeys: PropTypes.array,
     serverInfo: PropTypes.object.isRequired,
     showDirectories: PropTypes.bool,
-    showFiles: PropTypes.bool
+    showFiles: PropTypes.bool,
 };
 
 FilesystemBrowser.defaultProps = {
@@ -326,7 +325,7 @@ FilesystemBrowser.defaultProps = {
     parentHandleSelectChange: () => {},
     selectedRowKeys: [],
     showDirectories: true,
-    showFiles: true
+    showFiles: true,
 };
 
 export default FilesystemBrowser;
