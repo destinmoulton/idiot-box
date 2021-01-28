@@ -205,7 +205,7 @@ class FilesystemBrowser extends Component {
                                     record.name
                                 )}
                             >
-                                &nbsp;&nbsp;{record.name}
+                                {icon}&nbsp;&nbsp;{record.name}
                             </a>
                         );
                     } else {
