@@ -29,7 +29,6 @@ export default class IMDBScraperModel {
         return got.get(url, options).then((resp) => {
             const $ = cheerio.load(resp.body);
             const imageURL = $(this._posterSelector).attr("src");
-            console.log(resp);
             return {
                 imageURL,
                 url,
