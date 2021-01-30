@@ -6,7 +6,7 @@ import { Button, Col, Spin } from "antd";
 
 import { callAPI } from "../../actions/api.actions";
 
-const MAX_IMAGE_RETRIES = 5;
+const MAX_IMAGE_RETRIES = 2;
 
 class MediaItemSearchDetails extends Component {
     static propTypes = {
