@@ -21,19 +21,15 @@ export default class IMDBScraperModel {
                 accept: "text/html",
             },
         };
-        return needle("get", url, options)
-            .then((resp) => {
-                return cheerio.load(resp.body);
-            })
-            .then(($) => {
-                return $(this._posterSelector).attr("src");
-            })
-            .then((parsedResult) => {
-                return {
-                    imageURL: parsedResult,
-                    url,
-                };
-            });
+        return needle("get", url, options).then((resp) => {
+            const $ = cheerio.load(resp.body);
+            const imageURL = $(this._posterSelector).attr("src");
+
+            return {
+                imageURL,
+                url,
+            };
+        });
     }
 
     _buildImdbPath(imdbID) {
