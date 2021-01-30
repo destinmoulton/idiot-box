@@ -21,8 +21,7 @@ export default class IMDBScraperModel {
                 accept: "text/html",
             },
         };
-        return needle
-            .get(url, options)
+        return needle("get", url, options)
             .then((resp) => {
                 return cheerio.load(resp.body);
             })
