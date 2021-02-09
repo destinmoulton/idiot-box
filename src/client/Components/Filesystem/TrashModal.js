@@ -57,8 +57,6 @@ class TrashModal extends Component {
     render() {
         const { currentPath, isVisible, itemsToTrash, onCancel } = this.props;
 
-        const { isTrashing } = this.state;
-
         let list = [];
         itemsToTrash.forEach((item) => {
             list.push(<li key={item}>{item}</li>);
