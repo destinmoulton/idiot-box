@@ -1,20 +1,22 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Button, Modal } from "antd";
+import Button from "@material-ui/core/Button";
+import DeleteIcon from "@material-ui/icons/Delete";
 
+import DialogModal from "../shared/DialogModal";
 class TrashModal extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            isTrashing: false
+            isTrashing: false,
         };
     }
 
     componentWillReceiveProps(nextProps) {
         this.setState({
-            isTrashing: false
+            isTrashing: false,
         });
     }
 
@@ -27,7 +29,7 @@ class TrashModal extends Component {
 
         const options = {
             source_path: currentPath,
-            filenames: itemsToTrash
+            filenames: itemsToTrash,
         };
 
         callAPI(
@@ -38,7 +40,7 @@ class TrashModal extends Component {
         );
 
         this.setState({
-            isTrashing: true
+            isTrashing: true,
         });
     }
 
@@ -46,7 +48,7 @@ class TrashModal extends Component {
         const { onTrashComplete } = this.props;
 
         this.setState({
-            isTrashing: false
+            isTrashing: false,
         });
 
         onTrashComplete();
@@ -58,37 +60,42 @@ class TrashModal extends Component {
         const { isTrashing } = this.state;
 
         let list = [];
-        itemsToTrash.forEach(item => {
+        itemsToTrash.forEach((item) => {
             list.push(<li key={item}>{item}</li>);
         });
 
         return (
             <div>
-                <Modal
+                <DialogModal
                     title="Trash Confirmation"
-                    visible={isVisible}
-                    onCancel={onCancel}
-                    onOk={this._handlePressOk.bind(this)}
+                    isVisible={isVisible}
+                    onClose={onCancel}
                     footer={[
-                        <Button key="cancel" size="large" onClick={onCancel}>
+                        <Button
+                            variant="contained"
+                            key="cancel"
+                            size="small"
+                            onClick={onCancel}
+                        >
                             Cancel
                         </Button>,
                         <Button
+                            variant="contained"
                             key="submit"
-                            type="primary"
-                            size="large"
-                            loading={isTrashing}
+                            color="primary"
+                            size="small"
                             onClick={this._handlePressOk.bind(this)}
+                            startIcon={<DeleteIcon />}
                         >
                             Confirm Delete
-                        </Button>
+                        </Button>,
                     ]}
                 >
                     <div className="ib-trashmodal-list-box">
                         <h4>{currentPath}</h4>
                         <ul className="ib-trashmodal-list">{list}</ul>
                     </div>
-                </Modal>
+                </DialogModal>
             </div>
         );
     }
@@ -100,7 +107,7 @@ TrashModal.propTypes = {
     isVisible: PropTypes.bool.isRequired,
     itemsToTrash: PropTypes.array.isRequired,
     onCancel: PropTypes.func.isRequired,
-    onTrashComplete: PropTypes.func.isRequired
+    onTrashComplete: PropTypes.func.isRequired,
 };
 
 export default TrashModal;
