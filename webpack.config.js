@@ -8,7 +8,7 @@ module.exports = {
     entry: "./src/client/App.js",
     output: {
         path: path.join(__dirname, "dist/server/public/js/idiotbox"),
-        filename: "idiotbox.build.js"
+        filename: "idiotbox.build.js",
     },
     module: {
         rules: [
@@ -21,25 +21,24 @@ module.exports = {
                         presets: ["@babel/env", "@babel/react"],
                         plugins: [
                             "@babel/plugin-proposal-class-properties",
-                            "@babel/plugin-proposal-object-rest-spread"
-                        ]
-                    }
-                }
-            }
-        ]
+                            "@babel/plugin-proposal-object-rest-spread",
+                        ],
+                    },
+                },
+            },
+        ],
     },
     externals: {
-        antd: "antd",
         lodash: "_",
         immutable: "Immutable",
         moment: "moment",
         react: "React",
-        "react-dom": "ReactDOM"
+        "react-dom": "ReactDOM",
     },
     plugins: [
         /**
          * Bundle Analyzer will load a browser window to view the map.
          */
         //new BundleAnalyzerPlugin()
-    ]
+    ],
 };
