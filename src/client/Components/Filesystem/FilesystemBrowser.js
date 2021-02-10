@@ -3,6 +3,7 @@ import React, { Component } from "react";
 
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import Button from "@material-ui/core/Button";
+import Checkbox from "@material-ui/core/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import FolderIcon from "@material-ui/icons/Folder";
 import Table from "@material-ui/core/Table";
@@ -18,16 +19,18 @@ import FileDetails from "./FileDetails";
 
 class FilesystemBrowser extends Component {
     PARENT_DIR_NAME = "..";
+    INITIAL_STATE = {
+        isAllSelected: false,
+        isLoading: false,
+        currentPath: "",
+        dirList: [],
+        showHidden: false,
+    };
 
     constructor(props) {
         super(props);
 
-        this.state = {
-            isLoading: false,
-            currentPath: "",
-            dirList: [],
-            showHidden: false,
-        };
+        this.state = { ...this.INITIAL_STATE };
     }
 
     componentDidMount() {
@@ -91,6 +94,7 @@ class FilesystemBrowser extends Component {
             currentPath: newPath,
             dirList,
             isLoading: false,
+            isAllSelected: false,
         });
     }
 
@@ -191,22 +195,58 @@ class FilesystemBrowser extends Component {
         this._getDirFromServer(newPath, basePath);
     }
 
+    _handleClickSingleCheckbox(item) {
+        this.props.handleSelectChangeSingle(item);
+        this.setState({
+            isAllSelected: false,
+        });
+    }
+
+    _handleClickAllCheckbox() {
+        if (this.state.isAllSelected) {
+            // Clear the selected set
+            this.props.handleSelectChangeMultiple(new Set());
+            this.setState({
+                isAllSelected: false,
+            });
+        } else {
+            const { dirList } = this.state;
+            let selected = new Set();
+            dirList.forEach((item) => {
+                selected.add(item.name);
+            });
+            this.props.handleSelectChangeMultiple(selected);
+            this.setState({
+                isAllSelected: true,
+            });
+        }
+    }
+
     _buildRows() {
-        const { basePath } = this.props;
+        const { basePath, selectedRows } = this.props;
         const { currentPath, dirList } = this.state;
 
         const rows = [];
         dirList.forEach((item) => {
             let name = "";
+            let checked = false;
+            let hasCheckbox = true;
+            if (selectedRows.has(item.name)) {
+                checked = true;
+            }
             if (item.isDirectory) {
                 let icon = <FolderIcon />;
                 if (item.name === this.PARENT_DIR_NAME) {
+                    hasCheckbox = false;
                     icon = <ArrowUpwardIcon />;
                 }
                 name = (
-                    <Button onClick={() => this._handleDirClick(item.name)}>
-                        {icon}&nbsp;&nbsp;{item.name}
-                    </Button>
+                    <span>
+                        <Button onClick={() => this._handleDirClick(item.name)}>
+                            {icon}
+                        </Button>
+                        {item.name}
+                    </span>
                 );
             } else {
                 name = (
@@ -218,12 +258,29 @@ class FilesystemBrowser extends Component {
                     />
                 );
             }
+
+            let checkbox = "";
+            if (hasCheckbox) {
+                checkbox = (
+                    <Checkbox
+                        checked={checked}
+                        onChange={() =>
+                            this._handleClickSingleCheckbox(item.name)
+                        }
+                    />
+                );
+            }
             rows.push(
                 <TableRow key={item.name}>
-                    <TableCell></TableCell>
-                    <TableCell>{name}</TableCell>
-                    <TableCell>{item.size}</TableCell>
-                    <TableCell></TableCell>
+                    <TableCell className="filemanager-checkbox-column">
+                        {checkbox}
+                    </TableCell>
+                    <TableCell className="filemanager-name-column">
+                        {name}
+                    </TableCell>
+                    <TableCell className="filemanager-size-column">
+                        {item.size}
+                    </TableCell>
                 </TableRow>
             );
         });
@@ -241,23 +298,9 @@ class FilesystemBrowser extends Component {
     }
 
     _buildTable() {
-        const {
-            hasCheckboxes,
-            parentHandleSelectChange,
-            selectedRowKeys,
-        } = this.props;
-
-        const { currentPath } = this.state;
+        const { currentPath, isAllSelected } = this.state;
 
         const rows = this._buildRows();
-
-        let rowSelection = {};
-        if (hasCheckboxes) {
-            rowSelection = {
-                selectedRowKeys,
-                onChange: parentHandleSelectChange,
-            };
-        }
 
         return (
             <div>
@@ -275,10 +318,20 @@ class FilesystemBrowser extends Component {
                     <Table className="ib-filemanager-table">
                         <TableHead>
                             <TableRow>
-                                <TableCell></TableCell>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Size</TableCell>
-                                <TableCell></TableCell>
+                                <TableCell className="filemanager-checkbox-column">
+                                    <Checkbox
+                                        checked={isAllSelected}
+                                        onChange={() =>
+                                            this._handleClickAllCheckbox()
+                                        }
+                                    />
+                                </TableCell>
+                                <TableCell className="filemanager-name-column">
+                                    Name
+                                </TableCell>
+                                <TableCell className="filemanager-size-column">
+                                    Size
+                                </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>{rows}</TableBody>

@@ -1,3 +1,4 @@
+import _ from "lodash";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
@@ -37,7 +38,7 @@ class FileManager extends Component {
             moverenameSelectedItems: [],
             trashIsModalVisible: false,
             trashSelectedItems: [],
-            selectedRows: [],
+            selectedRows: new Set(),
             untagIsModalVisible: false,
             untagIDinfo: [],
         };
@@ -48,7 +49,7 @@ class FileManager extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.match.params.subpath !== undefined) {
+        if (!_.isEqual(prevProps, this.props)) {
             this._parseURL();
         }
     }
@@ -82,7 +83,7 @@ class FileManager extends Component {
             currentPath: dir.value + "/" + subpath,
             currentPathInfo: pathInfo,
             currentToplevelDirectory: dir.value,
-            selectedRows: [],
+            selectedRows: new Set(),
             isReloading: false,
         });
     }
@@ -119,9 +120,32 @@ class FileManager extends Component {
         });
     }
 
-    _handleSelectionChange(selectedRows) {
+    /**
+     * Handle checking/unchecking single items
+     *
+     * @param {object} item
+     */
+    _handleSelectionChangeSingle(item) {
+        const { selectedRows } = this.state;
+
+        if (selectedRows.has(item)) {
+            selectedRows.delete(item);
+        } else {
+            selectedRows.add(item);
+        }
+
         this.setState({
             selectedRows,
+        });
+    }
+    /**
+     * Handle checking/unchecking multiple items
+     *
+     * @param {object} item
+     */
+    _handleSelectionChangeMultiple(selectedItemsSet) {
+        this.setState({
+            selectedRows: selectedItemsSet,
         });
     }
 
@@ -145,7 +169,7 @@ class FileManager extends Component {
             isReloading: true,
             trashIsModalVisible: false,
             trashSelectedItems: [],
-            selectedRows: [],
+            selectedRows: new Set(),
         });
     }
 
@@ -183,7 +207,7 @@ class FileManager extends Component {
             isReloading: true,
             moverenameIsModalVisible: false,
             moverenameSelectedItems: [],
-            selectedRows: [],
+            selectedRows: new Set(),
         });
     }
 
@@ -243,17 +267,17 @@ class FileManager extends Component {
             isReloading: true,
             idmultipleIsModalVisible: false,
             idmultipleEpisodes: [],
-            selectedRows: [],
+            selectedRows: new Set(),
         });
     }
 
     _handleSelectVideos() {
         const { dirList } = this.state;
 
-        let selected = [];
+        let selected = new Set();
         dirList.forEach((item) => {
             if (Regex.isVideoFile(item.name)) {
-                selected.push(item.name);
+                selected.add(item.name);
             }
         });
 
@@ -386,7 +410,7 @@ class FileManager extends Component {
             untagIsModalVisible,
         } = this.state;
 
-        const hasSelected = selectedRows.length > 0 ? true : false;
+        const hasSelected = selectedRows.size > 0 ? true : false;
         const buttonDisabled = !hasSelected;
 
         return (
@@ -448,10 +472,13 @@ class FileManager extends Component {
                     forceReload={isReloading}
                     hasCheckboxes={true}
                     onChangeDirectory={this._handleChangeDirectory.bind(this)}
-                    parentHandleSelectChange={this._handleSelectionChange.bind(
+                    handleSelectChangeSingle={this._handleSelectionChangeSingle.bind(
                         this
                     )}
-                    selectedRowKeys={selectedRows}
+                    handleSelectChangeMultiple={this._handleSelectionChangeMultiple.bind(
+                        this
+                    )}
+                    selectedRows={selectedRows}
                     serverInfo={this.props.serverInfo}
                     showDirectories={true}
                     showFiles={true}
@@ -504,10 +531,8 @@ class FileManager extends Component {
 
     _handleClickTab(directory) {
         const { history } = this.props;
-        const { currentToplevelDirectory } = this.state;
-        history.push(
-            "/filemanager/" + currentToplevelDirectory + "/" + directory
-        );
+        //const { currentToplevelDirectory } = this.state;
+        history.push("/filemanager/" + directory);
     }
     _buildDirectoryMenu() {
         const settingDirectories = this.props.settings.directories;
@@ -524,7 +549,7 @@ class FileManager extends Component {
                     label={dir.key}
                     key={dir.value}
                     value={dir.value}
-                    onClick={() => this._handleClickTab(dir.value)}
+                    onClick={() => this._handleClickTab(dir.key)}
                 />
             );
         });

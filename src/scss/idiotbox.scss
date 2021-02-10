@@ -79,9 +79,41 @@ div#ib-filemanager-directorymenu ul a {
     height: 38px;
 }
 
-div.ib-filemanager-table tr {
-    font-size: 0.9em;
-    line-height: 0.9em;
+table.ib-filemanager-table {
+    tr {
+        font-size: 0.9em;
+
+        line-height: 0.9em;
+
+        th {
+            &.filemanager-checkbox-column {
+                padding: 2px;
+                width: 30px;
+            }
+        }
+        td {
+            &.filemanager-checkbox-column {
+                width: 30px;
+            }
+            &.filemanager-name-column {
+                text-align: left;
+
+                svg {
+                    font-size: 1.1em;
+                }
+            }
+            &.filemanager-size-column {
+                text-align: center;
+            }
+            &.MuiTableCell-root {
+                padding: 2px;
+            }
+            // Icons
+            // .MuiSvgIcon-root {
+            //     font-size: 1.1em;
+            // }
+        }
+    }
 }
 
 div.ib-idmodal-archivesingle-episodeinfo {
