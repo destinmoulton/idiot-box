@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 
 import { connect } from "react-redux";
+import Button from "@material-ui/core/Button";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import { callAPI } from "../actions/api.actions";
 class PlayButton extends Component {
@@ -28,12 +29,9 @@ class PlayButton extends Component {
 
     render() {
         return (
-            <a
-                href="javascript:void(0)"
-                onClick={this._startPlayback.bind(this)}
-            >
+            <Button onClick={this._startPlayback.bind(this)}>
                 <PlayArrowIcon className="ib-playbutton-icon" />
-            </a>
+            </Button>
         );
     }
 }
