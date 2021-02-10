@@ -26,18 +26,17 @@ class IdiotBoxHeader extends Component {
                 <Toolbar
                     theme="dark"
                     mode="horizontal"
-                    defaultSelectedKeys={["2"]}
                     style={{ lineHeight: "40px" }}
                 >
                     <List component="nav" aria-labelledby="main navigation">
                         {navbarItems.map(({ title, path }) => (
-                            <Link to={path}>
+                            <Link key={path} to={path}>
                                 <ListItem button>
                                     <ListItemText primary={title} />
                                 </ListItem>
                             </Link>
                         ))}
-                        <Link to="/settings">
+                        <Link key={"/settings"} to="/settings">
                             <ListItem button>
                                 <ListItemIcon>
                                     <SettingsIcon />
