@@ -14,13 +14,22 @@ class IdiotBox extends Component {
     static propTypes = {
         isServerConnected: PropTypes.bool.isRequired,
         hasServerInfo: PropTypes.bool.isRequired,
-        serverInfo: PropTypes.object.isRequired
+        serverInfo: PropTypes.object.isRequired,
     };
 
     constructor(props) {
         super(props);
         this._serverIsConnected = false;
         this._hasSettings = false;
+        this.state = { hasError: false };
+    }
+
+    componentDidCatch(error, errorInfo) {
+        console.error(error, errorInfo);
+    }
+
+    static getDerivedStateFromError(error) {
+        return { hasError: true };
     }
 
     componentWillMount() {
@@ -45,6 +54,9 @@ class IdiotBox extends Component {
     render() {
         const { isServerConnected, hasAllSettings, hasServerInfo } = this.props;
 
+        if (this.state.hasError) {
+            return <div>Error has occurred.</div>;
+        }
         const displayComponent =
             isServerConnected && hasAllSettings && hasServerInfo ? (
                 <IdiotBoxLayout />
@@ -56,7 +68,7 @@ class IdiotBox extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     const { server, settings } = state;
     const { isServerConnected, hasServerInfo, serverInfo } = server;
     const { hasAllSettings } = settings;
@@ -64,16 +76,16 @@ const mapStateToProps = state => {
         isServerConnected,
         hasAllSettings,
         hasServerInfo,
-        serverInfo
+        serverInfo,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         getAllSettings: () => dispatch(getAllSettings()),
         setupAPI: () => dispatch(setupAPI()),
         srvConnect: () => dispatch(srvConnect()),
-        srvGetServerInfo: () => dispatch(srvGetServerInfo())
+        srvGetServerInfo: () => dispatch(srvGetServerInfo()),
     };
 };
 
