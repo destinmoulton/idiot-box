@@ -15,20 +15,30 @@ class SeasonTabs extends Component {
         super(props);
 
         this.state = {
-            activeSeasonNum: -1,
+            activeSeasonNum: 0,
             activeSeason: {},
             isLoadingSeasons: false,
             seasons: [],
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._getSeasons();
         this._parseActiveSeason(this.props);
     }
 
-    componentWillReceiveProps(nextProps) {
-        this._parseActiveSeason(nextProps);
+    componentDidUpdate(prevProps) {
+        if (this.props.match.params.season_number !== undefined) {
+            if (prevProps.match.params.season_number !== undefined) {
+                const prevSeasonNum = prevProps.match.params.season_number;
+                const thisSeasonNum = this.props.match.params.season_number;
+                if (prevSeasonNum !== thisSeasonNum) {
+                    this._parseActiveSeason(this.props);
+                }
+            } else {
+                this._parseActiveSeason(this.props);
+            }
+        }
     }
 
     _parseActiveSeason(props) {
@@ -125,15 +135,17 @@ class SeasonTabs extends Component {
                     {lockIcon}
                 </span>
             );
-            return <Tab label={tabTitle} key={season.season_number} />;
+            return (
+                <Tab
+                    label={tabTitle}
+                    value={season.season_number}
+                    key={season.season_number}
+                    onClick={() => this._handleClickTab(season.season_number)}
+                />
+            );
         });
         return (
-            <Tabs
-                defaultActiveKey={activeSeasonNum}
-                onTabClick={this._handleClickTab.bind(this)}
-                size="small"
-                tabBarGutter={1}
-            >
+            <Tabs value={activeSeasonNum} size="small">
                 {tabpanes}
             </Tabs>
         );

@@ -22,7 +22,7 @@ class ShowsList extends Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._getShows();
     }
 
@@ -129,7 +129,7 @@ class ShowsList extends Component {
                 showList.push(
                     <Grid
                         item
-                        xs={4}
+                        xs={2}
                         key={show.id}
                         className="ib-showlist-infobox"
                     >
@@ -184,7 +184,7 @@ class ShowsList extends Component {
                         Add New Show
                     </Button>
                 </Grid>
-                <Grid container spacing={2}>
+                <Grid item container xs={12} spacing={2}>
                     {content}
                 </Grid>
                 <AddShowModal

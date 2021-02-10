@@ -17,7 +17,7 @@ class ShowInfo extends Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._getShowInfo();
     }
 
@@ -83,7 +83,7 @@ class ShowInfo extends Component {
 
         return (
             <Grid container>
-                <Grid item xs={4}>
+                <Grid item xs={2}>
                     <div className="ib-show-info-thumbnail-box">
                         <img
                             className="ib-show-info-thumb"
@@ -91,7 +91,7 @@ class ShowInfo extends Component {
                         />
                     </div>
                 </Grid>
-                <Grid item xs={8}>
+                <Grid item xs={10}>
                     <h3>{show.title}</h3>
                     <h4>
                         <a

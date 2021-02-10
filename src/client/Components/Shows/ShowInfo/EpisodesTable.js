@@ -1,13 +1,21 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Button from "@material-ui/core/Button";
 import CheckIcon from "@material-ui/icons/Check";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
 
@@ -25,16 +33,19 @@ class EpisodesTable extends Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._shouldGetEpisodes(this.props);
     }
 
-    componentWillReceiveProps(nextProps) {
-        this._shouldGetEpisodes(nextProps);
+    componentDidUpdate() {
+        this._shouldGetEpisodes(this.props);
     }
 
     _shouldGetEpisodes(props) {
         if (props.activeSeasonNum !== this.state.selectedSeasonNum) {
+            this.setState({
+                selectedSeasonNum: props.activeSeasonNum,
+            });
             this._getEpisodes(props.activeSeasonNum);
         }
     }
@@ -61,7 +72,6 @@ class EpisodesTable extends Component {
 
     _episodesReceived(seasonNum, episodes) {
         this.setState({
-            selectedSeasonNum: seasonNum,
             episodes,
             isLoadingEpisodes: false,
         });
@@ -98,62 +108,62 @@ class EpisodesTable extends Component {
     }
 
     _buildEpisodesTable() {
-        const { episodes, selectedEpisodeKeys } = this.state;
-        const { directories } = this.props.settings;
-
-        let columns = this._episodeTableColumns();
-
-        let rowSelection = {
-            selectedEpisodeKeys,
-            onChange: this._handleSelectEpisodeTableRow.bind(this),
-        };
-
-        const locale = {
-            emptyText: "No episodes found.",
-        };
+        let rows = this._episodeTableRows();
 
         return (
-            <Table
-                columns={columns}
-                dataSource={episodes}
-                pagination={false}
-                size="small"
-                rowKey="id"
-                rowSelection={rowSelection}
-                locale={locale}
-            />
+            <TableContainer>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Ep</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell>Episode Info</TableCell>
+                            <TableCell>Aired</TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>{rows}</TableBody>
+                </Table>
+            </TableContainer>
         );
     }
 
     _episodeTableRows() {
         const { directories } = this.props.settings;
 
+        const { episodes } = this.state;
         let output = [];
-        directories.forEach((dir) => {
+        episodes.forEach((ep) => {
             let watchedIcon = <CheckIcon />;
-            if (dir.watched) {
+            if (ep.watched) {
                 watchedIcon = <CheckBoxOutlineBlankIcon />;
             }
             let airedDate = moment
-                .unix(dir.first_aired)
+                .unix(ep.first_aired)
                 .format("MMM. D, YYYY, h:mm:ss a");
             let play = <span></span>;
-            if (record.file_info.hasOwnProperty("id")) {
-                const fullPath =
-                    directories.Shows + "/" + record.file_info.subpath;
+            if (ep.file_info.hasOwnProperty("id")) {
+                const fullPath = directories.Shows + "/" + ep.file_info.subpath;
                 play = (
                     <PlayButton
-                        filename={record.file_info.filename}
+                        filename={ep.file_info.filename}
                         fullPath={fullPath}
                     />
                 );
             }
 
             output.push(
-                <TableRow>
-                    <TableCell>{dir.episode_number}</TableCell>
-                    <TableCell>{watchedIcon}</TableCell>);
-                    <TableCell>{dir.title}</TableCell>
+                <TableRow key={ep.id}>
+                    <TableCell>{ep.episode_number}</TableCell>
+                    <TableCell>{watchedIcon}</TableCell>
+                    <TableCell style={{ width: "60%" }}>
+                        <Accordion>
+                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                <strong>{ep.title}</strong>
+                            </AccordionSummary>
+                            <AccordionDetails>{ep.overview}</AccordionDetails>
+                        </Accordion>
+                    </TableCell>
                     <TableCell>{airedDate}</TableCell>
                     <TableCell>{play}</TableCell>
                 </TableRow>
@@ -164,7 +174,6 @@ class EpisodesTable extends Component {
 
     _buildEpisodesList() {
         const { episodes } = this.state;
-        const { directories } = this.props.settings;
 
         let episodeList = [];
 
