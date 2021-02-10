@@ -14,21 +14,24 @@ class MoveRenameModal extends Component {
         this.state = {
             destinationPath: "",
             isRenaming: false,
-            itemsRenamed: {},
+            itemsRenaming: {},
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { itemsToRename } = nextProps;
+    componentDidUpdate(prevProps) {
+        const { isVisible } = this.props;
+        if (isVisible && isVisible !== prevProps.isVisible) {
+            const { itemsToRename } = this.props;
 
-        let itemsRenamed = {};
-        itemsToRename.forEach((item) => {
-            itemsRenamed[item] = item;
-        });
+            let itemsRenaming = {};
+            itemsToRename.forEach((item) => {
+                itemsRenaming[item] = item;
+            });
 
-        this.setState({
-            itemsRenamed,
-        });
+            this.setState({
+                itemsRenaming,
+            });
+        }
     }
 
     _handleClickRename() {
@@ -37,7 +40,7 @@ class MoveRenameModal extends Component {
 
     _performRename() {
         const { callAPI, initialPath } = this.props;
-        const { destinationPath, itemsRenamed } = this.state;
+        const { destinationPath, itemsRenaming: itemsRenaming } = this.state;
 
         this.setState({
             isRenaming: true,
@@ -46,7 +49,7 @@ class MoveRenameModal extends Component {
         const params = {
             source_path: initialPath,
             dest_path: destinationPath,
-            items_to_rename: itemsRenamed,
+            items_to_rename: itemsRenaming,
         };
 
         callAPI(
@@ -74,18 +77,18 @@ class MoveRenameModal extends Component {
     }
 
     _handleChangeFilename(originalFilename, evt) {
-        const { itemsRenamed } = this.state;
+        const { itemsRenaming: itemsRenaming } = this.state;
 
-        itemsRenamed[originalFilename] = evt.target.value;
+        itemsRenaming[originalFilename] = evt.target.value;
 
         this.setState({
-            itemsRenamed,
+            itemsRenaming,
         });
     }
 
     _buildRenameInputs() {
         const { itemsToRename } = this.props;
-        const { itemsRenamed } = this.state;
+        const { itemsRenaming: itemsRenaming } = this.state;
 
         let inputList = [];
         itemsToRename.forEach((item) => {
@@ -96,7 +99,7 @@ class MoveRenameModal extends Component {
                     </h5>
                     <Input
                         onChange={this._handleChangeFilename.bind(this, item)}
-                        value={itemsRenamed[item]}
+                        value={itemsRenaming[item]}
                     />
                 </div>
             );

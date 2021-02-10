@@ -1,13 +1,21 @@
+a {
+    text-decoration: none;
+    color: #40a9ff;
+    font-family: sans-serif;
+}
 .ib-header-toolbar {
+    line-height: 40px;
     .linklist {
         display: flex;
         justify-content: space-between;
+        background-color: #44484c;
     }
 
     .linklist-linktext {
         text-decoration: none;
         text-transform: uppercase;
         color: white;
+        font-weight: bold;
     }
 }
 div.ib-footer {
@@ -424,39 +432,59 @@ div.ib-showlist-infobox {
     height: 258px;
     padding: 5px;
     text-align: center;
+    justify-content: center;
     font-size: 1.1em;
     margin: 4px;
     border: 2px solid gray;
-}
 
-div.ib-showlist-infobox-tags {
-    position: absolute;
-    bottom: 4px;
-    text-align: center;
-    width: 100%;
-}
+    .showlist-infobox-thumb-container {
+        position: relative;
+        width: 136px;
+        height: 200px;
+        margin-left: auto;
+        margin-right: auto;
+        img {
+            width: 100%;
+        }
 
-img.ib-showlist-infobox-thumb {
-    width: 100%;
-}
+        .showlist-infobox-tags {
+            position: absolute;
+            bottom: 4px;
+            text-align: center;
+            width: 100%;
 
-div.ib-showlist-infobox-thumb-container {
-    position: relative;
-    width: 136px;
-    height: 200px;
-}
+            span {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 2px;
+                margin-left: 2px;
+                border-radius: 3px;
+                background-color: white;
+                color: gray;
+                padding: 2px;
+                text-align: center;
+                line-height: 24px;
+                height: 24px;
+                width: 50px;
+                border: 1px solid gray;
 
-div.ib-showlist-infobox-title {
-    position: relative;
-    width: 136px;
-    height: 44px;
-    line-height: 1.4em;
-    overflow: hidden;
-}
+                svg {
+                    height: 16px;
+                }
+            }
+        }
+    }
 
-div.ib-showlist-infobox-tags div.ib-showlist-searchbar {
-    padding: 5px;
-    text-align: center;
+    .showlist-infobox-title {
+        position: relative;
+        width: 136px;
+        height: 44px;
+        line-height: 1.4em;
+        overflow: hidden;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 div.ib-showlist-searchbar {

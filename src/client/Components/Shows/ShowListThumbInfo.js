@@ -12,23 +12,20 @@ export default (props) => {
     return (
         <div>
             <Link to={"/show/" + show.slug}>
-                <div className="ib-showlist-infobox-thumb-container">
-                    <img
-                        className="ib-showlist-infobox-thumb"
-                        src={"/images/shows/" + show.image_filename}
-                    />
-                    <div className="ib-showlist-infobox-tags">
+                <div className="showlist-infobox-thumb-container">
+                    <img src={"/images/shows/" + show.image_filename} />
+                    <div className="showlist-infobox-tags">
                         <span>
-                            {show.num_seasons_locked}&nbsp;
+                            {show.num_seasons_locked}
                             <LockIcon />
                         </span>
                         <span>
-                            {show.num_seasons_unlocked}&nbsp;
+                            {show.num_seasons_unlocked}
                             <LockOpenIcon />
                         </span>
                     </div>
                 </div>
-                <div className="ib-showlist-infobox-title">
+                <div className="showlist-infobox-title">
                     <span dangerouslySetInnerHTML={showTitle} />
                 </div>
             </Link>

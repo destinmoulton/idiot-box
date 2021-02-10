@@ -32,14 +32,14 @@ class IdiotBox extends Component {
         return { hasError: true };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.props.srvConnect();
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { getAllSettings, setupAPI } = this.props;
+    componentDidUpdate() {
+        const { getAllSettings, setupAPI, isServerConnected } = this.props;
 
-        if (nextProps.isServerConnected && !this._serverIsConnected) {
+        if (isServerConnected && !this._serverIsConnected) {
             // The server just connected
             this._serverIsConnected = true;
 
@@ -64,7 +64,7 @@ class IdiotBox extends Component {
                 <IdiotBoxLoading />
             );
 
-        return <div>{displayComponent}</div>;
+        return displayComponent;
     }
 }
 

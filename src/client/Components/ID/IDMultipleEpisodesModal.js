@@ -1,6 +1,8 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
 import SelectSearch from "react-select-search";
 import DialogModal from "../shared/DialogModal";
@@ -13,7 +15,8 @@ class IDMultipleEpisodesModal extends Component {
         currentShowInfo: {},
         currentSeasonID: 0,
         currentSeasonInfo: {},
-        isIDing: false,
+        hasShowsFromAPI: false,
+        isLoadingAPIData: false,
         episodes: [],
         seasonParseRegexStr: "E\\d+",
         seasons: [],
@@ -26,28 +29,51 @@ class IDMultipleEpisodesModal extends Component {
         this.state = this.INITIAL_STATE;
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._getShows();
     }
 
-    componentWillReceiveProps(nextProps) {
-        const { episodesToID } = nextProps;
+    componentDidUpdate(prevProps) {
+        const oldEpisodesToID = prevProps.episodesToID;
+        const { episodesToID } = this.props;
+        let isNewSet = true;
+        if (episodesToID.length === 0) {
+            isNewSet = false;
+        } else if (
+            episodesToID.length > 0 &&
+            oldEpisodesToID.length === episodesToID.length
+        ) {
+            // Check that the episodes are different
+            const newEpisodes = new Set();
 
-        let currentEpisodesInfo = {};
-        episodesToID.forEach((ep) => {
-            currentEpisodesInfo[ep.name] = {
-                info: ep,
-                newFilename: "",
-                selectedEpisodeID: 0,
-            };
-        });
+            episodesToID.forEach((ep) => {
+                newEpisodes.add(ep.name);
+            });
 
-        this.setState({
-            ...this.INITIAL_STATE,
-            currentEpisodesInfo,
-        });
+            oldEpisodesToID.forEach((ep) => {
+                if (newEpisodes.has(ep.name)) {
+                    newEpisodes.delete(ep.name);
+                }
+            });
+            isNewSet = newEpisodes.length > 0;
+        }
 
-        this._getShows();
+        if (isNewSet) {
+            let currentEpisodesInfo = {};
+            episodesToID.forEach((ep) => {
+                currentEpisodesInfo[ep.name] = {
+                    info: ep,
+                    newFilename: "",
+                    selectedEpisodeID: 0,
+                };
+            });
+
+            this.setState({
+                ...this.INITIAL_STATE,
+                currentEpisodesInfo,
+            });
+            this._getShows();
+        }
     }
 
     _getShows() {
@@ -60,9 +86,11 @@ class IDMultipleEpisodesModal extends Component {
         this.setState({
             currentSeasonID: 0,
             currentShowInfo: {},
+            hasShowsFromAPI: true,
             shows,
             seasons: [],
             episodes: [],
+            isLoadingAPIData: false,
         });
     }
 
@@ -424,7 +452,7 @@ class IDMultipleEpisodesModal extends Component {
         const { seasonParseRegexStr } = this.state;
 
         const el = (
-            <Grid xs="10">
+            <Grid item xs="12">
                 <TextField
                     label="Episode Regex: "
                     value={seasonParseRegexStr}

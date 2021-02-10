@@ -1,9 +1,15 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Link } from "react-router-dom";
+import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
+import DeleteIcon from "@material-ui/icons/Delete";
+import LabelOffIcon from "@material-ui/icons/LabelOff";
+import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
+import TextRotationNoneIcon from "@material-ui/icons/TextRotationNone";
+import VideocamIcon from "@material-ui/icons/Videocam";
 
 import FilesystemBrowser from "./Filesystem/FilesystemBrowser";
 import IDFileModal from "./ID/IDFileModal";
@@ -37,42 +43,39 @@ class FileManager extends Component {
         };
     }
 
-    componentWillMount() {
-        this._parseURL(this.props);
+    componentDidMount() {
+        this._parseURL();
     }
 
-    componentWillReceiveProps(nextProps) {
-        this._parseURL(nextProps);
-    }
-
-    _parseURL(props) {
-        const settingDirectories = props.settings.directories;
-
-        const settingKey = props.match.params.setting_key;
-
-        if (settingKey === undefined) {
-            this.setState({
-                currentPath: "",
-                currentPathInfo: {},
-                currentToplevelDirecory: "",
-                selectedRows: [],
-                isReloading: false,
-            });
-            return;
+    componentDidUpdate(prevProps) {
+        if (this.props.match.params.subpath !== undefined) {
+            this._parseURL();
         }
+    }
 
-        const newSubpath = props.match.params.subpath;
+    _parseURL() {
+        const { settings, match } = this.props;
+        const settingDirectories = settings.directories;
+
+        let settingKey = match.params.setting_key;
+
+        const newSubpath = match.params.subpath;
 
         let subpath = "";
         if (newSubpath !== undefined) {
             subpath = decodeURIComponent(newSubpath);
         }
 
-        const dir = settingDirectories.find((dir) => dir.key === settingKey);
+        let dir = {};
+        if (settingKey === undefined) {
+            dir = settingDirectories[0];
+        } else {
+            dir = settingDirectories.find((dir) => dir.key === settingKey);
+        }
 
         const pathInfo = {
             setting_id: dir.id,
-            setting_key: settingKey,
+            setting_key: dir.key,
             subpath,
         };
         this.setState({
@@ -389,20 +392,20 @@ class FileManager extends Component {
         return (
             <div>
                 <div className="ib-filemanager-button-bar">
-                    <Button.Group>
+                    <ButtonGroup>
                         <Button
                             type="primary"
-                            icon="video-camera"
+                            startIcon={<VideocamIcon />}
                             size="small"
                             onClick={this._handleSelectVideos.bind(this)}
                         >
                             Select Videos
                         </Button>
-                    </Button.Group>
+                    </ButtonGroup>
                     &nbsp;
-                    <Button.Group>
+                    <ButtonGroup>
                         <Button
-                            icon="tag"
+                            startIcon={<LocalOfferIcon />}
                             size="small"
                             disabled={buttonDisabled}
                             onClick={this._handleClickIDMultipleEpisodes.bind(
@@ -412,7 +415,7 @@ class FileManager extends Component {
                             ID
                         </Button>
                         <Button
-                            icon="export"
+                            startIcon={<TextRotationNoneIcon />}
                             size="small"
                             disabled={buttonDisabled}
                             onClick={this._handleClickMoveRename.bind(this)}
@@ -420,24 +423,22 @@ class FileManager extends Component {
                             Move or Rename
                         </Button>
                         <Button
-                            icon="delete"
+                            startIcon={<DeleteIcon />}
                             size="small"
-                            type="danger"
                             disabled={buttonDisabled}
                             onClick={this._handleClickTrash.bind(this)}
                         >
                             Trash
                         </Button>
                         <Button
-                            icon="disconnect"
+                            startIcon={<LabelOffIcon />}
                             size="small"
-                            type="danger"
                             disabled={buttonDisabled}
                             onClick={this._handleClickUntag.bind(this)}
                         >
                             Remove ID
                         </Button>
-                    </Button.Group>
+                    </ButtonGroup>
                 </div>
                 <FilesystemBrowser
                     actionColumns={this._buildActionColumns()}
@@ -501,6 +502,13 @@ class FileManager extends Component {
         );
     }
 
+    _handleClickTab(directory) {
+        const { history } = this.props;
+        const { currentToplevelDirectory } = this.state;
+        history.push(
+            "/filemanager/" + currentToplevelDirectory + "/" + directory
+        );
+    }
     _buildDirectoryMenu() {
         const settingDirectories = this.props.settings.directories;
         const { currentToplevelDirectory } = this.state;
@@ -512,15 +520,20 @@ class FileManager extends Component {
                     ? "ib-filemanager-button ib-filemanager-button-active"
                     : "ib-filemanager-button";
             menuList.push(
-                <Tab key={dir.value}>
-                    <Link to={"/filemanager/" + dir.key}>{dir.key}</Link>
-                </Tab>
+                <Tab
+                    label={dir.key}
+                    key={dir.value}
+                    value={dir.value}
+                    onClick={() => this._handleClickTab(dir.value)}
+                />
             );
         });
 
         return (
             <div id="ib-filemanager-directorymenu">
-                <Tabs value={currentToplevelDirectory}>{menuList}</Tabs>
+                <Tabs value={currentToplevelDirectory} size="small">
+                    {menuList}
+                </Tabs>
             </div>
         );
     }
@@ -528,9 +541,10 @@ class FileManager extends Component {
     render() {
         const { currentToplevelDirectory } = this.state;
 
-        let directoryMenu = this._buildDirectoryMenu();
+        let directoryMenu = "";
         let output = "";
         if (currentToplevelDirectory) {
+            directoryMenu = this._buildDirectoryMenu();
             output = this._buildFileManager();
         }
         return (

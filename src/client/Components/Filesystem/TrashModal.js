@@ -14,10 +14,14 @@ class TrashModal extends Component {
         };
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            isTrashing: false,
-        });
+    componentDidUpdate(prevProps) {
+        const { isVisible } = this.props;
+        if (isVisible && isVisible !== prevProps.isVisible) {
+            // Reset the state
+            this.setState({
+                isTrashing: false,
+            });
+        }
     }
 
     _handlePressOk() {

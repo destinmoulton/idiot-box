@@ -28,7 +28,7 @@ class IDFileModal extends Component {
         this.state = this.INITIAL_STATE;
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.setState(this.INITIAL_STATE);
     }
 

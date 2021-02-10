@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
+import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import FolderIcon from "@material-ui/icons/Folder";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -28,7 +30,7 @@ class FilesystemBrowser extends Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         let currentPath = this.props.basePath;
         if (this.props.currentPath !== "") {
             currentPath = this.props.currentPath;
@@ -37,18 +39,17 @@ class FilesystemBrowser extends Component {
         this._getDirFromServer(currentPath, this.props.basePath);
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.forceReload) {
+    componentDidUpdate(prevProps, prevState) {
+        const { forceReload, currentPath, basePath } = this.props;
+        if (forceReload !== prevProps.forceReload && forceReload === true) {
             this._reloadDir();
         }
-
-        if (
-            nextProps.currentPath !== "" &&
-            nextProps.currentPath !== this.state.currentPath
-        ) {
-            this._getDirFromServer(nextProps.currentPath, this.props.basePath);
-        } else if (nextProps.basePath !== this.props.basePath) {
-            this._getDirFromServer(nextProps.basePath, nextProps.basePath);
+        if (!this.state.isLoading) {
+            if (currentPath !== "" && currentPath !== prevState.currentPath) {
+                this._getDirFromServer(currentPath, prevProps.basePath);
+            } else if (basePath !== prevProps.basePath) {
+                this._getDirFromServer(basePath, basePath);
+            }
         }
     }
 
@@ -190,48 +191,43 @@ class FilesystemBrowser extends Component {
         this._getDirFromServer(newPath, basePath);
     }
 
-    _buildColumns() {
+    _buildRows() {
         const { basePath } = this.props;
-        const { currentPath } = this.state;
+        const { currentPath, dirList } = this.state;
 
-        return [
-            {
-                title: "Name",
-                dataIndex: "name",
-                render: (text, record) => {
-                    if (record.isDirectory) {
-                        let icon = <Icon type={"folder"} />;
-                        if (record.name === this.PARENT_DIR_NAME) {
-                            icon = <span>🡡</span>;
-                        }
-                        return (
-                            <a
-                                href="javascript:void(0);"
-                                onClick={this._handleDirClick.bind(
-                                    this,
-                                    record.name
-                                )}
-                            >
-                                {icon}&nbsp;&nbsp;{record.name}
-                            </a>
-                        );
-                    } else {
-                        return (
-                            <FileDetails
-                                assocData={record.assocData}
-                                filename={record.name}
-                                basePath={basePath}
-                                fullPath={currentPath}
-                            />
-                        );
-                    }
-                },
-            },
-            {
-                title: "Size",
-                dataIndex: "size",
-            },
-        ];
+        const rows = [];
+        dirList.forEach((item) => {
+            let name = "";
+            if (item.isDirectory) {
+                let icon = <FolderIcon />;
+                if (item.name === this.PARENT_DIR_NAME) {
+                    icon = <ArrowUpwardIcon />;
+                }
+                name = (
+                    <Button onClick={() => this._handleDirClick(item.name)}>
+                        {icon}&nbsp;&nbsp;{item.name}
+                    </Button>
+                );
+            } else {
+                name = (
+                    <FileDetails
+                        assocData={item.assocData}
+                        filename={item.name}
+                        basePath={basePath}
+                        fullPath={currentPath}
+                    />
+                );
+            }
+            rows.push(
+                <TableRow key={item.name}>
+                    <TableCell></TableCell>
+                    <TableCell>{name}</TableCell>
+                    <TableCell>{item.size}</TableCell>
+                    <TableCell></TableCell>
+                </TableRow>
+            );
+        });
+        return rows;
     }
 
     _buildLoadingBox() {
@@ -246,17 +242,14 @@ class FilesystemBrowser extends Component {
 
     _buildTable() {
         const {
-            actionColumns,
             hasCheckboxes,
             parentHandleSelectChange,
             selectedRowKeys,
         } = this.props;
 
-        const { currentPath, dirList, isLoading } = this.state;
+        const { currentPath } = this.state;
 
-        const rows = dirList;
-
-        let columns = [...this._buildColumns(), ...actionColumns];
+        const rows = this._buildRows();
 
         let rowSelection = {};
         if (hasCheckboxes) {
@@ -265,10 +258,6 @@ class FilesystemBrowser extends Component {
                 onChange: parentHandleSelectChange,
             };
         }
-
-        const locale = {
-            emptyText: "Empty directory.",
-        };
 
         return (
             <div>
@@ -286,26 +275,13 @@ class FilesystemBrowser extends Component {
                     <Table className="ib-filemanager-table">
                         <TableHead>
                             <TableRow>
-                                <TableCell>Check</TableCell>
+                                <TableCell></TableCell>
                                 <TableCell>Name</TableCell>
                                 <TableCell>Size</TableCell>
                                 <TableCell></TableCell>
                             </TableRow>
                         </TableHead>
-                        <TableBody>
-                            {rows.map((row) => (
-                                <TableRow key={row.name}>
-                                    <TableCell align="right"></TableCell>
-                                    <TableCell component="th" scope="row">
-                                        {row.name}
-                                    </TableCell>
-                                    <TableCell align="right">
-                                        {row.size}
-                                    </TableCell>
-                                    <TableCell align="right"></TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
+                        <TableBody>{rows}</TableBody>
                     </Table>
                 </TableContainer>
             </div>
@@ -314,11 +290,7 @@ class FilesystemBrowser extends Component {
 
     render() {
         const { isLoading } = this.state;
-        let displayComponent = isLoading
-            ? this._buildLoadingBox()
-            : this._buildTable();
-
-        return <div>{displayComponent}</div>;
+        return isLoading ? this._buildLoadingBox() : this._buildTable();
     }
 }
 

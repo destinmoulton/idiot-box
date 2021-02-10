@@ -20,7 +20,7 @@ const IdiotBoxLayout = (props) => {
             <Container className="layout">
                 <IdiotBoxHeader callAPI={props.callAPI} />
                 <Grid container>
-                    <Grid item xs={12} id="ib-layout-content-box">
+                    <Grid item container xs={12} id="ib-layout-content-box">
                         <Route
                             path="/"
                             exact
@@ -84,7 +84,7 @@ const IdiotBoxLayout = (props) => {
                             )}
                         />
                     </Grid>
-                    <Grid xs={12} className="ib-footer">
+                    <Grid item xs={12} className="ib-footer">
                         Idiot Box created by Destin Moulton
                     </Grid>
                 </Grid>

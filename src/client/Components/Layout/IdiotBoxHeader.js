@@ -22,21 +22,33 @@ class IdiotBoxHeader extends Component {
 
     render() {
         return (
-            <AppBar>
+            <AppBar position="static">
                 <Toolbar
                     theme="dark"
                     mode="horizontal"
-                    style={{ lineHeight: "40px" }}
+                    className="ib-header-toolbar"
                 >
-                    <List component="nav" aria-labelledby="main navigation">
+                    <List
+                        component="nav"
+                        aria-labelledby="main navigation"
+                        className="linklist"
+                    >
                         {navbarItems.map(({ title, path }) => (
-                            <Link key={path} to={path}>
+                            <Link
+                                key={path}
+                                to={path}
+                                className="linklist-linktext"
+                            >
                                 <ListItem button>
                                     <ListItemText primary={title} />
                                 </ListItem>
                             </Link>
                         ))}
-                        <Link key={"/settings"} to="/settings">
+                        <Link
+                            key={"/settings"}
+                            to="/settings"
+                            className="it-header-linktext"
+                        >
                             <ListItem button>
                                 <ListItemIcon>
                                     <SettingsIcon />
