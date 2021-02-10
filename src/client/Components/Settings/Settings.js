@@ -1,14 +1,13 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import { Row, Col } from 'antd';
+import Grid from "@material-ui/core/Grid";
 
-import DirectoriesEditor from './DirectoriesEditor';
+import DirectoriesEditor from "./DirectoriesEditor";
 
 class Settings extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-
     }
 
     render() {
@@ -16,37 +15,36 @@ class Settings extends Component {
             lastAPIAction,
             lastSavedSettingID,
             saveInProgress,
-            settings
+            settings,
         } = this.props;
-        
+
         return (
-            <div >
-                <Row>
-                    <Col>
-                        <h3>Media Directories</h3>
-                    </Col>
-                    <Col>
-                        <DirectoriesEditor 
-                            saveInProgress={saveInProgress}
-                            lastAPIAction={lastAPIAction}
-                            lastSavedSettingID={lastSavedSettingID}
-                            settings={settings.directories}
-                            settingCategory={"directories"} />
-                    </Col>
-                </Row>
-            </div>
+            <Grid container spacing={2}>
+                <Grid xs={12}>
+                    <h3>Media Directories</h3>
+                </Grid>
+                <Grid xs={12}>
+                    <DirectoriesEditor
+                        saveInProgress={saveInProgress}
+                        lastAPIAction={lastAPIAction}
+                        lastSavedSettingID={lastSavedSettingID}
+                        settings={settings.directories}
+                        settingCategory={"directories"}
+                    />
+                </Grid>
+            </Grid>
         );
     }
 }
 
-const mapStateToProps = (state)=>{
+const mapStateToProps = (state) => {
     const { settings } = state;
     return {
         saveInProgress: settings.saveInProgress,
         lastAPIAction: settings.lastAPIAction,
         lastSavedSettingID: settings.lastSavedSettingID,
-        settings: settings.settings
-    }
-}
+        settings: settings.settings,
+    };
+};
 
 export default connect(mapStateToProps)(Settings);

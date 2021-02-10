@@ -1,8 +1,11 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Button, Checkbox, Col, Input, Modal, Row } from "antd";
+import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
+import DialogModal from "../shared/DialogModal";
 import ArchiveSingleEpisode from "./ArchiveSingleEpisode";
 import EpisodeIDSelector from "./EpisodeIDSelector";
 import MovieCheckForm from "./MovieID/MovieCheckForm";
@@ -16,7 +19,7 @@ class IDFileModal extends Component {
     INITIAL_STATE = {
         currentView: "two_column_single_id",
         episodeInfo: {},
-        movieSearchString: ""
+        movieSearchString: "",
     };
 
     constructor(props) {
@@ -33,7 +36,7 @@ class IDFileModal extends Component {
         const { onCancel } = this.props;
         this.setState({
             currentView: "two_column_single_id",
-            movieSearchString: ""
+            movieSearchString: "",
         });
         onCancel();
     }
@@ -41,22 +44,22 @@ class IDFileModal extends Component {
     _handleClickSearchMovies(movieSearchString) {
         this.setState({
             currentView: "movie_search_results",
-            movieSearchString
+            movieSearchString,
         });
     }
 
     _handleClickIDEpisode(episodeInfo) {
         this.setState({
             currentView: "archive_episode",
-            episodeInfo
+            episodeInfo,
         });
     }
 
     _buildTwoColumnSingleID() {
         const { callAPI, currentFilename } = this.props;
         return (
-            <div>
-                <Col span={10}>
+            <Grid container spacing={2}>
+                <Grid item xs={6}>
                     <h4>Movie</h4>
                     <MovieCheckForm
                         currentFilename={currentFilename}
@@ -64,8 +67,8 @@ class IDFileModal extends Component {
                             this
                         )}
                     />
-                </Col>
-                <Col span={12} offset={1}>
+                </Grid>
+                <Grid item xs={6}>
                     <div className="ib-idmodal-idepisode-box">
                         <h4>Episode</h4>
                         <EpisodeIDSelector
@@ -73,8 +76,8 @@ class IDFileModal extends Component {
                             onIDEpisode={this._handleClickIDEpisode.bind(this)}
                         />
                     </div>
-                </Col>
-            </div>
+                </Grid>
+            </Grid>
         );
     }
 
@@ -84,7 +87,7 @@ class IDFileModal extends Component {
             callAPI,
             currentFilename,
             currentPathInfo,
-            onIDComplete
+            onIDComplete,
         } = this.props;
 
         return (
@@ -105,7 +108,7 @@ class IDFileModal extends Component {
             currentFilename,
             currentPathInfo,
             currentToplevelDirectory,
-            onIDComplete
+            onIDComplete,
         } = this.props;
 
         return (
@@ -121,7 +124,7 @@ class IDFileModal extends Component {
 
     _changeCurrentView(newView) {
         this.setState({
-            currentView: newView
+            currentView: newView,
         });
     }
 
@@ -147,11 +150,12 @@ class IDFileModal extends Component {
         if (currentView !== this.INITIAL_VIEW) {
             backButton = (
                 <Button
+                    variant="contained"
                     onClick={this._changeCurrentView.bind(
                         this,
                         this.INITIAL_VIEW
                     )}
-                    icon="caret-left"
+                    startIcon={<ArrowBackIcon />}
                 >
                     Back
                 </Button>
@@ -159,31 +163,28 @@ class IDFileModal extends Component {
         }
 
         return (
-            <div>
-                <Modal
-                    title="ID File"
-                    visible={isVisible}
-                    onCancel={this._handleCancel.bind(this)}
-                    onOk={() => {}}
-                    footer={[
-                        <Button
-                            key="cancel"
-                            size="small"
-                            onClick={this._handleCancel.bind(this)}
-                        >
-                            Cancel
-                        </Button>
-                    ]}
-                    width={700}
-                >
-                    <Row>
-                        <div className="ib-idmodal-filename">
-                            {backButton}&nbsp;&nbsp;{currentFilename}
-                        </div>
-                    </Row>
-                    <Row>{contents}</Row>
-                </Modal>
-            </div>
+            <DialogModal
+                title="ID File"
+                isVisible={isVisible}
+                onClose={this._handleCancel.bind(this)}
+                footer={[
+                    <Button
+                        variant="contained"
+                        key="cancel"
+                        size="small"
+                        onClick={this._handleCancel.bind(this)}
+                    >
+                        Cancel
+                    </Button>,
+                ]}
+            >
+                <div>
+                    <div className="ib-idmodal-filename">
+                        {backButton}&nbsp;&nbsp;{currentFilename}
+                    </div>
+                </div>
+                <div>{contents}</div>
+            </DialogModal>
         );
     }
 }
@@ -194,7 +195,7 @@ IDFileModal.propTypes = {
     currentPathInfo: PropTypes.object.isRequired,
     isVisible: PropTypes.bool.isRequired,
     onCancel: PropTypes.func.isRequired,
-    onIDComplete: PropTypes.func.isRequired
+    onIDComplete: PropTypes.func.isRequired,
 };
 
 export default IDFileModal;

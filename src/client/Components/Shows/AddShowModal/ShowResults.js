@@ -2,7 +2,9 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { Input, Row, Spin } from "antd";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import MediaItemSearchDetails from "../../shared/MediaItemSearchDetails";
 
@@ -107,26 +109,25 @@ class ShowResults extends Component {
         });
 
         return (
-            <div>
-                <div id="ib-showmodal-searbox">
-                    <Input.Search
+            <Grid container spacing={3}>
+                <Grid item xs={12} id="ib-showmodal-searbox">
+                    <TextField
                         autoFocus
                         enterButton
                         onChange={this._handleChangeSearchInput.bind(this)}
-                        onSearch={this._handleSearchPress.bind(this)}
-                        style={{ width: 400 }}
+                        // onSearch={this._handleSearchPress.bind(this)}
                         value={currentSearchString}
                     />
-                </div>
-                <Row>{showList}</Row>
-            </div>
+                </Grid>
+                <Grid container>{showList}</Grid>
+            </Grid>
         );
     }
 
     _buildAddingShow() {
         return (
             <div className="ib-spinner-container">
-                <Spin />
+                <CircularProgress />
                 <br />
                 Adding show. This could take a while...
             </div>

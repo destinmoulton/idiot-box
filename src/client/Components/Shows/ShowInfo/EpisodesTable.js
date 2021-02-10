@@ -1,9 +1,14 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Link } from "react-router-dom";
-import { Button, Icon, Row, Spin, Table } from "antd";
-
+import Button from "@material-ui/core/Button";
+import CheckIcon from "@material-ui/icons/Check";
+import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import LockIcon from "@material-ui/icons/Lock";
+import LockOpenIcon from "@material-ui/icons/LockOpen";
+import TableCell from "@material-ui/core/TableCell";
+import TableRow from "@material-ui/core/TableRow";
 import moment from "moment";
 
 import PlayButton from "../../PlayButton";
@@ -16,7 +21,7 @@ class EpisodesTable extends Component {
             selectedSeasonNum: -1,
             episodes: [],
             isLoadingEpisodes: false,
-            selectedEpisodeKeys: []
+            selectedEpisodeKeys: [],
         };
     }
 
@@ -38,12 +43,12 @@ class EpisodesTable extends Component {
         const { callAPI, show } = this.props;
 
         this.setState({
-            isLoadingEpisodes: true
+            isLoadingEpisodes: true,
         });
 
         const options = {
             show_id: show.id,
-            season_number: seasonNum
+            season_number: seasonNum,
         };
 
         callAPI(
@@ -58,7 +63,7 @@ class EpisodesTable extends Component {
         this.setState({
             selectedSeasonNum: seasonNum,
             episodes,
-            isLoadingEpisodes: false
+            isLoadingEpisodes: false,
         });
     }
 
@@ -67,12 +72,12 @@ class EpisodesTable extends Component {
         const { activeSeasonNum, callAPI } = this.props;
 
         this.setState({
-            isLoadingEpisodes: true
+            isLoadingEpisodes: true,
         });
 
         const params = {
             episode_ids: selectedEpisodeKeys,
-            watched_status: newWatchedStatus
+            watched_status: newWatchedStatus,
         };
         callAPI(
             "shows.episodes.toggle_watched",
@@ -84,7 +89,7 @@ class EpisodesTable extends Component {
 
     _handleSelectEpisodeTableRow(selectedEpisodeKeys) {
         this.setState({
-            selectedEpisodeKeys
+            selectedEpisodeKeys,
         });
     }
 
@@ -100,11 +105,11 @@ class EpisodesTable extends Component {
 
         let rowSelection = {
             selectedEpisodeKeys,
-            onChange: this._handleSelectEpisodeTableRow.bind(this)
+            onChange: this._handleSelectEpisodeTableRow.bind(this),
         };
 
         const locale = {
-            emptyText: "No episodes found."
+            emptyText: "No episodes found.",
         };
 
         return (
@@ -120,56 +125,41 @@ class EpisodesTable extends Component {
         );
     }
 
-    _episodeTableColumns() {
+    _episodeTableRows() {
         const { directories } = this.props.settings;
 
-        return [
-            {
-                title: "Num",
-                dataIndex: "episode_number"
-            },
-            {
-                title: <Icon type="check" />,
-                render: (text, record) => {
-                    let iconType = "";
-                    if (record.watched === 1) {
-                        iconType = "check";
-                    } else {
-                        iconType = "minus";
-                    }
-                    return <Icon type={iconType} />;
-                }
-            },
-            {
-                title: "Name",
-                dataIndex: "title"
-            },
-            {
-                title: "First Aired",
-                render: (text, record) => {
-                    return moment
-                        .unix(record.first_aired)
-                        .format("MMM. D, YYYY, h:mm:ss a");
-                }
-            },
-            {
-                title: (
-                    <Icon type="play-circle" className="ib-playbutton-icon" />
-                ),
-                render: (text, record) => {
-                    if (record.file_info.hasOwnProperty("id")) {
-                        const fullPath =
-                            directories.Shows + "/" + record.file_info.subpath;
-                        return (
-                            <PlayButton
-                                filename={record.file_info.filename}
-                                fullPath={fullPath}
-                            />
-                        );
-                    }
-                }
+        let output = [];
+        directories.forEach((dir) => {
+            let watchedIcon = <CheckIcon />;
+            if (dir.watched) {
+                watchedIcon = <CheckBoxOutlineBlankIcon />;
             }
-        ];
+            let airedDate = moment
+                .unix(dir.first_aired)
+                .format("MMM. D, YYYY, h:mm:ss a");
+            let play = <span></span>;
+            if (record.file_info.hasOwnProperty("id")) {
+                const fullPath =
+                    directories.Shows + "/" + record.file_info.subpath;
+                play = (
+                    <PlayButton
+                        filename={record.file_info.filename}
+                        fullPath={fullPath}
+                    />
+                );
+            }
+
+            output.push(
+                <TableRow>
+                    <TableCell>{dir.episode_number}</TableCell>
+                    <TableCell>{watchedIcon}</TableCell>);
+                    <TableCell>{dir.title}</TableCell>
+                    <TableCell>{airedDate}</TableCell>
+                    <TableCell>{play}</TableCell>
+                </TableRow>
+            );
+        });
+        return output;
     }
 
     _buildEpisodesList() {
@@ -178,7 +168,7 @@ class EpisodesTable extends Component {
 
         let episodeList = [];
 
-        episodes.forEach(episode => {
+        episodes.forEach((episode) => {
             let playButton = "";
 
             const el = (
@@ -203,13 +193,15 @@ class EpisodesTable extends Component {
         if (season.locked) {
             toggleLockButton = (
                 <Button onClick={this._handleToggleSeasonLock.bind(this, 0)}>
-                    <Icon type="unlock" />&nbsp;Unlock Season
+                    <LockOpenIcon />
+                    &nbsp;Unlock Season
                 </Button>
             );
         } else {
             toggleLockButton = (
                 <Button onClick={this._handleToggleSeasonLock.bind(this, 1)}>
-                    <Icon type="lock" />&nbsp;Lock Season
+                    <LockIcon />
+                    &nbsp;Lock Season
                 </Button>
             );
         }
@@ -218,7 +210,7 @@ class EpisodesTable extends Component {
 
         return (
             <div>
-                <Button.Group>
+                <div>
                     <Button
                         onClick={this._changeSelectedEpisodesWatchedStatus.bind(
                             this,
@@ -237,9 +229,9 @@ class EpisodesTable extends Component {
                     >
                         Toggle to UnWatched
                     </Button>
-                </Button.Group>
+                </div>
                 &nbsp;
-                <Button.Group>{toggleLockButton}</Button.Group>
+                <div>{toggleLockButton}</div>
             </div>
         );
     }
@@ -253,7 +245,7 @@ class EpisodesTable extends Component {
             if (isLoadingEpisodes) {
                 episodeList = (
                     <div id="ib-loading-box">
-                        <Spin />
+                        <CircularProgress />
                     </div>
                 );
             } else {
@@ -279,7 +271,7 @@ EpisodesTable.propTypes = {
     onToggleSeasonLock: PropTypes.func.isRequired,
     season: PropTypes.object.isRequired,
     settings: PropTypes.object.isRequired,
-    show: PropTypes.object.isRequired
+    show: PropTypes.object.isRequired,
 };
 
 export default EpisodesTable;

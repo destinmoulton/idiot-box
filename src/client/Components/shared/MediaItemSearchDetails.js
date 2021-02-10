@@ -2,7 +2,9 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { Button, Col, Spin } from "antd";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { callAPI } from "../../actions/api.actions";
 
@@ -89,7 +91,7 @@ class MediaItemSearchDetails extends Component {
         const { imageStatus, imageURL } = this.state;
         const { item, onSelectItem } = this.props;
 
-        let image = <Spin />;
+        let image = <CircularProgress />;
         if (imageStatus === "found") {
             image = (
                 <img
@@ -105,8 +107,9 @@ class MediaItemSearchDetails extends Component {
 
         let itemTitle = { __html: item.title };
         return (
-            <Col
-                span={5}
+            <Grid
+                item
+                xs={5}
                 key={item.ids.trakt}
                 className="ib-idmodal-item-search-details-box"
             >
@@ -134,7 +137,7 @@ class MediaItemSearchDetails extends Component {
                     </a>
                     <br />
                 </div>
-            </Col>
+            </Grid>
         );
     }
 }

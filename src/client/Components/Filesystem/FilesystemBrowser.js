@@ -1,7 +1,14 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Button, Checkbox, Icon, Spin, Table } from "antd";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 
 import { socketClient } from "../../store";
 
@@ -230,7 +237,7 @@ class FilesystemBrowser extends Component {
     _buildLoadingBox() {
         return (
             <div className="ib-filebrowser-spin-box">
-                <Spin />
+                <CircularProgress />
                 <br />
                 Loading directory list...
             </div>
@@ -264,29 +271,44 @@ class FilesystemBrowser extends Component {
         };
 
         return (
-            <Table
-                className="ib-filemanager-table"
-                columns={columns}
-                dataSource={rows}
-                pagination={false}
-                size="small"
-                title={() => {
-                    return (
-                        <span>
-                            <Button
-                                icon="reload"
-                                onClick={this._reloadDir.bind(this)}
-                                size="small"
-                            />
-                            <span className="ib-filebrowser-current-path">
-                                {currentPath}
-                            </span>
-                        </span>
-                    );
-                }}
-                rowSelection={rowSelection}
-                locale={locale}
-            />
+            <div>
+                <span>
+                    <Button
+                        icon="reload"
+                        onClick={this._reloadDir.bind(this)}
+                        size="small"
+                    />
+                    <span className="ib-filebrowser-current-path">
+                        {currentPath}
+                    </span>
+                </span>
+                <TableContainer>
+                    <Table className="ib-filemanager-table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>Check</TableCell>
+                                <TableCell>Name</TableCell>
+                                <TableCell>Size</TableCell>
+                                <TableCell></TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {rows.map((row) => (
+                                <TableRow key={row.name}>
+                                    <TableCell align="right"></TableCell>
+                                    <TableCell component="th" scope="row">
+                                        {row.name}
+                                    </TableCell>
+                                    <TableCell align="right">
+                                        {row.size}
+                                    </TableCell>
+                                    <TableCell align="right"></TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </div>
         );
     }
 

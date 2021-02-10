@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Button, Input, Spin } from "antd";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import TextField from "@material-ui/core/TextField";
 
 import MovieNameLib from "../../../lib/MovieName.lib";
 
@@ -12,7 +14,7 @@ class MovieArchive extends Component {
         this.state = {
             newMovieDirectory: "",
             newMovieFilename: "",
-            isIDing: false
+            isIDing: false,
         };
 
         this.movieNameLib = new MovieNameLib();
@@ -25,7 +27,7 @@ class MovieArchive extends Component {
             newMovieFilename: this.movieNameLib.getMovieFilename(
                 currentFilename,
                 movie
-            )
+            ),
         });
     }
 
@@ -35,13 +37,13 @@ class MovieArchive extends Component {
             currentPathInfo,
             callAPI,
             movie,
-            movieImageURL
+            movieImageURL,
         } = this.props;
 
         const { newMovieDirectory, newMovieFilename } = this.state;
 
         this.setState({
-            isIDing: true
+            isIDing: true,
         });
 
         const options = {
@@ -50,12 +52,12 @@ class MovieArchive extends Component {
             source_info: {
                 setting_id: currentPathInfo.setting_id,
                 subpath: currentPathInfo.subpath,
-                filename: currentFilename
+                filename: currentFilename,
             },
             dest_info: {
                 subpath: newMovieDirectory,
-                filename: newMovieFilename
-            }
+                filename: newMovieFilename,
+            },
         };
 
         callAPI(
@@ -74,13 +76,13 @@ class MovieArchive extends Component {
 
     _handleChangeFilename(evt) {
         this.setState({
-            newMovieFilename: evt.target.value
+            newMovieFilename: evt.target.value,
         });
     }
 
     _handleChangeDirectory(evt) {
         this.setState({
-            newMovieDirectory: evt.target.value
+            newMovieDirectory: evt.target.value,
         });
     }
 
@@ -97,12 +99,12 @@ class MovieArchive extends Component {
                 </div>
                 <div className="ib-idmodal-archivesingle-form-box">
                     Directory:{" "}
-                    <Input
+                    <TextField
                         onChange={this._handleChangeDirectory.bind(this)}
                         value={newMovieDirectory}
                     />
                     Filename:{" "}
-                    <Input
+                    <TextField
                         onChange={this._handleChangeFilename.bind(this)}
                         value={newMovieFilename}
                     />
@@ -126,8 +128,9 @@ class MovieArchive extends Component {
         if (isIDing) {
             contents = (
                 <div className="ib-spinner-container">
-                    <Spin />
-                    <br />Adding Movie...
+                    <CircularProgress />
+                    <br />
+                    Adding Movie...
                 </div>
             );
         } else {
@@ -144,7 +147,7 @@ MovieArchive.propTypes = {
     currentPathInfo: PropTypes.object.isRequired,
     movie: PropTypes.object.isRequired,
     movieImageURL: PropTypes.string.isRequired,
-    onIDComplete: PropTypes.func.isRequired
+    onIDComplete: PropTypes.func.isRequired,
 };
 
 export default MovieArchive;

@@ -1,11 +1,10 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Button, Col, Input, Modal, Select } from "antd";
-const Option = Select.Option;
-
+import TextField from "@material-ui/core/TextField";
+import SelectSearch from "react-select-search";
+import DialogModal from "../shared/DialogModal";
 import Regex from "../../lib/Regex.lib";
-
 class IDMultipleEpisodesModal extends Component {
     INITIAL_STATE = {
         currentEpisodesInfo: {},
@@ -18,7 +17,7 @@ class IDMultipleEpisodesModal extends Component {
         episodes: [],
         seasonParseRegexStr: "E\\d+",
         seasons: [],
-        shows: []
+        shows: [],
     };
 
     constructor(props) {
@@ -35,17 +34,17 @@ class IDMultipleEpisodesModal extends Component {
         const { episodesToID } = nextProps;
 
         let currentEpisodesInfo = {};
-        episodesToID.forEach(ep => {
+        episodesToID.forEach((ep) => {
             currentEpisodesInfo[ep.name] = {
                 info: ep,
                 newFilename: "",
-                selectedEpisodeID: 0
+                selectedEpisodeID: 0,
             };
         });
 
         this.setState({
             ...this.INITIAL_STATE,
-            currentEpisodesInfo
+            currentEpisodesInfo,
         });
 
         this._getShows();
@@ -63,7 +62,7 @@ class IDMultipleEpisodesModal extends Component {
             currentShowInfo: {},
             shows,
             seasons: [],
-            episodes: []
+            episodes: [],
         });
     }
 
@@ -72,7 +71,7 @@ class IDMultipleEpisodesModal extends Component {
         const { shows } = this.state;
 
         const currentShowInfo = shows.find(
-            show => show.id === parseInt(showID)
+            (show) => show.id === parseInt(showID)
         );
 
         this.setState({
@@ -80,11 +79,11 @@ class IDMultipleEpisodesModal extends Component {
             currentShowID: parseInt(showID),
             currentShowInfo,
             seasons: [],
-            episodes: []
+            episodes: [],
         });
 
         const options = {
-            show_id: showID
+            show_id: showID,
         };
         callAPI(
             "shows.seasons.get",
@@ -96,7 +95,7 @@ class IDMultipleEpisodesModal extends Component {
 
     _seasonsReceived(seasons) {
         this.setState({
-            seasons
+            seasons,
         });
     }
 
@@ -105,7 +104,7 @@ class IDMultipleEpisodesModal extends Component {
         const { currentShowInfo, seasons } = this.state;
 
         const currentSeasonInfo = seasons.find(
-            season => season.id === parseInt(seasonID)
+            (season) => season.id === parseInt(seasonID)
         );
 
         const name = Regex.sanitizeShowTitle(currentShowInfo.title);
@@ -115,12 +114,12 @@ class IDMultipleEpisodesModal extends Component {
             currentSeasonID: parseInt(seasonID),
             currentSeasonInfo,
             episodeDestPath,
-            episodes: []
+            episodes: [],
         });
 
         const options = {
             show_id: this.state.currentShowID,
-            season_id: parseInt(seasonID)
+            season_id: parseInt(seasonID),
         };
         callAPI(
             "shows.episodes.get",
@@ -140,7 +139,7 @@ class IDMultipleEpisodesModal extends Component {
         const { currentEpisodesInfo } = this.state;
         // Set the default selected episode based on the filename
         const epFilenames = Object.keys(currentEpisodesInfo);
-        epFilenames.forEach(filename => {
+        epFilenames.forEach((filename) => {
             // Get the S##E##
             const epPos = filename.search(RegExp(seasonParseRegexStr));
             if (epPos > -1) {
@@ -160,7 +159,7 @@ class IDMultipleEpisodesModal extends Component {
                     }
                 }
                 const ep = episodes.find(
-                    ep => ep.episode_number === episodeNumber
+                    (ep) => ep.episode_number === episodeNumber
                 );
                 const episodeID = ep !== undefined ? ep.id : 0;
 
@@ -175,7 +174,7 @@ class IDMultipleEpisodesModal extends Component {
         this.setState({
             currentEpisodesInfo,
             episodes,
-            seasonParseRegexStr
+            seasonParseRegexStr,
         });
     }
 
@@ -212,7 +211,7 @@ class IDMultipleEpisodesModal extends Component {
 
         const filenames = Object.keys(currentEpisodesInfo);
         let editorList = [];
-        filenames.forEach(filename => {
+        filenames.forEach((filename) => {
             const episodeInfo = currentEpisodesInfo[filename];
 
             let episodesSelector = "";
@@ -230,7 +229,7 @@ class IDMultipleEpisodesModal extends Component {
                 <div key={filename} className="ib-idmultiplemodal-episode-box">
                     <h4>{filename}</h4>
                     {episodesSelector}
-                    <Input
+                    <TextField
                         value={episodeInfo.newFilename}
                         onChange={this._handleChangeEpisodeFilename.bind(
                             this,
@@ -246,29 +245,21 @@ class IDMultipleEpisodesModal extends Component {
     }
 
     _buildSelect(items, titleKey, onChange, defaultValue, prefix = "") {
-        let options = [
-            <Option key="0" value="0">
-                Select...
-            </Option>
-        ];
-        items.forEach(item => {
+        let options = [];
+        items.forEach((item) => {
             const itemTitle = prefix + item[titleKey];
-            options.push(
-                <Option key={item.id.toString()} value={item.id.toString()}>
-                    {itemTitle}
-                </Option>
-            );
+            options.push({ value: item.id.toString(), name: itemTitle });
         });
 
         return (
-            <Select
+            <SelectSearch
+                options={options}
                 key={Math.random()}
                 onChange={onChange}
-                optionFilterProp="children"
-                showSearch={true}
-                style={{ width: 200 }}
-                defaultValue={defaultValue.toString()}
-                filterOption={(input, option) => {
+                search={true}
+                placeholder="Select..."
+                value={defaultValue.toString()}
+                filterOptions={(input, option) => {
                     const toSearch = option.props.children;
                     return (
                         toSearch.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -276,7 +267,7 @@ class IDMultipleEpisodesModal extends Component {
                 }}
             >
                 {options}
-            </Select>
+            </SelectSearch>
         );
     }
 
@@ -290,7 +281,7 @@ class IDMultipleEpisodesModal extends Component {
         );
 
         this.setState({
-            currentEpisodesInfo
+            currentEpisodesInfo,
         });
     }
 
@@ -298,12 +289,12 @@ class IDMultipleEpisodesModal extends Component {
         const {
             currentShowInfo,
             currentSeasonInfo,
-            currentEpisodesInfo
+            currentEpisodesInfo,
         } = this.state;
         let newEpisodeInfo = currentEpisodesInfo[originalFilename];
 
         const episodeID = parseInt(episodeIDString);
-        let currentEpisode = episodes.find(ep => ep.id === episodeID);
+        let currentEpisode = episodes.find((ep) => ep.id === episodeID);
         if (currentEpisode === undefined) {
             newEpisodeInfo.newFilename = originalFilename;
             newEpisodeInfo.selectedEpisodeID = episodeID;
@@ -333,7 +324,7 @@ class IDMultipleEpisodesModal extends Component {
         currentEpisodesInfo[filename].newFilename = evt.target.value;
 
         this.setState({
-            currentEpisodesInfo
+            currentEpisodesInfo,
         });
     }
 
@@ -341,7 +332,7 @@ class IDMultipleEpisodesModal extends Component {
         const newPath = evt.target.value;
 
         this.setState({
-            episodeDestPath: newPath
+            episodeDestPath: newPath,
         });
     }
 
@@ -361,24 +352,24 @@ class IDMultipleEpisodesModal extends Component {
             currentEpisodesInfo,
             currentSeasonID,
             currentShowID,
-            episodeDestPath
+            episodeDestPath,
         } = this.state;
 
         this.setState({
-            isIDing: true
+            isIDing: true,
         });
 
         const options = {
             id_info: {
                 season_id: currentSeasonID,
                 show_id: currentShowID,
-                episodes: currentEpisodesInfo
+                episodes: currentEpisodesInfo,
             },
             source_path_info: {
                 setting_id: currentPathInfo.setting_id,
-                subpath: currentPathInfo.subpath
+                subpath: currentPathInfo.subpath,
             },
-            dest_subpath: episodeDestPath
+            dest_subpath: episodeDestPath,
         };
 
         callAPI(
@@ -414,7 +405,7 @@ class IDMultipleEpisodesModal extends Component {
         let input = "";
         if (episodeDestPath !== "") {
             input = (
-                <Input
+                <TextField
                     value={episodeDestPath}
                     onChange={this._handleChangeCurrentPath.bind(this)}
                 />
@@ -433,28 +424,21 @@ class IDMultipleEpisodesModal extends Component {
         const { seasonParseRegexStr } = this.state;
 
         const el = (
-            <Input.Group size="large">
-                <Col span="10">
-                    <Input
-                        addonBefore="Episode Regex: "
-                        value={seasonParseRegexStr}
-                        onChange={this._handleChangeEpisodeRegex.bind(this)}
-                    />
-                </Col>
-            </Input.Group>
+            <Grid xs="10">
+                <TextField
+                    label="Episode Regex: "
+                    value={seasonParseRegexStr}
+                    onChange={this._handleChangeEpisodeRegex.bind(this)}
+                />
+            </Grid>
         );
         return el;
     }
 
     render() {
-        const {
-            currentShowID,
-            currentSeasonID,
-            isVisible,
-            onCancel
-        } = this.props;
+        const { isVisible, onCancel } = this.props;
 
-        const { episodes, isIDing } = this.state;
+        const { episodes } = this.state;
 
         const showSeasonSelectors = this._buildShowSeasonSelectors();
         const pathInput = this._buildShowSeasonPathInput();
@@ -468,16 +452,15 @@ class IDMultipleEpisodesModal extends Component {
         const buttonDisabled = !this._areAllEpisodesSelected();
 
         return (
-            <Modal
+            <DialogModal
                 title="ID Multiple Episodes"
-                visible={isVisible}
-                onCancel={onCancel}
+                isVisible={isVisible}
+                onClose={onCancel}
                 footer={[
-                    <Button key="cancel" size="large" onClick={onCancel}>
+                    <Button key="cancel" size="small" onClick={onCancel}>
                         Cancel
-                    </Button>
+                    </Button>,
                 ]}
-                width={700}
             >
                 {showSeasonSelectors}
                 {pathInput}
@@ -487,12 +470,11 @@ class IDMultipleEpisodesModal extends Component {
                     <Button
                         onClick={this._handleClickIDButton.bind(this)}
                         disabled={buttonDisabled}
-                        loading={isIDing}
                     >
                         ID Episodes
                     </Button>
                 </div>
-            </Modal>
+            </DialogModal>
         );
     }
 }
@@ -503,7 +485,7 @@ IDMultipleEpisodesModal.propTypes = {
     episodesToID: PropTypes.array.isRequired,
     isVisible: PropTypes.bool.isRequired,
     onCancel: PropTypes.func.isRequired,
-    onIDComplete: PropTypes.func.isRequired
+    onIDComplete: PropTypes.func.isRequired,
 };
 
 export default IDMultipleEpisodesModal;

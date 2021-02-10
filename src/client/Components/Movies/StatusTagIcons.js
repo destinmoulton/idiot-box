@@ -2,15 +2,13 @@ import PropTypes from "prop-types";
 import React from "react";
 import { connect } from "react-redux";
 
-import { Icon, Tooltip } from "antd";
-
 import { StatusTagsLib, STATUS_TAGS } from "../../lib/StatusTags.lib";
 import { callAPI } from "../../actions/api.actions";
 
 class StatusTagIcons extends React.Component {
     static propTypes = {
         movie: PropTypes.object.isRequired,
-        onClickToggleStatusTag: PropTypes.func.isRequired
+        onClickToggleStatusTag: PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -41,7 +39,7 @@ class StatusTagIcons extends React.Component {
                 : tag.classes.inactive;
             return (
                 <Tooltip key={tagIndex} title={tag.title}>
-                    <Icon
+                    {/* <Icon
                         type={tagType}
                         size="large"
                         className={tagClass}
@@ -49,7 +47,7 @@ class StatusTagIcons extends React.Component {
                             this,
                             tag.tag
                         )}
-                    />
+                    /> */}
                 </Tooltip>
             );
         });

@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { truncate } from "lodash";
-
-import { Col, Icon, Row, Spin } from "antd";
-
+import Card from "@material-ui/core/Card";
+import CardContent from "@material-ui/core/CardContent";
+import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
 import { callAPI } from "../actions/api.actions";
 
 class NewEpisodes extends Component {
@@ -14,7 +14,7 @@ class NewEpisodes extends Component {
 
         this.state = {
             days: [],
-            episodes: {}
+            episodes: {},
         };
     }
 
@@ -27,7 +27,7 @@ class NewEpisodes extends Component {
         }
 
         this.setState({
-            days
+            days,
         });
     }
 
@@ -46,7 +46,7 @@ class NewEpisodes extends Component {
             .unix();
         const params = {
             start_unix_timestamp: startUnixTimestamp,
-            end_unix_timestamp: endUnixTimestamp
+            end_unix_timestamp: endUnixTimestamp,
         };
 
         callAPI(
@@ -63,7 +63,7 @@ class NewEpisodes extends Component {
         episodes[dayMoment.unix()] = newEpisodes;
 
         this.setState({
-            episodes
+            episodes,
         });
     }
 
@@ -137,11 +137,11 @@ class NewEpisodes extends Component {
         const { days, episodes } = this.state;
 
         let elements = [];
-        days.forEach(dayMoment => {
+        days.forEach((dayMoment) => {
             let unixDay = dayMoment.unix();
             const header = (
                 <h3>
-                    <Icon type="calendar" />
+                    <CalendarTodayIcon />
                     &nbsp;{dayMoment.format("dddd, MMMM Do YYYY")}
                 </h3>
             );
@@ -156,17 +156,19 @@ class NewEpisodes extends Component {
                         </div>
                     );
                 } else {
-                    episodes[unixDay].forEach(episode => {
+                    episodes[unixDay].forEach((episode) => {
                         const epEl = this._buildEpisodeDetails(episode);
                         epList.push(epEl);
                     });
                 }
             }
             const el = (
-                <Row key={unixDay} className="ib-newepisode-section">
-                    {header}
-                    {epList}
-                </Row>
+                <Card key={unixDay} className="ib-newepisode-section">
+                    <CardContent>
+                        {header}
+                        {epList}
+                    </CardContent>
+                </Card>
             );
             elements.push(el);
         });
@@ -180,7 +182,7 @@ class NewEpisodes extends Component {
 }
 
 NewEpisodes.propTypes = {
-    callAPI: PropTypes.func.isRequired
+    callAPI: PropTypes.func.isRequired,
 };
 
 export default NewEpisodes;

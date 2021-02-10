@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { Button, Select } from "antd";
-const Option = Select.Option;
+import Button from "@material-ui/core/Button";
+import SelectSearch from "react-select-search";
 
 import { callAPI } from "../../actions/api.actions";
 
@@ -18,7 +18,7 @@ class EpisodeIDSelector extends Component {
             currentEpisodeID: 0,
             episodes: [],
             seasons: [],
-            shows: []
+            shows: [],
         };
     }
 
@@ -38,7 +38,7 @@ class EpisodeIDSelector extends Component {
             currentEpisodeID: 0,
             shows,
             seasons: [],
-            episodes: []
+            episodes: [],
         });
     }
 
@@ -50,11 +50,11 @@ class EpisodeIDSelector extends Component {
             currentSeasonID: 0,
             currentShowID: parseInt(showID),
             seasons: [],
-            episodes: []
+            episodes: [],
         });
 
         const options = {
-            show_id: showID
+            show_id: showID,
         };
         callAPI(
             "shows.seasons.get",
@@ -66,7 +66,7 @@ class EpisodeIDSelector extends Component {
 
     _seasonsReceived(seasons) {
         this.setState({
-            seasons
+            seasons,
         });
     }
 
@@ -76,12 +76,12 @@ class EpisodeIDSelector extends Component {
         this.setState({
             currentSeasonID: parseInt(seasonID),
             currentEpisodeID: 0,
-            episodes: []
+            episodes: [],
         });
 
         const options = {
             show_id: this.state.currentShowID,
-            season_id: seasonID
+            season_id: seasonID,
         };
         callAPI(
             "shows.episodes.get",
@@ -93,13 +93,13 @@ class EpisodeIDSelector extends Component {
 
     _episodesReceived(episodes) {
         this.setState({
-            episodes
+            episodes,
         });
     }
 
     _handleSelectEpisode(episodeID) {
         this.setState({
-            currentEpisodeID: parseInt(episodeID)
+            currentEpisodeID: parseInt(episodeID),
         });
     }
 
@@ -111,29 +111,21 @@ class EpisodeIDSelector extends Component {
         prefix = "",
         searchable = false
     ) {
-        let options = [
-            <Option key="0" value="0">
-                Select...
-            </Option>
-        ];
+        let options = [];
 
-        items.forEach(item => {
+        items.forEach((item) => {
             const optionValue = prefix + item[titleKey];
-            options.push(
-                <Option key={item.id.toString()} value={item.id.toString()}>
-                    {optionValue}
-                </Option>
-            );
+            options.push({ value: item.id.toString(), name: optionValue });
         });
 
         return (
-            <Select
-                defaultValue={defaultValue.toString()}
+            <SelectSearch
+                options={options}
+                placeholder="Select..."
+                value={defaultValue.toString()}
                 onChange={onChange}
-                optionFilterProp="children"
-                showSearch={searchable}
-                style={{ width: 200 }}
-                filterOption={(input, option) => {
+                search={searchable}
+                filterOptions={(input, option) => {
                     const toSearch = option.props.children;
                     return (
                         toSearch.toLowerCase().indexOf(input.toLowerCase()) >= 0
@@ -141,7 +133,7 @@ class EpisodeIDSelector extends Component {
                 }}
             >
                 {options}
-            </Select>
+            </SelectSearch>
         );
     }
 
@@ -152,7 +144,7 @@ class EpisodeIDSelector extends Component {
         const episodeInfo = {
             currentShowID,
             currentSeasonID,
-            currentEpisodeID
+            currentEpisodeID,
         };
 
         onIDEpisode(episodeInfo);
@@ -165,7 +157,7 @@ class EpisodeIDSelector extends Component {
             currentEpisodeID,
             episodes,
             seasons,
-            shows
+            shows,
         } = this.state;
 
         const showSelector = this._buildSelect(
@@ -223,7 +215,7 @@ class EpisodeIDSelector extends Component {
 
 EpisodeIDSelector.propTypes = {
     callAPI: PropTypes.func.isRequired,
-    onIDEpisode: PropTypes.func.isRequired
+    onIDEpisode: PropTypes.func.isRequired,
 };
 
 export default EpisodeIDSelector;

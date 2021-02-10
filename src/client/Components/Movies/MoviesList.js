@@ -3,8 +3,9 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { Col, Icon, Input, Row, Select, Spin } from "antd";
-const Option = Select.Option;
+import SelectSearch from "react-select-search";
+import Grid from "@material-ui/core/Grid";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import MovieInfoModal from "./MovieInfoModal";
 import MovieThumbInfo from "./MovieThumbInfo";
@@ -22,7 +23,7 @@ class MoviesList extends Component {
             infomodalIsVisible: false,
             infomodalMovie: {},
             isLoadingMovies: false,
-            movies: []
+            movies: [],
         };
     }
 
@@ -34,7 +35,7 @@ class MoviesList extends Component {
         const { callAPI } = this.props;
 
         this.setState({
-            isLoadingMovies: true
+            isLoadingMovies: true,
         });
 
         callAPI(
@@ -47,7 +48,7 @@ class MoviesList extends Component {
 
     _moviesReceived(movies) {
         let processedMovies = [];
-        movies.forEach(movie => {
+        movies.forEach((movie) => {
             // Add properties to each movie
             movie["is_visible"] = true;
             movie["searchable_text"] = this._prepStringForFilter(movie.title);
@@ -56,21 +57,21 @@ class MoviesList extends Component {
 
         this.setState({
             movies: processedMovies,
-            isLoadingMovies: false
+            isLoadingMovies: false,
         });
     }
 
     _handleClickMovie(movie) {
         this.setState({
             infomodalIsVisible: true,
-            infomodalMovie: movie
+            infomodalMovie: movie,
         });
     }
 
     _handleCloseModal(shouldReload = false) {
         this.setState({
             infomodalIsVisible: false,
-            infomodalMovie: {}
+            infomodalMovie: {},
         });
 
         if (shouldReload) {
@@ -92,7 +93,7 @@ class MoviesList extends Component {
         const { callAPI } = this.props;
 
         const params = {
-            movie_id: movie.id
+            movie_id: movie.id,
         };
 
         callAPI(
@@ -109,12 +110,12 @@ class MoviesList extends Component {
 
         const { movies } = this.state;
 
-        const filteredMovies = movies.filter(movie => {
+        const filteredMovies = movies.filter((movie) => {
             return movie.id !== movieId;
         });
 
         this.setState({
-            movies: filteredMovies
+            movies: filteredMovies,
         });
     }
 
@@ -125,7 +126,10 @@ class MoviesList extends Component {
 
         const params = {
             movie_id: movie.id,
-            status_tags: statusTagsLib.toggleTag(movie.status_tags, tagToToggle)
+            status_tags: statusTagsLib.toggleTag(
+                movie.status_tags,
+                tagToToggle
+            ),
         };
 
         callAPI(
@@ -140,7 +144,7 @@ class MoviesList extends Component {
         const { infomodalIsVisible, infomodalMovie, movies } = this.state;
 
         let newInfomodalMovie = {};
-        const updatedMovies = movies.map(movie => {
+        const updatedMovies = movies.map((movie) => {
             if (movie.id === newMovie.id) {
                 movie.status_tags = newMovie.status_tags;
                 newInfomodalMovie = infomodalIsVisible
@@ -152,7 +156,7 @@ class MoviesList extends Component {
 
         this.setState({
             infomodalMovie: newInfomodalMovie,
-            movies: updatedMovies
+            movies: updatedMovies,
         });
     }
 
@@ -162,7 +166,7 @@ class MoviesList extends Component {
         const currentSearchString = evt.currentTarget.value;
 
         this.setState({
-            currentSearchString
+            currentSearchString,
         });
     }
 
@@ -170,7 +174,7 @@ class MoviesList extends Component {
         const { currentSearchString } = this.state;
 
         this.setState({
-            currentStatusTagSelected: tag
+            currentStatusTagSelected: tag,
         });
     }
 
@@ -178,13 +182,13 @@ class MoviesList extends Component {
         const {
             currentSearchString,
             currentStatusTagSelected,
-            movies
+            movies,
         } = this.state;
 
         const filterText = this._prepStringForFilter(currentSearchString);
 
         let filteredMovies = [];
-        movies.forEach(movie => {
+        movies.forEach((movie) => {
             if (filterText === "" && currentStatusTagSelected === "all") {
                 movie.is_visible = true;
             } else {
@@ -228,13 +232,13 @@ class MoviesList extends Component {
     _buildMovieList() {
         const filteredMovies = this._filterMovies();
         let movieList = [];
-        filteredMovies.forEach(movie => {
+        filteredMovies.forEach((movie) => {
             if (movie.is_visible) {
                 movieList.push(
-                    <Col
+                    <Grid
                         key={movie.id}
                         className="ib-movies-thumbnail-box"
-                        span={4}
+                        xs={4}
                     >
                         <MovieThumbInfo
                             movie={movie}
@@ -245,7 +249,7 @@ class MoviesList extends Component {
                                 this
                             )}
                         />
-                    </Col>
+                    </Grid>
                 );
             }
         });
@@ -256,28 +260,18 @@ class MoviesList extends Component {
     _buildStatusTagFilterSelect() {
         const { currentStatusTagSelected } = this.state;
 
-        let selectOptions = [
-            <Option key="all" value="all">
-                All
-            </Option>
-        ];
+        let selectOptions = [{ value: "all", name: "All" }];
 
         for (let tag of STATUS_TAGS) {
-            selectOptions.push(
-                <Option key={tag.tag} value={tag.tag}>
-                    <Icon type={tag.icons.active} />&nbsp;
-                    {tag.title}
-                </Option>
-            );
+            selectOptions.push({ value: tag.tag, name: tag.title });
         }
         return (
-            <Select
+            <SelectSearch
+                options={selectOptions}
                 className="ib-movies-selectstatustag"
-                defaultValue={currentStatusTagSelected}
+                value={currentStatusTagSelected}
                 onChange={this._handleChangeStatusTagFilter.bind(this)}
-            >
-                {selectOptions}
-            </Select>
+            ></SelectSearch>
         );
     }
 
@@ -287,14 +281,14 @@ class MoviesList extends Component {
             infomodalIsVisible,
             infomodalMovie,
             isLoadingMovies,
-            movies
+            movies,
         } = this.state;
 
         let content = "";
         if (isLoadingMovies) {
             content = (
                 <div className="ib-spinner-container">
-                    <Spin />
+                    <CircularProgress />
                 </div>
             );
         } else {
@@ -304,11 +298,11 @@ class MoviesList extends Component {
         const filterPlaceholder = `Filter ${movies.length} movies...`;
         const filterSelect = this._buildStatusTagFilterSelect();
         return (
-            <div>
-                <Row>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
                     <h2>Movies</h2>
-                </Row>
-                <Row className="ib-movies-searchbar">
+                </Grid>
+                <Grid item xs={12} className="ib-movies-searchbar">
                     <Input.Search
                         autoFocus
                         value={currentSearchString}
@@ -318,8 +312,10 @@ class MoviesList extends Component {
                         placeholder={filterPlaceholder}
                     />
                     {filterSelect}
-                </Row>
-                <Row>{content}</Row>
+                </Grid>
+                <Grid item xs={12}>
+                    {content}
+                </Grid>
                 <MovieInfoModal
                     onClickDelete={this._handlePressDelete.bind(this)}
                     onClose={this._handleCloseModal.bind(this)}
@@ -329,14 +325,14 @@ class MoviesList extends Component {
                         this
                     )}
                 />
-            </div>
+            </Grid>
         );
     }
 }
 
 MoviesList.propTypes = {
     settings: PropTypes.object.isRequired,
-    callAPI: PropTypes.func.isRequired
+    callAPI: PropTypes.func.isRequired,
 };
 
 export default MoviesList;

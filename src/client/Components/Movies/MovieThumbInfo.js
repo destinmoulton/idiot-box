@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Col, Icon } from "antd";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import PlayButton from "../PlayButton";
 import StatusTagIcons from "./StatusTagIcons";
@@ -59,7 +59,7 @@ class MovieThumbInfo extends React.Component {
                         href="javascript:void(0)"
                         onClick={this._handleClickDelete.bind(this)}
                     >
-                        <Icon type="delete" className="ib-playbutton-icon" />
+                        <DeleteIcon className="ib-playbutton-icon" />
                     </a>
                 </div>
             );

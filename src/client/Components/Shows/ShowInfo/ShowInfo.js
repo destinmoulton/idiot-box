@@ -1,7 +1,9 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Button, Card, Col, Icon, Row, Spin } from "antd";
+import Button from "@material-ui/core/Button";
+import DeleteIcon from "@material-ui/icons/Delete";
+import Grid from "@material-ui/core/Grid";
 
 import SeasonTabs from "./SeasonTabs";
 
@@ -11,7 +13,7 @@ class ShowInfo extends Component {
 
         this.state = {
             isLoadingShow: true,
-            show: {}
+            show: {},
         };
     }
 
@@ -23,10 +25,10 @@ class ShowInfo extends Component {
         const { callAPI } = this.props;
 
         this.setState({
-            isLoadingShow: true
+            isLoadingShow: true,
         });
         const params = {
-            slug: this.props.match.params.slug
+            slug: this.props.match.params.slug,
         };
 
         callAPI(
@@ -40,7 +42,7 @@ class ShowInfo extends Component {
     _showInfoReceived(show) {
         this.setState({
             isLoadingShow: false,
-            show
+            show,
         });
     }
 
@@ -49,7 +51,7 @@ class ShowInfo extends Component {
         const { show } = this.state;
 
         const params = {
-            show_id: show.id
+            show_id: show.id,
         };
 
         callAPI(
@@ -63,7 +65,7 @@ class ShowInfo extends Component {
     _showDeleted() {
         // The subpath has changed so go there
         const location = {
-            pathname: "/shows"
+            pathname: "/shows",
         };
         this.props.history.push(location);
     }
@@ -80,16 +82,16 @@ class ShowInfo extends Component {
         const { show } = this.state;
 
         return (
-            <div>
-                <Col span={4}>
+            <Grid container>
+                <Grid item xs={4}>
                     <div className="ib-show-info-thumbnail-box">
                         <img
                             className="ib-show-info-thumb"
                             src={"/images/shows/" + show.image_filename}
                         />
                     </div>
-                </Col>
-                <Col span={14} offset={1}>
+                </Grid>
+                <Grid item xs={8}>
                     <h3>{show.title}</h3>
                     <h4>
                         <a
@@ -97,19 +99,21 @@ class ShowInfo extends Component {
                             target="_blank"
                         >
                             IMDB
-                        </a>&nbsp;|&nbsp;
+                        </a>
+                        &nbsp;|&nbsp;
                         {show.year}&nbsp;&nbsp;&nbsp;
                         <Button
                             type="danger"
                             onClick={this._handlePressDelete.bind(this)}
                             size="small"
                         >
-                            <Icon type="delete" />Delete Show
+                            <DeleteIcon />
+                            Delete Show
                         </Button>
                     </h4>
                     <p>{show.overview}</p>
-                </Col>
-            </div>
+                </Grid>
+            </Grid>
         );
     }
 
@@ -133,17 +137,21 @@ class ShowInfo extends Component {
         }
 
         return (
-            <div>
-                <Row>{showInfo}</Row>
-                <Row>{seasonsBar}</Row>
-            </div>
+            <Grid container>
+                <Grid item xs={12}>
+                    {showInfo}
+                </Grid>
+                <Grid item xs={12}>
+                    {seasonsBar}
+                </Grid>
+            </Grid>
         );
     }
 }
 
 ShowInfo.propTypes = {
     callAPI: PropTypes.func.isRequired,
-    settings: PropTypes.object.isRequired
+    settings: PropTypes.object.isRequired,
 };
 
 export default ShowInfo;

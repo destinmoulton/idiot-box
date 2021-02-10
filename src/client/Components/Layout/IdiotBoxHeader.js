@@ -2,81 +2,57 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-import { Button, Icon, Layout, Menu } from "antd";
-const { Header } = Layout;
-
-import VideoPlayerRemoteModal from "./VideoPlayerRemoteModal";
-
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
+import List from "@material-ui/core/List";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemText from "@material-ui/core/ListItemText";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import SettingsIcon from "@material-ui/icons/Settings";
+const navbarItems = [
+    { path: "/newepisodes", title: "New Episodes" },
+    { path: "/filemanager/Downloads", title: "File Manager" },
+    { path: "/shows", title: "Shows" },
+    { path: "/movies", title: "Movies" },
+];
 class IdiotBoxHeader extends Component {
     constructor(props) {
         super(props);
-
-        this.state = {
-            remoteModalIsVisible: false
-        };
-
-        this._handleRemoteModalClose = this._handleRemoteModalClose.bind(this);
-        this._handleRemoteModalOpen = this._handleRemoteModalOpen.bind(this);
-    }
-
-    _handleRemoteModalOpen() {
-        this.setState({
-            remoteModalIsVisible: true
-        });
-    }
-
-    _handleRemoteModalClose() {
-        this.setState({
-            remoteModalIsVisible: false
-        });
     }
 
     render() {
-        const { remoteModalIsVisible } = this.state;
-
         return (
-            <Header>
-                <Menu
+            <AppBar>
+                <Toolbar
                     theme="dark"
                     mode="horizontal"
                     defaultSelectedKeys={["2"]}
                     style={{ lineHeight: "40px" }}
                 >
-                    <Menu.Item key="newepisodes">
-                        <Link to="/newepisodes">New</Link>
-                    </Menu.Item>
-                    <Menu.Item key="filemanager">
-                        <Link to="/filemanager/Downloads">File Manager</Link>
-                    </Menu.Item>
-                    <Menu.Item key="shows">
-                        <Link to="/shows">Shows</Link>
-                    </Menu.Item>
-                    <Menu.Item key="movies">
-                        <Link to="/movies">Movies</Link>
-                    </Menu.Item>
-                    <Menu.Item key="settings">
+                    <List component="nav" aria-labelledby="main navigation">
+                        {navbarItems.map(({ title, path }) => (
+                            <Link to={path}>
+                                <ListItem button>
+                                    <ListItemText primary={title} />
+                                </ListItem>
+                            </Link>
+                        ))}
                         <Link to="/settings">
-                            <Icon type="setting" />
+                            <ListItem button>
+                                <ListItemIcon>
+                                    <SettingsIcon />
+                                </ListItemIcon>
+                            </ListItem>
                         </Link>
-                    </Menu.Item>
-                    <Menu.Item key="remote">
-                        <div onClick={this._handleRemoteModalOpen}>
-                            <Icon type="video-camera" />
-                        </div>
-                        <VideoPlayerRemoteModal
-                            callAPI={this.props.callAPI}
-                            onCancel={this._handleRemoteModalClose}
-                            isVisible={remoteModalIsVisible}
-                        />
-                    </Menu.Item>
-                </Menu>
-            </Header>
+                    </List>
+                </Toolbar>
+            </AppBar>
         );
     }
 }
 
 IdiotBoxHeader.propTypes = {
-    callAPI: PropTypes.func.isRequired
+    callAPI: PropTypes.func.isRequired,
 };
 
 export default IdiotBoxHeader;

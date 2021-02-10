@@ -1,11 +1,13 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import { Modal } from "antd";
+import Button from "@material-ui/core/Button";
+import DialogModal from "../shared/DialogModal";
+import SaveIcon from "@material-ui/icons/Save";
 
 import FilesystemBrowser from "../Filesystem/FilesystemBrowser";
 
-const DirectorySelectorModal = props => {
+const DirectorySelectorModal = (props) => {
     const {
         callAPI,
         initialPath,
@@ -14,25 +16,41 @@ const DirectorySelectorModal = props => {
         onOk,
         serverInfo,
         title,
-        visible
+        visible,
     } = props;
 
     const posDim = {
         modalTop: 30,
         modalHeight: window.innerHeight - 180,
-        fileBrowserHeight: window.innerHeight - 200
+        fileBrowserHeight: window.innerHeight - 200,
     };
 
     return (
         <div>
-            <Modal
+            <DialogModal
                 title={title}
-                visible={visible}
+                isVisible={visible}
                 onCancel={onCancel}
-                onOk={onOk}
-                okText="Choose This Directory"
-                cancelText="Cancel"
-                style={{ top: posDim.modalTop, height: posDim.modalHeight }}
+                footer={[
+                    <Button
+                        variant="contained"
+                        key="cancel"
+                        size="small"
+                        onClick={onCancel}
+                    >
+                        Cancel
+                    </Button>,
+                    <Button
+                        variant="contained"
+                        key="submit"
+                        color="primary"
+                        size="small"
+                        onClick={onOk}
+                        startIcon={<SaveIcon />}
+                    >
+                        Ok
+                    </Button>,
+                ]}
             >
                 <div
                     className="ib-settings-dirsel-fs-cont"
@@ -47,7 +65,7 @@ const DirectorySelectorModal = props => {
                         showFiles={false}
                     />
                 </div>
-            </Modal>
+            </DialogModal>
         </div>
     );
 };
@@ -60,14 +78,14 @@ DirectorySelectorModal.propTypes = {
     onOk: PropTypes.func.isRequired,
     serverInfo: PropTypes.object.isRequired,
     title: PropTypes.string.isRequired,
-    visible: PropTypes.bool
+    visible: PropTypes.bool,
 };
 
 DirectorySelectorModal.defaultProps = {
     title: "Select Directory",
     visible: false,
     onChangeDirectory: () => {},
-    onCancel: () => {}
+    onCancel: () => {},
 };
 
 export default DirectorySelectorModal;

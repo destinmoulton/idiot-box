@@ -2,7 +2,9 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import { Button, Col, Icon, Input, InputGroup, Modal, Spin, Table } from "antd";
+import Button from "@material-ui/core/Button";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import TextField from "@material-ui/core/TextField";
 
 import DirectorySelectorModal from "./DirectorySelectorModal";
 
@@ -13,12 +15,12 @@ const DEFAULT_INITIAL_DIR = "/";
 const BLANK_DATA = {
     id: 0,
     key: "",
-    value: DEFAULT_INITIAL_DIR
+    value: DEFAULT_INITIAL_DIR,
 };
 class DirectoriesEditor extends Component {
     static propTypes = {
         settingCategory: PropTypes.string.isRequired,
-        settings: PropTypes.array.isRequired
+        settings: PropTypes.array.isRequired,
     };
 
     constructor(props) {
@@ -29,7 +31,7 @@ class DirectoriesEditor extends Component {
             dirModalIsVisible: false,
             dirModalSelectedDirectory: DEFAULT_INITIAL_DIR,
             currentlyEditing: [],
-            currentEditData: {}
+            currentEditData: {},
         };
     }
 
@@ -50,7 +52,7 @@ class DirectoriesEditor extends Component {
         this.setState({
             ...this.state,
             currentlyEditing,
-            currentEditData
+            currentEditData,
         });
     }
 
@@ -61,7 +63,7 @@ class DirectoriesEditor extends Component {
             ...this.state,
             dirModalSettingID: settingID,
             dirModalIsVisible: true,
-            dirModalSelectedDirectory: currentEditData[settingID].value
+            dirModalSelectedDirectory: currentEditData[settingID].value,
         });
     }
 
@@ -69,7 +71,7 @@ class DirectoriesEditor extends Component {
         const {
             currentEditData,
             dirModalSelectedDirectory,
-            dirModalSettingID
+            dirModalSettingID,
         } = this.state;
 
         const settingID = dirModalSettingID;
@@ -83,8 +85,8 @@ class DirectoriesEditor extends Component {
             dirModalIsVisible: false,
             currentEditData: {
                 ...currentEditData,
-                [settingID]: newData
-            }
+                [settingID]: newData,
+            },
         });
     }
 
@@ -93,14 +95,14 @@ class DirectoriesEditor extends Component {
             ...this.state,
             dirModalSettingID: -1,
             dirModalSelectedDirectory: "",
-            dirModalIsVisible: false
+            dirModalIsVisible: false,
         });
     }
 
     _handleChangeDirectory(newDir) {
         this.setState({
             ...this.state,
-            dirModalSelectedDirectory: newDir
+            dirModalSelectedDirectory: newDir,
         });
     }
 
@@ -131,8 +133,8 @@ class DirectoriesEditor extends Component {
             ...this.state,
             currentEditData: {
                 ...currentEditData,
-                [settingID]: newData
-            }
+                [settingID]: newData,
+            },
         });
     }
 
@@ -153,7 +155,7 @@ class DirectoriesEditor extends Component {
         this.setState({
             ...this.state,
             currentlyEditing,
-            currentEditData
+            currentEditData,
         });
     }
 
@@ -202,7 +204,7 @@ class DirectoriesEditor extends Component {
     _buildSaveButton(settingID) {
         const { saveInProgress } = this.props;
         if (saveInProgress) {
-            return <Spin />;
+            return <CircularProgress />;
         } else {
             return (
                 <Button
@@ -231,7 +233,7 @@ class DirectoriesEditor extends Component {
                     } else {
                         return <span>{setting.key}</span>;
                     }
-                }
+                },
             },
             {
                 title: "Directory",
@@ -245,7 +247,7 @@ class DirectoriesEditor extends Component {
                     } else {
                         return <span>{setting.value}</span>;
                     }
-                }
+                },
             },
             {
                 title: "Edit",
@@ -265,17 +267,18 @@ class DirectoriesEditor extends Component {
                             </a>
                         );
                     }
-                }
-            }
+                },
+            },
         ];
 
         return (
-            <Table
-                columns={columns}
-                dataSource={settings}
-                pagination={false}
-                size="small"
-            />
+            <div></div>
+            // <Table
+            //     columns={columns}
+            //     dataSource={settings}
+            //     pagination={false}
+            //     size="small"
+            // />
         );
     }
 
@@ -301,18 +304,18 @@ class DirectoriesEditor extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     return {
-        serverInfo: state.server.serverInfo
+        serverInfo: state.server.serverInfo,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         callAPI: (endpoint, params, callback, shouldDispatch) =>
             dispatch(callAPI(endpoint, params, callback, shouldDispatch)),
         saveSetting: (settingID, category, key, value) =>
-            dispatch(saveSetting(settingID, category, key, value))
+            dispatch(saveSetting(settingID, category, key, value)),
     };
 };
 

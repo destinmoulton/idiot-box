@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Col, Input, Modal } from "antd";
+import Button from "@material-ui/core/Button";
 
+import DialogModal from "../shared/DialogModal";
+import SaveIcon from "@material-ui/icons/Save";
 import FilesystemBrowser from "./FilesystemBrowser";
 
 class MoveRenameModal extends Component {
@@ -12,7 +14,7 @@ class MoveRenameModal extends Component {
         this.state = {
             destinationPath: "",
             isRenaming: false,
-            itemsRenamed: {}
+            itemsRenamed: {},
         };
     }
 
@@ -20,12 +22,12 @@ class MoveRenameModal extends Component {
         const { itemsToRename } = nextProps;
 
         let itemsRenamed = {};
-        itemsToRename.forEach(item => {
+        itemsToRename.forEach((item) => {
             itemsRenamed[item] = item;
         });
 
         this.setState({
-            itemsRenamed
+            itemsRenamed,
         });
     }
 
@@ -38,13 +40,13 @@ class MoveRenameModal extends Component {
         const { destinationPath, itemsRenamed } = this.state;
 
         this.setState({
-            isRenaming: true
+            isRenaming: true,
         });
 
         const params = {
             source_path: initialPath,
             dest_path: destinationPath,
-            items_to_rename: itemsRenamed
+            items_to_rename: itemsRenamed,
         };
 
         callAPI(
@@ -59,7 +61,7 @@ class MoveRenameModal extends Component {
         const { onRenameComplete } = this.props;
 
         this.setState({
-            isRenaming: false
+            isRenaming: false,
         });
 
         onRenameComplete();
@@ -67,7 +69,7 @@ class MoveRenameModal extends Component {
 
     _handleChangeDirectory(newPath) {
         this.setState({
-            destinationPath: newPath
+            destinationPath: newPath,
         });
     }
 
@@ -77,7 +79,7 @@ class MoveRenameModal extends Component {
         itemsRenamed[originalFilename] = evt.target.value;
 
         this.setState({
-            itemsRenamed
+            itemsRenamed,
         });
     }
 
@@ -86,7 +88,7 @@ class MoveRenameModal extends Component {
         const { itemsRenamed } = this.state;
 
         let inputList = [];
-        itemsToRename.forEach(item => {
+        itemsToRename.forEach((item) => {
             const el = (
                 <div key={item} className="ib-moverename-input-box">
                     <h5>
@@ -110,29 +112,44 @@ class MoveRenameModal extends Component {
             initialPath,
             isVisible,
             onCancel,
-            serverInfo
+            serverInfo,
         } = this.props;
 
         const posDim = {
             modalTop: 30,
             modalHeight: window.innerHeight - 180,
             modalWidth: window.innerWidth - 100,
-            fileBrowserHeight: window.innerHeight - 450
+            fileBrowserHeight: window.innerHeight - 450,
         };
 
         const inputBoxes = this._buildRenameInputs();
 
         return (
             <div>
-                <Modal
+                <DialogModal
                     title="Move or Rename"
-                    visible={isVisible}
-                    onCancel={onCancel}
-                    onOk={this._handleClickRename.bind(this)}
-                    okText="Move or Rename"
-                    cancelText="Cancel"
-                    style={{ top: posDim.modalTop, height: posDim.modalHeight }}
-                    width={posDim.modalWidth}
+                    isVisible={isVisible}
+                    onClose={onCancel}
+                    footer={[
+                        <Button
+                            variant="contained"
+                            key="cancel"
+                            size="small"
+                            onClick={onCancel}
+                        >
+                            Cancel
+                        </Button>,
+                        <Button
+                            variant="contained"
+                            key="submit"
+                            color="primary"
+                            size="small"
+                            onClick={this._handleClickRename.bind(this)}
+                            startIcon={<SaveIcon />}
+                        >
+                            Move or Rename
+                        </Button>,
+                    ]}
                 >
                     <div
                         className="ib-moverename-dirsel-box"
@@ -155,7 +172,7 @@ class MoveRenameModal extends Component {
                         <h4>Items to Rename</h4>
                         {inputBoxes}
                     </div>
-                </Modal>
+                </DialogModal>
             </div>
         );
     }
@@ -168,7 +185,7 @@ MoveRenameModal.propTypes = {
     itemsToRename: PropTypes.array.isRequired,
     onCancel: PropTypes.func.isRequired,
     onRenameComplete: PropTypes.func.isRequired,
-    serverInfo: PropTypes.object.isRequired
+    serverInfo: PropTypes.object.isRequired,
 };
 
 export default MoveRenameModal;

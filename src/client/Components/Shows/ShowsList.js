@@ -2,7 +2,10 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-import { Button, Col, Input, Row, Spin } from "antd";
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import AddShowModal from "./AddShowModal/AddShowModal";
 import ShowListThumbInfo from "./ShowListThumbInfo";
@@ -15,7 +18,7 @@ class ShowsList extends Component {
             currentSearchString: "",
             isLoadingShows: false,
             isAddShowModalVisible: false,
-            shows: []
+            shows: [],
         };
     }
 
@@ -27,7 +30,7 @@ class ShowsList extends Component {
         const { callAPI } = this.props;
 
         this.setState({
-            isLoadingShows: true
+            isLoadingShows: true,
         });
 
         callAPI(
@@ -40,7 +43,7 @@ class ShowsList extends Component {
 
     _showsReceived(shows) {
         let newShows = [];
-        shows.forEach(show => {
+        shows.forEach((show) => {
             show["is_visible"] = true;
             show["searchable_text"] = this._prepStringForFilter(show.title);
             newShows.push(show);
@@ -48,7 +51,7 @@ class ShowsList extends Component {
 
         this.setState({
             isLoadingShows: false,
-            shows: newShows
+            shows: newShows,
         });
 
         this._filterVisibleShows(this.state.currentSearchString);
@@ -63,7 +66,7 @@ class ShowsList extends Component {
         const currentSearchString = evt.currentTarget.value;
 
         this.setState({
-            currentSearchString
+            currentSearchString,
         });
 
         this._filterVisibleShows(currentSearchString);
@@ -74,7 +77,7 @@ class ShowsList extends Component {
         const filterText = this._prepStringForFilter(searchString);
         let filteredShows = [];
 
-        shows.forEach(show => {
+        shows.forEach((show) => {
             if (filterText === "") {
                 show.is_visible = true;
             } else {
@@ -87,7 +90,7 @@ class ShowsList extends Component {
         });
 
         this.setState({
-            shows: filteredShows
+            shows: filteredShows,
         });
     }
 
@@ -99,19 +102,19 @@ class ShowsList extends Component {
 
     _handleOpenAddShowModal() {
         this.setState({
-            isAddShowModalVisible: true
+            isAddShowModalVisible: true,
         });
     }
 
     _cancelAddShowModal() {
         this.setState({
-            isAddShowModalVisible: false
+            isAddShowModalVisible: false,
         });
     }
 
     _addShowComplete() {
         this.setState({
-            isAddShowModalVisible: false
+            isAddShowModalVisible: false,
         });
 
         this._getShows();
@@ -121,12 +124,17 @@ class ShowsList extends Component {
         const { shows } = this.state;
 
         let showList = [];
-        shows.forEach(show => {
+        shows.forEach((show) => {
             if (show.is_visible) {
                 showList.push(
-                    <Col key={show.id} className="ib-showlist-infobox" span={4}>
+                    <Grid
+                        item
+                        xs={4}
+                        key={show.id}
+                        className="ib-showlist-infobox"
+                    >
                         <ShowListThumbInfo show={show} />
-                    </Col>
+                    </Grid>
                 );
             }
         });
@@ -139,14 +147,14 @@ class ShowsList extends Component {
             currentSearchString,
             isAddShowModalVisible,
             isLoadingShows,
-            shows
+            shows,
         } = this.state;
 
         let content = "";
         if (isLoadingShows) {
             content = (
                 <div className="ib-spinner-container">
-                    <Spin />
+                    <CircularProgress />
                 </div>
             );
         } else {
@@ -155,12 +163,12 @@ class ShowsList extends Component {
 
         const filterPlaceholder = `Filter ${shows.length} shows...`;
         return (
-            <div>
-                <Row>
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
                     <h2>Shows</h2>
-                </Row>
-                <Row className="ib-showlist-searchbar">
-                    <Input.Search
+                </Grid>
+                <Grid item xs={12} className="ib-showlist-searchbar">
+                    <TextField
                         autoFocus
                         value={currentSearchString}
                         onChange={this._handleChangeFilter.bind(this)}
@@ -175,8 +183,10 @@ class ShowsList extends Component {
                     >
                         Add New Show
                     </Button>
-                </Row>
-                <Row>{content}</Row>
+                </Grid>
+                <Grid container spacing={2}>
+                    {content}
+                </Grid>
                 <AddShowModal
                     callAPI={this.props.callAPI}
                     isVisible={isAddShowModalVisible}
@@ -184,13 +194,13 @@ class ShowsList extends Component {
                     onAddShowComplete={this._addShowComplete.bind(this)}
                     currentSearchString={currentSearchString}
                 />
-            </div>
+            </Grid>
         );
     }
 }
 
 ShowsList.propTypes = {
-    callAPI: PropTypes.func.isRequired
+    callAPI: PropTypes.func.isRequired,
 };
 
 export default ShowsList;

@@ -1,14 +1,15 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Checkbox, Input } from "antd";
+import Checkbox from "@material-ui/core/Checkbox";
+import TextField from "@material-ui/core/TextField";
 
 import MovieNameLib from "../../../lib/MovieName.lib";
 
 class MovieCheckForm extends Component {
     static propTypes = {
         currentFilename: PropTypes.string.isRequired,
-        onSearchMovies: PropTypes.func.isRequired
+        onSearchMovies: PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -16,7 +17,7 @@ class MovieCheckForm extends Component {
 
         this.state = {
             checkedMovieNames: [],
-            searchString: ""
+            searchString: "",
         };
 
         this.movieNameLib = new MovieNameLib();
@@ -34,13 +35,13 @@ class MovieCheckForm extends Component {
 
         this.setState({
             checkedMovieNames,
-            searchString: checkedMovieNames.join(" ")
+            searchString: checkedMovieNames.join(" "),
         });
     }
 
     _handleChangeSearchText(evt) {
         this.setState({
-            searchString: evt.target.value
+            searchString: evt.target.value,
         });
     }
 
@@ -53,7 +54,7 @@ class MovieCheckForm extends Component {
         );
 
         let possibleChecks = [];
-        possibleNames.forEach(name => {
+        possibleNames.forEach((name) => {
             const checkBox = (
                 <div key={name}>
                     <Checkbox
@@ -68,12 +69,11 @@ class MovieCheckForm extends Component {
 
         return (
             <div>
-                <Input.Search
+                <TextField
                     placeholder="Movie search..."
                     value={searchString}
-                    onSearch={onSearchMovies}
-                    onChange={this._handleChangeSearchText.bind(this)}
-                    enterButton
+                    onChange={onSearchMovies}
+                    // onChange={this._handleChangeSearchText.bind(this)}
                 />
                 <div>{possibleChecks}</div>
             </div>

@@ -1,12 +1,14 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Link } from "react-router-dom";
-import { Card, Icon, Row, Spin, Table, Tabs } from "antd";
-const TabPane = Tabs.TabPane;
+import CircularProgress from "@material-ui/core/CircularProgress";
+import Grid from "@material-ui/core/Grid";
+import LockIcon from "@material-ui/icons/Lock";
+import LockOpenIcon from "@material-ui/icons/LockOpen";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
 
 import EpisodesTable from "./EpisodesTable";
-import PlayButton from "../../PlayButton";
 
 class SeasonTabs extends Component {
     constructor(props) {
@@ -16,7 +18,7 @@ class SeasonTabs extends Component {
             activeSeasonNum: -1,
             activeSeason: {},
             isLoadingSeasons: false,
-            seasons: []
+            seasons: [],
         };
     }
 
@@ -37,14 +39,14 @@ class SeasonTabs extends Component {
             if (match.params.season_number !== activeSeasonNum) {
                 const seasonNumber = parseInt(match.params.season_number);
                 let activeSeason = {};
-                seasons.forEach(season => {
+                seasons.forEach((season) => {
                     if (season.season_number === seasonNumber) {
                         activeSeason = season;
                     }
                 });
                 this.setState({
                     activeSeasonNum: seasonNumber,
-                    activeSeason
+                    activeSeason,
                 });
             }
         }
@@ -54,11 +56,11 @@ class SeasonTabs extends Component {
         const { callAPI, show } = this.props;
 
         this.setState({
-            isLoadingSeasons: true
+            isLoadingSeasons: true,
         });
 
         const options = {
-            show_id: show.id
+            show_id: show.id,
         };
 
         callAPI(
@@ -72,7 +74,7 @@ class SeasonTabs extends Component {
     _seasonsReceived(seasons) {
         const { activeSeasonNum } = this.state;
         let activeSeason = {};
-        seasons.forEach(season => {
+        seasons.forEach((season) => {
             if (season.season_number === activeSeasonNum) {
                 activeSeason = season;
             }
@@ -81,7 +83,7 @@ class SeasonTabs extends Component {
         this.setState({
             activeSeason,
             isLoadingSeasons: false,
-            seasons
+            seasons,
         });
     }
 
@@ -96,7 +98,7 @@ class SeasonTabs extends Component {
 
         const params = {
             season_id: activeSeason.id,
-            lock_status: newLockStatus
+            lock_status: newLockStatus,
         };
 
         callAPI(
@@ -112,9 +114,9 @@ class SeasonTabs extends Component {
         const tabpanes = seasons.map((season, index) => {
             let lockIcon = "";
             if (season.locked === 1) {
-                lockIcon = <Icon type="lock" />;
+                lockIcon = <LockIcon />;
             } else {
-                lockIcon = <Icon type="unlock" />;
+                lockIcon = <LockOpenIcon />;
             }
 
             const tabTitle = (
@@ -123,7 +125,7 @@ class SeasonTabs extends Component {
                     {lockIcon}
                 </span>
             );
-            return <TabPane tab={tabTitle} key={season.season_number} />;
+            return <Tab label={tabTitle} key={season.season_number} />;
         });
         return (
             <Tabs
@@ -143,7 +145,7 @@ class SeasonTabs extends Component {
 
         let seasonBar = "";
         if (isLoadingSeasons) {
-            seasonBar = <Spin />;
+            seasonBar = <CircularProgress />;
         } else {
             seasonBar = this._buildSeasonTabs();
         }
@@ -163,10 +165,10 @@ class SeasonTabs extends Component {
         }
 
         return (
-            <Card title="Seasons">
+            <Grid container>
                 {seasonBar}
                 {episodesTable}
-            </Card>
+            </Grid>
         );
     }
 }
@@ -174,7 +176,7 @@ class SeasonTabs extends Component {
 SeasonTabs.propTypes = {
     callAPI: PropTypes.func.isRequired,
     settings: PropTypes.object.isRequired,
-    show: PropTypes.object.isRequired
+    show: PropTypes.object.isRequired,
 };
 
 export default SeasonTabs;

@@ -1,17 +1,18 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import { Button, Col, Input, Modal, Select } from "antd";
+import Button from "@material-ui/core/Button";
+import DialogModal from "../../shared/DialogModal";
 
 import ShowResults from "./ShowResults";
 
-const AddShowModal = props => {
+const AddShowModal = (props) => {
     const {
         callAPI,
         currentSearchString,
         isVisible,
         onAddShowComplete,
-        onCancel
+        onCancel,
     } = props;
 
     let showResults = null;
@@ -27,19 +28,19 @@ const AddShowModal = props => {
     }
 
     return (
-        <Modal
+        <DialogModal
             title="Add New Show"
-            visible={isVisible}
-            onCancel={onCancel}
+            isVisible={isVisible}
+            onClose={onCancel}
             footer={[
-                <Button key="cancel" size="large" onClick={onCancel}>
+                <Button key="cancel" size="small" onClick={onCancel}>
                     Cancel
-                </Button>
+                </Button>,
             ]}
             width={700}
         >
             {showResults}
-        </Modal>
+        </DialogModal>
     );
 };
 
@@ -48,7 +49,7 @@ AddShowModal.propTypes = {
     currentSearchString: PropTypes.string.isRequired,
     isVisible: PropTypes.bool.isRequired,
     onAddShowComplete: PropTypes.func.isRequired,
-    onCancel: PropTypes.func.isRequired
+    onCancel: PropTypes.func.isRequired,
 };
 
 export default AddShowModal;

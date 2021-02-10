@@ -1,13 +1,13 @@
 import React from "react";
 
 import { Link } from "react-router-dom";
+import LockIcon from "@material-ui/icons/Lock";
+import LockOpenIcon from "@material-ui/icons/LockOpen";
 
-import { Col, Icon, Tag } from "antd";
-
-export default props => {
+export default (props) => {
     const { show } = props;
     const showTitle = {
-        __html: show.title
+        __html: show.title,
     };
     return (
         <div>
@@ -18,12 +18,14 @@ export default props => {
                         src={"/images/shows/" + show.image_filename}
                     />
                     <div className="ib-showlist-infobox-tags">
-                        <Tag>
-                            {show.num_seasons_locked}&nbsp;<Icon type="lock" />
-                        </Tag>
-                        <Tag>
-                            {show.num_seasons_unlocked}&nbsp;<Icon type="unlock" />
-                        </Tag>
+                        <span>
+                            {show.num_seasons_locked}&nbsp;
+                            <LockIcon />
+                        </span>
+                        <span>
+                            {show.num_seasons_unlocked}&nbsp;
+                            <LockOpenIcon />
+                        </span>
                     </div>
                 </div>
                 <div className="ib-showlist-infobox-title">

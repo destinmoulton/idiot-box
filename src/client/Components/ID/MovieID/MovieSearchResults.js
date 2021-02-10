@@ -1,7 +1,8 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Input, Row } from "antd";
+import Grid from "@material-ui/core/Grid";
+import TextField from "@material-ui/core/TextField";
 
 import MediaItemSearchDetails from "../../shared/MediaItemSearchDetails";
 
@@ -79,19 +80,21 @@ class MovieSearchResults extends Component {
             }
         });
         return (
-            <div>
-                <h4>Movie - Search Results</h4>
-                <div id="ib-idmodal-movieresults-searchbox">
-                    <Input.Search
-                        value={currentSearchString}
-                        onChange={this._handleChangeSearchInput.bind(this)}
-                        style={{ width: 400 }}
-                        onSearch={this._handleSearchPress.bind(this)}
-                        enterButton
-                    />
-                </div>
-                <Row>{movieList}</Row>
-            </div>
+            <Grid container spacing={2}>
+                <Grid xs={12}>
+                    <h4>Movie - Search Results</h4>
+                    <div id="ib-idmodal-movieresults-searchbox">
+                        <TextField
+                            value={currentSearchString}
+                            onChange={this._handleChangeSearchInput.bind(this)}
+                            style={{ width: 400 }}
+                            onSearch={this._handleSearchPress.bind(this)}
+                            enterButton
+                        />
+                    </div>
+                </Grid>
+                <Grid xs={12}>{movieList}</Grid>
+            </Grid>
         );
     }
 }

@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Button, Col, Modal, Row } from "antd";
-
+import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
+import Modal from "@material-ui/core/Modal";
 import StatusTagIcons from "./StatusTagIcons";
 
 class MovieInfoModal extends Component {
@@ -11,7 +12,7 @@ class MovieInfoModal extends Component {
         movie: PropTypes.object.isRequired,
         onClose: PropTypes.func.isRequired,
         onClickDelete: PropTypes.func.isRequired,
-        onClickToggleStatusTag: PropTypes.func.isRequired
+        onClickToggleStatusTag: PropTypes.func.isRequired,
     };
 
     constructor(props) {
@@ -30,12 +31,7 @@ class MovieInfoModal extends Component {
     }
 
     render() {
-        const {
-            onClickDelete,
-            onClickToggleStatusTag,
-            isVisible,
-            movie
-        } = this.props;
+        const { onClickToggleStatusTag, isVisible, movie } = this.props;
         return (
             <Modal
                 title="Movie Info"
@@ -48,20 +44,20 @@ class MovieInfoModal extends Component {
                         onClick={this._handleCancelClose}
                     >
                         Close
-                    </Button>
+                    </Button>,
                 ]}
                 width={700}
             >
-                <Row>
-                    <Col span={5}>
+                <Grid container spacing={2}>
+                    <Grid item xs={2}>
                         <div className="ib-moviemodal-thumbnail-box">
                             <img
                                 className="ib-movies-thumbnail"
                                 src={"/images/movies/" + movie.image_filename}
                             />
                         </div>
-                    </Col>
-                    <Col span={18} offset={1}>
+                    </Grid>
+                    <Grid item xs={8}>
                         <div
                             className="ib-moviemodal-title"
                             dangerouslySetInnerHTML={{ __html: movie.title }}
@@ -85,11 +81,11 @@ class MovieInfoModal extends Component {
                                         onClickToggleStatusTag
                                     }
                                 />
-                            </div>&nbsp;
+                            </div>
+                            &nbsp;
                             <div className="ib-moviemodal-byline-button">
                                 <Button
                                     onClick={this._handleClickDelete}
-                                    type="danger"
                                     size="small"
                                 >
                                     Delete
@@ -100,8 +96,8 @@ class MovieInfoModal extends Component {
                         <div className="ib-moviemodal-description">
                             {movie.overview}
                         </div>
-                    </Col>
-                </Row>
+                    </Grid>
+                </Grid>
             </Modal>
         );
     }

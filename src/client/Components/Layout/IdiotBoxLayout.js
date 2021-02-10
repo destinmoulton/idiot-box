@@ -2,9 +2,8 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { BrowserRouter, Redirect, Route } from "react-router-dom";
 
-import { Layout, Menu } from "antd";
-const { Header, Content, Footer } = Layout;
-
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
 import { callAPI } from "../../actions/api.actions";
 
 import FileManager from "../FileManager";
@@ -15,17 +14,17 @@ import Settings from "../Settings/Settings";
 import ShowInfo from "../Shows/ShowInfo/ShowInfo";
 import ShowsList from "../Shows/ShowsList";
 
-const IdiotBoxLayout = props => {
+const IdiotBoxLayout = (props) => {
     return (
         <BrowserRouter>
-            <Layout className="layout">
+            <Container className="layout">
                 <IdiotBoxHeader callAPI={props.callAPI} />
-                <Content style={{ padding: "0 50px" }}>
-                    <div id="ib-layout-content-box">
+                <Grid container>
+                    <Grid item xs={12} id="ib-layout-content-box">
                         <Route
                             path="/"
                             exact
-                            render={routeParams => (
+                            render={(routeParams) => (
                                 <NewEpisodes
                                     {...routeParams}
                                     callAPI={props.callAPI}
@@ -35,7 +34,7 @@ const IdiotBoxLayout = props => {
                         />
                         <Route
                             path="/newepisodes"
-                            render={routeParams => (
+                            render={(routeParams) => (
                                 <NewEpisodes
                                     {...routeParams}
                                     callAPI={props.callAPI}
@@ -45,7 +44,7 @@ const IdiotBoxLayout = props => {
                         />
                         <Route
                             path="/filemanager/:setting_key?/:subpath?"
-                            render={routeParams => (
+                            render={(routeParams) => (
                                 <FileManager
                                     {...routeParams}
                                     callAPI={props.callAPI}
@@ -56,7 +55,7 @@ const IdiotBoxLayout = props => {
                         />
                         <Route
                             path="/movies"
-                            render={routeParams => (
+                            render={(routeParams) => (
                                 <MoviesList
                                     {...routeParams}
                                     settings={props.settings}
@@ -67,7 +66,7 @@ const IdiotBoxLayout = props => {
                         <Route path="/settings" component={Settings} />
                         <Route
                             path="/shows"
-                            render={routeParams => (
+                            render={(routeParams) => (
                                 <ShowsList
                                     {...routeParams}
                                     callAPI={props.callAPI}
@@ -76,7 +75,7 @@ const IdiotBoxLayout = props => {
                         />
                         <Route
                             path={`/show/:slug/:season_number?`}
-                            render={routeParams => (
+                            render={(routeParams) => (
                                 <ShowInfo
                                     {...routeParams}
                                     settings={props.settings}
@@ -84,28 +83,28 @@ const IdiotBoxLayout = props => {
                                 />
                             )}
                         />
-                    </div>
-                </Content>
-                <Footer style={{ textAlign: "center" }}>
-                    Idiot Box created by Destin Moulton
-                </Footer>
-            </Layout>
+                    </Grid>
+                    <Grid xs={12} className="ib-footer">
+                        Idiot Box created by Destin Moulton
+                    </Grid>
+                </Grid>
+            </Container>
         </BrowserRouter>
     );
 };
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
     const { server, settings } = state;
     return {
         settings: settings.settings,
-        server: server.serverInfo
+        server: server.serverInfo,
     };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
     return {
         callAPI: (endpoint, params, callback, shouldDispatch) =>
-            dispatch(callAPI(endpoint, params, callback, shouldDispatch))
+            dispatch(callAPI(endpoint, params, callback, shouldDispatch)),
     };
 };
 

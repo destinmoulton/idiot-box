@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Button, Input, Spin } from "antd";
-
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
 import Regex from "../../lib/Regex.lib";
 
 class ArchiveSingleEpisode extends Component {
@@ -16,7 +16,7 @@ class ArchiveSingleEpisode extends Component {
             season: {},
             show: {},
             newDirectory: "",
-            newFilename: ""
+            newFilename: "",
         };
     }
 
@@ -28,15 +28,15 @@ class ArchiveSingleEpisode extends Component {
         const { callAPI, episodeInfo } = this.props;
 
         this.setState({
-            isCollating: true
+            isCollating: true,
         });
 
         const options = {
             episode_info: {
                 show_id: episodeInfo.currentShowID,
                 season_id: episodeInfo.currentSeasonID,
-                episode_id: episodeInfo.currentEpisodeID
-            }
+                episode_id: episodeInfo.currentEpisodeID,
+            },
         };
         callAPI(
             "shows.episode.collate",
@@ -53,7 +53,7 @@ class ArchiveSingleEpisode extends Component {
             season: data.season,
             show: data.show,
             newDirectory: this._getDirectory(data.show, data.episode),
-            newFilename: this._getFilename(data.show, data.episode)
+            newFilename: this._getFilename(data.show, data.episode),
         });
     }
 
@@ -62,29 +62,29 @@ class ArchiveSingleEpisode extends Component {
             currentFilename,
             currentPathInfo,
             callAPI,
-            episodeInfo
+            episodeInfo,
         } = this.props;
         const { newDirectory, newFilename } = this.state;
 
         this.setState({
-            isIDing: true
+            isIDing: true,
         });
 
         const options = {
             episode_info: {
                 show_id: episodeInfo.currentShowID,
                 season_id: episodeInfo.currentSeasonID,
-                episode_id: episodeInfo.currentEpisodeID
+                episode_id: episodeInfo.currentEpisodeID,
             },
             source_info: {
                 setting_id: currentPathInfo.setting_id,
                 filename: currentFilename,
-                subpath: currentPathInfo.subpath
+                subpath: currentPathInfo.subpath,
             },
             dest_info: {
                 filename: newFilename,
-                subpath: newDirectory
-            }
+                subpath: newDirectory,
+            },
         };
         callAPI(
             "id.episode.id_and_archive",
@@ -135,13 +135,13 @@ class ArchiveSingleEpisode extends Component {
 
     _handleChangeFilename(evt) {
         this.setState({
-            newFilename: evt.target.value
+            newFilename: evt.target.value,
         });
     }
 
     _handleChangeDirectory(evt) {
         this.setState({
-            newDirectory: evt.target.value
+            newDirectory: evt.target.value,
         });
     }
 
@@ -157,18 +157,19 @@ class ArchiveSingleEpisode extends Component {
                 </div>
                 <div className="ib-idmodal-archivesingle-form-box">
                     Directory:{" "}
-                    <Input
+                    <TextField
                         onChange={this._handleChangeDirectory.bind(this)}
                         value={newDirectory}
                     />
                     Filename:{" "}
-                    <Input
+                    <TextField
                         onChange={this._handleChangeFilename.bind(this)}
                         value={newFilename}
                     />
                     <div className="ib-idmodal-button-box">
                         <Button
                             className="ib-button-green"
+                            size="small"
                             onClick={this._idAndArchiveEpisode.bind(this)}
                         >
                             Archive Episode
@@ -196,7 +197,7 @@ ArchiveSingleEpisode.propTypes = {
     currentFilename: PropTypes.string.isRequired,
     currentPathInfo: PropTypes.object.isRequired,
     episodeInfo: PropTypes.object.isRequired,
-    onIDComplete: PropTypes.func.isRequired
+    onIDComplete: PropTypes.func.isRequired,
 };
 
 export default ArchiveSingleEpisode;
