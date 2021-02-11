@@ -465,7 +465,7 @@ class FileManager extends Component {
                     </ButtonGroup>
                 </div>
                 <FilesystemBrowser
-                    actionColumns={this._buildActionColumns()}
+                    enableCheckboxes={true}
                     basePath={currentToplevelDirectory}
                     callAPI={this.props.callAPI}
                     currentPath={currentPath}

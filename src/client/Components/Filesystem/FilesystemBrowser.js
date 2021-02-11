@@ -223,16 +223,19 @@ class FilesystemBrowser extends Component {
     }
 
     _buildRows() {
-        const { basePath, selectedRows } = this.props;
+        const { basePath, selectedRows, enableCheckboxes } = this.props;
         const { currentPath, dirList } = this.state;
 
         const rows = [];
         dirList.forEach((item) => {
             let name = "";
             let checked = false;
-            let hasCheckbox = true;
-            if (selectedRows.has(item.name)) {
-                checked = true;
+            let hasCheckbox = false;
+            if (enableCheckboxes) {
+                hasCheckbox = true;
+                if (selectedRows.has(item.name)) {
+                    checked = true;
+                }
             }
             if (item.isDirectory) {
                 let icon = <FolderIcon />;
@@ -298,9 +301,19 @@ class FilesystemBrowser extends Component {
     }
 
     _buildTable() {
+        const { enableCheckboxes } = this.props;
         const { currentPath, isAllSelected } = this.state;
 
         const rows = this._buildRows();
+        let checkbox = "";
+        if (enableCheckboxes) {
+            checkbox = (
+                <Checkbox
+                    checked={isAllSelected}
+                    onChange={() => this._handleClickAllCheckbox()}
+                />
+            );
+        }
 
         return (
             <div>
@@ -314,17 +327,13 @@ class FilesystemBrowser extends Component {
                         {currentPath}
                     </span>
                 </span>
+
                 <TableContainer>
                     <Table className="ib-filemanager-table">
                         <TableHead>
                             <TableRow>
                                 <TableCell className="filemanager-checkbox-column">
-                                    <Checkbox
-                                        checked={isAllSelected}
-                                        onChange={() =>
-                                            this._handleClickAllCheckbox()
-                                        }
-                                    />
+                                    {checkbox}
                                 </TableCell>
                                 <TableCell className="filemanager-name-column">
                                     Name
