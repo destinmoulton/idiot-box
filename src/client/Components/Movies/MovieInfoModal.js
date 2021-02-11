@@ -2,9 +2,11 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 
 import Button from "@material-ui/core/Button";
+import DeleteIcon from "@material-ui/icons/Delete";
 import Grid from "@material-ui/core/Grid";
-import Modal from "@material-ui/core/Modal";
 import StatusTagIcons from "./StatusTagIcons";
+
+import DialogModal from "../shared/DialogModal";
 
 class MovieInfoModal extends Component {
     static propTypes = {
@@ -33,10 +35,10 @@ class MovieInfoModal extends Component {
     render() {
         const { onClickToggleStatusTag, isVisible, movie } = this.props;
         return (
-            <Modal
+            <DialogModal
                 title="Movie Info"
-                visible={isVisible}
-                onCancel={this._handleCancelClose}
+                isVisible={isVisible}
+                onClose={this._handleCancelClose}
                 footer={[
                     <Button
                         key="close"
@@ -49,7 +51,7 @@ class MovieInfoModal extends Component {
                 width={700}
             >
                 <Grid container spacing={2}>
-                    <Grid item xs={2}>
+                    <Grid item xs={4}>
                         <div className="ib-moviemodal-thumbnail-box">
                             <img
                                 className="ib-movies-thumbnail"
@@ -87,6 +89,8 @@ class MovieInfoModal extends Component {
                                 <Button
                                     onClick={this._handleClickDelete}
                                     size="small"
+                                    startIcon={<DeleteIcon />}
+                                    color="secondary"
                                 >
                                     Delete
                                 </Button>
@@ -98,7 +102,7 @@ class MovieInfoModal extends Component {
                         </div>
                     </Grid>
                 </Grid>
-            </Modal>
+            </DialogModal>
         );
     }
 }

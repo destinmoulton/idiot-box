@@ -5,11 +5,28 @@ import Modal from "@material-ui/core/Modal";
 import Button from "@material-ui/core/Button";
 import CloseIcon from "@material-ui/icons/Close";
 
-const DialogModal = (props) => {
-    const { children, title, isVisible, onClose, footer } = props;
+const DialogModal = ({
+    children,
+    title,
+    isVisible,
+    onClose,
+    footer,
+    minWidth = 200,
+    width = 200,
+}) => {
+    const calculatedLeft = Math.round((window.innerWidth - width) / 2);
+    const style = {
+        minWidth: minWidth + "px",
+        width: width + "px",
+        left: calculatedLeft + "px",
+    };
     return (
         <Modal open={isVisible} onClose={onClose} className="ib-dialogmodal">
-            <Grid container className="ib-dialogmodal-inner-wrapper">
+            <Grid
+                container
+                className="ib-dialogmodal-inner-wrapper"
+                style={style}
+            >
                 <Grid item xs={12}>
                     <div className="ib-dialogmodal-title">
                         {title}

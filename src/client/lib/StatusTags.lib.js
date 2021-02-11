@@ -3,6 +3,9 @@
  *
  * Encode and decode status_tags column.
  */
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import StarBorderIcon from "@material-ui/icons/StarBorder";
+import StarIcon from "@material-ui/icons/Star";
 export class StatusTagsLib {
     decodeTags(tagString) {
         if (tagString == null) return [];
@@ -37,24 +40,16 @@ export const STATUS_TAGS = [
         title: "Watch List",
         tag: "towatch",
         icons: {
-            active: "eye",
-            inactive: "eye-o"
+            active: <VisibilityIcon />,
+            inactive: <VisibilityIcon />,
         },
-        classes: {
-            active: "ib-movies-statustag-towatch-active",
-            inactive: "ib-movies-statustag-towatch-inactive"
-        }
     },
     {
         title: "Favorite",
         tag: "favorite",
         icons: {
-            active: "star",
-            inactive: "star-o"
+            active: <StarIcon />,
+            inactive: <StarBorderIcon />,
         },
-        classes: {
-            active: "ib-movies-statustag-favorite-active",
-            inactive: "ib-movies-statustag-favorite-inactive"
-        }
-    }
+    },
 ];

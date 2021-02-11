@@ -1,9 +1,9 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { connect } from "react-redux";
+
+import Button from "@material-ui/core/Button";
 
 import { StatusTagsLib, STATUS_TAGS } from "../../lib/StatusTags.lib";
-import { callAPI } from "../../actions/api.actions";
 
 class StatusTagIcons extends React.Component {
     static propTypes = {
@@ -30,29 +30,23 @@ class StatusTagIcons extends React.Component {
                 tag.tag
             );
 
-            const tagType = isTagEnabled
+            const tagIcon = isTagEnabled
                 ? tag.icons.active
                 : tag.icons.inactive;
 
-            const tagClass = isTagEnabled
-                ? tag.classes.active
-                : tag.classes.inactive;
+            const tagClass = isTagEnabled ? "active" : "inactive";
             return (
-                <Tooltip key={tagIndex} title={tag.title}>
-                    {/* <Icon
-                        type={tagType}
-                        size="large"
-                        className={tagClass}
-                        onClick={this._handleToggleStatusTag.bind(
-                            this,
-                            tag.tag
-                        )}
-                    /> */}
-                </Tooltip>
+                <Button
+                    key={tagIndex}
+                    className={"movie-tag-" + tag.tag + " " + tagClass}
+                    onClick={() => this._handleToggleStatusTag(tag.tag)}
+                >
+                    {tagIcon}
+                </Button>
             );
         });
 
-        return <span>{tagList}</span>;
+        return tagList;
     }
 }
 

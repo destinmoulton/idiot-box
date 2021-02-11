@@ -3,9 +3,9 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import SelectSearch from "react-select-search";
 import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import TextField from "@material-ui/core/TextField";
 
 import MovieInfoModal from "./MovieInfoModal";
 import MovieThumbInfo from "./MovieThumbInfo";
@@ -27,7 +27,7 @@ class MoviesList extends Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._getMovies();
     }
 
@@ -161,8 +161,6 @@ class MoviesList extends Component {
     }
 
     _handleChangeFilter(evt) {
-        const { currentStatusTagSelected } = this.state;
-
         const currentSearchString = evt.currentTarget.value;
 
         this.setState({
@@ -170,11 +168,9 @@ class MoviesList extends Component {
         });
     }
 
-    _handleChangeStatusTagFilter(tag) {
-        const { currentSearchString } = this.state;
-
+    _handleChangeStatusTagFilter(evt) {
         this.setState({
-            currentStatusTagSelected: tag,
+            currentStatusTagSelected: evt.currentTarget.value,
         });
     }
 
@@ -235,21 +231,16 @@ class MoviesList extends Component {
         filteredMovies.forEach((movie) => {
             if (movie.is_visible) {
                 movieList.push(
-                    <Grid
-                        key={movie.id}
-                        className="ib-movies-thumbnail-box"
-                        xs={4}
-                    >
-                        <MovieThumbInfo
-                            movie={movie}
-                            directories={this.props.settings.directories}
-                            onClickDelete={this._handlePressDelete.bind(this)}
-                            onClickMovie={this._handleClickMovie.bind(this)}
-                            onClickToggleStatusTag={this._handlePressToggleStatusTag.bind(
-                                this
-                            )}
-                        />
-                    </Grid>
+                    <MovieThumbInfo
+                        key={movie.title}
+                        movie={movie}
+                        directories={this.props.settings.directories}
+                        onClickDelete={this._handlePressDelete.bind(this)}
+                        onClickMovie={this._handleClickMovie.bind(this)}
+                        onClickToggleStatusTag={this._handlePressToggleStatusTag.bind(
+                            this
+                        )}
+                    />
                 );
             }
         });
@@ -260,18 +251,27 @@ class MoviesList extends Component {
     _buildStatusTagFilterSelect() {
         const { currentStatusTagSelected } = this.state;
 
-        let selectOptions = [{ value: "all", name: "All" }];
+        let selectOptions = [
+            <option key="all" value="all">
+                All
+            </option>,
+        ];
 
         for (let tag of STATUS_TAGS) {
-            selectOptions.push({ value: tag.tag, name: tag.title });
+            selectOptions.push(
+                <option key={tag.tag} value={tag.tag}>
+                    {tag.title}
+                </option>
+            );
         }
         return (
-            <SelectSearch
-                options={selectOptions}
+            <select
                 className="ib-movies-selectstatustag"
                 value={currentStatusTagSelected}
                 onChange={this._handleChangeStatusTagFilter.bind(this)}
-            ></SelectSearch>
+            >
+                {selectOptions}
+            </select>
         );
     }
 
@@ -303,17 +303,16 @@ class MoviesList extends Component {
                     <h2>Movies</h2>
                 </Grid>
                 <Grid item xs={12} className="ib-movies-searchbar">
-                    <Input.Search
+                    <TextField
                         autoFocus
                         value={currentSearchString}
                         onChange={this._handleChangeFilter.bind(this)}
                         style={{ width: 400 }}
-                        onSearch={this._handleChangeFilter.bind(this)}
                         placeholder={filterPlaceholder}
                     />
                     {filterSelect}
                 </Grid>
-                <Grid item xs={12}>
+                <Grid container item xs={12} wrap={"wrap"}>
                     {content}
                 </Grid>
                 <MovieInfoModal

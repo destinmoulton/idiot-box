@@ -1,6 +1,8 @@
 import React from "react";
 
+import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
+import Grid from "@material-ui/core/Grid";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import PlayButton from "../PlayButton";
 import StatusTagIcons from "./StatusTagIcons";
@@ -23,18 +25,6 @@ class MovieThumbInfo extends React.Component {
         this.props.onClickDelete(this.props.movie);
     }
 
-    _handleMouseOverMovie() {
-        this.setState({
-            isMouseOverMovie: true,
-        });
-    }
-
-    _handleMouseOutMovie() {
-        this.setState({
-            isMouseOverMovie: false,
-        });
-    }
-
     render() {
         const {
             directories,
@@ -47,32 +37,15 @@ class MovieThumbInfo extends React.Component {
             __html: movie.title,
         };
 
-        let veilOptions = null;
-        if (this.state.isMouseOverMovie) {
-            veilOptions = (
-                <div className="ib-movies-veil">
-                    <PlayButton
-                        filename={movie.file_info.filename}
-                        fullPath={fullPath}
-                    />
-                    <a
-                        href="javascript:void(0)"
-                        onClick={this._handleClickDelete.bind(this)}
-                    >
-                        <DeleteIcon className="ib-playbutton-icon" />
-                    </a>
-                </div>
-            );
-        }
         return (
-            <div
-                onMouseEnter={this._handleMouseOverMovie.bind(this)}
-                onMouseLeave={this._handleMouseOutMovie.bind(this)}
+            <Grid
+                key={movie.id}
+                className="ib-movies-thumbnail-box"
+                item
+                xs={4}
+                sm={2}
             >
-                <a
-                    href="javascript:void(0)"
-                    onClick={this._handleClick.bind(this, movie)}
-                >
+                <a onClick={this._handleClick.bind(this, movie)}>
                     <LazyLoadImage
                         className="ib-movies-thumbnail"
                         width={136}
@@ -81,12 +54,8 @@ class MovieThumbInfo extends React.Component {
                         src={"/images/movies/" + movie.image_filename}
                     />
                 </a>
-                {veilOptions}
                 <div className="ib-movies-thumbnail-title">
-                    <a
-                        href="javascript:void(0)"
-                        onClick={this._handleClick.bind(this, movie)}
-                    >
+                    <a onClick={this._handleClick.bind(this, movie)}>
                         <span dangerouslySetInnerHTML={movieTitle} />
                     </a>
                 </div>
@@ -96,7 +65,7 @@ class MovieThumbInfo extends React.Component {
                         onClickToggleStatusTag={onClickToggleStatusTag}
                     />
                 </div>
-            </div>
+            </Grid>
         );
     }
 }
