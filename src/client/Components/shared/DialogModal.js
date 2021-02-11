@@ -8,8 +8,8 @@ import CloseIcon from "@material-ui/icons/Close";
 const DialogModal = (props) => {
     const { children, title, isVisible, onClose, footer } = props;
     return (
-        <Modal open={isVisible} onClose={onClose}>
-            <Grid container>
+        <Modal open={isVisible} onClose={onClose} className="ib-dialogmodal">
+            <Grid container className="ib-dialogmodal-inner-wrapper">
                 <Grid item xs={12}>
                     <div className="ib-dialogmodal-title">
                         {title}

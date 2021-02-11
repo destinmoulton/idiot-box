@@ -3,23 +3,66 @@ a {
     color: #40a9ff;
     font-family: sans-serif;
 }
-.ib-header-toolbar {
-    line-height: 40px;
-    .linklist {
-        display: flex;
-        justify-content: space-between;
-        background-color: #44484c;
-    }
+.ib-header {
+    background-color: #44484c !important;
+    .ib-header-toolbar {
+        line-height: 40px;
+        .linklist {
+            display: flex;
+            justify-content: space-between;
+            background-color: #44484c;
+        }
 
-    .linklist-linktext {
-        text-decoration: none;
-        text-transform: uppercase;
-        color: white;
-        font-weight: bold;
+        .linklist-linktext {
+            text-decoration: none;
+            text-transform: uppercase;
+            color: white;
+            font-weight: bold;
+        }
     }
 }
 div.ib-footer {
     text-align: center;
+}
+
+.ib-dialogmodal {
+    border: none;
+    outline: none;
+    .ib-dialogmodal-inner-wrapper {
+        position: absolute;
+        left: 50%;
+        top: 20%;
+        transform: translate(-20%, -50%);
+        width: auto;
+        background-color: white;
+        padding: 10px;
+        border-radius: 5px;
+        border: none;
+        outline: none;
+
+        .ib-dialogmodal-title {
+            font-size: 24px;
+
+            button {
+                position: absolute;
+                right: 3px;
+                top: 2px;
+                min-width: 0px;
+                border-radius: 80px;
+
+                .MuiButton-startIcon {
+                    margin: 0 0;
+                    svg {
+                        font-size: 28px;
+                        color: gray;
+                    }
+                }
+            }
+        }
+        .ib-dialogmodal-footer {
+            background-color: white;
+        }
+    }
 }
 
 button.ib-button-green {
