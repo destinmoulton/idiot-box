@@ -3,6 +3,7 @@ import React, { Component } from "react";
 
 import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
 import Button from "@material-ui/core/Button";
+import CachedIcon from "@material-ui/icons/Cached";
 import Checkbox from "@material-ui/core/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import FolderIcon from "@material-ui/icons/Folder";
@@ -319,13 +320,17 @@ class FilesystemBrowser extends Component {
             <div>
                 <span>
                     <Button
-                        icon="reload"
+                        startIcon={<CachedIcon />}
                         onClick={this._reloadDir.bind(this)}
                         size="small"
+                    >
+                        Refresh
+                    </Button>
+                    <input
+                        className="ib-filebrowser-current-path"
+                        value={currentPath}
+                        disabled={true}
                     />
-                    <span className="ib-filebrowser-current-path">
-                        {currentPath}
-                    </span>
                 </span>
 
                 <TableContainer>

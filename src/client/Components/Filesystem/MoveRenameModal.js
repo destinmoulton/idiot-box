@@ -5,7 +5,6 @@ import Button from "@material-ui/core/Button";
 
 import DialogModal from "../shared/DialogModal";
 import SaveIcon from "@material-ui/icons/Save";
-import TextField from "@material-ui/core/TextField";
 import FilesystemBrowser from "./FilesystemBrowser";
 
 class MoveRenameModal extends Component {
@@ -95,10 +94,10 @@ class MoveRenameModal extends Component {
         itemsToRename.forEach((item) => {
             const el = (
                 <div key={item} className="ib-moverename-input-box">
-                    <h5>
+                    <div>
                         <u>Original:</u> {item}
-                    </h5>
-                    <TextField
+                    </div>
+                    <input
                         onChange={this._handleChangeFilename.bind(this, item)}
                         value={itemsRenaming[item]}
                     />
@@ -109,7 +108,6 @@ class MoveRenameModal extends Component {
 
         return inputList;
     }
-
     render() {
         const {
             callAPI,
@@ -134,6 +132,7 @@ class MoveRenameModal extends Component {
                     title="Move or Rename"
                     isVisible={isVisible}
                     onClose={onCancel}
+                    minWidth={400}
                     footer={[
                         <Button
                             variant="contained"
