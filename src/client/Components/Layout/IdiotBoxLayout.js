@@ -17,8 +17,8 @@ import ShowsList from "../Shows/ShowsList";
 const IdiotBoxLayout = (props) => {
     return (
         <BrowserRouter>
+            <IdiotBoxHeader callAPI={props.callAPI} />
             <Container className="layout">
-                <IdiotBoxHeader callAPI={props.callAPI} />
                 <Grid container>
                     <Grid item container xs={12} id="ib-layout-content-box">
                         <Route

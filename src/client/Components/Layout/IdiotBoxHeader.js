@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
 import AppBar from "@material-ui/core/AppBar";
+import Container from "@material-ui/core/Container";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -22,41 +23,43 @@ class IdiotBoxHeader extends Component {
 
     render() {
         return (
-            <AppBar position="static">
-                <Toolbar
-                    theme="dark"
-                    mode="horizontal"
-                    className="ib-header-toolbar"
-                >
-                    <List
-                        component="nav"
-                        aria-labelledby="main navigation"
-                        className="linklist"
+            <AppBar position="static" className="ib-header">
+                <Container>
+                    <Toolbar
+                        theme="dark"
+                        mode="horizontal"
+                        className="ib-header-toolbar"
                     >
-                        {navbarItems.map(({ title, path }) => (
+                        <List
+                            component="nav"
+                            aria-labelledby="main navigation"
+                            className="linklist"
+                        >
+                            {navbarItems.map(({ title, path }) => (
+                                <Link
+                                    key={path}
+                                    to={path}
+                                    className="linklist-linktext"
+                                >
+                                    <ListItem button>
+                                        <ListItemText primary={title} />
+                                    </ListItem>
+                                </Link>
+                            ))}
                             <Link
-                                key={path}
-                                to={path}
-                                className="linklist-linktext"
+                                key={"/settings"}
+                                to="/settings"
+                                className="it-header-linktext"
                             >
                                 <ListItem button>
-                                    <ListItemText primary={title} />
+                                    <ListItemIcon>
+                                        <SettingsIcon />
+                                    </ListItemIcon>
                                 </ListItem>
                             </Link>
-                        ))}
-                        <Link
-                            key={"/settings"}
-                            to="/settings"
-                            className="it-header-linktext"
-                        >
-                            <ListItem button>
-                                <ListItemIcon>
-                                    <SettingsIcon />
-                                </ListItemIcon>
-                            </ListItem>
-                        </Link>
-                    </List>
-                </Toolbar>
+                        </List>
+                    </Toolbar>
+                </Container>
             </AppBar>
         );
     }
