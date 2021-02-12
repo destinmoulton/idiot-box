@@ -126,16 +126,7 @@ class ShowsList extends Component {
         let showList = [];
         shows.forEach((show) => {
             if (show.is_visible) {
-                showList.push(
-                    <Grid
-                        item
-                        xs={2}
-                        key={show.id}
-                        className="ib-showlist-infobox"
-                    >
-                        <ShowListThumbInfo show={show} />
-                    </Grid>
-                );
+                showList.push(<ShowListThumbInfo key={show.id} show={show} />);
             }
         });
 
@@ -173,7 +164,7 @@ class ShowsList extends Component {
                         value={currentSearchString}
                         onChange={this._handleChangeFilter.bind(this)}
                         onKeyPress={this._handleCheckPressEnter.bind(this)}
-                        style={{ width: 400 }}
+                        style={{ width: 250 }}
                         placeholder={filterPlaceholder}
                     />
                     &nbsp;&nbsp;
@@ -184,7 +175,7 @@ class ShowsList extends Component {
                         Add New Show
                     </Button>
                 </Grid>
-                <Grid item container xs={12} spacing={2}>
+                <Grid item container xs={12}>
                     {content}
                 </Grid>
                 <AddShowModal

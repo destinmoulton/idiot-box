@@ -32,6 +32,10 @@ a {
 .ib-hamburger-drawer {
     .drawer-linklist {
         width: 230px;
+
+        a {
+            color: #44484c;
+        }
     }
 }
 div.ib-footer {
@@ -334,7 +338,7 @@ div.ib-movies-thumbnail-box {
         height: 260px;
     }
     div.ib-movies-thumbnail-title {
-        font-size: 16px;
+        font-size: 12px;
 
         width: 100%;
         height: 30px;
@@ -505,22 +509,21 @@ div.ib-show-seasonlist-season-box-active {
 }
 
 div.ib-showlist-infobox {
-    width: 150px;
-    height: 258px;
+    height: 285px;
     padding: 5px;
     text-align: center;
     justify-content: center;
     font-size: 1.1em;
-    margin: 4px;
     border: 2px solid gray;
+    cursor: pointer;
+    &.bpoint-xs {
+        height: 230px;
+    }
 
     .showlist-infobox-thumb-container {
         position: relative;
-        width: 136px;
-        height: 200px;
-        margin-left: auto;
-        margin-right: auto;
         img {
+            max-width: 150px;
             width: 100%;
         }
 
@@ -555,7 +558,6 @@ div.ib-showlist-infobox {
 
     .showlist-infobox-title {
         position: relative;
-        width: 136px;
         height: 44px;
         line-height: 1.4em;
         overflow: hidden;
