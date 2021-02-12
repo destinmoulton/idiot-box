@@ -324,7 +324,7 @@ div.ib-movies-searchbar {
 }
 
 div.ib-movies-thumbnail-box {
-    height: 280px;
+    height: 320px;
     padding: 5px;
     text-align: center;
     font-size: 1em;
@@ -333,6 +333,9 @@ div.ib-movies-thumbnail-box {
     overflow: hidden;
     line-height: 1.3em;
     cursor: pointer;
+    &.bpoint-xs {
+        height: 260px;
+    }
     div.ib-movies-thumbnail-title {
         font-size: 16px;
 

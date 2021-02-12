@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import PlayButton from "../PlayButton";
 import StatusTagIcons from "./StatusTagIcons";
 
+import { getCurrentBreakpoint } from "../../lib/breakpoints.lib";
 class MovieThumbInfo extends React.Component {
     constructor(props) {
         super(props);
@@ -36,10 +37,13 @@ class MovieThumbInfo extends React.Component {
             __html: movie.title,
         };
 
+        const breakpoint = getCurrentBreakpoint();
+        const breakClass = "bpoint-" + breakpoint;
+
         return (
             <Grid
                 key={movie.id}
-                className="ib-movies-thumbnail-box"
+                className={"ib-movies-thumbnail-box " + breakClass}
                 item
                 xs={4}
                 md={2}
