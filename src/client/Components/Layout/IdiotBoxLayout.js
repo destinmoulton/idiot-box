@@ -78,12 +78,12 @@ const IdiotBoxLayout = (props) => {
                         />
                     )}
                 />
-                <Grid container className="ib-footer">
-                    <Grid item xs={12}>
-                        Idiot Box created by Destin Moulton
-                    </Grid>
-                </Grid>
             </Container>
+            <Grid container className="ib-footer">
+                <Grid item xs={12}>
+                    Idiot Box created by Destin Moulton
+                </Grid>
+            </Grid>
         </BrowserRouter>
     );
 };
