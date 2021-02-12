@@ -270,33 +270,19 @@ div.ib-moverename-inputs-container {
 }
 
 div.ib-moviemodal-contents {
-    div.ib-moviemodal-title {
+    div.mm-title {
         border-bottom: 1px solid lightgray;
         line-height: 2em;
+        height: 2em;
         font-size: 1.2em;
         font-weight: bold;
+        padding-left: 8px;
     }
 
-    div.ib-moviemodal-byline {
-        display: flex;
-        justify-content: space-between;
-
-        border-bottom: 1px solid lightgray;
-        height: 35px;
-        font-size: 1.1em;
-        div.ib-moviemodal-byline-button {
-            padding: 4px 4px 0px 0px;
-            //margin-right: 13px;
-        }
-
-        div.ib-moviemodal-byline-movieinfo {
-            padding-top: 5px;
-        }
-
-        div.ib-moviemodal-byline-statustags {
-            font-size: 1.3em;
-            padding-top: 2px;
-        }
+    div.mm-byline {
+        line-height: 1.5em;
+        height: 1.5em;
+        padding-left: 8px;
     }
 
     div.ib-moviemodal-description {

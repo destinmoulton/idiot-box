@@ -50,42 +50,42 @@ class MovieInfoModal extends Component {
                 ]}
                 width={700}
             >
-                <Grid container spacing={2} className="ib-moviemodal-contents">
+                <Grid container item xs={12} className="ib-moviemodal-contents">
                     <Grid item xs={4}>
                         <div className="ib-moviemodal-thumbnail-box">
                             <img
-                                className="ib-movies-thumbnail"
                                 src={"/images/movies/" + movie.image_filename}
                             />
                         </div>
                     </Grid>
-                    <Grid item xs={8}>
-                        <div
-                            className="ib-moviemodal-title"
+                    <Grid container item xs={8} alignContent={"flex-start"}>
+                        <Grid
+                            item
+                            xs={12}
+                            className="mm-title"
                             dangerouslySetInnerHTML={{ __html: movie.title }}
                         />
-                        <div className="ib-moviemodal-byline">
-                            <div className="ib-moviemodal-byline-movieinfo">
-                                {movie.year}&nbsp;|&nbsp;
-                                <a
-                                    href={
-                                        "http://imdb.com/title/" + movie.imdb_id
-                                    }
-                                    target="_blank"
-                                >
-                                    IMDB
-                                </a>
-                            </div>
-                            <div className="ib-moviemodal-byline-statustags">
+                        <Grid item xs={12} className="mm-byline">
+                            {movie.year}&nbsp;|&nbsp;
+                            <a
+                                href={"http://imdb.com/title/" + movie.imdb_id}
+                                target="_blank"
+                            >
+                                IMDB
+                            </a>
+                            &nbsp;|&nbsp;
+                            {movie.runtime} minutes
+                        </Grid>
+                        <Grid item container xs={12}>
+                            <Grid item xs={6} style={{ textAlign: "center" }}>
                                 <StatusTagIcons
                                     movie={movie}
                                     onClickToggleStatusTag={
                                         onClickToggleStatusTag
                                     }
                                 />
-                            </div>
-                            &nbsp;
-                            <div className="ib-moviemodal-byline-button">
+                            </Grid>
+                            <Grid item xs={6} style={{ textAlign: "center" }}>
                                 <Button
                                     onClick={this._handleClickDelete}
                                     size="small"
@@ -94,12 +94,16 @@ class MovieInfoModal extends Component {
                                 >
                                     Delete
                                 </Button>
-                            </div>
-                        </div>
+                            </Grid>
+                        </Grid>
 
-                        <div className="ib-moviemodal-description">
+                        <Grid
+                            item
+                            xs={12}
+                            className="ib-moviemodal-description"
+                        >
                             {movie.overview}
-                        </div>
+                        </Grid>
                     </Grid>
                 </Grid>
             </DialogModal>
