@@ -307,7 +307,7 @@ class MoviesList extends Component {
                         autoFocus
                         value={currentSearchString}
                         onChange={this._handleChangeFilter.bind(this)}
-                        style={{ width: 400 }}
+                        style={{ width: 250 }}
                         placeholder={filterPlaceholder}
                     />
                     {filterSelect}
