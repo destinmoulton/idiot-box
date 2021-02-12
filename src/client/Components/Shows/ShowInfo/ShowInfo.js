@@ -82,16 +82,16 @@ class ShowInfo extends Component {
         const { show } = this.state;
 
         return (
-            <Grid container>
-                <Grid item xs={2}>
-                    <div className="ib-show-info-thumbnail-box">
+            <Grid container className="ib-show-info-container">
+                <Grid item xs={3}>
+                    <div className="showinfo-thumbnail-box">
                         <img
-                            className="ib-show-info-thumb"
+                            className="showinfo-thumb"
                             src={"/images/shows/" + show.image_filename}
                         />
                     </div>
                 </Grid>
-                <Grid item xs={10}>
+                <Grid item xs={9} className="showinfo-right">
                     <h3>{show.title}</h3>
                     <h4>
                         <a
@@ -103,7 +103,8 @@ class ShowInfo extends Component {
                         &nbsp;|&nbsp;
                         {show.year}&nbsp;&nbsp;&nbsp;
                         <Button
-                            type="danger"
+                            variant="contained"
+                            color="secondary"
                             onClick={this._handlePressDelete.bind(this)}
                             size="small"
                         >
@@ -123,7 +124,6 @@ class ShowInfo extends Component {
         const showInfo = this._buildShowInfo();
 
         let seasonsBar = "";
-        let episodesTable = "";
         if (!isLoadingShow) {
             seasonsBar = (
                 <SeasonTabs

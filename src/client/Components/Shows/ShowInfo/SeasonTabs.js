@@ -145,7 +145,13 @@ class SeasonTabs extends Component {
             );
         });
         return (
-            <Tabs value={activeSeasonNum} size="small">
+            <Tabs
+                value={activeSeasonNum}
+                size="small"
+                className="ib-show-info-tabs"
+                variant="scrollable"
+                scrollButtons="auto"
+            >
                 {tabpanes}
             </Tabs>
         );
@@ -178,8 +184,12 @@ class SeasonTabs extends Component {
 
         return (
             <Grid container>
-                {seasonBar}
-                {episodesTable}
+                <Grid item xs={12}>
+                    {seasonBar}
+                </Grid>
+                <Grid item xs={12}>
+                    {episodesTable}
+                </Grid>
             </Grid>
         );
     }
