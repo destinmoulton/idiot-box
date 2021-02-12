@@ -50,7 +50,7 @@ class MovieInfoModal extends Component {
                 ]}
                 width={700}
             >
-                <Grid container spacing={2}>
+                <Grid container spacing={2} className="ib-moviemodal-contents">
                     <Grid item xs={4}>
                         <div className="ib-moviemodal-thumbnail-box">
                             <img

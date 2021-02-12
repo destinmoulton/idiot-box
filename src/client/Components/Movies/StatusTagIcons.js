@@ -2,6 +2,7 @@ import PropTypes from "prop-types";
 import React from "react";
 
 import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 
 import { StatusTagsLib, STATUS_TAGS } from "../../lib/StatusTags.lib";
 
@@ -46,7 +47,7 @@ class StatusTagIcons extends React.Component {
             );
         });
 
-        return tagList;
+        return <ButtonGroup>{tagList}</ButtonGroup>;
     }
 }
 

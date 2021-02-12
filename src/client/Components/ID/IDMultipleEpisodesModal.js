@@ -227,10 +227,10 @@ class IDMultipleEpisodesModal extends Component {
         }
 
         return (
-            <div>
+            <Grid item xs={12}>
                 <div key="show">{showSelector}</div>
                 <div key="season">{seasonsSelector}</div>
-            </div>
+            </Grid>
         );
     }
 
@@ -288,10 +288,14 @@ class IDMultipleEpisodesModal extends Component {
                 placeholder="Select..."
                 value={defaultValue.toString()}
                 filterOptions={(input, option) => {
-                    const toSearch = option.props.children;
-                    return (
-                        toSearch.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    );
+                    if (option) {
+                        const toSearch = option.props.children;
+                        return (
+                            toSearch
+                                .toLowerCase()
+                                .indexOf(input.toLowerCase()) >= 0
+                        );
+                    }
                 }}
             >
                 {options}
@@ -452,7 +456,7 @@ class IDMultipleEpisodesModal extends Component {
         const { seasonParseRegexStr } = this.state;
 
         const el = (
-            <Grid item xs="12">
+            <Grid item xs={12}>
                 <TextField
                     label="Episode Regex: "
                     value={seasonParseRegexStr}
@@ -468,7 +472,7 @@ class IDMultipleEpisodesModal extends Component {
 
         const { episodes } = this.state;
 
-        const showSeasonSelectors = this._buildShowSeasonSelectors();
+        const showSeasonSelectors = ""; //this._buildShowSeasonSelectors();
         const pathInput = this._buildShowSeasonPathInput();
         let episodesSelectors = "";
         if (episodes.length > 0) {
@@ -490,18 +494,22 @@ class IDMultipleEpisodesModal extends Component {
                     </Button>,
                 ]}
             >
-                {showSeasonSelectors}
-                {pathInput}
-                {episodeRegexInput}
-                <div>{episodesSelectors}</div>
-                <div key="button" className="ib-idmodal-button-box">
-                    <Button
-                        onClick={this._handleClickIDButton.bind(this)}
-                        disabled={buttonDisabled}
-                    >
-                        ID Episodes
-                    </Button>
-                </div>
+                <Grid container>
+                    {showSeasonSelectors}
+                    {pathInput}
+                    {episodeRegexInput}
+                    <Grid item xs={12}>
+                        {episodesSelectors}
+                    </Grid>
+                    <div key="button" className="ib-idmodal-button-box">
+                        <Button
+                            onClick={this._handleClickIDButton.bind(this)}
+                            disabled={buttonDisabled}
+                        >
+                            ID Episodes
+                        </Button>
+                    </div>
+                </Grid>
             </DialogModal>
         );
     }

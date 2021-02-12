@@ -14,10 +14,17 @@ const DialogModal = ({
     minWidth = 200,
     width = 200,
 }) => {
-    const calculatedLeft = Math.round((window.innerWidth - width) / 2);
+    const windowWidth = window.innerWidth;
+
+    let modalWidth = width;
+    if (windowWidth < width) {
+        modalWidth = windowWidth - 20;
+    }
+
+    const calculatedLeft = Math.round((window.innerWidth - modalWidth) / 2);
     const style = {
         minWidth: minWidth + "px",
-        width: width + "px",
+        width: modalWidth + "px",
         left: calculatedLeft + "px",
     };
     return (

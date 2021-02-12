@@ -312,8 +312,9 @@ class MoviesList extends Component {
                     />
                     {filterSelect}
                 </Grid>
-                <Grid container item xs={12} wrap={"wrap"}>
-                    {content}
+
+                <Grid item xs={12}>
+                    <Grid container>{content}</Grid>
                 </Grid>
                 <MovieInfoModal
                     onClickDelete={this._handlePressDelete.bind(this)}

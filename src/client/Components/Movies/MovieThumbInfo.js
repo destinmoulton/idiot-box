@@ -3,7 +3,6 @@ import React from "react";
 import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Grid from "@material-ui/core/Grid";
-import { LazyLoadImage } from "react-lazy-load-image-component";
 import PlayButton from "../PlayButton";
 import StatusTagIcons from "./StatusTagIcons";
 
@@ -43,13 +42,13 @@ class MovieThumbInfo extends React.Component {
                 className="ib-movies-thumbnail-box"
                 item
                 xs={4}
-                sm={2}
+                md={2}
+                sm={3}
+                lg={2}
             >
                 <a onClick={this._handleClick.bind(this, movie)}>
-                    <LazyLoadImage
+                    <img
                         className="ib-movies-thumbnail"
-                        width={136}
-                        height={200}
                         alt={movieTitle}
                         src={"/images/movies/" + movie.image_filename}
                     />
