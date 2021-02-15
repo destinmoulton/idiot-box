@@ -12,7 +12,7 @@ const FileDetails = ({ assocData, filename, fullPath }) => {
         if (assocData.type === "movie") {
             extra = " - " + assocData.year + " [Movie]";
         } else {
-            extra = " - " + assocData.year + " [Episode]";
+            extra = " [Episode]";
         }
         mediaDetails = (
             <div className="filemanager-media-info">
@@ -32,8 +32,10 @@ const FileDetails = ({ assocData, filename, fullPath }) => {
 
     return (
         <div className={"filemanager-file-details " + videoClass}>
-            {videoIcon}
-            <div className="filemanager-filename-text">{filename}</div>
+            <div className="filemanager-filename-topline">
+                {videoIcon}
+                <div className="filemanager-filename-text">{filename}</div>
+            </div>
             {mediaDetails}
         </div>
     );
