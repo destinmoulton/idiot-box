@@ -12,7 +12,7 @@ import Tab from "@material-ui/core/Tab";
 import TextRotationNoneIcon from "@material-ui/icons/TextRotationNone";
 import VideocamIcon from "@material-ui/icons/Videocam";
 
-import FilesystemBrowser from "./Filesystem/FilesystemBrowser";
+import FileBrowser from "./Filesystem/FileBrowser";
 import IDFileModal from "./ID/IDFileModal";
 import IDMultipleEpisodesModal from "./ID/IDMultipleEpisodesModal";
 import MoveRenameModal from "./Filesystem/MoveRenameModal";
@@ -466,7 +466,7 @@ class FileManager extends Component {
                         </Button>
                     </ButtonGroup>
                 </div>
-                <FilesystemBrowser
+                <FileBrowser
                     basePath={currentToplevelDirectory}
                     callAPI={this.props.callAPI}
                     currentPath={currentPath}
