@@ -8,6 +8,14 @@ a {
     color: #40a9ff;
     font-family: sans-serif;
 }
+
+.MuiButton-containedSecondary {
+    background-color: maroon !important;
+}
+
+.MuiButton-textSecondary {
+    color: maroon !important;
+}
 .ib-header {
     width: 100%;
     background-color: #44484c !important;
@@ -252,10 +260,9 @@ div#ib-layout-content-box {
     min-height: 280px;
 }
 
-div#ib-loading-box {
-    width: 100%;
+div.ib-loading-box {
+    margin-top: 100px;
     text-align: center;
-    padding: 50px;
     font-size: 1.3em;
     font-weight: bold;
 }
@@ -476,18 +483,28 @@ div.ib-shows-seasonlist-episode-row {
     border-bottom: 1px solid #ebebeb;
 }
 
-div.ib-show-info-thumbnail-box {
-    width: 150px;
-    height: 214px;
-    padding: 5px;
-    text-align: center;
-    font-size: 1.1em;
-    margin: 4px;
-    border: 2px solid gray;
+.ib-show-info-container {
+    margin-top: 10px;
+    div.showinfo-thumbnail-box {
+        padding: 5px;
+        text-align: center;
+        font-size: 1.1em;
+        margin: 4px;
+        border: 2px solid gray;
+    }
+
+    .showinfo-right {
+        padding-left: 8px;
+        padding-right: 15px;
+    }
+
+    img.showinfo-thumb {
+        width: 100%;
+    }
 }
 
-img.ib-show-info-thumb {
-    width: 100%;
+.ib-show-info-tabs-wrapper {
+    overflow-x: auto;
 }
 
 .ib-show-seasonlist-episodes-container {
