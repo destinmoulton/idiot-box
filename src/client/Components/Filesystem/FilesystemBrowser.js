@@ -131,7 +131,6 @@ class FilesystemBrowser extends Component {
             }
 
             if (includeItem) {
-                console.log(item.assocData);
                 const newItem = {
                     ...item,
                     key: item.name,
@@ -241,20 +240,25 @@ class FilesystemBrowser extends Component {
                 }
             }
             if (item.isDirectory) {
-                let icon = <FolderIcon />;
+                let icon = <FolderIcon className="filemanager-folder-icon" />;
                 if (item.name === this.PARENT_DIR_NAME) {
                     hasCheckbox = false;
-                    icon = <ArrowUpwardIcon />;
+                    icon = (
+                        <ArrowUpwardIcon className="filemanager-arrowup-icon" />
+                    );
                 }
                 name = (
-                    <span>
-                        <IconButton
-                            onClick={() => this._handleDirClick(item.name)}
-                        >
+                    <div
+                        className="filemanager-directory-details"
+                        onClick={() => this._handleDirClick(item.name)}
+                    >
+                        <IconButton className="filemanager-directory-icon">
                             {icon}
                         </IconButton>
-                        {item.name}
-                    </span>
+                        <div className="filemanager-directory-name">
+                            {item.name}
+                        </div>
+                    </div>
                 );
             } else {
                 name = (

@@ -197,12 +197,35 @@ table.ib-filemanager-table {
                         font-size: 0.8em;
                     }
                 }
+
+                .filemanager-directory-details {
+                    .filemanager-directory-icon {
+                        vertical-align: middle;
+                        display: inline-block;
+                        font-size: 1.2em;
+                        margin-right: 4px;
+                        padding: 4px;
+
+                        .filemanager-folder-icon {
+                            color: #f8d775;
+                        }
+                        .filemanager-arrowup-icon {
+                            color: #006fc4;
+                        }
+                    }
+                    .filemanager-directory-name {
+                        vertical-align: middle;
+                        display: inline-block;
+                        font-weight: 500;
+                        color: #006fc4;
+                    }
+                }
             }
             &.filemanager-size-column {
                 text-align: center;
             }
             &.MuiTableCell-root {
-                padding: 2px;
+                padding: 0px;
             }
 
             // Icons
