@@ -7,6 +7,7 @@ import CachedIcon from "@material-ui/icons/Cached";
 import Checkbox from "@material-ui/core/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import FolderIcon from "@material-ui/icons/Folder";
+import IconButton from "@material-ui/core/IconButton";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -130,6 +131,7 @@ class FilesystemBrowser extends Component {
             }
 
             if (includeItem) {
+                console.log(item.assocData);
                 const newItem = {
                     ...item,
                     key: item.name,
@@ -246,9 +248,11 @@ class FilesystemBrowser extends Component {
                 }
                 name = (
                     <span>
-                        <Button onClick={() => this._handleDirClick(item.name)}>
+                        <IconButton
+                            onClick={() => this._handleDirClick(item.name)}
+                        >
                             {icon}
-                        </Button>
+                        </IconButton>
                         {item.name}
                     </span>
                 );

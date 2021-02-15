@@ -1,29 +1,40 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import PlayButton from "../PlayButton";
+//import PlayButton from "../PlayButton";
+import VideocamIcon from "@material-ui/icons/Videocam";
 
 import Regex from "../../lib/Regex.lib";
 const FileDetails = ({ assocData, filename, fullPath }) => {
     let mediaDetails = "";
     if ("title" in assocData) {
+        let extra = "";
+        if (assocData.type === "movie") {
+            extra = " - " + assocData.year + " [Movie]";
+        } else {
+            extra = " - " + assocData.year + " [Episode]";
+        }
         mediaDetails = (
-            <div className="ib-filebrowser-media-title">{assocData.title}</div>
+            <div className="filemanager-media-info">
+                {assocData.title}
+                {extra}
+            </div>
         );
     }
 
-    let actions = "";
+    let videoClass = "";
+    let videoIcon = "";
     if (Regex.isVideoFile(filename)) {
-        actions = <PlayButton filename={filename} fullPath={fullPath} />;
+        videoClass = "is-video-file";
+        videoIcon = <VideocamIcon className="filemanager-video-icon" />;
+        //actions = <PlayButton filename={filename} fullPath={fullPath} />;
     }
 
     return (
-        <div>
+        <div className={"filemanager-file-details " + videoClass}>
+            {videoIcon}
+            <div className="filemanager-filename-text">{filename}</div>
             {mediaDetails}
-            <div>
-                {actions}
-                {filename}
-            </div>
         </div>
     );
 };

@@ -118,11 +118,6 @@ input.ib-filebrowser-current-path {
     padding-left: 10px;
 }
 
-div.ib-filebrowser-media-title {
-    font-weight: bold;
-    font-size: #3e3e3e;
-}
-
 div.ib-filemanager-button-bar {
     padding: 10px;
 }
@@ -166,6 +161,7 @@ table.ib-filemanager-table {
             }
         }
         td {
+            vertical-align: middle;
             &.filemanager-checkbox-column {
                 width: 30px;
             }
@@ -175,6 +171,32 @@ table.ib-filemanager-table {
                 svg {
                     font-size: 1.1em;
                 }
+                .filemanager-file-details {
+                    height: inherit;
+                    vertical-align: middle;
+                    &.is-video-file {
+                        .filemanager-video-icon {
+                            vertical-align: middle;
+                            display: inline-block;
+                            color: gray;
+                            font-size: 1.4em;
+                            margin-right: 4px;
+                        }
+                        .filemanager-filename-text {
+                            vertical-align: middle;
+                            display: inline-block;
+                        }
+                    }
+
+                    .filemanager-media-info {
+                        width: 100%;
+                        background-color: #fffcf5;
+                        border-radius: 2px;
+                        padding: 2px;
+                        text-align: center;
+                        font-size: 0.8em;
+                    }
+                }
             }
             &.filemanager-size-column {
                 text-align: center;
@@ -182,6 +204,7 @@ table.ib-filemanager-table {
             &.MuiTableCell-root {
                 padding: 2px;
             }
+
             // Icons
             // .MuiSvgIcon-root {
             //     font-size: 1.1em;

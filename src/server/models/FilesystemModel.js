@@ -23,7 +23,7 @@ export default class FilesystemModel {
         const contents = fs.readdirSync(fullPath);
         const dirList = [];
         let promisesToRun = [];
-        contents.forEach(filename => {
+        contents.forEach((filename) => {
             promisesToRun.push(
                 this._collateFileInformation(basePath, fullPath, filename)
             );
@@ -42,7 +42,7 @@ export default class FilesystemModel {
             birthtime: info.birthtime,
             size: info.size,
             isDirectory,
-            assocData: {}
+            assocData: {},
         };
 
         if (isDirectory) {
@@ -51,7 +51,7 @@ export default class FilesystemModel {
 
         return this._settingsModel
             .getSingleByCatAndVal("directories", basePath)
-            .then(setting => {
+            .then((setting) => {
                 if (!setting.hasOwnProperty("id")) {
                     return Promise.resolve(fileData);
                 }
@@ -61,7 +61,7 @@ export default class FilesystemModel {
                     filename
                 );
             })
-            .then(file => {
+            .then((file) => {
                 if (!file.hasOwnProperty("id")) {
                     return Promise.resolve(fileData);
                 }
@@ -82,18 +82,19 @@ export default class FilesystemModel {
     _getMovieFileInfo(file, fileCollate) {
         return this._fileToMovieModel
             .getSingleForFile(file.id)
-            .then(fileToMovie => {
+            .then((fileToMovie) => {
                 if (!fileToMovie.hasOwnProperty("movie_id")) {
                     return Promise.resolve(fileCollate);
                 }
                 return this._moviesModel.getSingle(fileToMovie.movie_id);
             })
-            .then(movieInfo => {
+            .then((movieInfo) => {
                 const assocData = {
                     movie_id: movieInfo.id,
                     file_id: file.id,
                     title: movieInfo.title,
-                    type: "movie"
+                    type: "movie",
+                    year: movieInfo.year,
                 };
                 fileCollate.assocData = assocData;
                 return Promise.resolve(fileCollate);
@@ -108,7 +109,7 @@ export default class FilesystemModel {
     _getEpisodeFileInfo(file, fileCollate) {
         return this._fileToEpisodeModel
             .getSingleForFile(file.id)
-            .then(fileToEpisode => {
+            .then((fileToEpisode) => {
                 if (!fileToEpisode.hasOwnProperty("episode_id")) {
                     return Promise.resolve(fileCollate);
                 }
@@ -116,12 +117,12 @@ export default class FilesystemModel {
                     fileToEpisode.episode_id
                 );
             })
-            .then(episodeInfo => {
+            .then((episodeInfo) => {
                 const assocData = {
                     episode_id: episodeInfo.id,
                     file_id: file.id,
                     title: episodeInfo.title,
-                    type: "show"
+                    type: "show",
                 };
                 fileCollate.assocData = assocData;
                 return Promise.resolve(fileCollate);
@@ -145,7 +146,7 @@ export default class FilesystemModel {
     moveInSetDir(sourceInfo, destInfo, destDirType) {
         return this._settingsModel
             .getSingleByID(sourceInfo.setting_id)
-            .then(sourceSetting => {
+            .then((sourceSetting) => {
                 const fullSourcePath = path.join(
                     sourceSetting.value,
                     sourceInfo.subpath,
@@ -159,7 +160,7 @@ export default class FilesystemModel {
 
                 return this._settingsModel
                     .getSingle("directories", destDirType)
-                    .then(destSetting => {
+                    .then((destSetting) => {
                         const baseDestDir = destSetting.value;
                         if (!fs.existsSync(baseDestDir)) {
                             return Promise.reject(
@@ -191,7 +192,7 @@ export default class FilesystemModel {
                         }
                         return {
                             original_path: fullSourcePath,
-                            new_path: fullDestPath
+                            new_path: fullDestPath,
                         };
                     });
             });
@@ -210,7 +211,7 @@ export default class FilesystemModel {
 
         const originalNames = Object.keys(itemsToRename);
 
-        originalNames.forEach(sourceName => {
+        originalNames.forEach((sourceName) => {
             const cmd = this.directMoveSingle(
                 sourcePath,
                 destPath,
@@ -264,7 +265,7 @@ export default class FilesystemModel {
 
             return this._settingsModel
                 .getSingle("directories", "Trash")
-                .then(row => {
+                .then((row) => {
                     const trashPath = row.value;
                     if (!fs.existsSync(trashPath)) {
                         reject(
@@ -274,7 +275,7 @@ export default class FilesystemModel {
 
                     let succeeded = [];
                     let failures = [];
-                    filenames.forEach(filename => {
+                    filenames.forEach((filename) => {
                         const origFilePath = path.join(sourcePath, filename);
                         const trashFilePath = path.join(trashPath, filename);
 
@@ -286,10 +287,10 @@ export default class FilesystemModel {
                     });
                     resolve({
                         succeeded,
-                        failures
+                        failures,
                     });
                 })
-                .catch(err => {
+                .catch((err) => {
                     reject(err);
                 });
         });
