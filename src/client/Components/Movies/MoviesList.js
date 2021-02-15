@@ -1,7 +1,5 @@
-import { truncate } from "lodash";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -10,8 +8,6 @@ import TextField from "@material-ui/core/TextField";
 import MovieInfoModal from "./MovieInfoModal";
 import MovieThumbInfo from "./MovieThumbInfo";
 import { STATUS_TAGS, StatusTagsLib } from "../../lib/StatusTags.lib";
-
-import { callAPI } from "../../actions/api.actions";
 
 class MoviesList extends Component {
     constructor(props) {
@@ -300,7 +296,7 @@ class MoviesList extends Component {
         return (
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <h2>Movies</h2>
+                    <h1>Movies</h1>
                 </Grid>
                 <Grid item xs={12} className="ib-movies-searchbar">
                     <TextField

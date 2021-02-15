@@ -156,7 +156,7 @@ class ShowsList extends Component {
         return (
             <Grid container spacing={2}>
                 <Grid item xs={12}>
-                    <h2>Shows</h2>
+                    <h1>Shows</h1>
                 </Grid>
                 <Grid item xs={12} className="ib-showlist-searchbar">
                     <TextField
