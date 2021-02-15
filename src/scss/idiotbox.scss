@@ -8,6 +8,14 @@ a {
     color: #40a9ff;
     font-family: sans-serif;
 }
+// Main page titles
+h1 {
+    margin: 10px 5px 10px 0px;
+    padding-bottom: 5px;
+    font-size: 1.7em;
+    border-bottom: 1px solid lightgray;
+    color: #44484c;
+}
 
 .MuiButton-containedSecondary {
     background-color: maroon !important;
@@ -431,54 +439,90 @@ div.ib-movies-veil {
     padding-top: 10px;
 }
 
-div.ib-newepisode-section {
-    margin-bottom: 10px;
-}
+div.ib-newepisodes-block {
+    margin-bottom: 5px;
+    margin-top: 5px;
+    h3 {
+        margin: 0px 0px 10px 0px;
+        font-size: 1.1em;
 
-div.ib-newepisode-container {
-    display: inline-block;
-    width: 30%;
-    border: 2px solid gray;
-    margin: 4px;
-    padding: 4px;
-    border-radius: 6px;
-}
+        .newepisodes-title-icon {
+            vertical-align: middle;
+            display: inline-block;
+            margin-right: 4px;
+        }
+        .newepisodes-title-text {
+            vertical-align: middle;
+            display: inline-block;
+        }
+    }
 
-div.ib-newepisode-img-box {
-    float: left;
-    width: 20%;
-    margin: 4px;
-}
+    &.newepisodes-no-episodes {
+        .MuiCardContent-root {
+            padding: 5px;
+        }
+        h3 {
+            margin: 0 0;
+            color: gray;
+            font-size: 0.8em;
+            .newepisodes-title-icon {
+                height: 0.8em;
+                width: 0.8em;
+            }
+        }
 
-img.ib-newepisode-img {
-    width: 100%;
-}
+        p {
+            margin: 0 0;
+            padding: 10px;
+            font-size: 0.7em;
+            width: 100%;
+            font-style: italic;
+        }
+    }
+    div.ib-newepisode-container {
+        border: 2px solid gray;
+        padding: 4px;
+        border-radius: 6px;
+    }
 
-div.ib-newepisode-details-box {
-    float: left;
-    width: 75%;
-}
+    div.ib-newepisode-img-box {
+        vertical-align: top;
+        display: inline-block;
+        width: 20%;
+        margin: 4px;
+    }
 
-div.ib-newepisode-show-title {
-    font-weight: bold;
-    font-size: 1.2em;
-    height: 25px;
-    width: 100%;
-    overflow: hidden;
-}
+    img.ib-newepisode-img {
+        width: 100%;
+    }
 
-div.ib-newepisode-ep-title {
-    font-weight: bold;
-    font-size: 1.1em;
-    height: 20px;
-    overflow: hidden;
-    width: 100%;
-    color: #383f55;
-}
+    div.ib-newepisode-details-box {
+        vertical-align: top;
+        display: inline-block;
+        width: 75%;
+    }
 
-div.ib-newepisode-links {
-    bottom: 0px;
-    right: 0px;
+    div.ib-newepisode-show-title {
+        font-weight: bold;
+        font-size: 1.2em;
+        height: 25px;
+        width: 100%;
+        overflow: hidden;
+    }
+
+    div.ib-newepisode-ep-title {
+        font-weight: bold;
+        font-size: 1.1em;
+        height: 20px;
+        overflow: hidden;
+        width: 100%;
+        color: #383f55;
+    }
+
+    div.ib-newepisode-links {
+        bottom: 0px;
+        right: 0px;
+    }
 }
 
 i.ib-playbutton-icon {
