@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 
 import DialogModal from "../shared/DialogModal";
 import SaveIcon from "@material-ui/icons/Save";
-import FilesystemBrowser from "./FilesystemBrowser";
+import FileBrowser from "./FileBrowser";
 
 class MoveRenameModal extends Component {
     constructor(props) {
@@ -159,7 +159,7 @@ class MoveRenameModal extends Component {
                         style={{ height: posDim.fileBrowserHeight }}
                     >
                         <h4>Destination Directory</h4>
-                        <FilesystemBrowser
+                        <FileBrowser
                             basePath={initialPath}
                             callAPI={callAPI}
                             enableCheckboxes={false}

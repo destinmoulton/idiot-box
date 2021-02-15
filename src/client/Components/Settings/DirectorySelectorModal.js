@@ -5,7 +5,7 @@ import Button from "@material-ui/core/Button";
 import DialogModal from "../shared/DialogModal";
 import SaveIcon from "@material-ui/icons/Save";
 
-import FilesystemBrowser from "../Filesystem/FilesystemBrowser";
+import FileBrowser from "../Filesystem/FileBrowser";
 
 const DirectorySelectorModal = (props) => {
     const {
@@ -56,9 +56,11 @@ const DirectorySelectorModal = (props) => {
                     className="ib-settings-dirsel-fs-cont"
                     style={{ height: posDim.fileBrowserHeight }}
                 >
-                    <FilesystemBrowser
+                    <FileBrowser
                         callAPI={callAPI}
                         basePath={initialPath}
+                        enableCheckboxes={false}
+                        enableSize={false}
                         onChangeDirectory={onChangeDirectory}
                         serverInfo={serverInfo}
                         showDirectories={true}
