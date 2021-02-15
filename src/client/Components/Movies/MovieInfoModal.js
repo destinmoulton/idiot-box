@@ -40,13 +40,16 @@ class MovieInfoModal extends Component {
                 isVisible={isVisible}
                 onClose={this._handleCancelClose}
                 footer={[
-                    <Button
-                        key="close"
-                        size="small"
-                        onClick={this._handleCancelClose}
-                    >
-                        Close
-                    </Button>,
+                    <div style={{ width: "100%", textAlign: "center" }}>
+                        <Button
+                            variant="contained"
+                            key="close"
+                            size="small"
+                            onClick={this._handleCancelClose}
+                        >
+                            Close
+                        </Button>
+                    </div>,
                 ]}
                 width={700}
             >
