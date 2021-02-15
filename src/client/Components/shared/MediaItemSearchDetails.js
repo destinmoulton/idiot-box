@@ -114,7 +114,8 @@ class MediaItemSearchDetails extends Component {
                 className="ib-idmodal-item-search-details-box"
             >
                 <Button
-                    type="primary"
+                    color="primary"
+                    variant="contained"
                     icon="check"
                     onClick={this._handleSelectMovie.bind(this, item)}
                 >
