@@ -120,24 +120,11 @@ input.ib-filebrowser-current-path {
 
 div.ib-filemanager-button-bar {
     padding: 10px;
-}
 
-.ib-filemanager-button-bar button.ant-btn-sm {
-    font-size: 0.9em;
-    line-height: 0.9em;
-}
-
-button.ib-filemanager-button:hover,
-button.ib-filemanager-button:focus {
-    color: green;
-    border-color: green;
-}
-
-button.ib-filemanager-button-active {
-    font-weight: bold;
-    color: green;
-    border-color: green;
-    border-width: 2px;
+    .MuiButton-label {
+        line-height: 1em;
+        font-size: 0.7em;
+    }
 }
 
 div#ib-filemanager-directorymenu ul {
@@ -174,7 +161,9 @@ table.ib-filemanager-table {
                 .filemanager-file-details {
                     height: inherit;
                     vertical-align: middle;
-                    &.is-video-file {
+                    .filemanager-filename-topline {
+                        display: block;
+                        white-space: nowrap;
                         .filemanager-video-icon {
                             vertical-align: middle;
                             display: inline-block;

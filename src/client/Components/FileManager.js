@@ -439,6 +439,16 @@ class FileManager extends Component {
                             ID
                         </Button>
                         <Button
+                            startIcon={<LabelOffIcon />}
+                            size="small"
+                            disabled={buttonDisabled}
+                            onClick={this._handleClickUntag.bind(this)}
+                        >
+                            Remove ID
+                        </Button>
+                    </ButtonGroup>
+                    <ButtonGroup>
+                        <Button
                             startIcon={<TextRotationNoneIcon />}
                             size="small"
                             disabled={buttonDisabled}
@@ -454,23 +464,15 @@ class FileManager extends Component {
                         >
                             Trash
                         </Button>
-                        <Button
-                            startIcon={<LabelOffIcon />}
-                            size="small"
-                            disabled={buttonDisabled}
-                            onClick={this._handleClickUntag.bind(this)}
-                        >
-                            Remove ID
-                        </Button>
                     </ButtonGroup>
                 </div>
                 <FilesystemBrowser
-                    enableCheckboxes={true}
                     basePath={currentToplevelDirectory}
                     callAPI={this.props.callAPI}
                     currentPath={currentPath}
+                    enableCheckboxes={true}
+                    enableSize={true}
                     forceReload={isReloading}
-                    hasCheckboxes={true}
                     onChangeDirectory={this._handleChangeDirectory.bind(this)}
                     handleSelectChangeSingle={this._handleSelectionChangeSingle.bind(
                         this
