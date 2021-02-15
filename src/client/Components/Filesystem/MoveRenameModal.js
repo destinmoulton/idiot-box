@@ -132,7 +132,7 @@ class MoveRenameModal extends Component {
                     title="Move or Rename"
                     isVisible={isVisible}
                     onClose={onCancel}
-                    minWidth={400}
+                    width={400}
                     footer={[
                         <Button
                             variant="contained"
@@ -160,8 +160,10 @@ class MoveRenameModal extends Component {
                     >
                         <h4>Destination Directory</h4>
                         <FilesystemBrowser
-                            callAPI={callAPI}
                             basePath={initialPath}
+                            callAPI={callAPI}
+                            enableCheckboxes={false}
+                            enableSize={false}
                             lockToBasePath={false}
                             onChangeDirectory={this._handleChangeDirectory.bind(
                                 this
@@ -169,7 +171,6 @@ class MoveRenameModal extends Component {
                             serverInfo={serverInfo}
                             showDirectories={true}
                             showFiles={false}
-                            enableCheckboxes={false}
                         />
                     </div>
                     <div className="ib-moverename-inputs-container">

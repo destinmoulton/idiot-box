@@ -72,6 +72,7 @@ class TrashModal extends Component {
                     title="Trash Confirmation"
                     isVisible={isVisible}
                     onClose={onCancel}
+                    width={400}
                     footer={[
                         <Button
                             variant="contained"
