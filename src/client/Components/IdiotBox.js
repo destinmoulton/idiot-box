@@ -63,7 +63,6 @@ class IdiotBox extends Component {
             ) : (
                 <IdiotBoxLoading />
             );
-
         return displayComponent;
     }
 }
