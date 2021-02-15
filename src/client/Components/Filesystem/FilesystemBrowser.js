@@ -225,7 +225,12 @@ class FilesystemBrowser extends Component {
     }
 
     _buildRows() {
-        const { basePath, selectedRows, enableCheckboxes } = this.props;
+        const {
+            basePath,
+            selectedRows,
+            enableCheckboxes,
+            enableSize,
+        } = this.props;
         const { currentPath, dirList } = this.state;
 
         const rows = [];
@@ -271,7 +276,7 @@ class FilesystemBrowser extends Component {
                 );
             }
 
-            let checkbox = "";
+            let checkbox = null;
             if (hasCheckbox) {
                 checkbox = (
                     <Checkbox
@@ -282,17 +287,31 @@ class FilesystemBrowser extends Component {
                     />
                 );
             }
-            rows.push(
-                <TableRow key={item.name}>
+
+            let checkboxColumn = null;
+            if (enableCheckboxes) {
+                checkboxColumn = (
                     <TableCell className="filemanager-checkbox-column">
                         {checkbox}
                     </TableCell>
-                    <TableCell className="filemanager-name-column">
-                        {name}
-                    </TableCell>
+                );
+            }
+
+            let sizeColumn = "";
+            if (enableSize) {
+                sizeColumn = (
                     <TableCell className="filemanager-size-column">
                         {item.size}
                     </TableCell>
+                );
+            }
+            rows.push(
+                <TableRow key={item.name}>
+                    {checkboxColumn}
+                    <TableCell className="filemanager-name-column">
+                        {name}
+                    </TableCell>
+                    {sizeColumn}
                 </TableRow>
             );
         });
@@ -310,17 +329,26 @@ class FilesystemBrowser extends Component {
     }
 
     _buildTable() {
-        const { enableCheckboxes } = this.props;
+        const { enableCheckboxes, enableSize } = this.props;
         const { currentPath, isAllSelected } = this.state;
 
         const rows = this._buildRows();
-        let checkbox = "";
+        let checkboxColumn = null;
         if (enableCheckboxes) {
-            checkbox = (
-                <Checkbox
-                    checked={isAllSelected}
-                    onChange={() => this._handleClickAllCheckbox()}
-                />
+            checkboxColumn = (
+                <TableCell className="filemanager-checkbox-column">
+                    <Checkbox
+                        checked={isAllSelected}
+                        onChange={() => this._handleClickAllCheckbox()}
+                    />
+                </TableCell>
+            );
+        }
+
+        let sizeColumn = null;
+        if (enableSize) {
+            sizeColumn = (
+                <TableCell className="filemanager-size-column">Size</TableCell>
             );
         }
 
@@ -345,15 +373,11 @@ class FilesystemBrowser extends Component {
                     <Table className="ib-filemanager-table">
                         <TableHead>
                             <TableRow>
-                                <TableCell className="filemanager-checkbox-column">
-                                    {checkbox}
-                                </TableCell>
+                                {checkboxColumn}
                                 <TableCell className="filemanager-name-column">
                                     Name
                                 </TableCell>
-                                <TableCell className="filemanager-size-column">
-                                    Size
-                                </TableCell>
+                                {sizeColumn}
                             </TableRow>
                         </TableHead>
                         <TableBody>{rows}</TableBody>
@@ -370,9 +394,11 @@ class FilesystemBrowser extends Component {
 }
 
 FilesystemBrowser.propTypes = {
-    callAPI: PropTypes.func.isRequired,
     basePath: PropTypes.string.isRequired,
+    callAPI: PropTypes.func.isRequired,
     currentPath: PropTypes.string,
+    enableCheckboxes: PropTypes.bool,
+    enableSize: PropTypes.bool,
     forceReload: PropTypes.bool,
     hasCheckboxes: PropTypes.bool,
     lockToBasePath: PropTypes.bool,
@@ -387,6 +413,8 @@ FilesystemBrowser.propTypes = {
 FilesystemBrowser.defaultProps = {
     actionColumns: [],
     currentPath: "",
+    enableCheckboxes: true,
+    enableSize: false,
     forceReload: false,
     hasCheckboxes: false,
     lockToBasePath: true,
