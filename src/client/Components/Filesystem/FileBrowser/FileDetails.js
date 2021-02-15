@@ -4,7 +4,7 @@ import React from "react";
 //import PlayButton from "../PlayButton";
 import VideocamIcon from "@material-ui/icons/Videocam";
 
-import Regex from "../../lib/Regex.lib";
+import Regex from "../../../lib/Regex.lib";
 const FileDetails = ({ assocData, filename, fullPath }) => {
     let mediaDetails = "";
     if ("title" in assocData) {
