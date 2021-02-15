@@ -576,6 +576,7 @@ class FileManager extends Component {
         }
         return (
             <div>
+                <h1>File Manager</h1>
                 <div>{directoryMenu}</div>
                 {output}
             </div>
