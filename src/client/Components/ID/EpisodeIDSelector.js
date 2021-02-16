@@ -1,12 +1,9 @@
 import _ from "lodash";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
 import Button from "@material-ui/core/Button";
 import SelectSearch from "react-select-search";
-
-import { callAPI } from "../../actions/api.actions";
 
 class EpisodeIDSelector extends Component {
     constructor(props) {
@@ -120,17 +117,12 @@ class EpisodeIDSelector extends Component {
 
         return (
             <SelectSearch
+                className="select-search"
                 options={options}
                 placeholder="Select..."
                 value={defaultValue.toString()}
                 onChange={onChange}
                 search={searchable}
-                filterOptions={(input, option) => {
-                    const toSearch = option.props.children;
-                    return (
-                        toSearch.toLowerCase().indexOf(input.toLowerCase()) >= 0
-                    );
-                }}
             >
                 {options}
             </SelectSearch>
@@ -196,12 +188,14 @@ class EpisodeIDSelector extends Component {
             buttonDisabled = false;
         }
         return (
-            <div>
+            <div className="ib-idmodal-idepisode-box">
                 <div key="show">{showSelector}</div>
                 <div key="season">{seasonsSelector}</div>
                 <div key="episode">{episodesSelector}</div>
                 <div key="button" className="ib-idmodal-button-box">
                     <Button
+                        variant="contained"
+                        color="primary"
                         onClick={this._handleClickIDButton.bind(this)}
                         disabled={buttonDisabled}
                     >
