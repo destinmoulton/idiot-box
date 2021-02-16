@@ -106,7 +106,8 @@ class EpisodeIDSelector extends Component {
         onChange,
         defaultValue,
         prefix = "",
-        searchable = false
+        searchable = false,
+        placeholder = ""
     ) {
         let options = [];
 
@@ -119,7 +120,7 @@ class EpisodeIDSelector extends Component {
             <SelectSearch
                 className="select-search"
                 options={options}
-                placeholder="Select..."
+                placeholder={"Select " + placeholder + "..."}
                 value={defaultValue.toString()}
                 onChange={onChange}
                 search={searchable}
@@ -158,7 +159,8 @@ class EpisodeIDSelector extends Component {
             this._getSeasons.bind(this),
             currentShowID,
             "",
-            true
+            true,
+            "Show"
         );
         let seasonsSelector = "Select a show...";
         if (currentShowID > 0) {
@@ -168,7 +170,8 @@ class EpisodeIDSelector extends Component {
                 this._getEpisodes.bind(this),
                 currentSeasonID,
                 "Season ",
-                true
+                true,
+                "Season"
             );
         }
         let episodesSelector = "Select a season...";
@@ -179,7 +182,8 @@ class EpisodeIDSelector extends Component {
                 this._handleSelectEpisode.bind(this),
                 currentEpisodeID,
                 "Episode ",
-                true
+                true,
+                "Episode"
             );
         }
 
