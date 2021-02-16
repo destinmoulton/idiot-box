@@ -208,8 +208,10 @@ table.ib-filemanager-table {
                         border-radius: 2px;
                         padding: 2px;
                         text-align: center;
-                        font-size: 0.8em;
+                        font-size: 0.9em;
                         .tag-single-wrapper {
+                            vertical-align: middle;
+                            color: #006fc4;
                             cursor: pointer;
                             .tag-single-icon {
                                 display: inline-block;
@@ -217,6 +219,7 @@ table.ib-filemanager-table {
                                 margin-right: 6px;
                             }
                             .tag-single-text {
+                                font-weight: bold;
                                 display: inline-block;
                                 vertical-align: middle;
                             }
