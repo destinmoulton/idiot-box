@@ -12,9 +12,17 @@ const DialogModal = ({
     onClose,
     footer,
     minWidth = 200,
-    width = 200,
+    width = 400,
 }) => {
     const windowWidth = window.innerWidth;
+    const windowHeight = window.innerHeight;
+
+    // This is essential for mobile modals
+    const maxContentHeight = window.innerHeight - 175;
+    const mobileModalStyle = {
+        maxHeight: maxContentHeight + "px",
+        overflow: "auto",
+    };
 
     let modalWidth = width;
     if (windowWidth < width) {
@@ -39,7 +47,7 @@ const DialogModal = ({
                         {title}
                         <Button startIcon={<CloseIcon />} onClick={onClose} />
                     </div>
-                    {children}
+                    <div style={mobileModalStyle}>{children}</div>
                     <div className="ib-dialogmodal-footer">{footer}</div>
                 </Grid>
             </Grid>
