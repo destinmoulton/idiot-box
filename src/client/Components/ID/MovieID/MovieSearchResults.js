@@ -2,6 +2,8 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 
 import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import SearchIcon from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
 
 import MediaItemSearchDetails from "../../shared/MediaItemSearchDetails";
@@ -80,20 +82,37 @@ class MovieSearchResults extends Component {
             }
         });
         return (
-            <Grid container spacing={2}>
-                <Grid xs={12}>
+            <Grid container>
+                <Grid item xs={12} className="ib-idmodal-movieresults-topbar">
                     <h4>Movie - Search Results</h4>
-                    <div id="ib-idmodal-movieresults-searchbox">
+                    <div className="ib-idmodal-movieresults-searchbox">
                         <TextField
                             value={currentSearchString}
                             onChange={this._handleChangeSearchInput.bind(this)}
-                            style={{ width: 400 }}
-                            onSearch={this._handleSearchPress.bind(this)}
-                            enterButton
+                            variant="outlined"
+                            size="small"
+                            style={{ width: "250px" }}
                         />
+                        <Button
+                            size="small"
+                            variant="outlined"
+                            onClick={this._handleSearchPress.bind(this)}
+                            startIcon={<SearchIcon />}
+                        >
+                            Search
+                        </Button>
                     </div>
                 </Grid>
-                <Grid xs={12}>{movieList}</Grid>
+                <Grid
+                    item
+                    xs={12}
+                    container
+                    alignItems="center"
+                    alignContent="center"
+                    justify="center"
+                >
+                    {movieList}
+                </Grid>
             </Grid>
         );
     }

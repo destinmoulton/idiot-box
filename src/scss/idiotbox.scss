@@ -355,20 +355,36 @@ div.ib-idmodal-wrapper {
         border: 1px solid #d9d9d9;
         border-radius: 5px;
         margin: 5px;
-    }
-
-    div.ib-idmodal-item-search-details-img-box {
-        width: 100%;
         text-align: center;
-        margin-top: 4px;
+
+        div.ib-idmodal-item-search-details-img-box {
+            width: 100%;
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        img.ib-idmodal-item-search-details-img {
+            width: 100%;
+        }
     }
 
-    img.ib-idmodal-item-search-details-img {
-        width: 100%;
-    }
+    div.ib-idmodal-movieresults-topbar {
+        h4 {
+            margin: 0 0;
+            padding-left: 4px;
+            padding-bottom: 4px;
+        }
+        div.ib-idmodal-movieresults-searchbox {
+            text-align: center;
 
-    div#ib-idmodal-movieresults-searchbox {
-        text-align: center;
+            .MuiInputBase-root {
+                margin-right: 4px;
+                .MuiInputBase-input {
+                    padding: 6px 9px 5px 10px;
+                    font-size: 1em;
+                }
+            }
+        }
     }
 }
 
