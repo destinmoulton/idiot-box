@@ -187,18 +187,21 @@ table.ib-filemanager-table {
                     height: inherit;
                     vertical-align: middle;
                     .filemanager-filename-topline {
+                        font-family: monospace;
+                        margin: 4px;
                         display: block;
                         white-space: nowrap;
                         .filemanager-video-icon {
                             vertical-align: middle;
                             display: inline-block;
                             color: gray;
-                            font-size: 1.4em;
+                            font-size: 1.6em;
                             margin-right: 4px;
                         }
                         .filemanager-filename-text {
                             vertical-align: middle;
                             display: inline-block;
+                            font-size: 1.2em;
                         }
                     }
 
@@ -228,6 +231,7 @@ table.ib-filemanager-table {
                 }
 
                 .filemanager-directory-details {
+                    cursor: pointer;
                     .filemanager-directory-icon {
                         vertical-align: middle;
                         display: inline-block;

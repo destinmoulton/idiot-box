@@ -13,7 +13,7 @@ const FileDetails = ({
     fullPath,
     onClickTagSingle,
 }) => {
-    console.log("enableTagSingleLink", enableTagSingleLink);
+    const isVideoFile = Regex.isVideoFile(filename);
     let extra = null;
     if ("title" in assocData) {
         let txt = "";
@@ -29,7 +29,7 @@ const FileDetails = ({
             </div>
         );
     } else {
-        if (enableTagSingleLink) {
+        if (isVideoFile && enableTagSingleLink) {
             extra = (
                 <div
                     className="tag-single-wrapper"
@@ -38,7 +38,7 @@ const FileDetails = ({
                     <div className="tag-single-icon">
                         <LocalOfferIcon />
                     </div>
-                    <div className="tag-single-text">Tag This</div>
+                    <div className="tag-single-text">ID This Video</div>
                 </div>
             );
         }
@@ -46,7 +46,7 @@ const FileDetails = ({
 
     let videoClass = "";
     let videoIcon = "";
-    if (Regex.isVideoFile(filename)) {
+    if (isVideoFile) {
         videoClass = "is-video-file";
         videoIcon = <VideocamIcon className="filemanager-video-icon" />;
         //actions = <PlayButton filename={filename} fullPath={fullPath} />;
