@@ -261,6 +261,35 @@ table.ib-filemanager-table {
         }
     }
 }
+div.ib-idmodal-topbar {
+    font-size: 1.3em;
+    font-weight: bold;
+    padding-bottom: 5px;
+    width: 100%;
+    border-bottom: 2px solid black;
+    margin-bottom: 10px;
+    margin-top: 5px;
+
+    .idmodal-topbar-button-wrapper {
+        display: inline-block;
+        vertical-align: middle;
+        width: 27%;
+        text-align: right;
+
+        .MuiButtonBase-root {
+            padding: 2px 5px;
+            font-size: 0.4em;
+        }
+    }
+    .idmodal-topbar-filename-wrapper {
+        display: inline-block;
+        vertical-align: middle;
+        width: 70%;
+        input {
+            width: 100%;
+        }
+    }
+}
 
 div.ib-idmodal-wrapper {
     .idmodal-accordion-wrapper {
@@ -308,15 +337,6 @@ div.ib-idmodal-wrapper {
         width: 100%;
         padding: 5px;
         text-align: right;
-    }
-
-    div.ib-idmodal-filename {
-        font-size: 1.3em;
-        font-weight: bold;
-        padding-bottom: 5px;
-        width: 100%;
-        border-bottom: 2px solid black;
-        margin-bottom: 10px;
     }
 
     div.ib-idmodal-idepisode-box {

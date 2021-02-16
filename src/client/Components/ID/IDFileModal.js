@@ -164,6 +164,7 @@ class IDFileModal extends Component {
                         this,
                         this.INITIAL_VIEW
                     )}
+                    size="small"
                     startIcon={<ArrowBackIcon />}
                 >
                     Back
@@ -189,8 +190,13 @@ class IDFileModal extends Component {
                 ]}
             >
                 <div>
-                    <div className="ib-idmodal-filename">
-                        {backButton}&nbsp;&nbsp;{currentFilename}
+                    <div className="ib-idmodal-topbar">
+                        <div className="idmodal-topbar-filename-wrapper">
+                            <input value={currentFilename} disabled />
+                        </div>
+                        <div className="idmodal-topbar-button-wrapper">
+                            {backButton}
+                        </div>
                     </div>
                 </div>
                 <div className="ib-idmodal-wrapper">{contents}</div>
