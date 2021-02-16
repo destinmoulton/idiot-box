@@ -263,7 +263,7 @@ table.ib-filemanager-table {
 }
 
 div.ib-idmodal-wrapper {
-    .idmodal-twocolumn-wrapper {
+    .idmodal-accordion-wrapper {
         margin-top: 9px;
         .MuiAccordionSummary-root {
             min-height: 30px !important;
@@ -273,6 +273,20 @@ div.ib-idmodal-wrapper {
             }
             .MuiButtonBase-root {
                 height: 15px;
+            }
+        }
+
+        .idmodal-movie-checksearch-wrapper {
+            width: 100%;
+            .idmodal-movie-checksearch-checks-wrapper {
+                margin-top: 8px;
+                .idmodal-movie-checksearch-option {
+                    font-size: 10px;
+                    .MuiCheckbox-root {
+                        padding: 2px;
+                        margin-right: 6px;
+                    }
+                }
             }
         }
     }
@@ -307,6 +321,7 @@ div.ib-idmodal-wrapper {
 
     div.ib-idmodal-idepisode-box {
         width: 100%;
+        text-align: center;
 
         .select-search__input {
             width: 100%;

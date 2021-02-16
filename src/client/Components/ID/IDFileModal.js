@@ -61,12 +61,12 @@ class IDFileModal extends Component {
     _buildTwoColumnSingleID() {
         const { callAPI, currentFilename } = this.props;
         return (
-            <div className="idmodal-twocolumn-wrapper">
+            <div className="idmodal-accordion-wrapper">
                 <Accordion>
                     <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                         Episode
                     </AccordionSummary>
-                    <AccordionDetails className="ib-idmodal-idepisode-box">
+                    <AccordionDetails>
                         <EpisodeIDSelector
                             callAPI={callAPI}
                             onIDEpisode={this._handleClickIDEpisode.bind(this)}
