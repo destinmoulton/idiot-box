@@ -2,24 +2,46 @@ import PropTypes from "prop-types";
 import React from "react";
 
 //import PlayButton from "../PlayButton";
+import LocalOfferIcon from "@material-ui/icons/LocalOffer";
 import VideocamIcon from "@material-ui/icons/Videocam";
 
 import Regex from "../../../lib/Regex.lib";
-const FileDetails = ({ assocData, filename, fullPath }) => {
-    let mediaDetails = "";
+const FileDetails = ({
+    assocData,
+    enableTagSingleLink,
+    filename,
+    fullPath,
+    onClickTagSingle,
+}) => {
+    console.log("enableTagSingleLink", enableTagSingleLink);
+    let extra = null;
     if ("title" in assocData) {
-        let extra = "";
+        let txt = "";
         if (assocData.type === "movie") {
-            extra = " - " + assocData.year + " [Movie]";
+            txt = " - " + assocData.year + " [Movie]";
         } else {
-            extra = " [Episode]";
+            txt = " [Episode]";
         }
-        mediaDetails = (
-            <div className="filemanager-media-info">
+        extra = (
+            <div>
                 {assocData.title}
-                {extra}
+                {txt}
             </div>
         );
+    } else {
+        if (enableTagSingleLink) {
+            extra = (
+                <div
+                    className="tag-single-wrapper"
+                    onClick={() => onClickTagSingle(filename)}
+                >
+                    <div className="tag-single-icon">
+                        <LocalOfferIcon />
+                    </div>
+                    <div className="tag-single-text">Tag This</div>
+                </div>
+            );
+        }
     }
 
     let videoClass = "";
@@ -36,7 +58,7 @@ const FileDetails = ({ assocData, filename, fullPath }) => {
                 {videoIcon}
                 <div className="filemanager-filename-text">{filename}</div>
             </div>
-            {mediaDetails}
+            <div className="filemanager-filename-bottomline">{extra}</div>
         </div>
     );
 };
@@ -44,8 +66,10 @@ const FileDetails = ({ assocData, filename, fullPath }) => {
 FileDetails.propTypes = {
     assocData: PropTypes.object.isRequired,
     basePath: PropTypes.string.isRequired,
+    enableTagSingleLink: PropTypes.bool,
     filename: PropTypes.string.isRequired,
     fullPath: PropTypes.string.isRequired,
+    onClickTagSingle: () => {},
 };
 
 export default FileDetails;
