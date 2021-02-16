@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 
 import Button from "@material-ui/core/Button";
-import SelectSearch from "react-select-search";
+import Select from "react-select";
 
 class EpisodeIDSelector extends Component {
     constructor(props) {
@@ -106,27 +106,19 @@ class EpisodeIDSelector extends Component {
         onChange,
         defaultValue,
         prefix = "",
-        searchable = false,
         placeholder = ""
     ) {
-        let options = [];
-
-        items.forEach((item) => {
+        let options = items.map((item) => {
             const optionValue = prefix + item[titleKey];
-            options.push({ value: item.id.toString(), name: optionValue });
+            return { value: item.id.toString(), label: optionValue };
         });
-
         return (
-            <SelectSearch
-                className="select-search"
+            <Select
                 options={options}
                 placeholder={"Select " + placeholder + "..."}
-                value={defaultValue.toString()}
-                onChange={onChange}
-                search={searchable}
-            >
-                {options}
-            </SelectSearch>
+                defaultValue={defaultValue.toString()}
+                onChange={({ value }) => onChange(value)}
+            />
         );
     }
 
@@ -182,7 +174,6 @@ class EpisodeIDSelector extends Component {
                 this._handleSelectEpisode.bind(this),
                 currentEpisodeID,
                 "Episode ",
-                true,
                 "Episode"
             );
         }
