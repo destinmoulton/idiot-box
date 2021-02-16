@@ -262,64 +262,79 @@ table.ib-filemanager-table {
     }
 }
 
-div.ib-idmodal-archivesingle-episodeinfo {
-    font-size: 1.1em;
-    font-weight: bold;
-    border: 1px solid gray;
-    padding: 5px;
-    margin: 5px;
-}
+div.ib-idmodal-wrapper {
+    .idmodal-twocolumn-wrapper {
+        margin-top: 9px;
+        .MuiAccordionSummary-root {
+            min-height: 30px !important;
 
-div.ib-idmodal-archivesingle-form-box {
-    border: 1px solid gray;
-    padding: 5px;
-    margin: 5px;
-}
-
-div.ib-idmodal-button-box {
-    width: 100%;
-    padding: 5px;
-    text-align: right;
-}
-
-div.ib-idmodal-filename {
-    font-size: 1.3em;
-    font-weight: bold;
-    padding-bottom: 5px;
-    width: 100%;
-    border-bottom: 2px solid black;
-    margin-bottom: 10px;
-}
-
-div.ib-idmodal-idepisode-box {
-    width: 100%;
-
-    .select-search__input {
-        width: 100%;
-        margin-bottom: 4px;
+            .MuiAccordionSummary-content {
+                margin: 0 0;
+            }
+            .MuiButtonBase-root {
+                height: 15px;
+            }
+        }
     }
-}
+    div.ib-idmodal-archivesingle-episodeinfo {
+        font-size: 1.1em;
+        font-weight: bold;
+        border: 1px solid gray;
+        padding: 5px;
+        margin: 5px;
+    }
 
-div.ib-idmodal-item-search-details-box {
-    min-height: 275px;
-    padding: 15px;
-    border: 1px solid #d9d9d9;
-    border-radius: 5px;
-    margin: 5px;
-}
+    div.ib-idmodal-archivesingle-form-box {
+        border: 1px solid gray;
+        padding: 5px;
+        margin: 5px;
+    }
 
-div.ib-idmodal-item-search-details-img-box {
-    width: 100%;
-    text-align: center;
-    margin-top: 4px;
-}
+    div.ib-idmodal-button-box {
+        width: 100%;
+        padding: 5px;
+        text-align: right;
+    }
 
-img.ib-idmodal-item-search-details-img {
-    width: 100%;
-}
+    div.ib-idmodal-filename {
+        font-size: 1.3em;
+        font-weight: bold;
+        padding-bottom: 5px;
+        width: 100%;
+        border-bottom: 2px solid black;
+        margin-bottom: 10px;
+    }
 
-div#ib-idmodal-movieresults-searchbox {
-    text-align: center;
+    div.ib-idmodal-idepisode-box {
+        width: 100%;
+
+        .select-search__input {
+            width: 100%;
+            margin-bottom: 4px;
+        }
+    }
+
+    div.ib-idmodal-item-search-details-box {
+        min-height: 275px;
+        padding: 15px;
+        border: 1px solid #d9d9d9;
+        border-radius: 5px;
+        margin: 5px;
+    }
+
+    div.ib-idmodal-item-search-details-img-box {
+        width: 100%;
+        text-align: center;
+        margin-top: 4px;
+    }
+
+    img.ib-idmodal-item-search-details-img {
+        width: 100%;
+    }
+
+    div#ib-idmodal-movieresults-searchbox {
+        text-align: center;
+    }
 }
 
 div.ib-idmultiplemodal-episode-box {

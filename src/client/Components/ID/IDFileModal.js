@@ -2,9 +2,12 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
+import Accordion from "@material-ui/core/Accordion";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
+import AccordionDetails from "@material-ui/core/AccordionDetails";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-
+import Button from "@material-ui/core/Button";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DialogModal from "../shared/DialogModal";
 import ArchiveSingleEpisode from "./ArchiveSingleEpisode";
 import EpisodeIDSelector from "./EpisodeIDSelector";
@@ -58,26 +61,32 @@ class IDFileModal extends Component {
     _buildTwoColumnSingleID() {
         const { callAPI, currentFilename } = this.props;
         return (
-            <Grid container spacing={2}>
-                <Grid item xs={6}>
-                    <h4>Movie</h4>
-                    <MovieCheckForm
-                        currentFilename={currentFilename}
-                        onSearchMovies={this._handleClickSearchMovies.bind(
-                            this
-                        )}
-                    />
-                </Grid>
-                <Grid item xs={6}>
-                    <div className="ib-idmodal-idepisode-box">
-                        <h4>Episode</h4>
+            <div className="idmodal-twocolumn-wrapper">
+                <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        Episode
+                    </AccordionSummary>
+                    <AccordionDetails className="ib-idmodal-idepisode-box">
                         <EpisodeIDSelector
                             callAPI={callAPI}
                             onIDEpisode={this._handleClickIDEpisode.bind(this)}
                         />
-                    </div>
-                </Grid>
-            </Grid>
+                    </AccordionDetails>
+                </Accordion>
+                <Accordion>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        Movie
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <MovieCheckForm
+                            currentFilename={currentFilename}
+                            onSearchMovies={this._handleClickSearchMovies.bind(
+                                this
+                            )}
+                        />
+                    </AccordionDetails>
+                </Accordion>
+            </div>
         );
     }
 
@@ -167,6 +176,7 @@ class IDFileModal extends Component {
                 title="ID File"
                 isVisible={isVisible}
                 onClose={this._handleCancel.bind(this)}
+                width={400}
                 footer={[
                     <Button
                         variant="contained"
@@ -183,7 +193,7 @@ class IDFileModal extends Component {
                         {backButton}&nbsp;&nbsp;{currentFilename}
                     </div>
                 </div>
-                <div>{contents}</div>
+                <div className="ib-idmodal-wrapper">{contents}</div>
             </DialogModal>
         );
     }
