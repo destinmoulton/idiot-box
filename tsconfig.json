@@ -1,0 +1,8 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist/server/app",
+        "allowJs": true,
+        "esModuleInterop": true
+    },
+    "include": ["./src/server/**/*"]
+}
