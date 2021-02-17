@@ -1,6 +1,26 @@
 const logger = require("../logger");
 
-module.exports = class IDModel {
+import FilesModel from "./db/FilesModel";
+import FilesystemModel from "./FilesystemModel";
+import FileToEpisodeModel from "./db/FileToEpisodeModel";
+import FileToMovieModel from "./db/FileToMovieModel";
+import MediaScraperModel from "./MediaScraperModel";
+import MoviesModel from "./db/MoviesModel";
+import SettingsModel from "./db/SettingsModel";
+import ShowsModel from "./db/ShowsModel";
+import ShowSeasonEpisodesModel from "./db/ShowSeasonEpisodesModel";
+import ShowSeasonsModel from "./db/ShowSeasonsModel";
+export default class IDModel {
+    _filesModel: FilesModel;
+    _filesystemModel: FilesystemModel;
+    _fileToEpisodeModel: FileToEpisodeModel;
+    _fileToMovieModel: FileToMovieModel;
+    _mediaScraperModel: MediaScraperModel;
+    _moviesModel: MoviesModel;
+    _settingsModel: SettingsModel;
+    _showsModel: ShowsModel;
+    _showSeasonsModel: ShowSeasonsModel;
+    _showSeasonEpisodesModel: ShowSeasonEpisodesModel;
     constructor(models) {
         this._filesystemModel = models.filesystemModel;
         this._filesModel = models.filesModel;
@@ -14,26 +34,26 @@ module.exports = class IDModel {
         this._showSeasonEpisodesModel = models.showSeasonEpisodesModel;
     }
 
-    idAndArchiveMovie(movieInfo, imageURL, sourceInfo, destInfo) {
+    async idAndArchiveMovie(movieInfo, imageURL, sourceInfo, destInfo) {
         const imageFilename = this._buildThumbFilename(movieInfo);
-        return this._filesystemModel
-            .moveInSetDir(sourceInfo, destInfo, "Movies")
-            .then(() => {
-                if (imageURL !== "") {
-                    return this._mediaScraperModel.downloadThumbnail(
-                        "movies",
-                        imageURL,
-                        imageFilename
-                    );
-                }
-                return Promise.resolve("");
-            })
-            .then((imageFilename) => {
-                return this._moviesModel.addMovie(movieInfo, imageFilename);
-            })
-            .then((movieRow) => {
-                return this._addMovieFileAssociations(movieRow, destInfo);
-            });
+        await this._filesystemModel.moveInSetDir(
+            sourceInfo,
+            destInfo,
+            "Movies"
+        );
+        let newFilename = "";
+        if (imageURL !== "") {
+            newFilename = await this._mediaScraperModel.downloadThumbnail(
+                "movies",
+                imageURL,
+                imageFilename
+            );
+        }
+        const movieRow = await this._moviesModel.addMovie(
+            movieInfo,
+            newFilename
+        );
+        return await this._addMovieFileAssociations(movieRow, destInfo);
     }
 
     /**
@@ -43,50 +63,19 @@ module.exports = class IDModel {
      * @param Movie movie
      * @param object destInfo
      */
-    _addMovieFileAssociations(movie, destInfo) {
-        return this._settingsModel
-            .getSingle("directories", "Movies")
-            .then((destSetting) => {
-                return this._filesModel.addFile(
-                    destSetting.id,
-                    destInfo.subpath,
-                    destInfo.filename,
-                    "movie"
-                );
-            })
-            .then((fileRow) => {
-                return this._fileToMovieModel.add(fileRow.id, movie.id);
-            });
+    async _addMovieFileAssociations(movie, destInfo) {
+        const destSetting = await this._settingsModel.getSingle(
+            "directories",
+            "Movies"
+        );
+        const fileRow = await this._filesModel.addFile(
+            destSetting.id,
+            destInfo.subpath,
+            destInfo.filename,
+            "movie"
+        );
+        return await this._fileToMovieModel.add(fileRow.id, movie.id);
     }
-
-    /*idAndArchiveEpisode(epInfo, sourceInfo, destInfo) {
-        return this._filesystemModel
-            .moveInSetDir(sourceInfo, destInfo, "Shows")
-            .then(() => {
-                return this._settingsModel.getSingle("directories", "Shows");
-            })
-            .then((destSetting) => {
-                return this._filesModel.addFile(
-                    destSetting.id,
-                    destInfo.subpath,
-                    destInfo.filename,
-                    "show"
-                );
-            })
-            .then((fileRow) => {
-                // Check if the episode already exists
-                this._fileToEpisodeModel.getSingleForEpisode(epInfo.episode_id);
-            })
-            .then(())
-                console.log("IDModel :: fileRow = ", fileRow);
-                return this._fileToEpisodeModel.add(
-                    fileRow.id,
-                    epInfo.show_id,
-                    epInfo.season_id,
-                    epInfo.episode_id
-                );
-            });
-    }*/
 
     async idAndArchiveEpisode(epInfo, sourceInfo, destInfo) {
         // Setup the directory
@@ -95,14 +84,14 @@ module.exports = class IDModel {
             "directories",
             "Shows"
         );
-        const fileRow = this._filesModel.addFile(
+        const fileRow = await this._filesModel.addFile(
             destSetting.id,
             destInfo.subpath,
             destInfo.filename,
             "show"
         );
         // Check if the episode is already associated
-        const possibleEpisode = this._fileToEpisodeModel.getSingleForEpisode(
+        const possibleEpisode = await this._fileToEpisodeModel.getSingleForEpisode(
             epInfo.episode_id
         );
 
@@ -125,13 +114,12 @@ module.exports = class IDModel {
             epInfo.episode_id
         );
     }
+
     idAndArchiveMultipleEpisodes(sourcePathInfo, destSubpath, idInfo) {
         const episodesToMove = idInfo.episodes;
         const filenames = Object.keys(episodesToMove);
 
-        let promisesToRun = [];
-
-        filenames.forEach((filename) => {
+        return filenames.map(async (filename) => {
             const episode = episodesToMove[filename];
             const dest = {
                 filename: episode.newFilename,
@@ -150,26 +138,21 @@ module.exports = class IDModel {
                 episode_id: episode.selectedEpisodeID,
             };
 
-            promisesToRun.push(this.idAndArchiveEpisode(epInfo, source, dest));
+            return await this.idAndArchiveEpisode(epInfo, source, dest);
         });
-
-        return Promise.all(promisesToRun);
     }
 
-    removeMultipleIDs(itemsToRemove) {
-        let promisesToRun = [];
-        itemsToRemove.forEach((item) => {
-            promisesToRun.push(this.removeSingleID(item.assocData));
+    async removeMultipleIDs(itemsToRemove) {
+        return itemsToRemove.map(async (item) => {
+            return await this.removeSingleID(item.assocData);
         });
-
-        return Promise.all(promisesToRun);
     }
 
-    removeSingleID(idInfo) {
+    async removeSingleID(idInfo) {
         if (idInfo.type === "movie") {
-            return this._removeMovie(idInfo);
+            return await this._removeMovie(idInfo);
         } else if (idInfo.type === "show") {
-            return this._removeEpisodeFileAssociations(idInfo);
+            return await this._removeEpisodeFileAssociations(idInfo);
         }
     }
 
@@ -180,18 +163,13 @@ module.exports = class IDModel {
      *
      * @param object idInfo
      */
-    _removeMovie(idInfo) {
-        return this._filesModel
-            .deleteSingle(idInfo.file_id)
-            .then(() => {
-                return this._fileToMovieModel.deleteSingle(
-                    idInfo.file_id,
-                    idInfo.movie_id
-                );
-            })
-            .then(() => {
-                return this._moviesModel.deleteSingle(idInfo.movie_id);
-            });
+    async _removeMovie(idInfo) {
+        await this._filesModel.deleteSingle(idInfo.file_id);
+        await this._fileToMovieModel.deleteSingle(
+            idInfo.file_id,
+            idInfo.movie_id
+        );
+        return await this._moviesModel.deleteSingle(idInfo.movie_id);
     }
 
     /**
@@ -201,25 +179,23 @@ module.exports = class IDModel {
      *
      * @param object idInfo
      */
-    _removeEpisodeFileAssociations(idInfo) {
-        return this._filesModel.deleteSingle(idInfo.file_id).then(() => {
-            return this._fileToEpisodeModel.deleteSingle(
-                idInfo.file_id,
-                idInfo.episode_id
-            );
-        });
+    async _removeEpisodeFileAssociations(idInfo) {
+        await this._filesModel.deleteSingle(idInfo.file_id);
+        return await this._fileToEpisodeModel.deleteSingle(
+            idInfo.file_id,
+            idInfo.episode_id
+        );
     }
 
-    addShow(showInfo, imageInfo) {
+    async addShow(showInfo, imageInfo) {
         const imageFilename = this._buildThumbFilename(showInfo);
-        return this._mediaScraperModel
-            .downloadThumbnail("shows", imageInfo.url, imageFilename)
-            .then((imageFilename) => {
-                return this._showsModel.addShow(showInfo, imageFilename);
-            })
-            .then((show) => {
-                return this._scrapeAndAddSeasonsForShow(show);
-            });
+        const newFilename = await this._mediaScraperModel.downloadThumbnail(
+            "shows",
+            imageInfo.url,
+            imageFilename
+        );
+        const show = await this._showsModel.addShow(showInfo, newFilename);
+        return await this._scrapeAndAddSeasonsForShow(show);
     }
 
     _buildThumbFilename(mediaInfo) {
@@ -232,18 +208,15 @@ module.exports = class IDModel {
      *
      * @param Show show
      */
-    _scrapeAndAddSeasonsForShow(show) {
-        return this._mediaScraperModel
-            .getShowSeasonsList(show.trakt_id)
-            .then((seasons) => {
-                return this._showSeasonsModel.addArrayOfSeasons(
-                    seasons,
-                    show.id
-                );
-            })
-            .then((addedSeasons) => {
-                return this._scrapeAndAddEpisodesForSeasons(show, addedSeasons);
-            });
+    async _scrapeAndAddSeasonsForShow(show) {
+        const seasons = this._mediaScraperModel.getShowSeasonsList(
+            show.trakt_id
+        );
+        const addedSeasons = this._showSeasonsModel.addArrayOfSeasons(
+            seasons,
+            show.id
+        );
+        return await this._scrapeAndAddEpisodesForSeasons(show, addedSeasons);
     }
 
     /**
@@ -253,20 +226,17 @@ module.exports = class IDModel {
      * @param Show show
      * @param ShowSeasons seasons for a show
      */
-    _scrapeAndAddEpisodesForSeasons(show, seasons) {
-        let promisesToRun = [];
-        seasons.forEach((season) => {
-            const prom = this._mediaScraperModel
-                .getEpisodesForSeason(show.trakt_id, season.season_number)
-                .then((episodesArr) => {
-                    return this._showSeasonEpisodesModel.addArrEpisodes(
-                        show.id,
-                        season.id,
-                        episodesArr
-                    );
-                });
-            promisesToRun.push(prom);
+    async _scrapeAndAddEpisodesForSeasons(show, seasons) {
+        return seasons.map(async (season) => {
+            const episodesArr = await this._mediaScraperModel.getEpisodesForSeason(
+                show.trakt_id,
+                season.season_number
+            );
+            return await this._showSeasonEpisodesModel.addArrEpisodes(
+                show.id,
+                season.id,
+                episodesArr
+            );
         });
-        return Promise.all(promisesToRun);
     }
-};
+}
