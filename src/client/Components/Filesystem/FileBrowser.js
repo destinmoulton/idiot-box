@@ -204,6 +204,8 @@ class FileBrowser extends Component {
             selectedRows,
             enableCheckboxes,
             enableSize,
+            enableTagSingleLink,
+            onClickTagSingle,
         } = this.props;
         const { currentPath, dirList, isAllSelected, isLoading } = this.state;
 
@@ -221,13 +223,13 @@ class FileBrowser extends Component {
                     basePath={basePath}
                     enableCheckboxes={enableCheckboxes}
                     enableSize={enableSize}
-                    handleClickAllCheckbox={this._handleClickAllCheckbox.bind(
+                    enableTagSingleLink={enableTagSingleLink}
+                    onClickAllCheckbox={this._handleClickAllCheckbox.bind(this)}
+                    onClickDir={this._handleDirClick.bind(this)}
+                    onClickSingleCheckbox={this._handleClickSingleCheckbox.bind(
                         this
                     )}
-                    handleClickDir={this._handleDirClick.bind(this)}
-                    handleClickSingleCheckbox={this._handleClickSingleCheckbox.bind(
-                        this
-                    )}
+                    onClickTagSingle={onClickTagSingle}
                     isAllChecked={isAllSelected}
                     path={currentPath}
                     rowData={dirList}
@@ -244,10 +246,12 @@ FileBrowser.propTypes = {
     currentPath: PropTypes.string,
     enableCheckboxes: PropTypes.bool,
     enableSize: PropTypes.bool,
+    enableTagSingleLink: PropTypes.bool,
     forceReload: PropTypes.bool,
     hasCheckboxes: PropTypes.bool,
     lockToBasePath: PropTypes.bool,
     onChangeDirectory: PropTypes.func,
+    onClickTagSingle: PropTypes.func,
     parentHandleSelectChange: PropTypes.func,
     selectedRowKeys: PropTypes.array,
     serverInfo: PropTypes.object.isRequired,
@@ -260,10 +264,12 @@ FileBrowser.defaultProps = {
     currentPath: "",
     enableCheckboxes: true,
     enableSize: false,
+    enableTagSingleLink: false,
     forceReload: false,
     hasCheckboxes: false,
     lockToBasePath: true,
     onChangeDirectory: () => {},
+    onClickTagSingle: () => {},
     parentHandleSelectChange: () => {},
     selectedRowKeys: [],
     showDirectories: true,

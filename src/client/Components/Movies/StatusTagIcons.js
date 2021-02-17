@@ -39,6 +39,7 @@ class StatusTagIcons extends React.Component {
             return (
                 <Button
                     key={tagIndex}
+                    size="small"
                     className={"movie-tag-" + tag.tag + " " + tagClass}
                     onClick={() => this._handleToggleStatusTag(tag.tag)}
                 >
@@ -47,7 +48,7 @@ class StatusTagIcons extends React.Component {
             );
         });
 
-        return <ButtonGroup>{tagList}</ButtonGroup>;
+        return <ButtonGroup size="small">{tagList}</ButtonGroup>;
     }
 }
 

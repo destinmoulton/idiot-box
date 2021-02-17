@@ -18,8 +18,10 @@ const buildTableRows = ({
     basePath,
     enableCheckboxes,
     enableSize,
-    handleClickDir,
-    handleClickSingleCheckbox,
+    enableTagSingleLink,
+    onClickDir,
+    onClickSingleCheckbox,
+    onClickTagSingle,
     path,
     rowData,
     selectedRows,
@@ -44,7 +46,7 @@ const buildTableRows = ({
             name = (
                 <div
                     className="filemanager-directory-details"
-                    onClick={() => handleClickDir(item.name)}
+                    onClick={() => onClickDir(item.name)}
                 >
                     <IconButton className="filemanager-directory-icon">
                         {icon}
@@ -58,9 +60,11 @@ const buildTableRows = ({
             name = (
                 <FileDetails
                     assocData={item.assocData}
-                    filename={item.name}
                     basePath={basePath}
+                    enableTagSingleLink={enableTagSingleLink}
+                    filename={item.name}
                     fullPath={path}
+                    onClickTagSingle={onClickTagSingle}
                 />
             );
         }
@@ -70,7 +74,7 @@ const buildTableRows = ({
             checkbox = (
                 <Checkbox
                     checked={checked}
-                    onChange={() => handleClickSingleCheckbox(item.name)}
+                    onChange={() => onClickSingleCheckbox(item.name)}
                 />
             );
         }
@@ -109,9 +113,11 @@ const BrowserTable = ({
     basePath,
     enableCheckboxes,
     enableSize,
-    handleClickAllCheckbox,
-    handleClickDir,
-    handleClickSingleCheckbox,
+    enableTagSingleLink,
+    onClickAllCheckbox,
+    onClickDir,
+    onClickSingleCheckbox,
+    onClickTagSingle,
     isAllChecked,
     path,
     rowData,
@@ -121,8 +127,10 @@ const BrowserTable = ({
         basePath,
         enableCheckboxes,
         enableSize,
-        handleClickDir,
-        handleClickSingleCheckbox,
+        enableTagSingleLink,
+        onClickDir,
+        onClickSingleCheckbox,
+        onClickTagSingle,
         path,
         rowData,
         selectedRows,
@@ -133,7 +141,7 @@ const BrowserTable = ({
             <TableCell className="filemanager-checkbox-column">
                 <Checkbox
                     checked={isAllChecked}
-                    onChange={handleClickAllCheckbox}
+                    onChange={onClickAllCheckbox}
                 />
             </TableCell>
         );

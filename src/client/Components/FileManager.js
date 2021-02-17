@@ -472,8 +472,10 @@ class FileManager extends Component {
                     currentPath={currentPath}
                     enableCheckboxes={true}
                     enableSize={true}
+                    enableTagSingleLink={true}
                     forceReload={isReloading}
                     onChangeDirectory={this._handleChangeDirectory.bind(this)}
+                    onClickTagSingle={this._handleClickIDFile.bind(this)}
                     handleSelectChangeSingle={this._handleSelectionChangeSingle.bind(
                         this
                     )}

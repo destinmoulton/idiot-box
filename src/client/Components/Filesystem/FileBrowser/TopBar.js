@@ -6,11 +6,12 @@ import Grid from "@material-ui/core/Grid";
 const TopBar = ({ handleClickReload, path }) => {
     return (
         <Grid container className="ib-filebrowser-topbar">
-            <Grid xs="11" className="filebrowser-topbar-current-path">
+            <Grid item xs={11} className="filebrowser-topbar-current-path">
                 <input value={path} disabled={true} />
             </Grid>
             <Grid
-                xs="1"
+                item
+                xs={1}
                 align="center"
                 className="filebrowser-topbar-refresh-icon"
             >

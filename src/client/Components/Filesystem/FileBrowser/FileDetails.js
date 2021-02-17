@@ -16,16 +16,16 @@ const FileDetails = ({
     const isVideoFile = Regex.isVideoFile(filename);
     let extra = null;
     if ("title" in assocData) {
-        let txt = "";
+        let suffix = "";
         if (assocData.type === "movie") {
-            txt = " - " + assocData.year + " [Movie]";
+            suffix = " - " + assocData.year + " [Movie]";
         } else {
-            txt = " [Episode]";
+            suffix = " [Episode]";
         }
         extra = (
             <div>
                 {assocData.title}
-                {txt}
+                {suffix}
             </div>
         );
     } else {

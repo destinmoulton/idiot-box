@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
+import Button from "@material-ui/core/Button";
 import Checkbox from "@material-ui/core/Checkbox";
 import TextField from "@material-ui/core/TextField";
 
@@ -53,29 +54,42 @@ class MovieCheckForm extends Component {
             currentFilename
         );
 
+        console.log(possibleNames);
+
         let possibleChecks = [];
         possibleNames.forEach((name) => {
             const checkBox = (
-                <div key={name}>
+                <div key={name} className="idmodal-movie-checksearch-option">
                     <Checkbox
                         onChange={this._handleClickMovieCheck.bind(this, name)}
-                    >
-                        {name}
-                    </Checkbox>
+                    />
+                    {name}
                 </div>
             );
             possibleChecks.push(checkBox);
         });
 
         return (
-            <div>
+            <div className="idmodal-movie-checksearch-wrapper">
                 <TextField
-                    placeholder="Movie search..."
+                    style={{ width: "90%" }}
+                    placeholder="Movie to search for..."
                     value={searchString}
-                    onChange={onSearchMovies}
-                    // onChange={this._handleChangeSearchText.bind(this)}
+                    onChange={this._handleChangeSearchText.bind(this)}
                 />
-                <div>{possibleChecks}</div>
+                <div className="idmodal-movie-checksearch-checks-wrapper">
+                    {possibleChecks}
+                </div>
+                <div align="right">
+                    <Button
+                        variant="contained"
+                        size="small"
+                        color="primary"
+                        onClick={() => onSearchMovies(searchString)}
+                    >
+                        Search for Movie
+                    </Button>
+                </div>
             </div>
         );
     }
