@@ -1,4 +1,4 @@
-module.exports = {
+export default {
     client_id:
         "ba4048ca75c0ddd7a343452fee0973708ce73d9dab06a88c64d06dfb42553ce7",
     client_secret:
