@@ -1,60 +1,67 @@
+import { IBDB } from "../../db/IBDB";
 export default class FileToEpisodeModel {
-    constructor(ibdb){
+    _ibdb: IBDB;
+    _tableName: string;
+    constructor(ibdb) {
         this._ibdb = ibdb;
         this._tableName = "file_to_episode";
     }
 
-    add(fileID, showID, seasonID, episodeID){
-        return this.getSingleForEpisode(episodeID)
-            .then((row)=>{
-                if('file_id' in row){
-                    return row;
-                }
-                const data = {
-                    file_id: fileID,
-                    show_id: showID,
-                    season_id: seasonID,
-                    episode_id: episodeID
-                };
+    async add(fileID, showID, seasonID, episodeID) {
+        // Check if the file already exists
+        const row = await this.getSingleForEpisode(episodeID);
 
-                return this._ibdb.insert(data, this._tableName);
-            })
-            .then(()=>{
-                return this.getSingle(fileID, showID, seasonID, episodeID);
-            })
-        
+        if ("file_id" in row) {
+            return row;
+        }
+        const data = {
+            file_id: fileID,
+            show_id: showID,
+            season_id: seasonID,
+            episode_id: episodeID,
+        };
+
+        await this._ibdb.insert(data, this._tableName);
+        return await this.getSingle(fileID, showID, seasonID, episodeID);
     }
-    
-    getSingle(fileID, showID, seasonID, episodeID){
+
+    async getSingle(fileID, showID, seasonID, episodeID) {
         const where = {
             file_id: fileID,
             show_id: showID,
             season_id: seasonID,
-            episode_id: episodeID
+            episode_id: episodeID,
         };
-        return this._ibdb.getRow(where, this._tableName);
+        return await this._ibdb.getRow(where, this._tableName);
     }
 
-    getSingleForEpisode(episodeID){
+    async getSingleForEpisode(episodeID) {
         const where = {
-            episode_id: episodeID
+            episode_id: episodeID,
         };
-        return this._ibdb.getRow(where, this._tableName);
+        return await this._ibdb.getRow(where, this._tableName);
     }
 
-    getSingleForFile(fileID){
-        const where = {
-            file_id: fileID
-        };
-        return this._ibdb.getRow(where, this._tableName);
-    }
-
-    deleteSingle(fileID, episodeID){
+    async getSingleForFile(fileID) {
         const where = {
             file_id: fileID,
-            episode_id: episodeID
+        };
+        return await this._ibdb.getRow(where, this._tableName);
+    }
+
+    async deleteSingle(fileID, episodeID) {
+        const where = {
+            file_id: fileID,
+            episode_id: episodeID,
         };
 
-        return this._ibdb.delete(where, this._tableName);
+        return await this._ibdb.delete(where, this._tableName);
+    }
+    async deleteSingleForEpisode(episodeID) {
+        const where = {
+            episode_id: episodeID,
+        };
+
+        return await this._ibdb.delete(where, this._tableName);
     }
 }

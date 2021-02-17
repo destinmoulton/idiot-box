@@ -1,55 +1,53 @@
+import { IBDB } from "../../db/IBDB";
 export default class FileToMovieModel {
-    constructor(ibdb){
+    _ibdb: IBDB;
+    _tableName: string;
+    constructor(ibdb) {
         this._ibdb = ibdb;
         this._tableName = "file_to_movie";
     }
 
-    add(fileID, movieID){
-        return this.getSingleForMovie(movieID)
-            .then((row)=>{
-                if('file_id' in row){
-                    return row;
-                }
-                const data = {
-                    file_id: fileID,
-                    movie_id: movieID
-                };
+    async add(fileID, movieID) {
+        const row = await this.getSingleForMovie(movieID);
+        if ("file_id" in row) {
+            return row;
+        }
+        const data = {
+            file_id: fileID,
+            movie_id: movieID,
+        };
 
-                return this._ibdb.insert(data, this._tableName);
-            })
-            .then(()=>{
-                return this.getSingle(fileID, movieID);
-            })
-        
+        await this._ibdb.insert(data, this._tableName);
+        return await this.getSingle(fileID, movieID);
     }
-    
-    getSingle(fileID, movieID){
+
+    async getSingle(fileID, movieID) {
         const where = {
             file_id: fileID,
-            movie_id: movieID
+            movie_id: movieID,
         };
-        return this._ibdb.getRow(where, this._tableName);
+        return await this._ibdb.getRow(where, this._tableName);
     }
 
-    getSingleForMovie(movieID){
+    async getSingleForMovie(movieID) {
         const where = {
-            movie_id: movieID
+            movie_id: movieID,
         };
-        return this._ibdb.getRow(where, this._tableName);
+        return await this._ibdb.getRow(where, this._tableName);
     }
 
-    getSingleForFile(fileID){
-        const where = {
-            file_id: fileID
-        };
-        return this._ibdb.getRow(where, this._tableName);
-    }
-
-    deleteSingle(fileID, movieID){
+    async getSingleForFile(fileID) {
         const where = {
             file_id: fileID,
-            movie_id: movieID
         };
-        return this._ibdb.delete(where, this._tableName);
+        return await this._ibdb.getRow(where, this._tableName);
+    }
+
+    async deleteSingle(fileID, movieID) {
+        const where = {
+            file_id: fileID,
+            movie_id: movieID,
+        };
+        return await this._ibdb.delete(where, this._tableName);
     }
 }

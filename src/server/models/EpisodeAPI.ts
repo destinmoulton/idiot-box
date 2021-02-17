@@ -1,36 +1,36 @@
 import logger from "../logger";
 
+import FilesModel from "./db/FilesModel";
+import FileToEpisodeModel from "./db/FileToEpisodeModel";
+import ShowSeasonEpisodesModel from "./db/ShowSeasonEpisodesModel";
+
 export default class EpisodeAPI {
+    _filesModel: FilesModel;
+    _fileToEpisodeModel: FileToEpisodeModel;
+    _showSeasonEpisodesModel: ShowSeasonEpisodesModel;
     constructor(models) {
         this._showSeasonEpisodesModel = models.showSeasonEpisodesModel;
         this._filesModel = models.filesModel;
         this._fileToEpisodeModel = models.fileToEpisodeModel;
     }
 
-    getAllEpisodesWithFileInfo(showID, seasonNum) {
-        return this._showSeasonEpisodesModel
-            .getEpisodesForSeasonNum(showID, seasonNum)
-            .then(episodes => {
-                let promisesToRun = [];
+    async getAllEpisodesWithFileInfo(showID, seasonNum) {
+        const episodes = await this._showSeasonEpisodesModel.getEpisodesForSeasonNum(
+            showID,
+            seasonNum
+        );
 
-                episodes.forEach(ep => {
-                    let data = Object.assign({}, ep);
-                    data["file_info"] = {};
+        return episodes.map(async (ep) => {
+            let data = Object.assign({}, ep);
+            data["file_info"] = {};
 
-                    const cmd = this._fileToEpisodeModel
-                        .getSingleForEpisode(ep.id)
-                        .then(fileEp => {
-                            if (!fileEp.hasOwnProperty("file_id")) {
-                                return Promise.resolve(data);
-                            }
+            const fileEp = this._fileToEpisodeModel.getSingleForEpisode(ep.id);
+            if (!fileEp.hasOwnProperty("file_id")) {
+                return data;
+            }
 
-                            return this._collectFileInfo(fileEp, data);
-                        });
-                    promisesToRun.push(cmd);
-                });
-
-                return Promise.all(promisesToRun);
-            });
+            return await this._collectFileInfo(fileEp, data);
+        });
     }
 
     /**
@@ -39,13 +39,12 @@ export default class EpisodeAPI {
      * @param FileToEpisode fileEp
      * @param ShowSeasonEpisode episode
      */
-    _collectFileInfo(fileEp, episode) {
-        return this._filesModel.getSingle(fileEp.file_id).then(file => {
-            if (!file.hasOwnProperty("id")) {
-                return Promise.resolve(episode);
-            }
-            episode.file_info = file;
-            return Promise.resolve(episode);
-        });
+    async _collectFileInfo(fileEp, episode) {
+        const file = await this._filesModel.getSingle(fileEp.file_id);
+        if (!file.hasOwnProperty("id")) {
+            return episode;
+        }
+        episode.file_info = file;
+        return episode;
     }
 }

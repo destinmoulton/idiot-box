@@ -1,13 +1,16 @@
-import moment from 'moment';
+import moment from "moment";
+import { IBDB } from "../../db/IBDB";
 
 export default class ShowSeasonsModel {
-    constructor(ibdb){
+    _ibdb: IBDB;
+    _tableName: string;
+    constructor(ibdb) {
         this._ibdb = ibdb;
 
         this._tableName = "show_seasons";
     }
 
-    _prepareData(showID, apiData){
+    _prepareData(showID, apiData) {
         return {
             show_id: showID,
             season_number: apiData.number,
@@ -16,94 +19,104 @@ export default class ShowSeasonsModel {
             aired_episodes: apiData.aired_episodes,
             title: apiData.title,
             overview: apiData.overview,
-            first_aired: moment(apiData.first_aired).format('X'),
+            first_aired: moment(apiData.first_aired).format("X"),
             trakt_id: apiData.ids.trakt,
             tvdb_id: apiData.ids.tvdb,
             tmdb_id: apiData.ids.tmdb,
             tvrage_id: apiData.ids.tvrage,
-            locked: 0
+            locked: 0,
         };
     }
 
-    addArrayOfSeasons(arrSeasons, showID){
-        let promisesToRun = [];
-        arrSeasons.forEach((season)=>{
-            promisesToRun.push(this.addShowSeason(showID, season))
-        })
-        return Promise.all(promisesToRun);
+    async addArrayOfSeasons(arrSeasons, showID) {
+        arrSeasons.forEach(async (season) => {
+            await this.addShowSeason(showID, season);
+        });
     }
 
-    addShowSeason(showID, apiData){
+    async addShowSeason(showID, apiData) {
         const data = this._prepareData(showID, apiData);
-        return this.getSingleByShowSeasonTrakt(showID, apiData.number, apiData.ids.trakt)
-            .then((season)=>{
-                if('id' in season){
-                    return season;
-                }
-                
-                return this._ibdb.insert(data, this._tableName);
-            })        
-            .then(()=>{
-                return this.getSingleByShowSeasonTrakt(showID, data.season_number, data.trakt_id);
-            });
+        const season = await this.getSingleByShowSeasonTrakt(
+            showID,
+            apiData.number,
+            apiData.ids.trakt
+        );
+        if ("id" in season) {
+            return season;
+        }
+
+        await this._ibdb.insert(data, this._tableName);
+        return await this.getSingleByShowSeasonTrakt(
+            showID,
+            data.season_number,
+            data.trakt_id
+        );
     }
 
-    getSingle(seasonID){
+    async getSingle(seasonID) {
         const where = {
-            id: seasonID
+            id: seasonID,
         };
 
-        return this._ibdb.getRow(where, this._tableName);
+        return await this._ibdb.getRow(where, this._tableName);
     }
 
-    getSingleByShowSeasonTrakt(showID, seasonNumber, traktID){
+    async getSingleByShowSeasonTrakt(showID, seasonNumber, traktID) {
         const where = {
             show_id: showID,
             season_number: seasonNumber,
-            trakt_id: traktID
+            trakt_id: traktID,
         };
 
-        return this._ibdb.getRow(where, this._tableName);
+        return await this._ibdb.getRow(where, this._tableName);
     }
 
-    getSingleByTraktID(traktID){
+    async getSingleByTraktID(traktID) {
         const where = {
-            trakt_id: traktID
+            trakt_id: traktID,
         };
 
-        return this._ibdb.getRow(where, this._tableName);
+        return await this._ibdb.getRow(where, this._tableName);
     }
 
-    getSeasonsForShow(showID){
+    async getSeasonsForShow(showID) {
         const where = {
-            show_id: showID
+            show_id: showID,
         };
-        return this._ibdb.getAll(where, this._tableName, "season_number ASC");
+        return await this._ibdb.getAll(
+            where,
+            this._tableName,
+            "season_number ASC"
+        );
     }
 
-    getSeasonsByTraktID(traktID){
+    async getSeasonsByTraktID(traktID) {
         const where = {
-            trakt_id: traktID
+            trakt_id: traktID,
         };
-        return this._ibdb.getAll(where, this._tableName, "season_number ASC");
+        return await this._ibdb.getAll(
+            where,
+            this._tableName,
+            "season_number ASC"
+        );
     }
 
-    deleteAllForShow(showID){
+    async deleteAllForShow(showID) {
         const where = {
-            show_id: showID
+            show_id: showID,
         };
-        return this._ibdb.delete(where, this._tableName);
+        return await this._ibdb.delete(where, this._tableName);
     }
 
-    updateLock(seasonID, lockStatus){
+    async updateLock(seasonID, lockStatus) {
         const data = {
-            locked: lockStatus
+            locked: lockStatus,
         };
 
         const where = {
-            id: seasonID            
+            id: seasonID,
         };
 
-        return this._ibdb.update(data, where, this._tableName);
+        return await this._ibdb.update(data, where, this._tableName);
     }
 }

@@ -1,14 +1,14 @@
-class Logger{
-    log(){
-        console.log(...arguments);
+class Logger {
+    log(...args: any[]) {
+        console.log(...args);
     }
 
-    error(){
-        console.error(...arguments);
+    error(...args: any[]) {
+        console.error(...args);
     }
 
-    info(){
-        console.info(...arguments);
+    info(...args: any[]) {
+        console.info(...args);
     }
 }
 

@@ -1,52 +1,70 @@
+import { IBDB } from "../../db/IBDB";
+
 export default class FilesModel {
-    constructor(ibdb){
+    _ibdb: IBDB;
+    _tableName: string;
+    constructor(ibdb) {
         this._ibdb = ibdb;
 
         this._tableName = "files";
     }
 
-    addFile(directory_setting_id, subpath, filename, mediatype){
+    async addFile(directory_setting_id, subpath, filename, mediatype) {
         const data = {
-            directory_setting_id, subpath, filename, mediatype
+            directory_setting_id,
+            subpath,
+            filename,
+            mediatype,
         };
 
-        return this._ibdb.insert(data, this._tableName)
-            .then(()=>{
-                return this.getSingleByDirectoryAndFilename(directory_setting_id, subpath, filename);
-            });
+        try {
+            await this._ibdb.insert(data, this._tableName);
+            return this.getSingleByDirectoryAndFilename(
+                directory_setting_id,
+                subpath,
+                filename
+            );
+        } catch (err) {
+            throw new Error(
+                `FilesModel :: addFile :: failed to insert the file ${filename}. ${err}`
+            );
+        }
     }
 
-    getSingle(fileID){
+    getSingle(fileID) {
         const where = {
-            id: fileID
+            id: fileID,
         };
 
         return this._ibdb.getRow(where, this._tableName);
     }
 
-    getSingleByDirectoryAndFilename(directory_setting_id, subpath, filename){
+    async getSingleByDirectoryAndFilename(
+        directory_setting_id,
+        subpath,
+        filename
+    ) {
         const query = {
             directory_setting_id,
             subpath,
-            filename
+            filename,
         };
-        return this._ibdb.getRow(query, this._tableName);
+        return await this._ibdb.getRow(query, this._tableName);
     }
 
-    getAllForDirectory(directory_setting_id, subpath){
+    async getAllForDirectory(directory_setting_id, subpath) {
         const query = {
             directory_setting_id,
             subpath,
-            filename
         };
-        return this._ibdb.getAll(query, this._tableName, "filename ASC");
+        return await this._ibdb.getAll(query, this._tableName, "filename ASC");
     }
 
-    deleteSingle(fileID){
+    async deleteSingle(fileID) {
         const where = {
-            id: fileID
+            id: fileID,
         };
 
-        return this._ibdb.delete(where, this._tableName);
+        return await this._ibdb.delete(where, this._tableName);
     }
 }
