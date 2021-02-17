@@ -1,81 +1,83 @@
-import logger from '../../logger';
+import { IBDB } from "../../db/IBDB";
+import logger from "../../logger";
 export default class SettingsModel {
-    
-    constructor(db){
+    _ibdb: IBDB;
+    _tableName: string;
+    constructor(db) {
         this._ibdb = db;
         this._tableName = "settings";
     }
 
-    getAll(){
-        return this._ibdb.getAll({}, this._tableName);
+    async getAll() {
+        return await this._ibdb.getAll({}, this._tableName);
     }
-    
-    getAllForCategory(category){
+
+    async getAllForCategory(category) {
         const where = {
-            category
+            category,
+        };
+        return await this._ibdb.getAll(where, this._tableName);
+    }
+
+    async getSingleByID(settingID) {
+        const where = {
+            id: settingID,
+        };
+        return await this._ibdb.getRow(where, this._tableName);
+    }
+
+    async getSingle(category, key, value = "") {
+        const where = {
+            category,
+            key,
+        };
+
+        if (value) {
+            where["value"] = value;
         }
-        return this._ibdb.getAll(where, this._tableName);
+
+        return await this._ibdb.getRow(where, this._tableName);
     }
 
-    getSingleByID(settingID){
+    async getSingleByCatAndVal(category, value) {
         const where = {
-            id: settingID
+            category,
+            value,
         };
-        return this._ibdb.getRow(where, this._tableName);
+        return await this._ibdb.getRow(where, this._tableName);
     }
 
-    getSingle(category, key, value = ""){
-        const where = {
-            category, key
-        };
-
-        if(value){
-            where['value'] = value;
-        }
-
-        return this._ibdb.getRow(where, this._tableName);
-    }
-
-    getSingleByCatAndVal(category, value){
-        const where = {
-            category, value
-        };
-        return this._ibdb.getRow(where, this._tableName);
-    }
-
-    addSetting(category, key, value){
+    async addSetting(category, key, value) {
         const data = {
-            category, key, value
+            category,
+            key,
+            value,
         };
 
-        return this._ibdb.insert(data, this._tableName)
-            .then(()=>{
-                return this.getSingle(category, key, value);
-            });
+        await this._ibdb.insert(data, this._tableName);
+        return await this.getSingle(category, key, value);
     }
 
-    updateSetting(id, category, key, value){
+    async updateSetting(id, category, key, value) {
         const where = {
             id,
-            category
+            category,
         };
 
         const data = {
-            key, 
-            value
+            key,
+            value,
         };
 
-        return this._ibdb.update(data, where, this._tableName)
-            .then(() => {
-                return this.getSingle(category, key, data.value);
-            });
+        await this._ibdb.update(data, where, this._tableName);
+        return await this.getSingle(category, key, data.value);
     }
 
-    deleteSetting(id){
+    async deleteSetting(id) {
         const where = {
-            id
+            id,
         };
 
-        return this._ibdb.delete(where, this._tableName);
+        return await this._ibdb.delete(where, this._tableName);
     }
 }

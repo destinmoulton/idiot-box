@@ -1,80 +1,79 @@
-import moment from 'moment';
+import moment from "moment";
 
+import { IBDB } from "../../db/IBDB";
 export default class ShowsModel {
-    constructor(ibdb){
+    _ibdb: IBDB;
+    _tableName: string;
+    constructor(ibdb) {
         this._ibdb = ibdb;
 
         this._tableName = "shows";
     }
 
-    _prepareData(apiData, imageFilename){
+    _prepareData(apiData, imageFilename) {
         return {
             title: apiData.title,
             year: apiData.year,
             overview: apiData.overview,
-            first_aired: moment(apiData.first_aired).format('X'),
+            first_aired: moment(apiData.first_aired).format("X"),
             runtime: apiData.runtime,
             network: apiData.network,
             status: apiData.status,
             rating: apiData.rating,
-            updated_at: moment(apiData.updated_at).format('X'),
+            updated_at: moment(apiData.updated_at).format("X"),
             slug: apiData.ids.slug,
             trakt_id: apiData.ids.trakt,
             tvdb_id: apiData.ids.tvdb,
             imdb_id: apiData.ids.imdb,
             tmdb_id: apiData.ids.tmdb,
             tvrage_id: apiData.ids.tvrage,
-            image_filename: imageFilename
+            image_filename: imageFilename,
         };
     }
 
-    addShow(apiData, imageFilename){
+    async addShow(apiData, imageFilename) {
         const data = this._prepareData(apiData, imageFilename);
 
-        return this.getSingleByTraktID(data.trakt_id)
-                .then((show)=>{
-                    if('id' in show){
-                        return show;
-                    }
-                    return this._ibdb.insert(data, this._tableName);
-                })
-                .then(()=>{
-                    return this.getSingleByTraktID(data.trakt_id);
-                });
+        const show = await this.getSingleByTraktID(data.trakt_id);
+        if ("id" in show) {
+            return show;
+        }
+        await this._ibdb.insert(data, this._tableName);
+        return await this.getSingleByTraktID(data.trakt_id);
     }
 
-    getSingle(showID){
+    async getSingle(showID) {
         const where = {
-            id: showID
+            id: showID,
         };
 
-        return this._ibdb.getRow(where, this._tableName);
+        return await this._ibdb.getRow(where, this._tableName);
     }
 
-    getSingleBySlug(slug){
+    async getSingleBySlug(slug) {
         const where = {
-            slug
+            slug,
         };
 
-        return this._ibdb.getRow(where, this._tableName);
+        return await this._ibdb.getRow(where, this._tableName);
     }
 
-    getSingleByTraktID(traktID){
+    async getSingleByTraktID(traktID) {
         const where = {
-            trakt_id: traktID
+            trakt_id: traktID,
         };
 
-        return this._ibdb.getRow(where, this._tableName);
+        return await this._ibdb.getRow(where, this._tableName);
     }
 
-    getAll(){
-        return this._ibdb.getAll({}, this._tableName, "title ASC");
+    async getAll() {
+        return await this._ibdb.getAll({}, this._tableName, "title ASC");
     }
 
-    deleteSingle(showID){
+    async deleteSingle(showID) {
         const where = {
-            id: showID
+            id: showID,
         };
-        return this._ibdb.delete(where, this._tableName);
+        return await this._ibdb.delete(where, this._tableName);
     }
 }

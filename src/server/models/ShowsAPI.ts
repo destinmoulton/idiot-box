@@ -1,10 +1,20 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
 
-import thumbConfig from '../config/thumbnails.config';
+import FilesModel from "./db/FilesModel";
+import FileToEpisodeModel from "./db/FileToEpisodeModel";
+import ShowsModel from "./db/ShowsModel";
+import ShowSeasonEpisodesModel from "./db/ShowSeasonEpisodesModel";
+import ShowSeasonsModel from "./db/ShowSeasonsModel";
+import thumbConfig from "../config/thumbnails.config";
 
 class ShowsAPI {
-    constructor(models){
+    _filesModel: FilesModel;
+    _fileToEpisodeModel: FileToEpisodeModel;
+    _showsModel: ShowsModel;
+    _showSeasonsModel: ShowSeasonsModel;
+    _showSeasonEpisodesModel: ShowSeasonEpisodesModel;
+    constructor(models) {
         this._filesModel = models.filesModel;
         this._fileToEpisodeModel = models.fileToEpisodeModel;
         this._showsModel = models.showsModel;
@@ -12,113 +22,88 @@ class ShowsAPI {
         this._showSeasonsModel = models.showSeasonsModel;
     }
 
-    getAllShowsWithSeasonLockedInfo(){
-        return this._showsModel.getAll()
-                .then((shows)=>{
-                    let showsToReturn = [];
-                    let promisesToRun = [];
-                    shows.forEach((show)=>{
-                        const cmd = this._getSeasonLockedInfo(show);
-                        promisesToRun.push(cmd);
-                    })
-                    return Promise.all(promisesToRun);
-                })
+    async getAllShowsWithSeasonLockedInfo() {
+        const shows = await this._showsModel.getAll();
+        return shows.map(async (show) => {
+            return await this._getSeasonLockedInfo(show);
+        });
     }
 
-    _getSeasonLockedInfo(show){
-        return this._showSeasonsModel.getSeasonsForShow(show.id)
-                    .then((seasons)=>{
-                        const newShow = Object.assign({}, show);
+    async _getSeasonLockedInfo(show) {
+        const seasons = await this._showSeasonsModel.getSeasonsForShow(show.id);
+        const newShow = Object.assign({}, show);
 
-                        let countLocked = 0;
-                        let countUnLocked = 0;
-                        seasons.forEach((season)=>{
-                            if(season.locked === 1){
-                                countLocked++;
-                            } else {
-                                countUnLocked++;
-                            }
-                        });
-                        
-                        newShow['num_seasons_locked'] = countLocked;
-                        newShow['num_seasons_unlocked'] = countUnLocked;
-                        return Promise.resolve(newShow);
-                    });
+        let countLocked = 0;
+        let countUnLocked = 0;
+        seasons.forEach((season) => {
+            if (season.locked === 1) {
+                countLocked++;
+            } else {
+                countUnLocked++;
+            }
+        });
+
+        newShow["num_seasons_locked"] = countLocked;
+        newShow["num_seasons_unlocked"] = countUnLocked;
+        return newShow;
     }
 
-    getEpisodesBetweenTimestamps(startUnixTimestamp, endUnixTimestamp){
-        return this._showSeasonEpisodesModel.getBetweenUnixTimestamps(startUnixTimestamp, endUnixTimestamp)
-                    .then((episodes)=>{
-                        if(episodes.length===0){
-                            return Promise.resolve([]);
-                        }
+    async getEpisodesBetweenTimestamps(startUnixTimestamp, endUnixTimestamp) {
+        const episodes = await this._showSeasonEpisodesModel.getBetweenUnixTimestamps(
+            startUnixTimestamp,
+            endUnixTimestamp
+        );
+        if (episodes.length === 0) {
+            return [];
+        }
 
-                        let promisesToRun = [];
-                        episodes.forEach((episode)=>{
-                            const cmd = this._collateShowIntoEpisode(episode);
-                            promisesToRun.push(cmd);
-                        });
-                        return Promise.all(promisesToRun);
-                    })
+        return episodes.map(async (episode) => {
+            return await this._collateShowIntoEpisode(episode);
+        });
     }
 
-    _collateShowIntoEpisode(originalEpisode){
-        return this._showsModel.getSingle(originalEpisode.show_id)
-                .then((show)=>{
-                    originalEpisode['show_info'] = show;
-                    return Promise.resolve(originalEpisode);
-                })
-    }
-    
-    deleteSingleShow(showID){
-        return this._removeEpisodes(showID)
-                .then(()=>{
-                    return this._showSeasonsModel.deleteAllForShow(showID);
-                })
-                .then(()=>{
-                    return this._removeShowThumbnail(showID);
-                })
-                .then(()=>{
-                    return this._showsModel.deleteSingle(showID);
-                });
+    async _collateShowIntoEpisode(originalEpisode) {
+        const show = await this._showsModel.getSingle(originalEpisode.show_id);
+        originalEpisode["show_info"] = show;
+        return originalEpisode;
     }
 
-    _removeShowThumbnail(showID){
-        return this._showsModel.getSingle(showID)
-                .then((show)=>{
-                    const fullPath = path.join(thumbConfig.shows, show.image_filename);
-                    if(!fs.existsSync(fullPath)){
-                        return Promise.resolve(true);
-                    }
-                    return Promise.resolve(fs.unlinkSync(fullPath));
-                })
-
+    async deleteSingleShow(showID) {
+        await this._removeEpisodes(showID);
+        await this._showSeasonsModel.deleteAllForShow(showID);
+        await this._removeShowThumbnail(showID);
+        return await this._showsModel.deleteSingle(showID);
     }
 
-    _removeEpisodes(showID){
-        return this._showSeasonEpisodesModel.getEpisodesForShow(showID)
-                .then((episodes)=>{
-                    let promisesToRun = [];
-
-                    episodes.forEach((episode)=>{
-                        let cmd = this._removeFileAssociations(episode.id);
-                        promisesToRun.push(cmd);
-                    });
-                    Promise.all(promisesToRun);
-                })
-                .then(()=>{
-                    return this._showSeasonEpisodesModel.deleteAllForShow(showID);
-                })
+    async _removeShowThumbnail(showID) {
+        const show = await this._showsModel.getSingle(showID);
+        const fullPath = path.join(thumbConfig.shows, show.image_filename);
+        if (!fs.existsSync(fullPath)) {
+            return true;
+        }
+        return fs.unlinkSync(fullPath);
     }
 
-    _removeFileAssociations(episodeID){
-        return this._fileToEpisodeModel.getSingleForEpisode(episodeID)
-                .then((fileToEpisode)=>{
-                    return this._filesModel.deleteSingle(fileToEpisode.file_id)
-                            .then(()=>{
-                                return this._fileToEpisodeModel.deleteSingle(fileToEpisode.file_id, episodeID);
-                            });
-                })
+    async _removeEpisodes(showID) {
+        const episodes = await this._showSeasonEpisodesModel.getEpisodesForShow(
+            showID
+        );
+
+        episodes.forEach(async (episode) => {
+            await this._removeFileAssociations(episode.id);
+        });
+        return await this._showSeasonEpisodesModel.deleteAllForShow(showID);
+    }
+
+    async _removeFileAssociations(episodeID) {
+        const fileToEpisode = await this._fileToEpisodeModel.getSingleForEpisode(
+            episodeID
+        );
+        await this._filesModel.deleteSingle(fileToEpisode.file_id);
+        return await this._fileToEpisodeModel.deleteSingle(
+            fileToEpisode.file_id,
+            episodeID
+        );
     }
 }
 

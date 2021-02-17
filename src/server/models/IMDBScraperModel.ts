@@ -3,6 +3,8 @@ import cheerio from "cheerio";
 import randomUseragent from "random-useragent";
 
 export default class IMDBScraperModel {
+    _posterSelector: string;
+    _imdbPath: string;
     constructor() {
         this._posterSelector = "div.poster > a > img";
         this._imdbPath = "https://www.imdb.com/title/";
@@ -23,7 +25,6 @@ export default class IMDBScraperModel {
                 "accept-language": "en-US,en;q=0.9",
                 "cache-control": "no-cache",
                 pragma: "no-cache",
-                "upgrade-insecure-requests": 1,
             },
         };
         return got.get(url, options).then((resp) => {

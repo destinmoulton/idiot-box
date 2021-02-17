@@ -1,4 +1,10 @@
+import { IBDB } from "../../db/IBDB";
+import MovieToGenreModel from "./MovieToGenreModel";
 export default class MoviesModel {
+    _ibdb: IBDB;
+    _tableName: string;
+    _movieToGenreModel: MovieToGenreModel;
+
     constructor(ibdb, movieToGenreModel) {
         this._ibdb = ibdb;
 
@@ -7,7 +13,7 @@ export default class MoviesModel {
         this._tableName = "movies";
     }
 
-    addMovie(apiData, imageFilename) {
+    async addMovie(apiData, imageFilename) {
         const data = {
             title: apiData.title,
             year: apiData.year,
@@ -22,74 +28,67 @@ export default class MoviesModel {
             tmdb_id: apiData.ids.tmdb,
             image_filename: imageFilename,
             has_watched: 0,
-            status_tags: ""
+            status_tags: "",
         };
 
-        return this._ibdb
-            .insert(data, this._tableName)
-            .then(() => {
-                return this.getSingleByTraktID(data.trakt_id);
-            })
-            .then(movie => {
-                return this._movieToGenreModel
-                    .addMovieToArrayGenres(movie.id, apiData.genres)
-                    .then(() => {
-                        return movie;
-                    });
-            });
+        await this._ibdb.insert(data, this._tableName);
+        const movie = await this.getSingleByTraktID(data.trakt_id);
+        await this._movieToGenreModel.addMovieToArrayGenres(
+            movie.id,
+            apiData.genres
+        );
+        return movie;
     }
 
-    updateHasWatched(movieID, hasWatched) {
+    async updateHasWatched(movieID, hasWatched) {
         const where = {
-            id: movieID
+            id: movieID,
         };
         let data = {
-            has_watched: hasWatched
+            has_watched: hasWatched,
         };
 
-        return this._ibdb.update(data, where, this._tableName).then(() => {
-            return this.getSingle(movieID);
-        });
+        await this._ibdb.update(data, where, this._tableName);
+        return await this.getSingle(movieID);
     }
 
-    updateStatusTags(movieID, statusTags) {
+    async updateStatusTags(movieID, statusTags) {
         const where = {
-            id: movieID
+            id: movieID,
         };
 
         const data = {
-            status_tags: statusTags
+            status_tags: statusTags,
         };
 
-        return this._ibdb.update(data, where, this._tableName).then(() => {
-            return this.getSingle(movieID);
-        });
+        await this._ibdb.update(data, where, this._tableName);
+        return await this.getSingle(movieID);
     }
 
-    getAll() {
-        return this._ibdb.getAll({}, this._tableName, "title ASC");
+    async getAll() {
+        return await this._ibdb.getAll({}, this._tableName, "title ASC");
     }
 
-    getSingleByTraktID(traktID) {
+    async getSingleByTraktID(traktID) {
         const where = {
-            trakt_id: traktID
+            trakt_id: traktID,
         };
 
-        return this._ibdb.getRow(where, this._tableName);
+        return await this._ibdb.getRow(where, this._tableName);
     }
 
-    getSingle(movieID) {
+    async getSingle(movieID) {
         const where = {
-            id: movieID
+            id: movieID,
         };
-        return this._ibdb.getRow(where, this._tableName);
+        return await this._ibdb.getRow(where, this._tableName);
     }
 
-    deleteSingle(movieID) {
+    async deleteSingle(movieID) {
         const where = {
-            id: movieID
+            id: movieID,
         };
 
-        return this._ibdb.delete(where, this._tableName);
+        return await this._ibdb.delete(where, this._tableName);
     }
 }

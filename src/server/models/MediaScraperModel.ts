@@ -1,83 +1,88 @@
-import fs from 'fs';
-import path from 'path';
+import fs from "fs";
+import path from "path";
+import fetch from "node-fetch";
+import trakt from "trakt.tv";
 
-import fetch from 'node-fetch';
+import logger from "../logger";
 
-import logger from '../logger';
-
-import thumbConf from '../config/thumbnails.config';
+import SettingsModel from "./db/SettingsModel";
+import thumbConf from "../config/thumbnails.config";
 
 export default class MediaScraperModel {
-    
-    constructor(traktInstance, settingsModel){
+    _trakt: any;
+    _settingsModel: SettingsModel;
+
+    constructor(traktInstance, settingsModel) {
         this._trakt = traktInstance;
         this._settingsModel = settingsModel;
     }
 
-    searchMovies(movieQuery){
+    async searchMovies(movieQuery) {
         const options = {
             query: movieQuery,
-            type: 'movie',
-            extended: 'full'
+            type: "movie",
+            extended: "full",
         };
-        return this._trakt.search.text(options)
-            .then((results)=>{
-                return results.map((item)=>{return item.movie});
-            })
+        const results = await this._trakt.search.text(options);
+        return results.map((item) => {
+            return item.movie;
+        });
     }
 
-    searchShows(tvQuery){
+    async searchShows(tvQuery) {
         const options = {
             query: tvQuery,
-            type: 'show',
-            extended: 'full'
+            type: "show",
+            extended: "full",
         };
-        return this._trakt.search.text(options)
-                .then((results)=>{
-                    return results.map((item)=>{return item.show});
-                })
+        const results = await this._trakt.search.text(options);
+        return results.map((item) => {
+            return item.show;
+        });
     }
 
-    getShowByTraktID(traktID){
+    async getShowByTraktID(traktID) {
         const options = {
             id: traktID,
-            extended: 'full'
+            extended: "full",
         };
-        return this._trakt.shows.summary(options);
+        return await this._trakt.shows.summary(options);
     }
 
-    getShowSeasonsList(id){
-        return this._trakt.seasons.summary({
+    async getShowSeasonsList(id) {
+        return await this._trakt.seasons.summary({
             id,
-            extended: 'full'
+            extended: "full",
         });
     }
 
-    getEpisodesForSeason(showID, seasonNumber){
-        return this._trakt.seasons.season({
+    async getEpisodesForSeason(showID, seasonNumber) {
+        return await this._trakt.seasons.season({
             id: showID,
             season: seasonNumber,
-            extended: 'full'
+            extended: "full",
         });
     }
 
-    downloadThumbnail(typeOfMedia, fileURL, destFilenameMinusExt){
+    async downloadThumbnail(typeOfMedia, fileURL, destFilenameMinusExt) {
         const origFilename = fileURL.split("/").pop();
         const origFileExt = origFilename.split(".").pop();
-        const destFilename = this._sanitizeThumbFilename(destFilenameMinusExt) + "." + origFileExt;
+        const destFilename =
+            this._sanitizeThumbFilename(destFilenameMinusExt) +
+            "." +
+            origFileExt;
 
-        const camelCaseType = typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
-        
-        return fetch(fileURL)
-                .then((res)=>{
-                    const finalPath = path.join(thumbConf[typeOfMedia], destFilename);
-                    const dest = fs.createWriteStream(finalPath);
-                    res.body.pipe(dest);
-                    return destFilename;
-                });
+        const camelCaseType =
+            typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
+
+        const res = await fetch(fileURL, {});
+        const finalPath = path.join(thumbConf[typeOfMedia], destFilename);
+        const dest = fs.createWriteStream(finalPath);
+        res.body.pipe(dest);
+        return destFilename;
     }
 
-    _sanitizeThumbFilename(originalFilename){
+    _sanitizeThumbFilename(originalFilename) {
         // Replace current periods
         let newThumbFilename = originalFilename.replace(/\./g, "");
 

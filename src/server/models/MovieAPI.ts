@@ -1,9 +1,17 @@
 import fs from "fs";
 import path from "path";
 
+import FilesModel from "./db/FilesModel";
+import FileToMovieModel from "./db/FileToMovieModel";
+import MoviesModel from "./db/MoviesModel";
+import MovieToGenreModel from "./db/MovieToGenreModel";
 import thumbConfig from "../config/thumbnails.config";
 
 class MovieAPI {
+    _filesModel: FilesModel;
+    _fileToMovieModel: FileToMovieModel;
+    _moviesModel: MoviesModel;
+    _movieToGenreModel: MovieToGenreModel;
     constructor(models) {
         this._filesModel = models.filesModel;
         this._fileToMovieModel = models.fileToMovieModel;
@@ -11,23 +19,17 @@ class MovieAPI {
         this._movieToGenreModel = models.movieToGenreModel;
     }
 
-    getAllMoviesWithFileInfo() {
-        return this._moviesModel.getAll().then(movies => {
-            let promisesToRun = [];
+    async getAllMoviesWithFileInfo() {
+        const movies = await this._moviesModel.getAll();
 
-            movies.forEach(movie => {
-                let data = Object.assign({}, movie);
-                data["file_info"] = {};
+        return movies.map(async (movie) => {
+            let data = Object.assign({}, movie);
+            data["file_info"] = {};
 
-                const cmd = this._fileToMovieModel
-                    .getSingleForMovie(movie.id)
-                    .then(fileToMovie => {
-                        return this._collateMovieFileInfo(fileToMovie, data);
-                    });
-                promisesToRun.push(cmd);
-            });
-
-            return Promise.all(promisesToRun);
+            const fileToMovie = await this._fileToMovieModel.getSingleForMovie(
+                movie.id
+            );
+            return this._collateMovieFileInfo(fileToMovie, data);
         });
     }
 
@@ -37,81 +39,58 @@ class MovieAPI {
      * @param FileToMovie fileToMovie
      * @param object infoObj for collation
      */
-    _collateMovieFileInfo(fileToMovie, infoObj) {
+    async _collateMovieFileInfo(fileToMovie, infoObj) {
         if (!fileToMovie.hasOwnProperty("file_id")) {
-            return Promise.resolve(infoObj);
+            return infoObj;
         }
-        return this._filesModel.getSingle(fileToMovie.file_id).then(file => {
-            if (!file.hasOwnProperty("id")) {
-                return Promise.resolve(infoObj);
-            }
-            infoObj.file_info = file;
-            return Promise.resolve(infoObj);
-        });
+        const file = await this._filesModel.getSingle(fileToMovie.file_id);
+        if (!file.hasOwnProperty("id")) {
+            return infoObj;
+        }
+        infoObj.file_info = file;
+        return infoObj;
     }
 
-    deleteSingle(movieID) {
-        return this._moviesModel
-            .getSingle(movieID)
-            .then(movie => {
-                if (!movie.hasOwnProperty("id")) {
-                    return Promise.reject(
-                        "MovieAPI :: deleteSingle() :: Unable to find movie ${movieID}"
-                    );
-                }
-                return this._removeMovieThumbnail(movie);
-            })
-            .then(() => {
-                return this._movieToGenreModel.deleteForMovie(movieID);
-            })
-            .then(() => {
-                return this._removeFileAssociationForMovie(movieID);
-            })
-            .then(() => {
-                return this._moviesModel.deleteSingle(movieID);
-            });
+    async deleteSingle(movieID) {
+        const movie = await this._moviesModel.getSingle(movieID);
+        if (!movie.hasOwnProperty("id")) {
+            return Promise.reject(
+                "MovieAPI :: deleteSingle() :: Unable to find movie ${movieID}"
+            );
+        }
+        await this._removeMovieThumbnail(movie);
+        await this._movieToGenreModel.deleteForMovie(movieID);
+        await this._removeFileAssociationForMovie(movieID);
+        return await this._moviesModel.deleteSingle(movieID);
     }
 
-    _removeShowThumbnail(showID) {
-        return this._showsModel.getSingle(showID).then(show => {
-            const fullPath = path.join(thumbConfig.shows, show.image_filename);
-            if (!fs.existsSync(fullPath)) {
-                return Promise.resolve(true);
-            }
-            return Promise.resolve(fs.unlinkSync(fullPath));
-        });
-    }
+    async _removeFileAssociationForMovie(movieID) {
+        const fileToMovie = await this._fileToMovieModel.getSingleForMovie(
+            movieID
+        );
+        if (!fileToMovie.hasOwnProperty("file_id")) {
+            // No file to remove
 
-    _removeFileAssociationForMovie(movieID) {
-        return this._fileToMovieModel
-            .getSingleForMovie(movieID)
-            .then(fileToMovie => {
-                if (!fileToMovie.hasOwnProperty("file_id")) {
-                    // No file to remove
-                    return Promise.resolve();
-                }
+            return true;
+        }
 
-                return this._filesModel
-                    .deleteSingle(fileToMovie.file_id)
-                    .then(() => {
-                        return this._fileToMovieModel.deleteSingle(
-                            fileToMovie.file_id,
-                            movieID
-                        );
-                    });
-            });
+        await this._filesModel.deleteSingle(fileToMovie.file_id);
+        return await this._fileToMovieModel.deleteSingle(
+            fileToMovie.file_id,
+            movieID
+        );
     }
 
     _removeMovieThumbnail(movie) {
         const fullPath = path.join(thumbConfig.movies, movie.image_filename);
         if (!fs.existsSync(fullPath)) {
-            return Promise.resolve(true);
+            return true;
         }
-        return Promise.resolve(fs.unlinkSync(fullPath));
+        return fs.unlinkSync(fullPath);
     }
 
-    updateStatusTags(movieID, statusTags) {
-        return this._moviesModel.updateStatusTags(movieID, statusTags);
+    async updateStatusTags(movieID, statusTags) {
+        return await this._moviesModel.updateStatusTags(movieID, statusTags);
     }
 }
 

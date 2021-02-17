@@ -1,123 +1,144 @@
-import fs from 'fs';
+import fs from "fs";
 
-import Promise from 'bluebird';
+import sqlite, { Database } from "sqlite";
+import sqlite3 from "sqlite3";
 
-import sqlite  from 'sqlite';
-
-import logger from '../logger';
-
-import error from '../error';
+import error from "../error";
 
 class IBDB {
-    constructor(){
-        this._db = {};
+    _db: null | Database;
+    _isConnected: boolean;
+    _paramCount: number;
+    constructor() {
+        this._db = null;
         this._isConnected = false;
         this._paramCount = 0;
     }
 
-    connect(config){
-        
-        let filename = "";
-        if(config.hasOwnProperty('filename')){
-            if(!fs.existsSync(config.filename)){
+    async connect(config) {
+        let filename: string = "";
+        if (config.hasOwnProperty("filename")) {
+            if (!fs.existsSync(config.filename)) {
                 error("IBDB :: connect :: File does not exist.");
-                return new Promise.reject(`IBDB :: connect :: File does not exist. ${config.filename}`);
+                throw new Error(
+                    `IBDB :: connect :: File does not exist. ${config.filename}`
+                );
             }
             filename = config.filename;
-        } else if(config.hasOwnProperty('inMemory')){
+        } else if (config.hasOwnProperty("inMemory")) {
             filename = ":memory:";
         } else {
-            return new Promise.reject("IBDB :: connect :: No filename config is set.");
+            throw new Error("IBDB :: connect :: No filename config is set.");
         }
-
-        return Promise.resolve()
-            .then(() => {
-                return sqlite.open(filename, { Promise });
-            })
-            .then((newDB) => {
-                this._isConnected = true;
-                this._db = newDB;
-                return newDB;
-            })
-            .catch((err)=>{
-                error(`IBDB :: connect :: sqlite error ${err}`);
+        try {
+            this._db = await sqlite.open({
+                filename: filename,
+                driver: sqlite3.Database,
             });
+            this._isConnected = true;
+        } catch (err) {
+            throw new Error(`IBDB :: connect :: sqlite error ${err}`);
+        }
     }
 
-    isConnected(){
+    isConnected() {
         return this._isConnected;
     }
 
-    close(){
-        if(this._isConnected){
+    async close() {
+        if (this._isConnected) {
             this._isConnected = false;
-            return this._db.close();
+            return await this._db.close();
         }
     }
 
-    insert(columnsAndValues, tablename){
+    async insert(columnsAndValues, tablename) {
         this._resetParamCount();
         const [columns, params] = this._getColumnsAndParams(columnsAndValues);
 
-        const insertColumns = columns.join(', ');
-        const insertValueVariables = Object.keys(params).join(',');
+        const insertColumns = columns.join(", ");
+        const insertValueVariables = Object.keys(params).join(",");
 
-        const query = "INSERT INTO "+tablename+" ("+insertColumns+") VALUES ("+insertValueVariables+")";
-        return this._db.run(query, params);
+        const query =
+            "INSERT INTO " +
+            tablename +
+            " (" +
+            insertColumns +
+            ") VALUES (" +
+            insertValueVariables +
+            ")";
+        return await this._db.run(query, params);
     }
 
-    update(dataColumnsAndValues, whereColumnsAndValues, tablename){
+    async update(dataColumnsAndValues, whereColumnsAndValues, tablename) {
         this._resetParamCount();
-        const [dataDelim, dataParams] = this._buildCommaDelimetedStatement(dataColumnsAndValues);
-        const [whereDelim, whereParams] = this._buildCommaDelimetedStatement(whereColumnsAndValues, " AND ");
+        const [dataDelim, dataParams] = this._buildCommaDelimetedStatement(
+            dataColumnsAndValues
+        );
+        const [whereDelim, whereParams] = this._buildCommaDelimetedStatement(
+            whereColumnsAndValues,
+            " AND "
+        );
 
-        const update = "UPDATE "+tablename+" SET "+dataDelim+ " WHERE "+whereDelim;
+        const update =
+            "UPDATE " +
+            tablename +
+            " SET " +
+            dataDelim +
+            " WHERE " +
+            whereDelim;
         const params = Object.assign({}, dataParams, whereParams);
 
-        return this._db.run(update, params);
+        return await this._db.run(update, params);
     }
 
-    delete(whereColumnsAndValues, tablename){
+    async delete(whereColumnsAndValues, tablename) {
         this._resetParamCount();
-        const [whereDelim, whereParams] = this._buildCommaDelimetedStatement(whereColumnsAndValues, " AND ");
+        const [whereDelim, whereParams] = this._buildCommaDelimetedStatement(
+            whereColumnsAndValues,
+            " AND "
+        );
 
-        const update = "DELETE FROM "+tablename+" WHERE "+whereDelim;
-        return this._db.run(update, whereParams);
+        const update = "DELETE FROM " + tablename + " WHERE " + whereDelim;
+        return await this._db.run(update, whereParams);
     }
 
-    getRow(whereColumnsAndValues, tablename){
+    async getRow(whereColumnsAndValues, tablename) {
         this._resetParamCount();
-        const [query, params] = this._buildSelectQuery(whereColumnsAndValues, tablename);
-        return this._db.get(query, params)
-                       .then((row)=>{
-                            return (row===undefined) ? {} : row;
-                        });
+        const [query, params] = this._buildSelectQuery(
+            whereColumnsAndValues,
+            tablename
+        );
+        const row = await this._db.get(query, params);
+        return row === undefined ? {} : row;
     }
 
-    getAll(whereColumnsAndValues, tablename, orderBy = ""){
+    async getAll(whereColumnsAndValues, tablename, orderBy = "") {
         this._resetParamCount();
-        let [query, params] = this._buildSelectQuery(whereColumnsAndValues, tablename);
-        if(orderBy !== ""){
+        let [query, params] = this._buildSelectQuery(
+            whereColumnsAndValues,
+            tablename
+        );
+        if (orderBy !== "") {
             query = query + " ORDER BY " + orderBy;
         }
-        return this._db.all(query, params)
-                        .then((rows)=>{
-                            return (rows===undefined) ? [] : rows;
-                        });
+        const rows = await this._db.all(query, params);
+        return rows === undefined ? [] : rows;
     }
 
-    queryAll(sql, params){
-        return this._db.all(sql, params)
-                    .then((rows)=>{
-                        return (rows===undefined) ? [] : rows;
-                    });
+    async queryAll(sql, params) {
+        const rows = this._db.all(sql, params);
+        return rows === undefined ? [] : rows;
     }
 
-    _buildSelectQuery(whereColumnsAndValues, tablename){
-        const [where, params] = this._buildCommaDelimetedStatement(whereColumnsAndValues, " AND ");
+    _buildSelectQuery(whereColumnsAndValues, tablename) {
+        const [where, params] = this._buildCommaDelimetedStatement(
+            whereColumnsAndValues,
+            " AND "
+        );
         let query = "SELECT * FROM " + tablename;
 
-        if(where !== ""){
+        if (where !== "") {
             query = query + " WHERE " + where;
         }
 
@@ -125,21 +146,23 @@ class IBDB {
     }
 
     // Build a comma delimited equals string (ie for where: "key = $var AND key1 = $var")
-    _buildCommaDelimetedStatement(whereColumnsAndValues, separator = ', '){
-        const [columns, params, paramKeys] = this._getColumnsAndParams(whereColumnsAndValues);
+    _buildCommaDelimetedStatement(whereColumnsAndValues, separator = ", ") {
+        const [columns, params, paramKeys] = this._getColumnsAndParams(
+            whereColumnsAndValues
+        );
         let whereParts = [];
-        columns.forEach((columnName, index)=>{
-            whereParts.push(columnName+" = "+paramKeys[index]);
+        columns.forEach((columnName, index) => {
+            whereParts.push(columnName + " = " + paramKeys[index]);
         });
         const where = whereParts.join(separator);
         return [where, params];
     }
 
-    _getColumnsAndParams(columnsAndValues){
-        const columns = Object.keys(columnsAndValues);
+    _getColumnsAndParams(columnsAndValues): [string[], any, string[]] {
+        const columns: string[] = Object.keys(columnsAndValues);
         let params = {};
         let paramKeys = [];
-        columns.forEach((columnName)=>{
+        columns.forEach((columnName) => {
             this._paramCount++;
             const key = "$" + columnName + this._paramCount;
             paramKeys.push(key);
@@ -148,11 +171,11 @@ class IBDB {
         return [columns, params, paramKeys];
     }
 
-    _resetParamCount(){
+    _resetParamCount() {
         this._paramCount = 0;
     }
-    
 }
 
 let ibdb = new IBDB();
-export default ibdb ;
+export default ibdb;
+export { IBDB };
