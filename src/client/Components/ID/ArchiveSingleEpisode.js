@@ -2,7 +2,9 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
+import Grid from "@material-ui/core/Grid";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 import Regex from "../../lib/Regex.lib";
 
 class ArchiveSingleEpisode extends Component {
@@ -149,20 +151,35 @@ class ArchiveSingleEpisode extends Component {
         const { episode, season, show, newDirectory, newFilename } = this.state;
 
         return (
-            <div>
-                <div className="ib-idmodal-archivesingle-episodeinfo">
+            <Grid container>
+                <Grid
+                    item
+                    xs={12}
+                    className="ib-idmodal-archivesingle-episodeinfo"
+                >
                     <div>{show.title}</div>
                     <div>{season.title}</div>
                     <div>Episode {episode.episode_number}</div>
-                </div>
-                <div className="ib-idmodal-archivesingle-form-box">
-                    Directory:{" "}
-                    <TextField
+                </Grid>
+                <Grid
+                    item
+                    xs={12}
+                    className="ib-idmodal-archivesingle-form-box"
+                >
+                    <label htmlFor="episode-destination-directory">
+                        Destination Directory:
+                    </label>
+                    <br />
+                    <input
+                        name="episode-destination-directory"
                         onChange={this._handleChangeDirectory.bind(this)}
                         value={newDirectory}
                     />
-                    Filename:{" "}
-                    <TextField
+                    <br />
+                    <label htmlFor="episode-filename">Filename:</label>
+                    <br />
+                    <input
+                        name="episode-filename"
                         onChange={this._handleChangeFilename.bind(this)}
                         value={newFilename}
                     />
@@ -175,15 +192,15 @@ class ArchiveSingleEpisode extends Component {
                             Archive Episode
                         </Button>
                     </div>
-                </div>
-            </div>
+                </Grid>
+            </Grid>
         );
     }
 
     render() {
         const { isCollating } = this.state;
 
-        let content = <Spin />;
+        let content = <CircularProgress />;
         if (!isCollating) {
             content = this._buildEpisodeForm();
         }
