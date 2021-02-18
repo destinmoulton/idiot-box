@@ -41,6 +41,7 @@ export default class IDModel {
             destInfo,
             "Movies"
         );
+
         let newFilename = "";
         if (imageURL !== "") {
             newFilename = await this._mediaScraperModel.downloadThumbnail(

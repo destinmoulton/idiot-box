@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
 import TextField from "@material-ui/core/TextField";
-import SelectSearch from "react-select-search";
+import Select from "react-select";
 import DialogModal from "../shared/DialogModal";
 import Regex from "../../lib/Regex.lib";
 class IDMultipleEpisodesModal extends Component {
