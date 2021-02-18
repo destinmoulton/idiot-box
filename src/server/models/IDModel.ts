@@ -115,11 +115,12 @@ export default class IDModel {
         );
     }
 
-    idAndArchiveMultipleEpisodes(sourcePathInfo, destSubpath, idInfo) {
+    async idAndArchiveMultipleEpisodes(sourcePathInfo, destSubpath, idInfo) {
         const episodesToMove = idInfo.episodes;
         const filenames = Object.keys(episodesToMove);
 
-        return filenames.map(async (filename) => {
+        let res = [];
+        for (const filename of filenames) {
             const episode = episodesToMove[filename];
             const dest = {
                 filename: episode.newFilename,
@@ -138,14 +139,17 @@ export default class IDModel {
                 episode_id: episode.selectedEpisodeID,
             };
 
-            return await this.idAndArchiveEpisode(epInfo, source, dest);
-        });
+            res.push(await this.idAndArchiveEpisode(epInfo, source, dest));
+        }
+        return res;
     }
 
     async removeMultipleIDs(itemsToRemove) {
-        return itemsToRemove.map(async (item) => {
-            return await this.removeSingleID(item.assocData);
-        });
+        let res = [];
+        for (const item of itemsToRemove) {
+            res.push(await this.removeSingleID(item.assocData));
+        }
+        return res;
     }
 
     async removeSingleID(idInfo) {
@@ -227,16 +231,20 @@ export default class IDModel {
      * @param ShowSeasons seasons for a show
      */
     async _scrapeAndAddEpisodesForSeasons(show, seasons) {
-        return seasons.map(async (season) => {
+        let res = [];
+        for (const season of seasons) {
             const episodesArr = await this._mediaScraperModel.getEpisodesForSeason(
                 show.trakt_id,
                 season.season_number
             );
-            return await this._showSeasonEpisodesModel.addArrEpisodes(
-                show.id,
-                season.id,
-                episodesArr
+            res.push(
+                await this._showSeasonEpisodesModel.addArrEpisodes(
+                    show.id,
+                    season.id,
+                    episodesArr
+                )
             );
-        });
+        }
+        return res;
     }
 }

@@ -157,7 +157,8 @@ export default class ShowSeasonEpisodesModel {
             " WHERE first_aired > ? AND first_aired < ? ORDER BY first_aired";
 
         const params = [startUnixTimestamp, endUnixTimestamp];
-        return await this._ibdb.queryAll(query, params);
+        const data = await this._ibdb.queryAll(query, params);
+        return data;
     }
 
     async deleteSingle(episodeID) {

@@ -1,43 +1,34 @@
-import path from 'path';
-import express from 'express';
+import path from "path";
+import express from "express";
 
-const app = express();
+const app: any = express();
 
-import ibdb from './db/IBDB';
-import { setupSocketIO } from './socket.io/io';
-import logger from './logger';
+import ibdb from "./db/IBDB";
+import { setupSocketIO } from "./socket.io/io";
+import logger from "./logger";
 
-import dbconfig from './config/db.config';
+import dbconfig from "./config/db.config";
 
 const PORT = 3000;
 
-const PUBLIC_PATH = path.resolve(__dirname, '../public');
+const PUBLIC_PATH = path.resolve(__dirname, "../public");
 app.use(express.static(PUBLIC_PATH));
 
 // Allow all URI's; handle by react router
-app.get('*', (req, res)=>{
-    res.sendFile(path.join(PUBLIC_PATH, '/index.html'));
+app.get("*", (req, res) => {
+    res.sendFile(path.join(PUBLIC_PATH, "/index.html"));
 });
 
-Promise.resolve()
-    .then(()=>{
-        ibdb.connect(dbconfig);
-    })
-    .then(()=>{
-        try {
-            return app.listen(PORT, ()=>{
-                logger.log("\n---------------------------------------");
-                logger.log("Idiot Box Server running on Port "+PORT);
-                logger.log("---------------------------------------");
-            });
-        }
-        catch(err){
-            return Promise.reject(err);
-        }
-    })
-    .then((server)=>{
+(async () => {
+    try {
+        await ibdb.connect(dbconfig);
+        let server = app.listen(PORT, () => {
+            logger.log("\n---------------------------------------");
+            logger.log("Idiot Box Server running on Port " + PORT);
+            logger.log("---------------------------------------");
+        });
         setupSocketIO(server);
-    })
-    .catch((err)=>{
-        logger.error(err);
-    })
+    } catch (err) {
+        throw new Error(err);
+    }
+})();

@@ -24,9 +24,11 @@ class ShowsAPI {
 
     async getAllShowsWithSeasonLockedInfo() {
         const shows = await this._showsModel.getAll();
-        return shows.map(async (show) => {
-            return await this._getSeasonLockedInfo(show);
-        });
+        const res = [];
+        for (const show of shows) {
+            res.push(await this._getSeasonLockedInfo(show));
+        }
+        return res;
     }
 
     async _getSeasonLockedInfo(show) {
@@ -57,9 +59,11 @@ class ShowsAPI {
             return [];
         }
 
-        return episodes.map(async (episode) => {
-            return await this._collateShowIntoEpisode(episode);
-        });
+        let res = [];
+        for (const episode of episodes) {
+            res.push(await this._collateShowIntoEpisode(episode));
+        }
+        return res;
     }
 
     async _collateShowIntoEpisode(originalEpisode) {

@@ -20,17 +20,22 @@ export default class EpisodeAPI {
             seasonNum
         );
 
-        return episodes.map(async (ep) => {
-            let data = Object.assign({}, ep);
+        let res = [];
+        let episode: any;
+        for (episode of episodes) {
+            let data = Object.assign({}, episode);
             data["file_info"] = {};
 
-            const fileEp = this._fileToEpisodeModel.getSingleForEpisode(ep.id);
+            const fileEp = this._fileToEpisodeModel.getSingleForEpisode(
+                episode.id
+            );
             if (!fileEp.hasOwnProperty("file_id")) {
-                return data;
+                res.push(data);
+            } else {
+                res.push(await this._collectFileInfo(fileEp, data));
             }
-
-            return await this._collectFileInfo(fileEp, data);
-        });
+        }
+        return res;
     }
 
     /**

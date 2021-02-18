@@ -1,6 +1,6 @@
 import fs from "fs";
 
-import sqlite, { Database } from "sqlite";
+import { Database, open } from "sqlite";
 import sqlite3 from "sqlite3";
 
 import error from "../error";
@@ -31,7 +31,7 @@ class IBDB {
             throw new Error("IBDB :: connect :: No filename config is set.");
         }
         try {
-            this._db = await sqlite.open({
+            this._db = await open({
                 filename: filename,
                 driver: sqlite3.Database,
             });
@@ -127,7 +127,8 @@ class IBDB {
     }
 
     async queryAll(sql, params) {
-        const rows = this._db.all(sql, params);
+        const rows = await this._db.all(sql, params);
+
         return rows === undefined ? [] : rows;
     }
 

@@ -64,50 +64,59 @@ const shows = {
     seasons: {
         get: {
             params: ["show_id"],
-            func: async (showID) =>
-                await showSeasonsModel.getSeasonsForShow(showID),
+            func: async (showID) => {
+                return await showSeasonsModel.getSeasonsForShow(showID);
+            },
         },
     },
     episodes: {
         get: {
             params: ["show_id", "season_id"],
-            func: async (showID, seasonID) =>
-                await showSeasonEpisodesModel.getEpisodesForSeason(
+            func: async (showID, seasonID) => {
+                return await showSeasonEpisodesModel.getEpisodesForSeason(
                     showID,
                     seasonID
-                ),
+                );
+            },
         },
         get_all_with_file_info: {
             params: ["show_id", "season_number"],
-            func: async (showID, seasonNum) =>
-                await episodeAPI.getAllEpisodesWithFileInfo(showID, seasonNum),
+            func: async (showID, seasonNum) => {
+                return await episodeAPI.getAllEpisodesWithFileInfo(
+                    showID,
+                    seasonNum
+                );
+            },
         },
         toggle_watched: {
             params: ["episode_ids", "watched_status"],
-            func: async (episodeIDs, watchedStatus) =>
-                await showSeasonEpisodesModel.updateMultipleEpisodesWatchedStatus(
+            func: async (episodeIDs, watchedStatus) => {
+                return await showSeasonEpisodesModel.updateMultipleEpisodesWatchedStatus(
                     episodeIDs,
                     watchedStatus
-                ),
+                );
+            },
         },
         get_between_unix_timestamps: {
             params: ["start_unix_timestamp", "end_unix_timestamp"],
-            func: async (startUnixTimestamp, endUnixTimestamp) =>
-                await showsAPI.getEpisodesBetweenTimestamps(
+            func: async (startUnixTimestamp, endUnixTimestamp) => {
+                return await showsAPI.getEpisodesBetweenTimestamps(
                     startUnixTimestamp,
                     endUnixTimestamp
-                ),
+                );
+            },
         },
     },
     episode: {
         collate: {
             params: ["episode_info"],
-            func: async (episodeInfo) =>
-                await showSeasonEpisodesModel.collateEpisodeInfo(
+            func: async (episodeInfo) => {
+                return await showSeasonEpisodesModel.collateEpisodeInfo(
                     episodeInfo,
                     showsModel,
                     showSeasonsModel
-                ),
+                );
+            },
         },
     },
 };

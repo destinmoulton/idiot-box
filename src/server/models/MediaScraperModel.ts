@@ -24,9 +24,11 @@ export default class MediaScraperModel {
             extended: "full",
         };
         const results = await this._trakt.search.text(options);
-        return results.map((item) => {
-            return item.movie;
-        });
+        let res = [];
+        for (const item of results) {
+            res.push(item.movie);
+        }
+        return res;
     }
 
     async searchShows(tvQuery) {
@@ -36,6 +38,7 @@ export default class MediaScraperModel {
             extended: "full",
         };
         const results = await this._trakt.search.text(options);
+
         return results.map((item) => {
             return item.show;
         });

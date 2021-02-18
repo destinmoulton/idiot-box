@@ -33,9 +33,10 @@ export default class MovieToGenreModel {
         };
 
         const movieToGenres = await this._ibdb.getAll(where, this._tableName);
-        const genres = movieToGenres.map(async (link) => {
-            await this._genresModel.getSingle(link.genre_id);
-        });
+        const genres = [];
+        for (const link of movieToGenres) {
+            genres.push(await this._genresModel.getSingle(link.genre_id));
+        }
 
         return genres.sort(this._sortGenresByName);
     }

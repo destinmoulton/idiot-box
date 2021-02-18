@@ -22,15 +22,17 @@ class MovieAPI {
     async getAllMoviesWithFileInfo() {
         const movies = await this._moviesModel.getAll();
 
-        return movies.map(async (movie) => {
+        let res = [];
+        for (const movie of movies) {
             let data = Object.assign({}, movie);
             data["file_info"] = {};
 
             const fileToMovie = await this._fileToMovieModel.getSingleForMovie(
                 movie.id
             );
-            return this._collateMovieFileInfo(fileToMovie, data);
-        });
+            res.push(this._collateMovieFileInfo(fileToMovie, data));
+        }
+        return res;
     }
 
     /**

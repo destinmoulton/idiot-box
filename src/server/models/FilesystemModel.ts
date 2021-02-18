@@ -33,15 +33,13 @@ export default class FilesystemModel {
             );
         }
         const contents = fs.readdirSync(fullPath);
-        const dirList = [];
-        let promisesToRun = [];
-        return contents.map(async (filename) => {
-            return await this._collateFileInformation(
-                basePath,
-                fullPath,
-                filename
+        let res = [];
+        for (const filename of contents) {
+            res.push(
+                await this._collateFileInformation(basePath, fullPath, filename)
             );
-        });
+        }
+        return res;
     }
 
     async _collateFileInformation(basePath, fullPath, filename) {
