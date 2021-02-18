@@ -42,6 +42,21 @@ export default class FileToEpisodeModel {
         return await this._ibdb.getRow(where, this._tableName);
     }
 
+    /**
+     * Get all for an episode.
+     *
+     * There *should* be only one - but this will
+     * be used by the IDModel to verify and remove
+     * pre-existing versions.
+     *
+     * @param episodeID
+     */
+    async getAllForEpisode(episodeID) {
+        const where = {
+            episode_id: episodeID,
+        };
+        return await this._ibdb.getAll(where, this._tableName);
+    }
     async getSingleForFile(fileID) {
         const where = {
             file_id: fileID,
@@ -60,6 +75,14 @@ export default class FileToEpisodeModel {
     async deleteSingleForEpisode(episodeID) {
         const where = {
             episode_id: episodeID,
+        };
+
+        return await this._ibdb.delete(where, this._tableName);
+    }
+
+    async deleteSingleByFileID(fileID) {
+        const where = {
+            file_id: fileID,
         };
 
         return await this._ibdb.delete(where, this._tableName);

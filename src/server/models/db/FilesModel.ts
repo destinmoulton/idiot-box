@@ -52,6 +52,27 @@ export default class FilesModel {
         return await this._ibdb.getRow(query, this._tableName);
     }
 
+    /**
+     * Get all possible entries for a directory/filename
+     * combination.
+     *
+     * @param directory_setting_id
+     * @param subpath
+     * @param filename
+     */
+    async getAllForDirectoryAndFilename(
+        directory_setting_id,
+        subpath,
+        filename
+    ) {
+        const query = {
+            directory_setting_id,
+            subpath,
+            filename,
+        };
+        return await this._ibdb.getAll(query, this._tableName);
+    }
+
     async getAllForDirectory(directory_setting_id, subpath) {
         const query = {
             directory_setting_id,

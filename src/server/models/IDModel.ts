@@ -68,6 +68,23 @@ export default class IDModel {
             "directories",
             "Movies"
         );
+
+        const possibleExisting = await this._fileToMovieModel.getSingleForMovie(
+            movie.id
+        );
+
+        if ("file_id" in possibleExisting) {
+            // Remove the current file association
+            if (possibleExisting.file_id !== null) {
+                await this._filesModel.deleteSingle(possibleExisting.file_id);
+            }
+
+            await this._fileToMovieModel.deleteSingle(
+                possibleExisting.file_id,
+                movie.id
+            );
+        }
+
         const fileRow = await this._filesModel.addFile(
             destSetting.id,
             destInfo.subpath,
@@ -84,28 +101,22 @@ export default class IDModel {
             "directories",
             "Shows"
         );
+
+        // Remove possible existing files and associations
+        await this._removeExistingEpisodeAssoc(
+            epInfo.episode_id,
+            destSetting.id,
+            destInfo.subpath,
+            destInfo.filename
+        );
+
+        // Add the new file
         const fileRow = await this._filesModel.addFile(
             destSetting.id,
             destInfo.subpath,
             destInfo.filename,
             "show"
         );
-        // Check if the episode is already associated
-        const possibleEpisode = await this._fileToEpisodeModel.getSingleForEpisode(
-            epInfo.episode_id
-        );
-
-        if ("file_id" in possibleEpisode) {
-            // Remove the file and episode association if it exists
-
-            if (possibleEpisode.file_id !== null) {
-                await this._filesModel.deleteSingle(possibleEpisode.file_id);
-            }
-            await this._fileToEpisodeModel.deleteSingleForEpisode(
-                possibleEpisode.episode_id
-            );
-        }
-
         // Create the new association
         return await this._fileToEpisodeModel.add(
             fileRow.id,
@@ -157,6 +168,49 @@ export default class IDModel {
             return await this._removeMovie(idInfo);
         } else if (idInfo.type === "show") {
             return await this._removeEpisodeFileAssociations(idInfo);
+        }
+    }
+
+    /**
+     * Remove any existing file-to-episodes and files
+     * for an episode.
+     *
+     * @param episode_id
+     * @param dest_setting_id
+     * @param dest_subpath
+     * @param dest_filename
+     */
+    async _removeExistingEpisodeAssoc(
+        episode_id,
+        dest_setting_id,
+        dest_subpath,
+        dest_filename
+    ) {
+        // Check if the episode is already associated
+        const possibleLinks = await this._fileToEpisodeModel.getAllForEpisode(
+            episode_id
+        );
+
+        // Remove the file and episode association if it exists
+
+        for (const link of possibleLinks) {
+            if (link.file_id !== null) {
+                await this._filesModel.deleteSingle(link.file_id);
+            }
+            await this._fileToEpisodeModel.deleteSingleForEpisode(
+                link.episode_id
+            );
+        }
+
+        const possibleFiles = await this._filesModel.getAllForDirectoryAndFilename(
+            dest_setting_id,
+            dest_subpath,
+            dest_filename
+        );
+
+        for (const file of possibleFiles) {
+            await this._fileToEpisodeModel.deleteSingleByFileID(file.id);
+            await this._filesModel.deleteSingle(file.id);
         }
     }
 
