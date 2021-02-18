@@ -24,7 +24,6 @@ export default async function apiIOListeners(socket) {
                 );
                 try {
                     const data = await apiEndpoint.func(...endpointParams);
-                    console.log("api.io.ts data=", data);
                     const resp = {
                         id: req.id,
                         data,
