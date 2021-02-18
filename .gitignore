@@ -1,7 +1,7 @@
 node_modules
 typings
 dist/server/database/idiot-box.sqlite3
-src/server/config/trakt.config.js
+src/server/config/trakt.config.ts
 
 dist/server/app
 
