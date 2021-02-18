@@ -18,7 +18,7 @@ const movieAPIModels = {
     filesModel,
     fileToMovieModel,
     movieToGenreModel,
-    moviesModel
+    moviesModel,
 };
 
 const movieAPI = new MovieAPI(movieAPIModels);
@@ -27,24 +27,25 @@ const movies = {
     movie: {
         delete: {
             params: ["movie_id"],
-            func: movieID => movieAPI.deleteSingle(movieID)
+            func: async (movieID) => await movieAPI.deleteSingle(movieID),
         },
         update_status_tags: {
             params: ["movie_id", "status_tags"],
-            func: (movieID, statusTags) =>
-                movieAPI.updateStatusTags(movieID, statusTags)
-        }
+            func: async (movieID, statusTags) => {
+                return await movieAPI.updateStatusTags(movieID, statusTags);
+            },
+        },
     },
     movies: {
         get_all: {
             params: [],
-            func: () => moviesModel.getAll()
+            func: async () => await moviesModel.getAll(),
         },
         get_all_with_file_info: {
             params: [],
-            func: () => movieAPI.getAllMoviesWithFileInfo()
-        }
-    }
+            func: async () => await movieAPI.getAllMoviesWithFileInfo(),
+        },
+    },
 };
 
 export default movies;

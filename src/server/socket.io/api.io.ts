@@ -4,9 +4,9 @@ import logger from "../logger";
 import APIendpoints from "./apiendpoints";
 
 let localSocket: any = {};
-export default function apiIOListeners(socket) {
+export default async function apiIOListeners(socket) {
     localSocket = socket;
-    socket.on("api.request", (req) => {
+    socket.on("api.request", async (req) => {
         if (!req.hasOwnProperty("id")) {
             apiError("Invalid request. No id provided.", req);
             return false;
@@ -22,17 +22,17 @@ export default function apiIOListeners(socket) {
                     apiEndpoint.params,
                     req.params
                 );
-                return apiEndpoint
-                    .func(...endpointParams)
-                    .then((data) => {
-                        const resp = {
-                            id: req.id,
-                            data,
-                            request: req,
-                        };
-                        socket.emit("api.response", resp);
-                    })
-                    .catch((err) => apiError("MODEL ERROR :: " + err, req));
+                try {
+                    const data = await apiEndpoint.func(...endpointParams);
+                    const resp = {
+                        id: req.id,
+                        data,
+                        request: req,
+                    };
+                    socket.emit("api.response", resp);
+                } catch (err) {
+                    apiError("MODEL ERROR :: " + err, req);
+                }
             }
         }
     });

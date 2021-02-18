@@ -62,49 +62,56 @@ const id = {
     // file: {
     //     search: {
     //         params: ['file_info'],
-    //         func: (fileInfo) => idModel.findID(fileInfo)
+    //         func: async(fileInfo) =>await idModel.findID(fileInfo)
     //     }
     // },
     movie_or_episode: {
         remove_ids: {
             params: ["items_to_remove"],
-            func: (itemsToRemove) => idModel.removeMultipleIDs(itemsToRemove),
+            func: async (itemsToRemove) => {
+                return await idModel.removeMultipleIDs(itemsToRemove);
+            },
         },
     },
     movie: {
         id_and_archive: {
             params: ["movie_info", "image_url", "source_info", "dest_info"],
-            func: (movieInfo, imageURL, sourceInfo, destInfo) =>
-                idModel.idAndArchiveMovie(
+            func: async (movieInfo, imageURL, sourceInfo, destInfo) => {
+                return await idModel.idAndArchiveMovie(
                     movieInfo,
                     imageURL,
                     sourceInfo,
                     destInfo
-                ),
+                );
+            },
         },
     },
     show: {
         add: {
             params: ["show_info", "image_info"],
-            func: (showInfo, imageInfo) => idModel.addShow(showInfo, imageInfo),
+            func: async (showInfo, imageInfo) => {
+                return await idModel.addShow(showInfo, imageInfo);
+            },
         },
     },
     episode: {
         id_and_archive: {
             params: ["episode_info", "source_info", "dest_info"],
-            func: (epInfo, sourceInfo, destInfo) =>
-                idModel.idAndArchiveEpisode(epInfo, sourceInfo, destInfo),
+            func: async (epInfo, sourceInfo, destInfo) => {
+                await idModel.idAndArchiveEpisode(epInfo, sourceInfo, destInfo);
+            },
         },
     },
     multiple_episodes: {
         id_and_archive: {
             params: ["source_path_info", "dest_subpath", "id_info"],
-            func: (sourcePathInfo, destSubpath, idInfo) =>
-                idModel.idAndArchiveMultipleEpisodes(
+            func: async (sourcePathInfo, destSubpath, idInfo) => {
+                return await idModel.idAndArchiveMultipleEpisodes(
                     sourcePathInfo,
                     destSubpath,
                     idInfo
-                ),
+                );
+            },
         },
     },
 };
