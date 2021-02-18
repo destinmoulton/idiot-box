@@ -30,7 +30,7 @@ class MovieAPI {
             const fileToMovie = await this._fileToMovieModel.getSingleForMovie(
                 movie.id
             );
-            res.push(this._collateMovieFileInfo(fileToMovie, data));
+            res.push(await this._collateMovieFileInfo(fileToMovie, data));
         }
         return res;
     }
