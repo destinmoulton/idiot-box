@@ -6,7 +6,7 @@
     "scripts": {
         "clean-server": "rm -rf dist/server/app/*",
         "compile-react": "webpack --config webpack.config.js -d --watch",
-        "compile-server": "npm run clean-server && babel --watch src/server --out-dir dist/server/app",
+        "compile-server": "npm run clean-server && tsc --watch ",
         "profile": "webpack --profile --json > stats.json",
         "start-server": "pm2 start pm2.config.json",
         "test": "jest --silent=false --colors --verbose",
