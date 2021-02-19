@@ -655,6 +655,20 @@ i.ib-remote-icon {
     font-size: 1.2em;
 }
 
+.ib-settings-editor-wrapper {
+    input {
+        border: 1px solid gray;
+        padding: 4px;
+        width: 100%;
+    }
+    input.setting-directory {
+        width: 75%;
+    }
+    .setting-dirselector-button {
+        padding: 2px 6px;
+        margin-left: 4px;
+    }
+}
 div.ib-settings-dirsel-fs-cont {
     overflow-y: scroll;
 }

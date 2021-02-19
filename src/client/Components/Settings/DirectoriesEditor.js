@@ -4,12 +4,21 @@ import { connect } from "react-redux";
 
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import EditIcon from "@material-ui/icons/Edit";
+import FolderIcon from "@material-ui/icons/Folder";
+import SaveIcon from "@material-ui/icons/Save";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
 import TextField from "@material-ui/core/TextField";
-
 import DirectorySelectorModal from "./DirectorySelectorModal";
 
 import { deleteSetting, saveSetting } from "../../actions/settings.actions";
 import { callAPI } from "../../actions/api.actions";
+import { InputAdornment } from "@material-ui/core";
 
 const DEFAULT_INITIAL_DIR = "/";
 const BLANK_DATA = {
@@ -170,7 +179,8 @@ class DirectoriesEditor extends Component {
         const { saveInProgress } = this.props;
         const { currentEditData } = this.state;
         return (
-            <Input
+            <TextField
+                variant="outlined"
                 onChange={this._handleChangeSettingInput.bind(this)}
                 data-setting-field={"key"}
                 data-setting-id={settingID}
@@ -184,20 +194,26 @@ class DirectoriesEditor extends Component {
         const { saveInProgress } = this.props;
         const { currentEditData } = this.state;
         return (
-            <Input
-                addonAfter={
-                    <Icon
-                        type="folder"
-                        onClick={this._openDirectorySelector.bind(this)}
-                        data-setting-id={settingID}
-                    />
-                }
-                onChange={this._handleChangeSettingInput.bind(this)}
-                data-setting-field={"value"}
-                data-setting-id={settingID}
-                value={currentEditData[settingID].value}
-                disabled={saveInProgress}
-            />
+            <span>
+                <input
+                    className="setting-directory"
+                    onChange={this._handleChangeSettingInput.bind(this)}
+                    data-setting-field={"value"}
+                    data-setting-id={settingID}
+                    value={currentEditData[settingID].value}
+                    disabled={saveInProgress}
+                />
+                <Button
+                    variant="contained"
+                    disableElevation
+                    className="setting-dirselector-button"
+                    onClick={this._openDirectorySelector.bind(this)}
+                    data-setting-id={settingID}
+                    startIcon={<FolderIcon />}
+                >
+                    Choose...
+                </Button>
+            </span>
         );
     }
 
@@ -208,8 +224,12 @@ class DirectoriesEditor extends Component {
         } else {
             return (
                 <Button
+                    variant="contained"
+                    size="small"
+                    disableElevation
                     data-setting-id={settingID}
                     onClick={this._handleSaveButtonPress.bind(this)}
+                    startIcon={<SaveIcon />}
                 >
                     Save
                 </Button>
@@ -220,65 +240,64 @@ class DirectoriesEditor extends Component {
     _buildDirectoriesTable() {
         const { settings, saveInProgress } = this.props;
         const { currentlyEditing } = this.state;
-        const columns = [
-            {
-                title: "Name",
-                dataIndex: "key",
-                render: (text, setting) => {
-                    if (currentlyEditing.indexOf(setting.id) > -1) {
-                        return this._buildInputNameField(
-                            setting.id,
-                            setting.key
-                        );
-                    } else {
-                        return <span>{setting.key}</span>;
-                    }
-                },
-            },
-            {
-                title: "Directory",
-                dataIndex: "value",
-                render: (text, setting) => {
-                    if (currentlyEditing.indexOf(setting.id) > -1) {
-                        return this._buildInputValueField(
-                            setting.id,
-                            setting.value
-                        );
-                    } else {
-                        return <span>{setting.value}</span>;
-                    }
-                },
-            },
-            {
-                title: "Edit",
-                dataIndex: "",
-                render: (text, setting) => {
-                    if (currentlyEditing.indexOf(setting.id) > -1) {
-                        return this._buildSaveButton(setting.id);
-                    } else {
-                        return (
-                            <a
-                                onClick={this._handleEditSettingClick.bind(
-                                    this
-                                )}
-                                data-setting-id={setting.id}
-                            >
-                                <Icon type={"edit"} />
-                            </a>
-                        );
-                    }
-                },
-            },
-        ];
 
+        let rows = [];
+        settings.forEach((setting) => {
+            let cols = [];
+            if (currentlyEditing.indexOf(setting.id) > -1) {
+                cols.push(this._buildInputNameField(setting.id, setting.key));
+            } else {
+                cols.push(<span>{setting.key}</span>);
+            }
+            if (currentlyEditing.indexOf(setting.id) > -1) {
+                cols.push(
+                    this._buildInputValueField(setting.id, setting.value)
+                );
+            } else {
+                cols.push(<span>{setting.value}</span>);
+            }
+            if (currentlyEditing.indexOf(setting.id) > -1) {
+                cols.push(this._buildSaveButton(setting.id));
+            } else {
+                cols.push(
+                    <Button
+                        variant="contained"
+                        disableElevation
+                        color="primary"
+                        size="small"
+                        onClick={this._handleEditSettingClick.bind(this)}
+                        data-setting-id={setting.id}
+                        startIcon={<EditIcon />}
+                    >
+                        Edit
+                    </Button>
+                );
+            }
+            rows.push(cols);
+        });
+        let rid = 0;
+        const trs = rows.map((cols) => {
+            let cid = 0;
+            const cells = cols.map((col) => {
+                cid++;
+                return <TableCell key={cid}>{col}</TableCell>;
+            });
+            rid++;
+            return <TableRow key={rid}>{cells}</TableRow>;
+        });
         return (
-            <div></div>
-            // <Table
-            //     columns={columns}
-            //     dataSource={settings}
-            //     pagination={false}
-            //     size="small"
-            // />
+            <TableContainer>
+                <Table className="ib-filemanager-table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Setting</TableCell>
+                            <TableCell>Directory</TableCell>
+                            <TableCell>Edit</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>{trs}</TableBody>
+                </Table>
+            </TableContainer>
         );
     }
 
@@ -287,7 +306,7 @@ class DirectoriesEditor extends Component {
 
         return (
             <div>
-                <div className="ib-settings-dir-list">
+                <div className="ib-settings-editor-wrapper">
                     {this._buildDirectoriesTable()}
                 </div>
                 <DirectorySelectorModal
