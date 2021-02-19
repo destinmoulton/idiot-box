@@ -54,14 +54,20 @@ class MovieInfoModal extends Component {
                 width={700}
             >
                 <Grid container item xs={12} className="ib-moviemodal-contents">
-                    <Grid item xs={4}>
+                    <Grid key="thumbox" item xs={4}>
                         <div className="ib-moviemodal-thumbnail-box">
                             <img
                                 src={"/images/movies/" + movie.image_filename}
                             />
                         </div>
                     </Grid>
-                    <Grid container item xs={8} alignContent={"flex-start"}>
+                    <Grid
+                        key="info"
+                        container
+                        item
+                        xs={8}
+                        alignContent={"flex-start"}
+                    >
                         <Grid
                             item
                             xs={12}

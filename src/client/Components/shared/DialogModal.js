@@ -13,6 +13,7 @@ const DialogModal = ({
     footer,
     minWidth = 200,
     width = 400,
+    minHeight = 200,
 }) => {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
@@ -34,6 +35,7 @@ const DialogModal = ({
         minWidth: minWidth + "px",
         width: modalWidth + "px",
         left: calculatedLeft + "px",
+        minHeight: minHeight + "px",
     };
     return (
         <Modal open={isVisible} onClose={onClose} className="ib-dialogmodal">

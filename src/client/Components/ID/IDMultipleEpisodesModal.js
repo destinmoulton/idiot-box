@@ -254,10 +254,10 @@ class IDMultipleEpisodesModal extends Component {
             }
 
             const episodeEditor = (
-                <div key={filename} className="ib-idmultiplemodal-episode-box">
+                <div key={filename} className="idmul-episode-box">
                     <h4>{filename}</h4>
                     {episodesSelector}
-                    <TextField
+                    <input
                         value={episodeInfo.newFilename}
                         onChange={this._handleChangeEpisodeFilename.bind(
                             this,
@@ -273,33 +273,23 @@ class IDMultipleEpisodesModal extends Component {
     }
 
     _buildSelect(items, titleKey, onChange, defaultValue, prefix = "") {
-        let options = [];
-        items.forEach((item) => {
+        let selected = { value: defaultValue, label: "Select..." };
+        const options = items.map((item) => {
             const itemTitle = prefix + item[titleKey];
-            options.push({ value: item.id.toString(), name: itemTitle });
+            if (item.id === defaultValue) {
+                selected = { value: item.id, label: itemTitle };
+            }
+            return { value: item.id, label: itemTitle };
         });
-
+        console.log(defaultValue, options);
         return (
-            <SelectSearch
-                options={options}
-                key={Math.random()}
-                onChange={onChange}
-                search={true}
+            <Select
+                onChange={({ value }) => onChange(value)}
                 placeholder="Select..."
-                value={defaultValue.toString()}
-                filterOptions={(input, option) => {
-                    if (option) {
-                        const toSearch = option.props.children;
-                        return (
-                            toSearch
-                                .toLowerCase()
-                                .indexOf(input.toLowerCase()) >= 0
-                        );
-                    }
-                }}
-            >
-                {options}
-            </SelectSearch>
+                defaultValue={selected}
+                options={options}
+                maxMenuHeight={150}
+            />
         );
     }
 
@@ -437,10 +427,13 @@ class IDMultipleEpisodesModal extends Component {
         let input = "";
         if (episodeDestPath !== "") {
             input = (
-                <TextField
-                    value={episodeDestPath}
-                    onChange={this._handleChangeCurrentPath.bind(this)}
-                />
+                <Grid item xs={12} className="idmul-inputgroup-container">
+                    <label>Season Path:</label>
+                    <input
+                        value={episodeDestPath}
+                        onChange={this._handleChangeCurrentPath.bind(this)}
+                    />
+                </Grid>
             );
         }
         return input;
@@ -456,9 +449,9 @@ class IDMultipleEpisodesModal extends Component {
         const { seasonParseRegexStr } = this.state;
 
         const el = (
-            <Grid item xs={12}>
-                <TextField
-                    label="Episode Regex: "
+            <Grid item xs={12} className="idmul-inputgroup-container">
+                <label>Episode Regex:</label>
+                <input
                     value={seasonParseRegexStr}
                     onChange={this._handleChangeEpisodeRegex.bind(this)}
                 />
@@ -472,7 +465,7 @@ class IDMultipleEpisodesModal extends Component {
 
         const { episodes } = this.state;
 
-        const showSeasonSelectors = ""; //this._buildShowSeasonSelectors();
+        const showSeasonSelectors = this._buildShowSeasonSelectors();
         const pathInput = this._buildShowSeasonPathInput();
         let episodesSelectors = "";
         if (episodes.length > 0) {
@@ -488,27 +481,42 @@ class IDMultipleEpisodesModal extends Component {
                 title="ID Multiple Episodes"
                 isVisible={isVisible}
                 onClose={onCancel}
+                minHeight={400}
                 footer={[
-                    <Button key="cancel" size="small" onClick={onCancel}>
+                    <Button
+                        key="cancel"
+                        variant="contained"
+                        disableElevation
+                        size="small"
+                        onClick={onCancel}
+                    >
                         Cancel
                     </Button>,
                 ]}
             >
-                <Grid container>
+                <Grid container className="ib-idmultiplemodal-wrapper">
                     {showSeasonSelectors}
                     {pathInput}
                     {episodeRegexInput}
-                    <Grid item xs={12}>
+                    <Grid item xs={12} className="idmul-episodes-container">
                         {episodesSelectors}
                     </Grid>
-                    <div key="button" className="ib-idmodal-button-box">
+                    <Grid
+                        item
+                        xs={12}
+                        key="button"
+                        className="idmul-button-box"
+                    >
                         <Button
+                            variant="contained"
+                            size="small"
+                            disableElevation
                             onClick={this._handleClickIDButton.bind(this)}
                             disabled={buttonDisabled}
                         >
                             ID Episodes
                         </Button>
-                    </div>
+                    </Grid>
                 </Grid>
             </DialogModal>
         );
