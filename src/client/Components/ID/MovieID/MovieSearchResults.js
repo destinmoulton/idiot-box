@@ -107,6 +107,7 @@ class MovieSearchResults extends Component {
                     item
                     xs={12}
                     container
+                    spacing={2}
                     alignItems="center"
                     alignContent="center"
                     justify="center"

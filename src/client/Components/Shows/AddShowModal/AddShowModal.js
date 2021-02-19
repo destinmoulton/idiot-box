@@ -1,6 +1,7 @@
 import PropTypes from "prop-types";
 import React from "react";
 
+import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import DialogModal from "../../shared/DialogModal";
 
@@ -33,9 +34,16 @@ const AddShowModal = (props) => {
             isVisible={isVisible}
             onClose={onCancel}
             footer={[
-                <Button key="cancel" size="small" onClick={onCancel}>
-                    Cancel
-                </Button>,
+                <Box justify="center">
+                    <Button
+                        key="cancel"
+                        size="small"
+                        onClick={onCancel}
+                        is="center"
+                    >
+                        Cancel
+                    </Button>
+                </Box>,
             ]}
             width={700}
         >

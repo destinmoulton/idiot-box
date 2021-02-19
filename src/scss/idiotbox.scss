@@ -79,6 +79,7 @@ div.ib-footer {
         border-radius: 5px;
         border: none;
         outline: none;
+        min-height: 200px;
 
         .ib-dialogmodal-title {
             font-size: 24px;
@@ -301,6 +302,7 @@ div.ib-idmodal-topbar {
 div.ib-idmodal-wrapper {
     .idmodal-accordion-wrapper {
         margin-top: 9px;
+        padding: 5px;
         .MuiAccordionSummary-root {
             min-height: 30px !important;
 
@@ -361,25 +363,6 @@ div.ib-idmodal-wrapper {
         }
     }
 
-    div.ib-idmodal-item-search-details-box {
-        min-height: 275px;
-        padding: 15px;
-        border: 1px solid #d9d9d9;
-        border-radius: 5px;
-        margin: 5px;
-        text-align: center;
-
-        div.ib-idmodal-item-search-details-img-box {
-            width: 100%;
-            text-align: center;
-            margin-top: 4px;
-        }
-
-        img.ib-idmodal-item-search-details-img {
-            width: 100%;
-        }
-    }
-
     div.ib-idmodal-movieresults-topbar {
         h4 {
             margin: 0 0;
@@ -396,6 +379,24 @@ div.ib-idmodal-wrapper {
                     font-size: 1em;
                 }
             }
+        }
+    }
+}
+div.ib-misd-item-search-details-box {
+    .misd-item-wrapper {
+        min-height: 330px;
+        border: 1px solid #d9d9d9;
+        border-radius: 5px;
+        padding: 5px;
+        text-align: center;
+        div.misd-item-img-box {
+            width: 100%;
+            text-align: center;
+            margin-top: 4px;
+        }
+
+        img {
+            width: 100%;
         }
     }
 }
@@ -658,8 +659,16 @@ div.ib-settings-dirsel-fs-cont {
     overflow-y: scroll;
 }
 
-div#ib-showmodal-searbox {
+div.ib-showmodal-search-topbar {
     text-align: center;
+    margin-top: 12px;
+    .MuiInputBase-root {
+        margin-right: 4px;
+        .MuiInputBase-input {
+            padding: 6px 9px 5px 10px;
+            font-size: 1em;
+        }
+    }
 }
 
 div.ib-shows-seasonlist-seasontitle {

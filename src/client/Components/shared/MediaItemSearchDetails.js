@@ -93,12 +93,7 @@ class MediaItemSearchDetails extends Component {
 
         let image = <CircularProgress />;
         if (imageStatus === "found") {
-            image = (
-                <img
-                    src={imageURL}
-                    className={"ib-idmodal-item-search-details-img"}
-                />
-            );
+            image = <img src={imageURL} />;
         } else if (imageStatus === "no_imdb_image") {
             image = <span>No IMDB image available.</span>;
         } else if (imageStatus === "no_imdb_page") {
@@ -109,35 +104,35 @@ class MediaItemSearchDetails extends Component {
         return (
             <Grid
                 item
-                xs={5}
+                xs={6}
                 key={item.ids.trakt}
-                className="ib-idmodal-item-search-details-box"
+                className="ib-misd-item-search-details-box"
             >
-                <Button
-                    align="center"
-                    color="primary"
-                    variant="contained"
-                    icon="check"
-                    onClick={this._handleSelectMovie.bind(this, item)}
-                >
-                    This Is It
-                </Button>
-                <div className="ib-idmodal-item-search-details-img-box">
-                    {image}
-                </div>
-                <div>
-                    <b>
-                        <span dangerouslySetInnerHTML={itemTitle} />
-                    </b>
-                    <br />
-                    {item.year} -{" "}
-                    <a
-                        href={"http://imdb.com/title/" + item.ids.imdb}
-                        target="_blank"
+                <div className="misd-item-wrapper">
+                    <Button
+                        align="center"
+                        color="primary"
+                        variant="contained"
+                        icon="check"
+                        onClick={this._handleSelectMovie.bind(this, item)}
                     >
-                        IMDB
-                    </a>
-                    <br />
+                        This Is It
+                    </Button>
+                    <div className="misd-item-img-box">{image}</div>
+                    <div>
+                        <b>
+                            <span dangerouslySetInnerHTML={itemTitle} />
+                        </b>
+                        <br />
+                        {item.year} -{" "}
+                        <a
+                            href={"http://imdb.com/title/" + item.ids.imdb}
+                            target="_blank"
+                        >
+                            IMDB
+                        </a>
+                        <br />
+                    </div>
                 </div>
             </Grid>
         );

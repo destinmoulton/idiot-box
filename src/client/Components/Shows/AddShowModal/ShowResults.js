@@ -1,8 +1,9 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
-import { connect } from "react-redux";
 
+import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
+import SearchIcon from "@material-ui/icons/Search";
 import TextField from "@material-ui/core/TextField";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -110,16 +111,35 @@ class ShowResults extends Component {
 
         return (
             <Grid container spacing={3}>
-                <Grid item xs={12} id="ib-showmodal-searbox">
+                <Grid item xs={12} className="ib-showmodal-search-topbar">
                     <TextField
-                        autoFocus
-                        enterButton
                         onChange={this._handleChangeSearchInput.bind(this)}
                         // onSearch={this._handleSearchPress.bind(this)}
                         value={currentSearchString}
+                        variant="outlined"
+                        size="small"
+                        style={{ width: "250px" }}
                     />
+                    <Button
+                        size="small"
+                        variant="outlined"
+                        onClick={this._handleSearchPress.bind(this)}
+                        startIcon={<SearchIcon />}
+                    >
+                        Search
+                    </Button>
                 </Grid>
-                <Grid container>{showList}</Grid>
+                <Grid
+                    container
+                    item
+                    xs={12}
+                    alignItems="center"
+                    alignContent="center"
+                    justify="center"
+                    spacing={2}
+                >
+                    {showList}
+                </Grid>
             </Grid>
         );
     }
@@ -137,11 +157,9 @@ class ShowResults extends Component {
     render() {
         const { isIDing } = this.state;
 
-        let contents = "";
+        let contents = this._buildAddingShow();
 
-        if (isIDing) {
-            contents = this._buildAddingShow();
-        } else {
+        if (!isIDing) {
             contents = this._buildSearchResults();
         }
 
