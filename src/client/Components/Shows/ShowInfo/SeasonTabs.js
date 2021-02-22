@@ -102,7 +102,7 @@ class SeasonTabs extends Component {
         history.push("/show/" + show.slug + "/" + seasonNumber);
     }
 
-    _handleToggleSeasonLock(newLockStatus) {
+    _handleToggleSingleSeasonLock(newLockStatus) {
         const { callAPI } = this.props;
         const { activeSeason } = this.state;
 
@@ -113,6 +113,22 @@ class SeasonTabs extends Component {
 
         callAPI(
             "shows.season.toggle_lock",
+            params,
+            this._getSeasons.bind(this),
+            false
+        );
+    }
+    _handleToggleAllSeasonsLock(newLockStatus) {
+        const { callAPI, show } = this.props;
+        const { activeSeason } = this.state;
+
+        const params = {
+            show_id: show.id,
+            lock_status: newLockStatus,
+        };
+
+        callAPI(
+            "shows.seasons.toggle_lock_all",
             params,
             this._getSeasons.bind(this),
             false
@@ -177,7 +193,13 @@ class SeasonTabs extends Component {
                     season={activeSeason}
                     settings={settings}
                     show={show}
-                    onToggleSeasonLock={this._handleToggleSeasonLock.bind(this)}
+                    onToggleSingleSeasonLock={this._handleToggleSingleSeasonLock.bind(
+                        this
+                    )}
+                    onToggleAllSeasonsLock={this._handleToggleAllSeasonsLock.bind(
+                        this
+                    )}
+                    onToggle
                 />
             );
         }

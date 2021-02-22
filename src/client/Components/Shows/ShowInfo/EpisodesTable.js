@@ -5,10 +5,12 @@ import Accordion from "@material-ui/core/Accordion";
 import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
 import Button from "@material-ui/core/Button";
+import ButtonGroup from "@material-ui/core/ButtonGroup";
 import CheckIcon from "@material-ui/icons/Check";
 import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import Grid from "@material-ui/core/Grid";
 import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import Table from "@material-ui/core/Table";
@@ -77,7 +79,7 @@ class EpisodesTable extends Component {
         });
     }
 
-    _changeSelectedEpisodesWatchedStatus(newWatchedStatus) {
+    _changeSelectedEpisodeWatchedStatus(newWatchedStatus) {
         const { selectedEpisodeKeys } = this.state;
         const { activeSeasonNum, callAPI } = this.props;
 
@@ -103,8 +105,12 @@ class EpisodesTable extends Component {
         });
     }
 
-    _handleToggleSeasonLock(newStatus) {
-        this.props.onToggleSeasonLock(newStatus);
+    _handleToggleSingleSeasonLock(newStatus) {
+        this.props.onToggleSingleSeasonLock(newStatus);
+    }
+
+    _handleToggleAllSeasonsLock(newStatus) {
+        this.props.onToggleAllSeasonsLock(newStatus);
     }
 
     _buildEpisodesTable() {
@@ -201,16 +207,26 @@ class EpisodesTable extends Component {
         let toggleLockButton = null;
         if (season.locked) {
             toggleLockButton = (
-                <Button onClick={this._handleToggleSeasonLock.bind(this, 0)}>
-                    <LockOpenIcon />
-                    &nbsp;Unlock Season
+                <Button
+                    size="small"
+                    variant="contained"
+                    disableElevation
+                    onClick={this._handleToggleSingleSeasonLock.bind(this, 0)}
+                    startIcon={<LockOpenIcon />}
+                >
+                    Unlock This Season
                 </Button>
             );
         } else {
             toggleLockButton = (
-                <Button onClick={this._handleToggleSeasonLock.bind(this, 1)}>
-                    <LockIcon />
-                    &nbsp;Lock Season
+                <Button
+                    size="small"
+                    variant="contained"
+                    disableElevation
+                    onClick={this._handleToggleSingleSeasonLock.bind(this, 1)}
+                    startIcon={<LockIcon />}
+                >
+                    Lock This Season
                 </Button>
             );
         }
@@ -218,10 +234,11 @@ class EpisodesTable extends Component {
         const buttonsDisabled = selectedEpisodeKeys.length > 0 ? false : true;
 
         return (
-            <div>
-                <div>
+            <Grid item xs={12}>
+                <ButtonGroup>
                     <Button
-                        onClick={this._changeSelectedEpisodesWatchedStatus.bind(
+                        size="small"
+                        onClick={this._changeSelectedEpisodeWatchedStatus.bind(
                             this,
                             1
                         )}
@@ -230,7 +247,8 @@ class EpisodesTable extends Component {
                         Toggle to Watched
                     </Button>
                     <Button
-                        onClick={this._changeSelectedEpisodesWatchedStatus.bind(
+                        size="small"
+                        onClick={this._changeSelectedEpisodeWatchedStatus.bind(
                             this,
                             0
                         )}
@@ -238,10 +256,25 @@ class EpisodesTable extends Component {
                     >
                         Toggle to UnWatched
                     </Button>
-                </div>
-                &nbsp;
-                <div>{toggleLockButton}</div>
-            </div>
+                </ButtonGroup>
+                <ButtonGroup>
+                    <Button
+                        size="small"
+                        onClick={this._handleToggleAllSeasonsLock.bind(this, 0)}
+                        startIcon={<LockOpenIcon />}
+                    >
+                        Unlock All Seasons
+                    </Button>
+                    <Button
+                        size="small"
+                        onClick={this._handleToggleAllSeasonsLock.bind(this, 1)}
+                        startIcon={<LockIcon />}
+                    >
+                        Lock All Seasons
+                    </Button>
+                </ButtonGroup>
+                {toggleLockButton}
+            </Grid>
         );
     }
 
@@ -277,7 +310,8 @@ class EpisodesTable extends Component {
 EpisodesTable.propTypes = {
     activeSeasonNum: PropTypes.number.isRequired,
     callAPI: PropTypes.func.isRequired,
-    onToggleSeasonLock: PropTypes.func.isRequired,
+    onToggleSingleSeasonLock: PropTypes.func.isRequired,
+    onToggleAllSeasonsLock: PropTypes.func.isRequired,
     season: PropTypes.object.isRequired,
     settings: PropTypes.object.isRequired,
     show: PropTypes.object.isRequired,

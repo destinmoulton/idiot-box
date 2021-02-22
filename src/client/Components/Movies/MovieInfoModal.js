@@ -40,7 +40,10 @@ class MovieInfoModal extends Component {
                 isVisible={isVisible}
                 onClose={this._handleCancelClose}
                 footer={[
-                    <div style={{ width: "100%", textAlign: "center" }}>
+                    <div
+                        key="buttons"
+                        style={{ width: "100%", textAlign: "center" }}
+                    >
                         <Button
                             variant="contained"
                             key="close"
@@ -53,7 +56,13 @@ class MovieInfoModal extends Component {
                 ]}
                 width={700}
             >
-                <Grid container item xs={12} className="ib-moviemodal-contents">
+                <Grid
+                    key="container"
+                    container
+                    item
+                    xs={12}
+                    className="ib-moviemodal-contents"
+                >
                     <Grid key="thumbox" item xs={4}>
                         <div className="ib-moviemodal-thumbnail-box">
                             <img
@@ -69,12 +78,13 @@ class MovieInfoModal extends Component {
                         alignContent={"flex-start"}
                     >
                         <Grid
+                            key="title"
                             item
                             xs={12}
                             className="mm-title"
                             dangerouslySetInnerHTML={{ __html: movie.title }}
                         />
-                        <Grid item xs={12} className="mm-byline">
+                        <Grid key="byline" item xs={12} className="mm-byline">
                             {movie.year}&nbsp;|&nbsp;
                             <a
                                 href={"http://imdb.com/title/" + movie.imdb_id}
@@ -85,7 +95,7 @@ class MovieInfoModal extends Component {
                             &nbsp;|&nbsp;
                             {movie.runtime} minutes
                         </Grid>
-                        <Grid item container xs={12}>
+                        <Grid key="actions" item container xs={12}>
                             <Grid item xs={6} style={{ textAlign: "center" }}>
                                 <StatusTagIcons
                                     movie={movie}
@@ -107,6 +117,7 @@ class MovieInfoModal extends Component {
                         </Grid>
 
                         <Grid
+                            key="desc"
                             item
                             xs={12}
                             className="ib-moviemodal-description"
