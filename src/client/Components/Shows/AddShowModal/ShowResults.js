@@ -110,7 +110,7 @@ class ShowResults extends Component {
         });
 
         return (
-            <Grid container spacing={3}>
+            <Grid container>
                 <Grid item xs={12} className="ib-showmodal-search-topbar">
                     <TextField
                         onChange={this._handleChangeSearchInput.bind(this)}
