@@ -239,7 +239,7 @@ class MoviesList extends Component {
             if (movie.is_visible) {
                 movieList.push(
                     <MovieThumbInfo
-                        key={movie.title}
+                        key={movie.id}
                         movie={movie}
                         directories={this.props.settings.directories}
                         onClickDelete={this._handlePressDelete.bind(this)}
