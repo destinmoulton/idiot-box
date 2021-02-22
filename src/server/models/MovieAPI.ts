@@ -84,8 +84,13 @@ class MovieAPI {
     }
 
     _removeMovieThumbnail(movie) {
+        if (movie.image_filename === "") {
+            return true;
+        }
         const fullPath = path.join(thumbConfig.movies, movie.image_filename);
-        if (!fs.existsSync(fullPath)) {
+
+        const info = fs.statSync(fullPath);
+        if (!fs.existsSync(fullPath) || info.isDirectory) {
             return true;
         }
         return fs.unlinkSync(fullPath);
