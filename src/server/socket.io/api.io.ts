@@ -31,7 +31,7 @@ export default async function apiIOListeners(socket) {
                     };
                     socket.emit("api.response", resp);
                 } catch (err) {
-                    apiError("MODEL ERROR :: " + err, req);
+                    apiError("MODEL ERROR :: " + err, err.stack);
                 }
             }
         }

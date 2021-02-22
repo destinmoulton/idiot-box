@@ -55,9 +55,9 @@ export default class ShowSeasonEpisodesModel {
     }
 
     async addArrEpisodes(showID, seasonID, episodes) {
-        episodes.forEach(async (episode) => {
+        for (const episode of episodes) {
             await this.addEpisode(showID, seasonID, episode);
-        });
+        }
     }
 
     async updateEpisode(showID, seasonID, episodeID, apiData) {

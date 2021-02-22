@@ -29,9 +29,11 @@ export default class ShowSeasonsModel {
     }
 
     async addArrayOfSeasons(arrSeasons, showID) {
-        arrSeasons.forEach(async (season) => {
-            await this.addShowSeason(showID, season);
-        });
+        const res = [];
+        for (const season of arrSeasons) {
+            res.push(await this.addShowSeason(showID, season));
+        }
+        return res;
     }
 
     async addShowSeason(showID, apiData) {

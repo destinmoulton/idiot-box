@@ -268,10 +268,10 @@ export default class IDModel {
      * @param Show show
      */
     async _scrapeAndAddSeasonsForShow(show) {
-        const seasons = this._mediaScraperModel.getShowSeasonsList(
+        const seasons = await this._mediaScraperModel.getShowSeasonsList(
             show.trakt_id
         );
-        const addedSeasons = this._showSeasonsModel.addArrayOfSeasons(
+        const addedSeasons = await this._showSeasonsModel.addArrayOfSeasons(
             seasons,
             show.id
         );
@@ -286,20 +286,22 @@ export default class IDModel {
      * @param ShowSeasons seasons for a show
      */
     async _scrapeAndAddEpisodesForSeasons(show, seasons) {
-        let res = [];
         for (const season of seasons) {
-            const episodesArr = await this._mediaScraperModel.getEpisodesForSeason(
-                show.trakt_id,
-                season.season_number
-            );
-            res.push(
+            try {
+                const episodesArr = await this._mediaScraperModel.getEpisodesForSeason(
+                    show.trakt_id,
+                    season.season_number
+                );
                 await this._showSeasonEpisodesModel.addArrEpisodes(
                     show.id,
                     season.id,
                     episodesArr
-                )
-            );
+                );
+            } catch (err) {
+                throw new Error(
+                    "IDModel :: _scrapeAndAddEpisodesForSeasons + " + err
+                );
+            }
         }
-        return res;
     }
 }
