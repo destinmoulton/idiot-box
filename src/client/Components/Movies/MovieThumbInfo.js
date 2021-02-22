@@ -4,6 +4,9 @@ import Button from "@material-ui/core/Button";
 import DeleteIcon from "@material-ui/icons/Delete";
 import Grid from "@material-ui/core/Grid";
 import PlayButton from "../PlayButton";
+
+import { LazyLoadImage } from "react-lazy-load-image-component";
+
 import StatusTagIcons from "./StatusTagIcons";
 
 import { getCurrentBreakpoint } from "../../lib/breakpoints.lib";
@@ -40,33 +43,34 @@ class MovieThumbInfo extends React.Component {
         const breakpoint = getCurrentBreakpoint();
         const breakClass = "bpoint-" + breakpoint;
 
+        let imgSize = { width: 124, height: 182 };
+
+        if (breakpoint === "xs") {
+            imgSize = { width: 90, height: 133 };
+        }
         return (
-            <Grid
-                key={movie.id}
-                className={"ib-movies-thumbnail-box " + breakClass}
-                item
-                xs={4}
-                md={2}
-                sm={3}
-                lg={2}
-            >
-                <a onClick={this._handleClick.bind(this, movie)}>
-                    <img
-                        className="ib-movies-thumbnail"
-                        alt={movieTitle}
-                        src={"/images/movies/" + movie.image_filename}
-                    />
-                </a>
-                <div className="ib-movies-thumbnail-title">
+            <Grid key={movie.id} item xs={4} md={2} sm={3} lg={2}>
+                <div className={"ib-movies-thumbnail-box " + breakClass}>
                     <a onClick={this._handleClick.bind(this, movie)}>
-                        <span dangerouslySetInnerHTML={movieTitle} />
+                        <LazyLoadImage
+                            className="ib-movies-thumbnail"
+                            alt={movieTitle}
+                            src={"/images/movies/" + movie.image_filename}
+                            width={imgSize.width}
+                            height={imgSize.height}
+                        />
                     </a>
-                </div>
-                <div className="ib-movies-thumbnail-statustags">
-                    <StatusTagIcons
-                        movie={movie}
-                        onClickToggleStatusTag={onClickToggleStatusTag}
-                    />
+                    <div className="ib-movies-thumbnail-title">
+                        <a onClick={this._handleClick.bind(this, movie)}>
+                            <span dangerouslySetInnerHTML={movieTitle} />
+                        </a>
+                    </div>
+                    <div className="ib-movies-thumbnail-statustags">
+                        <StatusTagIcons
+                            movie={movie}
+                            onClickToggleStatusTag={onClickToggleStatusTag}
+                        />
+                    </div>
                 </div>
             </Grid>
         );

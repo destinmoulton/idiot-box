@@ -1,5 +1,6 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
+import { debounce } from "lodash";
 
 import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -18,7 +19,10 @@ class MoviesList extends Component {
             currentStatusTagSelected: "all",
             infomodalIsVisible: false,
             infomodalMovie: {},
+            isFiltering: false, // Is there a filtering action occurring (ie typing or filtering)
             isLoadingMovies: false,
+            isTyping: false, // Is the user typing in the filter box
+
             movies: [],
         };
     }
@@ -160,8 +164,15 @@ class MoviesList extends Component {
         const currentSearchString = evt.currentTarget.value;
 
         this.setState({
+            isTyping: true,
             currentSearchString,
         });
+        const debounced = debounce(() => {
+            this.setState({
+                isTyping: false,
+            });
+        }, 500);
+        debounced();
     }
 
     _handleChangeStatusTagFilter(evt) {
@@ -276,12 +287,14 @@ class MoviesList extends Component {
             currentSearchString,
             infomodalIsVisible,
             infomodalMovie,
+            isFiltering,
             isLoadingMovies,
+            isTyping,
             movies,
         } = this.state;
 
         let content = "";
-        if (isLoadingMovies) {
+        if (isLoadingMovies || isTyping) {
             content = (
                 <div className="ib-spinner-container">
                     <CircularProgress />
@@ -309,8 +322,8 @@ class MoviesList extends Component {
                     {filterSelect}
                 </Grid>
 
-                <Grid item xs={12}>
-                    <Grid container>{content}</Grid>
+                <Grid item container xs={12} spacing={2}>
+                    {content}
                 </Grid>
                 <MovieInfoModal
                     onClickDelete={this._handlePressDelete.bind(this)}

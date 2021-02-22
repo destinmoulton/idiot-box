@@ -515,17 +515,18 @@ div.ib-movies-searchbar {
 }
 
 div.ib-movies-thumbnail-box {
-    height: 320px;
+    height: 255px;
     padding: 5px;
     text-align: center;
     font-size: 1em;
     font-weight: bold;
     border: 2px solid lightgray;
+    border-radius: 5px;
     overflow: hidden;
     line-height: 1.3em;
     cursor: pointer;
     &.bpoint-xs {
-        height: 260px;
+        height: 205px;
     }
     div.ib-movies-thumbnail-title {
         font-size: 12px;
@@ -535,10 +536,6 @@ div.ib-movies-thumbnail-box {
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
-    }
-    img.ib-movies-thumbnail {
-        max-width: 150px;
-        width: 100%;
     }
     div.ib-movies-thumbnail-statustags {
         right: 0px;
