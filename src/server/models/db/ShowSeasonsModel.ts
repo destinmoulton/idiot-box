@@ -121,4 +121,11 @@ export default class ShowSeasonsModel {
 
         return await this._ibdb.update(data, where, this._tableName);
     }
+
+    async updateLockAllSeasons(showID, lockStatus) {
+        const seasons = await this.getSeasonsForShow(showID);
+        for (const season of seasons) {
+            await this.updateLock(season.id, lockStatus);
+        }
+    }
 }

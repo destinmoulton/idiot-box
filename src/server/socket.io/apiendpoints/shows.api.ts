@@ -68,6 +68,15 @@ const shows = {
                 return await showSeasonsModel.getSeasonsForShow(showID);
             },
         },
+        toggle_lock_all: {
+            params: ["show_id", "lock_status"],
+            func: async (showID, lockStatus) => {
+                return await showSeasonsModel.updateLockAllSeasons(
+                    showID,
+                    lockStatus
+                );
+            },
+        },
     },
     episodes: {
         get: {
