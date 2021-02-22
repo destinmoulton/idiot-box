@@ -81,8 +81,12 @@ class ShowsAPI {
 
     async _removeShowThumbnail(showID) {
         const show = await this._showsModel.getSingle(showID);
+        if (show.image_filename === "") {
+            return true;
+        }
         const fullPath = path.join(thumbConfig.shows, show.image_filename);
-        if (!fs.existsSync(fullPath)) {
+        const info = fs.statSync(fullPath);
+        if (!fs.existsSync(fullPath) || info.isDirectory) {
             return true;
         }
         return fs.unlinkSync(fullPath);
