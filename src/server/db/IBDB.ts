@@ -67,7 +67,8 @@ class IBDB {
             ") VALUES (" +
             insertValueVariables +
             ")";
-        return await this._db.run(query, params);
+        const res = await this._db.run(query, params);
+        return res.lastID;
     }
 
     async update(dataColumnsAndValues, whereColumnsAndValues, tablename) {
@@ -89,7 +90,8 @@ class IBDB {
             whereDelim;
         const params = Object.assign({}, dataParams, whereParams);
 
-        return await this._db.run(update, params);
+        const res = await this._db.run(update, params);
+        return res.changes;
     }
 
     async delete(whereColumnsAndValues, tablename) {
