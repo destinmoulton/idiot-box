@@ -281,7 +281,6 @@ class IDMultipleEpisodesModal extends Component {
             }
             return { value: item.id, label: itemTitle };
         });
-        console.log(defaultValue, options);
         return (
             <Select
                 onChange={({ value }) => onChange(value)}
