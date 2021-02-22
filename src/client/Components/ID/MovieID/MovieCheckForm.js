@@ -54,8 +54,6 @@ class MovieCheckForm extends Component {
             currentFilename
         );
 
-        console.log(possibleNames);
-
         let possibleChecks = [];
         possibleNames.forEach((name) => {
             const checkBox = (
