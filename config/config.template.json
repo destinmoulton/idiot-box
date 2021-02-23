@@ -1,0 +1,17 @@
+{
+    "paths": {
+        "images": {
+            "base": "<base_path_to_images>",
+            "shows": "shows/",
+            "movies": "movies/"
+        },
+        "db": {
+            "migrations": "<full_path_to_migrations_folder>",
+            "sqlite": "<full_path_to_sqlite_db>"
+        }
+    },
+    "trakt": {
+        "client_id": "",
+        "client_secret": ""
+    }
+}
