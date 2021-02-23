@@ -29,12 +29,11 @@ class MoviesList extends Component {
     }
 
     componentDidMount() {
-        this._getMovies();
+        this._getMovies("All");
     }
 
-    _getMovies() {
+    _getMovies(startingLetter) {
         const { callAPI } = this.props;
-        const { selectedLetter } = this.state;
 
         this.setState({
             isLoadingMovies: true,
@@ -42,9 +41,9 @@ class MoviesList extends Component {
 
         let endpoint = "movies.movies.get_all_with_file_info";
         let params = {};
-        if (selectedLetter !== "All") {
+        if (startingLetter !== "All") {
             endpoint = "movies.movies.get_all_starting_with";
-            params = { selected_letter: selectedLetter };
+            params = { starting_letter: startingLetter };
         }
 
         callAPI(endpoint, params, this._moviesReceived.bind(this), false);
@@ -190,7 +189,7 @@ class MoviesList extends Component {
             selectedLetter: letter,
         });
 
-        this._getMovies();
+        this._getMovies(letter);
     }
 
     _filterMovies() {
