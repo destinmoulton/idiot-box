@@ -3,10 +3,11 @@ import React from "react";
 import ALPHABET from "../../lib/alphabet.lib";
 
 const LetterBar = ({ selectedLetter, onClick }) => {
-    let localLetters = ["All", ...ALPHABET];
+    let localLetters = ["All", "#", ...ALPHABET];
     let letters = [];
     for (let letter of localLetters) {
-        const active = letter === selectedLetter ? " active-letter" : "";
+        const active =
+            letter === selectedLetter ? " active-letter" : " link-letter";
         letters.push(
             <div
                 key={letter}

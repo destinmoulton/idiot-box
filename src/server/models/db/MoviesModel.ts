@@ -70,10 +70,27 @@ export default class MoviesModel {
     }
 
     async getAllStartingWith(startingLetter) {
-        const query =
-            "SELECT * FROM " + this._tableName + " WHERE title LIKE ?";
+        let query = "SELECT * FROM " + this._tableName + " WHERE title LIKE ?";
 
-        const params = [startingLetter + "%"];
+        let params = [startingLetter + "%"];
+        if (startingLetter === "#") {
+            // Run a regex for titles starting with letter
+            query =
+                "SELECT * FROM " +
+                this._tableName +
+                " WHERE title LIKE '0%' " +
+                " OR title LIKE '1%' " +
+                " OR title LIKE '2%' " +
+                " OR title LIKE '3%' " +
+                " OR title LIKE '4%' " +
+                " OR title LIKE '5%' " +
+                " OR title LIKE '6%' " +
+                " OR title LIKE '7%' " +
+                " OR title LIKE '8%' " +
+                " OR title LIKE '9%' ";
+            params = [];
+        }
+
         return await this._ibdb.queryAll(query, params);
     }
 

@@ -509,15 +509,18 @@ div.ib-moviemodal-contents {
     text-align: center;
     .letter {
         display: inline-block;
-        margin-right: 4px;
-        padding: 2px 4px;
+        margin-right: 6px;
+        padding: 2px 5px;
         font-size: 0.9em;
-        cursor: pointer;
         border: 1px solid gray;
 
         &.active-letter {
-            cursor: default;
             font-weight: bold;
+        }
+
+        &.link-letter {
+            cursor: pointer;
+            color: #006fc4;
         }
     }
 }
