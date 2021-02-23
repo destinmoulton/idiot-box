@@ -16,9 +16,9 @@ Clone the repo:
 
 Install dependencies:
 
-`yarn install`
+`npm install`
 
-Add configurations.
+Copy `config/config.template.json` to `config/config.json` and alter the values to match your configuration.
 
 #### Starting, Stopping, and Monitoring
 
