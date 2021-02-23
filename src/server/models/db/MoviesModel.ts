@@ -85,7 +85,7 @@ export default class MoviesModel {
                 this._tableName +
                 " WHERE title LIKE ? ORDER BY title ASC";
 
-            let params = [startingLetter + "%"];
+            params = [startingLetter + "%"];
         } else if (startingLetter === "#") {
             // Run a regex for titles starting with letter
             query =
