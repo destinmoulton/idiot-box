@@ -70,9 +70,12 @@ export default class MoviesModel {
     }
 
     async getAllStartingWith(startingLetter) {
-        let query = "SELECT * FROM " + this._tableName + " WHERE title LIKE ?";
+        let query =
+            "SELECT * FROM " +
+            this._tableName +
+            " WHERE title LIKE ? OR title LIKE ?";
 
-        let params = [startingLetter + "%"];
+        let params = [startingLetter + "%", "The " + startingLetter + "%"];
         if (startingLetter === "#") {
             // Run a regex for titles starting with letter
             query =
