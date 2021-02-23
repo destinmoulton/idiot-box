@@ -5,7 +5,7 @@ import FilesModel from "./db/FilesModel";
 import FileToMovieModel from "./db/FileToMovieModel";
 import MoviesModel from "./db/MoviesModel";
 import MovieToGenreModel from "./db/MovieToGenreModel";
-import thumbConfig from "../config/thumbnails.config";
+import config from "../config";
 
 class MovieAPI {
     _filesModel: FilesModel;
@@ -105,7 +105,12 @@ class MovieAPI {
         if (movie.image_filename === "") {
             return true;
         }
-        const fullPath = path.join(thumbConfig.movies, movie.image_filename);
+        const imagepaths = config.paths.images;
+        const fullPath = path.join(
+            imagepaths.base,
+            imagepaths.movies,
+            movie.image_filename
+        );
 
         const info = fs.statSync(fullPath);
         if (!fs.existsSync(fullPath) || info.isDirectory) {

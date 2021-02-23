@@ -1,7 +1,7 @@
-import moment from 'moment';
-import Trakt from 'trakt.tv';
-import traktConfig from './config/trakt.config';
-const trakt = new Trakt(traktConfig);
+import moment from "moment";
+import Trakt from "trakt.tv";
+//import traktConfig from './config/trakt.config';
+//const trakt = new Trakt(traktConfig);
 /**
 trakt.search.text({
             query: 'days',
@@ -13,12 +13,14 @@ trakt.search.text({
         });
         
 **/
-trakt.seasons.summary({
-            id: 107460,
-            extended: 'full'
-        }).then((res)=>{
-            console.log(res);
-        });
+/**trakt.seasons
+    .summary({
+        id: 107460,
+        extended: "full",
+    })
+    .then((res) => {
+        console.log(res);
+    });**/
 
 /**
 trakt.seasons.season({

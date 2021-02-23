@@ -10,15 +10,13 @@ import ShowsModel from "../models/db/ShowsModel";
 import ShowSeasonsModel from "../models/db/ShowSeasonsModel";
 import ShowSeasonEpisodesModel from "../models/db/ShowSeasonEpisodesModel";
 
-import dbconfig from "../config/db.config";
-import thumbconfig from "../config/thumbnails.config";
-import traktConfig from "../config/trakt.config";
+import config from "../config";
 
 const settingsModel = new SettingsModel(ibdb);
 const filesModel = new FilesModel(ibdb);
 const fileToEpisodeModel = new FileToEpisodeModel(ibdb);
 const mediaScraperModel = new MediaScraperModel(
-    new Trakt(traktConfig),
+    new Trakt(config.trakt),
     settingsModel
 );
 const showsModel = new ShowsModel(ibdb);
@@ -26,7 +24,7 @@ const showSeasonsModel = new ShowSeasonsModel(ibdb);
 const showSeasonEpisodesModel = new ShowSeasonEpisodesModel(ibdb);
 
 (async () => {
-    await ibdb.connect(dbconfig);
+    await ibdb.connect(config);
     await compareShows();
 })();
 

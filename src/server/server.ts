@@ -7,7 +7,7 @@ import ibdb from "./db/IBDB";
 import { setupSocketIO } from "./socket.io/io";
 import logger from "./logger";
 
-import dbconfig from "./config/db.config";
+import config from "./config";
 
 const PORT = 3000;
 
@@ -21,7 +21,7 @@ app.get("*", (req, res) => {
 
 (async () => {
     try {
-        await ibdb.connect(dbconfig);
+        await ibdb.connect(config);
         let server = app.listen(PORT, () => {
             logger.log("\n---------------------------------------");
             logger.log("Idiot Box Server running on Port " + PORT);

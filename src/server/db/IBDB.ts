@@ -1,5 +1,7 @@
 import fs from "fs";
 
+import _ from "lodash";
+
 import { Database, open } from "sqlite";
 import sqlite3 from "sqlite3";
 
@@ -17,16 +19,14 @@ class IBDB {
 
     async connect(config) {
         let filename: string = "";
-        if (config.hasOwnProperty("filename")) {
-            if (!fs.existsSync(config.filename)) {
+        if (_.has(config, "paths.db.sqlite")) {
+            if (!fs.existsSync(config.paths.db.sqlite)) {
                 error("IBDB :: connect :: File does not exist.");
                 throw new Error(
-                    `IBDB :: connect :: File does not exist. ${config.filename}`
+                    `IBDB :: connect :: File does not exist. ${config.paths.db.sqlite}`
                 );
             }
-            filename = config.filename;
-        } else if (config.hasOwnProperty("inMemory")) {
-            filename = ":memory:";
+            filename = config.paths.db.sqlite;
         } else {
             throw new Error("IBDB :: connect :: No filename config is set.");
         }

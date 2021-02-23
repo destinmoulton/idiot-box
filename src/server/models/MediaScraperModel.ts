@@ -6,7 +6,7 @@ import trakt from "trakt.tv";
 import logger from "../logger";
 
 import SettingsModel from "./db/SettingsModel";
-import thumbConf from "../config/thumbnails.config";
+import config from "../config";
 
 export default class MediaScraperModel {
     _trakt: any;
@@ -79,7 +79,13 @@ export default class MediaScraperModel {
             typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
 
         const res = await fetch(fileURL, {});
-        const finalPath = path.join(thumbConf[typeOfMedia], destFilename);
+        const imagepaths = config.paths.images;
+
+        const finalPath = path.join(
+            imagepaths.base,
+            imagepaths[typeOfMedia],
+            destFilename
+        );
         const dest = fs.createWriteStream(finalPath);
         res.body.pipe(dest);
         return destFilename;

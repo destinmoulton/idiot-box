@@ -6,8 +6,8 @@ import FileToEpisodeModel from "./db/FileToEpisodeModel";
 import ShowsModel from "./db/ShowsModel";
 import ShowSeasonEpisodesModel from "./db/ShowSeasonEpisodesModel";
 import ShowSeasonsModel from "./db/ShowSeasonsModel";
-import thumbConfig from "../config/thumbnails.config";
 
+import config from "../config";
 class ShowsAPI {
     _filesModel: FilesModel;
     _fileToEpisodeModel: FileToEpisodeModel;
@@ -84,7 +84,12 @@ class ShowsAPI {
         if (show.image_filename === "") {
             return true;
         }
-        const fullPath = path.join(thumbConfig.shows, show.image_filename);
+        const imagepaths = config.paths.images;
+        const fullPath = path.join(
+            imagepaths.base,
+            imagepaths.shows,
+            show.image_filename
+        );
         const info = fs.statSync(fullPath);
         if (!fs.existsSync(fullPath) || info.isDirectory) {
             return true;

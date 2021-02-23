@@ -1,6 +1,6 @@
 import Trakt from "trakt.tv";
 
-import traktConfig from "../../config/trakt.config";
+import config from "../../config";
 
 import ibdb from "../../db/IBDB";
 import logger from "../../logger";
@@ -25,7 +25,7 @@ const fileToEpisodeModel = new FileToEpisodeModel(ibdb);
 const fileToMovieModel = new FileToMovieModel(ibdb);
 const genresModel = new GenresModel(ibdb);
 const mediaScraperModel = new MediaScraperModel(
-    new Trakt(traktConfig),
+    new Trakt(config.trakt),
     settingsModel
 );
 const movieToGenreModel = new MovieToGenreModel(ibdb, genresModel);
