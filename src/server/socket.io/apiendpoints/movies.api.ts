@@ -45,6 +45,11 @@ const movies = {
             params: [],
             func: async () => await movieAPI.getAllMoviesWithFileInfo(),
         },
+        get_all_starting_with: {
+            params: ["starting_letter"],
+            func: async (startingLetter) =>
+                await movieAPI.getMoviesStartingWith(startingLetter),
+        },
     },
 };
 

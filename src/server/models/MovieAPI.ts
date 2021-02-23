@@ -35,6 +35,24 @@ class MovieAPI {
         return res;
     }
 
+    async getMoviesStartingWith(startingLetter) {
+        const movies = await this._moviesModel.getAllStartingWith(
+            startingLetter
+        );
+
+        let res = [];
+        for (const movie of movies) {
+            let data = Object.assign({}, movie);
+            data["file_info"] = {};
+
+            const fileToMovie = await this._fileToMovieModel.getSingleForMovie(
+                movie.id
+            );
+            res.push(await this._collateMovieFileInfo(fileToMovie, data));
+        }
+        return res;
+    }
+
     /**
      * Add file-to-movie information to the info object.
      *

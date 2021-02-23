@@ -69,6 +69,14 @@ export default class MoviesModel {
         return await this._ibdb.getAll({}, this._tableName, "title ASC");
     }
 
+    async getAllStartingWith(startingLetter) {
+        const query =
+            "SELECT * FROM " + this._tableName + " WHERE title LIKE ?";
+
+        const params = [startingLetter + "%"];
+        return await this._ibdb.queryAll(query, params);
+    }
+
     async getSingleByTraktID(traktID) {
         const where = {
             trakt_id: traktID,
