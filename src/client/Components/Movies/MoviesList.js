@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import TextField from "@material-ui/core/TextField";
 
+import LetterBar from "./LetterBar";
 import MovieInfoModal from "./MovieInfoModal";
 import MovieThumbInfo from "./MovieThumbInfo";
 import { STATUS_TAGS, StatusTagsLib } from "../../lib/StatusTags.lib";
@@ -19,11 +20,11 @@ class MoviesList extends Component {
             currentStatusTagSelected: "all",
             infomodalIsVisible: false,
             infomodalMovie: {},
-            isFiltering: false, // Is there a filtering action occurring (ie typing or filtering)
             isLoadingMovies: false,
             isTyping: false, // Is the user typing in the filter box
 
             movies: [],
+            selectedLetter: "All",
         };
     }
 
@@ -33,17 +34,20 @@ class MoviesList extends Component {
 
     _getMovies() {
         const { callAPI } = this.props;
+        const { selectedLetter } = this.state;
 
         this.setState({
             isLoadingMovies: true,
         });
 
-        callAPI(
-            "movies.movies.get_all_with_file_info",
-            {},
-            this._moviesReceived.bind(this),
-            false
-        );
+        let endpoint = "movies.movies.get_all_with_file_info";
+        let params = {};
+        if (selectedLetter !== "All") {
+            endpoint = "movies.movies.get_all_starting_with";
+            params = { selected_letter: selectedLetter };
+        }
+
+        callAPI(endpoint, params, this._moviesReceived.bind(this), false);
     }
 
     _moviesReceived(movies) {
@@ -181,6 +185,14 @@ class MoviesList extends Component {
         });
     }
 
+    _handleClickLetter(letter) {
+        this.setState({
+            selectedLetter: letter,
+        });
+
+        this._getMovies();
+    }
+
     _filterMovies() {
         const {
             currentSearchString,
@@ -287,10 +299,10 @@ class MoviesList extends Component {
             currentSearchString,
             infomodalIsVisible,
             infomodalMovie,
-            isFiltering,
             isLoadingMovies,
             isTyping,
             movies,
+            selectedLetter,
         } = this.state;
 
         let content = "";
@@ -321,7 +333,12 @@ class MoviesList extends Component {
                     />
                     {filterSelect}
                 </Grid>
-
+                <Grid item xs={12} className="ib-movies-letterbar">
+                    <LetterBar
+                        selectedLetter={selectedLetter}
+                        onClick={this._handleClickLetter.bind(this)}
+                    />
+                </Grid>
                 <Grid item container xs={12} spacing={2}>
                     {content}
                 </Grid>

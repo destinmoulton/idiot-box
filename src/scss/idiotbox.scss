@@ -505,6 +505,23 @@ div.ib-moviemodal-contents {
     }
 }
 
+.ib-movies-letterbar {
+    text-align: center;
+    .letter {
+        display: inline-block;
+        margin-right: 4px;
+        padding: 2px 4px;
+        font-size: 0.9em;
+        cursor: pointer;
+        border: 1px solid gray;
+
+        &.active-letter {
+            cursor: default;
+            font-weight: bold;
+        }
+    }
+}
+
 div.ib-movies-searchbar {
     text-align: center;
     padding: 5px;
