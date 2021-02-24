@@ -276,16 +276,18 @@ class IDMultipleEpisodesModal extends Component {
         let selected = { value: defaultValue, label: "Select..." };
         const options = items.map((item) => {
             const itemTitle = prefix + item[titleKey];
-            if (item.id === defaultValue) {
-                selected = { value: item.id, label: itemTitle };
+            if (item.id.toString() === defaultValue.toString()) {
+                selected = { value: item.id.toString(), label: itemTitle };
             }
-            return { value: item.id, label: itemTitle };
+            return { value: item.id.toString(), label: itemTitle };
         });
+        console.log("_buildSelect :: defaultValue = " + defaultValue, selected);
         return (
             <Select
                 onChange={({ value }) => onChange(value)}
                 placeholder="Select..."
                 defaultValue={selected}
+                value={selected}
                 options={options}
                 maxMenuHeight={150}
             />
