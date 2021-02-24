@@ -90,8 +90,11 @@ class ShowsAPI {
             imagepaths.shows,
             show.image_filename
         );
+        if (!fs.existsSync(fullPath)) {
+            return true;
+        }
         const info = fs.statSync(fullPath);
-        if (!fs.existsSync(fullPath) || info.isDirectory) {
+        if (info.isDirectory) {
             return true;
         }
         return fs.unlinkSync(fullPath);
