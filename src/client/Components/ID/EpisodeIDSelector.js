@@ -118,6 +118,7 @@ class EpisodeIDSelector extends Component {
                 placeholder={"Select " + placeholder + "..."}
                 defaultValue={defaultValue.toString()}
                 onChange={({ value }) => onChange(value)}
+                maxMenuHeight={150}
             />
         );
     }
