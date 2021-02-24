@@ -177,7 +177,7 @@ class IDFileModal extends Component {
                 title="ID File"
                 isVisible={isVisible}
                 onClose={this._handleCancel.bind(this)}
-                width={400}
+                width={700}
                 footer={[
                     <Button
                         variant="contained"

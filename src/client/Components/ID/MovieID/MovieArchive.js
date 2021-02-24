@@ -98,13 +98,17 @@ class MovieArchive extends Component {
                     <div>{movie.year}</div>
                 </div>
                 <div className="ib-idmodal-archivesingle-form-box">
-                    Directory:{" "}
-                    <TextField
+                    <label>Directory:</label>
+                    <br />
+                    <input
+                        name="movie-archive-single-directory"
                         onChange={this._handleChangeDirectory.bind(this)}
                         value={newMovieDirectory}
                     />
-                    Filename:{" "}
-                    <TextField
+                    <label>Filename:</label>
+                    <br />
+                    <input
+                        name="movie-archive-single-filename"
                         onChange={this._handleChangeFilename.bind(this)}
                         value={newMovieFilename}
                     />
