@@ -108,6 +108,8 @@ class MovieInfoModal extends Component {
                                 <Button
                                     onClick={this._handleClickDelete}
                                     size="small"
+                                    variant="contained"
+                                    disableElevation
                                     startIcon={<DeleteIcon />}
                                     color="secondary"
                                 >
