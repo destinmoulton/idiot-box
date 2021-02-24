@@ -1,0 +1,1 @@
+{"version":3,"file":"error.io.js","sourceRoot":"","sources":["../../../../src/server/socket.io/error.io.ts"],"names":[],"mappings":";;;;;AAAA,yDAA8B;AAG9B,SAAwB,gBAAgB,CAAC,MAAM;IAC3C,qBAAG,CAAC,EAAE,CAAC,OAAO,EAAE,UAAC,OAAO;QACpB,MAAM,CAAC,IAAI,CAAC,OAAO,EAAE,EAAC,OAAO,SAAA,EAAC,CAAC,CAAC;IACpC,CAAC,CAAC,CAAC;AACP,CAAC;AAJD,sCAIC"}

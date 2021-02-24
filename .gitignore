@@ -4,7 +4,6 @@ config/config.json
 dist/server/database/idiot-box.sqlite3
 src/server/config/trakt.config.ts
 
-dist/server/app
 
 dist/server/public/images/movies
 dist/server/public/images/shows
