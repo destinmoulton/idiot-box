@@ -1,89 +1,108 @@
-import { callAPI } from './api.actions';
+import { callAPI } from "./api.actions";
 
 import {
     SETTINGS_ALL_RECEIVED,
+    SETTINGS_GET_ALL_START,
     SETTING_DELETE_START,
     SETTING_DELETE_COMPLETE,
     SETTING_SAVE_START,
-    SETTING_SAVE_COMPLETE
-} from './actionTypes';
+    SETTING_SAVE_COMPLETE,
+} from "./actionTypes";
+import { getAll } from "random-useragent";
 
+export function getAllSettings() {
+    return (dispatch) => {
+        const endpoint = "settings.all.get";
 
-export function getAllSettings(){
-    return (dispatch)=>{
-        const endpoint = 'settings.all.get';
-        
+        dispatch(settingsGetAllStarted());
         dispatch(callAPI(endpoint, {}, settingsAllReceived));
-    }
+    };
 }
 
-function settingsAllReceived(settings){
+function settingsGetAllStarted() {
+    return {
+        type: SETTINGS_GET_ALL_START,
+    };
+}
+
+function settingsAllReceived(settings) {
     return {
         type: SETTINGS_ALL_RECEIVED,
-        settings
-    }
+        settings,
+    };
 }
 
-export function saveSetting(settingID, category, key, value){
-    return (dispatch)=>{
-        let endpoint = '';
+export function saveSetting(settingID, category, key, value) {
+    return (dispatch) => {
+        let endpoint = "";
         let params = {};
-        if(settingID === 0){
-            endpoint = 'settings.editor.add';
+        if (settingID === 0) {
+            endpoint = "settings.editor.add";
             params = {
                 category,
                 key,
-                value
+                value,
             };
         } else {
-            endpoint = 'settings.editor.update';
+            endpoint = "settings.editor.update";
             params = {
                 id: settingID,
                 category,
                 key,
-                value
+                value,
             };
         }
         dispatch(settingSaveInProgress(settingID));
-        dispatch(callAPI(endpoint, params, settingSaveComplete));
-    }
+        dispatch(callAPI(endpoint, params, settingSaveNearCompletion, true));
+    };
 }
 
-function settingSaveInProgress(settingID){
+function settingSaveInProgress(settingID) {
     return {
-        type:SETTING_SAVE_START,
-        settingID
-    }
+        type: SETTING_SAVE_START,
+        settingID,
+    };
 }
 
-function settingSaveComplete(data, recd){
+// Dispatch to get all settings
+function settingSaveNearCompletion(data, recd) {
+    return (dispatch) => {
+        // Get all the settings
+        dispatch(getAllSettings());
+
+        // Complete the save
+        dispatch(settingSaveComplete(data, recd));
+    };
+}
+
+function settingSaveComplete(data, recd) {
     return {
-        type:SETTING_SAVE_COMPLETE,
-        data
-    }
+        type: SETTING_SAVE_COMPLETE,
+        data,
+    };
 }
 
-export function deleteSetting(settingID, category){
-    return (dispatch)=>{
-        const endpoint = 'settings.editor.delete';
+export function deleteSetting(settingID, category) {
+    return (dispatch) => {
+        const endpoint = "settings.editor.delete";
         const params = {
-            id: settingID
+            id: settingID,
         };
         dispatch(settingDeleteStart(settingID, category));
         dispatch(callAPI(endpoint, params, settingDeleteComplete));
-    }
+    };
 }
 
-function settingDeleteStart(settingID, category){
+function settingDeleteStart(settingID, category) {
     return {
         type: SETTING_DELETE_START,
         settingID,
-        category
-    }
+        category,
+    };
 }
 
-function settingDeleteComplete(){
+function settingDeleteComplete() {
     return {
-        type: SETTING_DELETE_COMPLETE
-    }
+        type: SETTING_DELETE_COMPLETE,
+    };
 }
