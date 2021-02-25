@@ -84,7 +84,7 @@ class NewEpisodes extends Component {
                     episode.show_info
                 );
                 linkJSX.push(
-                    <a target="_blank" href={href}>
+                    <a key={link.id} target="_blank" href={href}>
                         {link.value.title}
                     </a>
                 );
