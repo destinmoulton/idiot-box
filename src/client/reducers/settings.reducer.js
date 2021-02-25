@@ -1,5 +1,4 @@
-import deepClone from "lodash";
-
+import { isJSON } from "../lib/json.lib";
 import {
     SETTINGS_ALL_RECEIVED,
     SETTING_DELETE_START,
@@ -34,23 +33,20 @@ export default function settingsReducer(state = INITIAL_STATE, action) {
             };
         }
         case SETTINGS_ALL_RECEIVED:
-            const nextSettings = deepClone(INITIAL_STATE.settings);
+            const nextSettings = _.cloneDeep(INITIAL_STATE.settings);
             action.settings.forEach((setting) => {
                 const category = setting.category;
                 if (!nextSettings.hasOwnProperty(category)) {
-                    nextSettings[category] = [];
+                    throw new Error(
+                        `settings.reducer :: SETTINGS_ALL_RECEIVED :: add setting ${category} to the INITIAL_STATE`
+                    );
+                }
+                if (isJSON(setting.value)) {
+                    // Some settings store the value as a json obj
+                    setting.value = JSON.parse(setting.value);
                 }
                 nextSettings[category].push(setting);
             });
-
-            console.log("reducer", nextSettings);
-            // Link value is stored as JSON, so parse them
-            if (nextSettings.links.length > 0) {
-                for (let i = 0; i < nextSettings.links.length; i++) {
-                    const linkJSON = nextSettings.links[i].value;
-                    nextSettings.links[i].value = JSON.parse(linkJSON);
-                }
-            }
 
             return {
                 ...state,

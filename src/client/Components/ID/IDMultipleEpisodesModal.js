@@ -281,7 +281,6 @@ class IDMultipleEpisodesModal extends Component {
             }
             return { value: item.id.toString(), label: itemTitle };
         });
-        console.log("_buildSelect :: defaultValue = " + defaultValue, selected);
         return (
             <Select
                 onChange={({ value }) => onChange(value)}

@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 
 import { connect } from "react-redux";
 
@@ -30,13 +31,14 @@ class Links extends React.Component {
     _handleSaveLink(linkset) {
         // Encode the value field (multiple properties)
         // into a json string
-        linkset.value = JSON.stringify(linkset.value);
+        const mutable = _.clone(linkset);
+        mutable.value = JSON.stringify(mutable.value);
 
         this.props.saveSetting(
-            parseInt(linkset.id),
+            parseInt(mutable.id),
             "links",
-            linkset.key,
-            linkset.value
+            mutable.key,
+            mutable.value
         );
     }
     _handleClickDelete(settingID) {

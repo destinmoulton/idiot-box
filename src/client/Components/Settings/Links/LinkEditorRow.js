@@ -25,6 +25,7 @@ const LinkEditorRow = ({ linkTypes, linkset, onChange, onSave, onCancel }) => {
                 <input
                     type="text"
                     value={linkset.value.title}
+                    style={{ width: "100%" }}
                     onChange={(evt) => {
                         onChange(
                             linkset.id,
@@ -38,6 +39,7 @@ const LinkEditorRow = ({ linkTypes, linkset, onChange, onSave, onCancel }) => {
                 <input
                     type="text"
                     value={linkset.value.link}
+                    style={{ width: "100%" }}
                     onChange={(evt) => {
                         onChange(
                             linkset.id,

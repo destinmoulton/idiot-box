@@ -43,6 +43,8 @@ class LinkTable extends React.Component {
         if (currentlyEditing.has(settingID)) {
             const linkset = currentlyEditing.get(settingID);
             this.props.saveLink(linkset);
+
+            // Create a new map for immutability
             const newEditMap = new Map(currentlyEditing);
             newEditMap.delete(settingID);
             this.setState({ currentlyEditing: newEditMap });
