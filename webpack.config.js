@@ -34,11 +34,12 @@ module.exports = {
         moment: "moment",
         react: "React",
         "react-dom": "ReactDOM",
+        "@material-ui/core": "MaterialUI",
     },
     plugins: [
         /**
          * Bundle Analyzer will load a browser window to view the map.
          */
-        //new BundleAnalyzerPlugin()
+        new BundleAnalyzerPlugin(),
     ],
 };
