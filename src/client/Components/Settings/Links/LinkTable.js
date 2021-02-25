@@ -1,4 +1,5 @@
 import React from "react";
+import _ from "lodash";
 
 import AddIcon from "@material-ui/icons/Add";
 import Button from "@material-ui/core/Button";
@@ -54,10 +55,14 @@ class LinkTable extends React.Component {
         this.setState({ currentlyEditing });
     }
 
-    _handleChangeFormInput(linkID, property, value) {
+    _handleChangeFormInput(linkID, propertyPath, value) {
         const { currentlyEditing } = this.state;
         const linkset = currentlyEditing.get(linkID);
-        linkset[property] = value;
+
+        // Use lodash set to alter the property value
+        // as some are nested properties
+        _.set(linkset, propertyPath, value);
+
         currentlyEditing.set(linkID, linkset);
         this.setState({ currentlyEditing });
     }
@@ -69,7 +74,10 @@ class LinkTable extends React.Component {
                 id: 0,
                 category: "links",
                 key: linkTypes[0].id,
-                value: "",
+                value: {
+                    title: "",
+                    link: "",
+                },
             };
             currentlyEditing.set(0, newlink);
         }
@@ -142,6 +150,7 @@ class LinkTable extends React.Component {
                         <TableHead>
                             <TableRow>
                                 <TableCell>Type</TableCell>
+                                <TableCell>Title</TableCell>
                                 <TableCell>Link</TableCell>
                                 <TableCell>Edit</TableCell>
                             </TableRow>

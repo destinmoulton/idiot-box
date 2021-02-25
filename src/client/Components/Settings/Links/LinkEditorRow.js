@@ -24,9 +24,26 @@ const LinkEditorRow = ({ linkTypes, linkset, onChange, onSave, onCancel }) => {
             <TableCell>
                 <input
                     type="text"
-                    value={linkset.value}
+                    value={linkset.value.title}
                     onChange={(evt) => {
-                        onChange(linkset.id, "value", evt.currentTarget.value);
+                        onChange(
+                            linkset.id,
+                            "value.title",
+                            evt.currentTarget.value
+                        );
+                    }}
+                />
+            </TableCell>
+            <TableCell>
+                <input
+                    type="text"
+                    value={linkset.value.link}
+                    onChange={(evt) => {
+                        onChange(
+                            linkset.id,
+                            "value.link",
+                            evt.currentTarget.value
+                        );
                     }}
                 />
             </TableCell>

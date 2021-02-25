@@ -15,10 +15,9 @@ class Settings extends Component {
         const {
             lastAPIAction,
             lastSavedSettingID,
-            saveInProgress,
+            isSaveInProgress,
             settings,
         } = this.props;
-        console.log(settings);
         return (
             <Grid container spacing={2}>
                 <Grid item xs={12}>
@@ -26,7 +25,7 @@ class Settings extends Component {
                 </Grid>
                 <Grid item xs={12}>
                     <DirectoriesEditor
-                        saveInProgress={saveInProgress}
+                        saveInProgress={isSaveInProgress}
                         lastAPIAction={lastAPIAction}
                         lastSavedSettingID={lastSavedSettingID}
                         settings={settings.directories}
@@ -44,7 +43,8 @@ class Settings extends Component {
 const mapStateToProps = (state) => {
     const { settings } = state;
     return {
-        saveInProgress: settings.saveInProgress,
+        isSaveInProgress: settings.isSaveInProgress,
+        isGetAllInProgress: settings.isGetAllInProgress,
         lastAPIAction: settings.lastAPIAction,
         lastSavedSettingID: settings.lastSavedSettingID,
         settings: settings.settings,

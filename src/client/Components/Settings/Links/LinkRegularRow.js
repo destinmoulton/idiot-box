@@ -14,7 +14,8 @@ const LinkRegularRow = ({ linkset, linkTypes, onEdit, onDelete }) => {
     return (
         <TableRow>
             <TableCell>{currentType[0].name}</TableCell>
-            <TableCell>{linkset.value}</TableCell>
+            <TableCell>{linkset.value.title}</TableCell>
+            <TableCell>{linkset.value.link}</TableCell>
             <TableCell>
                 <ButtonGroup>
                     <Button
