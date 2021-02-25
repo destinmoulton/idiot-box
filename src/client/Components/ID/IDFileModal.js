@@ -1,12 +1,14 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import Grid from "@material-ui/core/Grid";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
+import {
+    Grid,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails,
+    Button,
+} from "@material-ui/core";
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import Button from "@material-ui/core/Button";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import DialogModal from "../shared/DialogModal";
 import ArchiveSingleEpisode from "./ArchiveSingleEpisode";

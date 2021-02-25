@@ -1,25 +1,27 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import {
+    AppBar,
+    Button,
+    Container,
+    Hidden,
+    IconButton,
+    List,
+    ListItem,
+    ListItemText,
+    ListItemIcon,
+    SwipeableDrawer,
+    Toolbar,
+    Typography,
+} from "@material-ui/core";
 
-import AppBar from "@material-ui/core/AppBar";
-import Button from "@material-ui/core/Button";
-import Container from "@material-ui/core/Container";
-import Hidden from "@material-ui/core/Hidden";
-import IconButton from "@material-ui/core/IconButton";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListIcon from "@material-ui/icons/List";
 import MenuIcon from "@material-ui/icons/Menu";
 import MovieIcon from "@material-ui/icons/Movie";
 import NewReleasesIcon from "@material-ui/icons/NewReleases";
 import SettingsIcon from "@material-ui/icons/Settings";
-import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import TvIcon from "@material-ui/icons/Tv";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
 
 const navbarItems = [
     { path: "/newepisodes", title: "New Episodes", icon: <NewReleasesIcon /> },

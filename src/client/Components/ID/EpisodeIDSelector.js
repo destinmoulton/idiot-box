@@ -2,7 +2,7 @@ import _ from "lodash";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import Button from "@material-ui/core/Button";
+import { Button } from "@material-ui/core";
 import Select from "react-select";
 
 class EpisodeIDSelector extends Component {

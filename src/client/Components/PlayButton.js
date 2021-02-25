@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
+import { Button } from "@material-ui/core";
 import { connect } from "react-redux";
-import Button from "@material-ui/core/Button";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import { callAPI } from "../actions/api.actions";
 class PlayButton extends Component {

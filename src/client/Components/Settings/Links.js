@@ -3,7 +3,7 @@ import _ from "lodash";
 
 import { connect } from "react-redux";
 
-import Button from "@material-ui/core/Button";
+import { Button } from "@material-ui/core";
 import LinkTable from "./Links/LinkTable";
 import HelpModal from "./Links/HelpModal";
 

@@ -2,13 +2,10 @@ import _ from "lodash";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import Button from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
+import { Button, ButtonGroup, Tabs, Tab } from "@material-ui/core";
 import DeleteIcon from "@material-ui/icons/Delete";
 import LabelOffIcon from "@material-ui/icons/LabelOff";
 import LocalOfferIcon from "@material-ui/icons/LocalOffer";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
 import TextRotationNoneIcon from "@material-ui/icons/TextRotationNone";
 import VideocamIcon from "@material-ui/icons/Videocam";
 

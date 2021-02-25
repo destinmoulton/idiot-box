@@ -1,12 +1,9 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Grid from "@material-ui/core/Grid";
+import { CircularProgress, Grid, Tabs, Tab } from "@material-ui/core";
 import LockIcon from "@material-ui/icons/Lock";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
-import Tabs from "@material-ui/core/Tabs";
-import Tab from "@material-ui/core/Tab";
 
 import EpisodesTable from "./EpisodesTable";
 

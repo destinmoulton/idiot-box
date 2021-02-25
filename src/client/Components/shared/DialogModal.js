@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 
-import Grid from "@material-ui/core/Grid";
-import Modal from "@material-ui/core/Modal";
-import Button from "@material-ui/core/Button";
+import { Grid, Modal, Button } from "@material-ui/core";
 import CloseIcon from "@material-ui/icons/Close";
 
 const DialogModal = ({

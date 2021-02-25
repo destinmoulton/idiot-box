@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { BrowserRouter, Redirect, Route } from "react-router-dom";
 
-import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
+import { Container, Grid } from "@material-ui/core";
 import { callAPI } from "../../actions/api.actions";
 
 import FileManager from "../FileManager";

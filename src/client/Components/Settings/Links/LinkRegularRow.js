@@ -1,11 +1,8 @@
 import React from "react";
 
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-import Button from "@material-ui/core/Button";
+import { ButtonGroup, Button, TableCell, TableRow } from "@material-ui/core";
 import EditIcon from "@material-ui/icons/Edit";
 import DeleteIcon from "@material-ui/icons/Delete";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
 const LinkRegularRow = ({ linkset, linkTypes, onEdit, onDelete }) => {
     const currentType = linkTypes.filter((type) => {
         return type.id === linkset.key;

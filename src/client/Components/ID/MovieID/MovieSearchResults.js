@@ -1,10 +1,8 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
+import { Grid, Button, TextField } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
-import TextField from "@material-ui/core/TextField";
 
 import MediaItemSearchDetails from "../../shared/MediaItemSearchDetails";
 

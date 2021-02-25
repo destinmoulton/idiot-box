@@ -1,10 +1,7 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { debounce } from "lodash";
-
-import Grid from "@material-ui/core/Grid";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import TextField from "@material-ui/core/TextField";
+import { Grid, CircularProgress, TextField } from "@material-ui/core";
 
 import LetterBar from "./LetterBar";
 import MovieInfoModal from "./MovieInfoModal";

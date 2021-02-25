@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import Button from "@material-ui/core/Button";
-import DialogModal from "../shared/DialogModal";
+import { Button } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
 
+import DialogModal from "../shared/DialogModal";
 import FileBrowser from "../Filesystem/FileBrowser";
 
 const DirectorySelectorModal = (props) => {

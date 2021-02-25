@@ -1,12 +1,9 @@
 import React from "react";
 
-import Button from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
+import { Button, ButtonGroup, TableCell, TableRow } from "@material-ui/core";
 import CancelIcon from "@material-ui/icons/Cancel";
 import LinkTypeSelector from "./LinkTypeSelector";
 import SaveIcon from "@material-ui/icons/Save";
-import TableCell from "@material-ui/core/TableCell";
-import TableRow from "@material-ui/core/TableRow";
 const LinkEditorRow = ({ linkTypes, linkset, onChange, onSave, onCancel }) => {
     const selector = (
         <LinkTypeSelector

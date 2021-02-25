@@ -3,11 +3,10 @@ import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { truncate } from "lodash";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
+
+import { Card, CardContent, Grid } from "@material-ui/core";
 import EventAvailableIcon from "@material-ui/icons/EventAvailable";
 import EventBusyIcon from "@material-ui/icons/EventBusy";
-import Grid from "@material-ui/core/Grid";
 
 import { linksReplaceCodesForEpisode } from "../lib/links.lib";
 import { callAPI } from "../actions/api.actions";
