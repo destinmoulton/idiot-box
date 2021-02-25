@@ -1,4 +1,4 @@
-import clone from "lodash";
+import deepClone from "lodash";
 
 import {
     SETTINGS_ALL_RECEIVED,
@@ -6,6 +6,7 @@ import {
     SETTING_DELETE_COMPLETE,
     SETTING_SAVE_START,
     SETTING_SAVE_COMPLETE,
+    SETTINGS_GET_ALL_START,
 } from "../actions/actionTypes";
 
 const INITIAL_STATE = {
@@ -16,7 +17,8 @@ const INITIAL_STATE = {
     hasAllSettings: false,
     lastAPIAction: "",
     lastSavedSettingID: -1,
-    saveInProgress: false,
+    isSaveInProgress: false,
+    isGetAllInProgress: false,
     settings: {
         directories: [],
         links: [],
@@ -25,8 +27,14 @@ const INITIAL_STATE = {
 
 export default function settingsReducer(state = INITIAL_STATE, action) {
     switch (action.type) {
+        case SETTINGS_GET_ALL_START: {
+            return {
+                ...state,
+                isGetAllInProgress: true,
+            };
+        }
         case SETTINGS_ALL_RECEIVED:
-            const nextSettings = Object.assign(INITIAL_STATE.settings);
+            const nextSettings = deepClone(INITIAL_STATE.settings);
             action.settings.forEach((setting) => {
                 const category = setting.category;
                 if (!nextSettings.hasOwnProperty(category)) {
@@ -34,10 +42,21 @@ export default function settingsReducer(state = INITIAL_STATE, action) {
                 }
                 nextSettings[category].push(setting);
             });
+
+            console.log("reducer", nextSettings);
+            // Link value is stored as JSON, so parse them
+            if (nextSettings.links.length > 0) {
+                for (let i = 0; i < nextSettings.links.length; i++) {
+                    const linkJSON = nextSettings.links[i].value;
+                    nextSettings.links[i].value = JSON.parse(linkJSON);
+                }
+            }
+
             return {
                 ...state,
                 settings: nextSettings,
                 hasAllSettings: true,
+                isGetAllInProgress: false,
             };
         case SETTING_SAVE_START:
             return {
@@ -47,23 +66,8 @@ export default function settingsReducer(state = INITIAL_STATE, action) {
                 lastAPIAction: "",
             };
         case SETTING_SAVE_COMPLETE:
-            const newSettings = { ...state.settings };
-
-            const category = newSettings[action.data.category];
-            if (state.currentlySavingSettingID === 0) {
-                category.push(action.data);
-            } else {
-                for (let i = 0; i < category.length; i++) {
-                    if (category[i].id === action.data.id) {
-                        category[i].key = action.data.key;
-                        category[i].value = action.data.value;
-                    }
-                }
-            }
-            newSettings[action.data.category] = category;
             return {
                 ...state,
-                settings: newSettings,
                 saveInProgress: false,
                 currentlySavingSettingID: -1,
                 lastSavedSettingID: state.currentlySavingSettingID,
