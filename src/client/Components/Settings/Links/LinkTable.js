@@ -141,6 +141,9 @@ class LinkTable extends React.Component {
                     <Button
                         onClick={this._handleClickAdd.bind(this)}
                         startIcon={<AddIcon />}
+                        variant="contained"
+                        size="small"
+                        disableElevation
                     >
                         Add a Link
                     </Button>
