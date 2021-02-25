@@ -119,7 +119,7 @@ var SettingsModel = /** @class */ (function () {
     };
     SettingsModel.prototype.addSetting = function (category, key, value) {
         return __awaiter(this, void 0, void 0, function () {
-            var data;
+            var data, lastID;
             return __generator(this, function (_a) {
                 switch (_a.label) {
                     case 0:
@@ -130,8 +130,8 @@ var SettingsModel = /** @class */ (function () {
                         };
                         return [4 /*yield*/, this._ibdb.insert(data, this._tableName)];
                     case 1:
-                        _a.sent();
-                        return [4 /*yield*/, this.getSingle(category, key, value)];
+                        lastID = _a.sent();
+                        return [4 /*yield*/, this.getSingleByID(lastID)];
                     case 2: return [2 /*return*/, _a.sent()];
                 }
             });
@@ -154,7 +154,7 @@ var SettingsModel = /** @class */ (function () {
                         return [4 /*yield*/, this._ibdb.update(data, where, this._tableName)];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, this.getSingle(category, key, data.value)];
+                        return [4 /*yield*/, this.getSingleByID(id)];
                     case 2: return [2 /*return*/, _a.sent()];
                 }
             });
