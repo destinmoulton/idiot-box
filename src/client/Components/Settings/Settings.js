@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import Grid from "@material-ui/core/Grid";
 
 import DirectoriesEditor from "./DirectoriesEditor";
+import Links from "./Links";
 
 class Settings extends Component {
     constructor(props) {
@@ -17,13 +18,13 @@ class Settings extends Component {
             saveInProgress,
             settings,
         } = this.props;
-
+        console.log(settings);
         return (
             <Grid container spacing={2}>
-                <Grid xs={12}>
+                <Grid item xs={12}>
                     <h3>Media Directories</h3>
                 </Grid>
-                <Grid xs={12}>
+                <Grid item xs={12}>
                     <DirectoriesEditor
                         saveInProgress={saveInProgress}
                         lastAPIAction={lastAPIAction}
@@ -31,6 +32,9 @@ class Settings extends Component {
                         settings={settings.directories}
                         settingCategory={"directories"}
                     />
+                </Grid>
+                <Grid item xs={12}>
+                    <Links links={settings.links} />
                 </Grid>
             </Grid>
         );

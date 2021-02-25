@@ -1,11 +1,12 @@
+import clone from "lodash";
+
 import {
     SETTINGS_ALL_RECEIVED,
     SETTING_DELETE_START,
     SETTING_DELETE_COMPLETE,
     SETTING_SAVE_START,
-    SETTING_SAVE_COMPLETE
-} from '../actions/actionTypes';
-
+    SETTING_SAVE_COMPLETE,
+} from "../actions/actionTypes";
 
 const INITIAL_STATE = {
     currentlyDeletingSettingID: -1,
@@ -16,18 +17,19 @@ const INITIAL_STATE = {
     lastAPIAction: "",
     lastSavedSettingID: -1,
     saveInProgress: false,
-    settings:{
-        directories: []
-    }
-}
+    settings: {
+        directories: [],
+        links: [],
+    },
+};
 
-export default function settingsReducer(state = INITIAL_STATE, action){
-    switch(action.type){
+export default function settingsReducer(state = INITIAL_STATE, action) {
+    switch (action.type) {
         case SETTINGS_ALL_RECEIVED:
-            const nextSettings = {};
-            action.settings.forEach((setting)=>{
+            const nextSettings = Object.assign(INITIAL_STATE.settings);
+            action.settings.forEach((setting) => {
                 const category = setting.category;
-                if(!nextSettings.hasOwnProperty(category)){
+                if (!nextSettings.hasOwnProperty(category)) {
                     nextSettings[category] = [];
                 }
                 nextSettings[category].push(setting);
@@ -35,24 +37,24 @@ export default function settingsReducer(state = INITIAL_STATE, action){
             return {
                 ...state,
                 settings: nextSettings,
-                hasAllSettings: true
-            }
+                hasAllSettings: true,
+            };
         case SETTING_SAVE_START:
             return {
                 ...state,
                 saveInProgress: true,
                 currentlySavingSettingID: action.settingID,
-                lastAPIAction: ""
-            }
+                lastAPIAction: "",
+            };
         case SETTING_SAVE_COMPLETE:
-            const newSettings = {...state.settings};
-            
+            const newSettings = { ...state.settings };
+
             const category = newSettings[action.data.category];
-            if(state.currentlySavingSettingID === 0){
+            if (state.currentlySavingSettingID === 0) {
                 category.push(action.data);
             } else {
-                for(let i=0; i<category.length; i++){
-                    if(category[i].id === action.data.id){
+                for (let i = 0; i < category.length; i++) {
+                    if (category[i].id === action.data.id) {
                         category[i].key = action.data.key;
                         category[i].value = action.data.value;
                     }
@@ -65,36 +67,37 @@ export default function settingsReducer(state = INITIAL_STATE, action){
                 saveInProgress: false,
                 currentlySavingSettingID: -1,
                 lastSavedSettingID: state.currentlySavingSettingID,
-                lastAPIAction: "save"
-            }
+                lastAPIAction: "save",
+            };
         case SETTING_DELETE_START:
             return {
                 ...state,
                 deleteInProgress: true,
                 currentlyDeletingSettingID: action.settingID,
                 currentlyDeletingSettingCategory: action.category,
-                lastAPIAction: ""
-            }
+                lastAPIAction: "",
+            };
         case SETTING_DELETE_COMPLETE:
-            const copySettings = {...state.settings};
-            const copyCategory = [...copySettings[state.currentlyDeletingSettingCategory]];
+            const copySettings = { ...state.settings };
+            const copyCategory = [
+                ...copySettings[state.currentlyDeletingSettingCategory],
+            ];
 
-            for(let i = 0; i<copyCategory.length; i++){
-                if(copyCategory[i].id === state.currentlyDeletingSettingID){
+            for (let i = 0; i < copyCategory.length; i++) {
+                if (copyCategory[i].id === state.currentlyDeletingSettingID) {
                     copyCategory.splice(i, 1);
                 }
             }
             copySettings[state.currentlyDeletingSettingCategory] = copyCategory;
             return {
                 ...state,
-                settings:copySettings,
+                settings: copySettings,
                 deleteInProgress: false,
                 currentlyDeletingSettingID: -1,
                 currentlyDeletingSettingCategory: "",
-                lastAPIAction: "delete"
-            }
+                lastAPIAction: "delete",
+            };
         default:
             return state;
     }
-
 }
