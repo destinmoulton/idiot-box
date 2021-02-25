@@ -676,8 +676,13 @@ div.ib-newepisodes-block {
     }
 
     div.ib-newepisode-links {
-        bottom: 0px;
-        right: 0px;
+        margin-top: 4px;
+
+        a {
+            border: 1px solid gray;
+            padding: 2px 6px;
+            margin-right: 4px;
+        }
     }
 }
 
