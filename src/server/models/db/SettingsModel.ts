@@ -54,8 +54,8 @@ export default class SettingsModel {
             value,
         };
 
-        await this._ibdb.insert(data, this._tableName);
-        return await this.getSingle(category, key, value);
+        const lastID = await this._ibdb.insert(data, this._tableName);
+        return await this.getSingleByID(lastID);
     }
 
     async updateSetting(id, category, key, value) {
@@ -70,7 +70,7 @@ export default class SettingsModel {
         };
 
         await this._ibdb.update(data, where, this._tableName);
-        return await this.getSingle(category, key, data.value);
+        return await this.getSingleByID(id);
     }
 
     async deleteSetting(id) {
