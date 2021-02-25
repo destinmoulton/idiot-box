@@ -1,8 +1,10 @@
 import React from "react";
 
 import { connect } from "react-redux";
+
+import Button from "@material-ui/core/Button";
 import LinkTable from "./Links/LinkTable";
-import HelpTable from "./Links/HelpTable";
+import HelpModal from "./Links/HelpModal";
 
 import { deleteSetting, saveSetting } from "../../actions/settings.actions";
 import { callAPI } from "../../actions/api.actions";
@@ -13,7 +15,23 @@ const TYPES_OF_LINKS = [
     { name: "Movie", id: "link_for_movie" },
 ];
 class Links extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isHelpModalVisible: false,
+        };
+    }
+
+    _handleToggleHelpModal(toggleState) {
+        this.setState({
+            isHelpModalVisible: toggleState,
+        });
+    }
     _handleSaveLink(linkset) {
+        // Encode the value field (multiple properties)
+        // into a json string
+        linkset.value = JSON.stringify(linkset.value);
+
         this.props.saveSetting(
             parseInt(linkset.id),
             "links",
@@ -26,6 +44,7 @@ class Links extends React.Component {
     }
     render() {
         const { links } = this.props;
+        const { isHelpModalVisible } = this.state;
         return (
             <div>
                 <LinkTable
@@ -34,7 +53,21 @@ class Links extends React.Component {
                     onDelete={(settingID) => this._handleClickDelete(settingID)}
                     linkTypes={TYPES_OF_LINKS}
                 />
-                <HelpTable />
+                <div style={{ textAlign: "center" }}>
+                    <Button
+                        variant="contained"
+                        size="small"
+                        color="primary"
+                        disableElevation
+                        onClick={() => this._handleToggleHelpModal(true)}
+                    >
+                        Link Code Help
+                    </Button>
+                </div>
+                <HelpModal
+                    isVisible={isHelpModalVisible}
+                    onClose={() => this._handleToggleHelpModal(false)}
+                />
             </div>
         );
     }
