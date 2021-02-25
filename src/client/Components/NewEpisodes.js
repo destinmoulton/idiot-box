@@ -8,6 +8,8 @@ import CardContent from "@material-ui/core/CardContent";
 import EventAvailableIcon from "@material-ui/icons/EventAvailable";
 import EventBusyIcon from "@material-ui/icons/EventBusy";
 import Grid from "@material-ui/core/Grid";
+
+import { linksReplaceCodesForEpisode } from "../lib/links.lib";
 import { callAPI } from "../actions/api.actions";
 
 const NUM_DAYS = 14;
@@ -70,18 +72,29 @@ class NewEpisodes extends Component {
         });
     }
 
+    _buildLinks(episode) {
+        let { settings } = this.props;
+
+        const linkJSX = [];
+        for (const link of settings.links) {
+            if (link.key === "link_for_episode") {
+                const href = linksReplaceCodesForEpisode(
+                    link.value.link,
+                    episode,
+                    episode.show_info
+                );
+                linkJSX.push(
+                    <a target="_blank" href={href}>
+                        {link.value.title}
+                    </a>
+                );
+            }
+        }
+        return linkJSX;
+    }
+
     _buildEpisodeDetails(episode) {
-        let sNum =
-            episode.season_number < 10
-                ? "0" + episode.season_number
-                : episode.season_number;
-        let eNum =
-            episode.episode_number < 10
-                ? "0" + episode.episode_number
-                : episode.episode_number;
-        let searchString = encodeURIComponent(
-            episode.show_info.title + " S" + sNum + "E" + eNum
-        );
+        let links = this._buildLinks(episode);
         return (
             <Grid item xs={12} sm={6} lg={4} key={episode.id}>
                 <div className="ib-newepisode-container">
@@ -111,29 +124,7 @@ class NewEpisodes extends Component {
                             Season {episode.season_number} - Episode{" "}
                             {episode.episode_number}
                         </div>
-                        <div className="ib-newepisode-links">
-                            <a
-                                target="_blank"
-                                href={
-                                    "https://www.1337x.to/search/" +
-                                    searchString +
-                                    "/1/"
-                                }
-                            >
-                                1337x
-                            </a>
-                            &nbsp;|&nbsp;
-                            <a
-                                target="_blank"
-                                href={
-                                    "https://thepiratebay.org/search/" +
-                                    searchString +
-                                    "/0/99/0/"
-                                }
-                            >
-                                thepiratebay
-                            </a>
-                        </div>
+                        <div className="ib-newepisode-links">{links}</div>
                     </div>
                 </div>
             </Grid>
