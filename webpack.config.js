@@ -40,6 +40,6 @@ module.exports = {
         /**
          * Bundle Analyzer will load a browser window to view the map.
          */
-        new BundleAnalyzerPlugin(),
+        //new BundleAnalyzerPlugin(),
     ],
 };
