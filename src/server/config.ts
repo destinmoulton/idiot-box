@@ -15,6 +15,7 @@ const CONFIG_OBJECT_PATHS = [
 ];
 
 if (!fs.existsSync(configFile)) {
+    console.error(`config.ts :: The config file does not exist. ${configFile}`);
     throw new Error(
         `config.ts :: The config file does not exist. ${configFile}`
     );

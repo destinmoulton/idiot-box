@@ -17,6 +17,7 @@ var CONFIG_OBJECT_PATHS = [
     "trakt.client_secret",
 ];
 if (!fs_1["default"].existsSync(configFile)) {
+    console.error("config.ts :: The config file does not exist. " + configFile);
     throw new Error("config.ts :: The config file does not exist. " + configFile);
 }
 var conf = null;
