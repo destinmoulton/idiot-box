@@ -6,7 +6,7 @@ exports.__esModule = true;
 var fs_1 = __importDefault(require("fs"));
 var path_1 = __importDefault(require("path"));
 var lodash_1 = __importDefault(require("lodash"));
-var configFile = path_1["default"].resolve("config/config.json");
+var configFile = path_1["default"].resolve(__dirname, "../../../config/config.json");
 var CONFIG_OBJECT_PATHS = [
     "paths.images.base",
     "paths.images.shows",

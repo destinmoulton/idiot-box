@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import has from "lodash";
 
-const configFile = path.resolve("config/config.json");
+const configFile = path.resolve(__dirname, "../../../config/config.json");
 
 const CONFIG_OBJECT_PATHS = [
     "paths.images.base",
