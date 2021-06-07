@@ -41,6 +41,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 exports.__esModule = true;
 var path_1 = __importDefault(require("path"));
 var express_1 = __importDefault(require("express"));
+var express_basic_auth_1 = __importDefault(require("express-basic-auth"));
 var app = express_1["default"]();
 var IBDB_1 = __importDefault(require("./db/IBDB"));
 var io_1 = require("./socket.io/io");
@@ -48,9 +49,11 @@ var logger_1 = __importDefault(require("./logger"));
 var config_1 = __importDefault(require("./config"));
 var PORT = 3000;
 var PUBLIC_PATH = path_1["default"].resolve(__dirname, "../public");
+// Enable http basic auth
+app.use(express_basic_auth_1["default"]({ challenge: true, users: config_1["default"].users, realm: "ibox" }));
 app.use(express_1["default"].static(PUBLIC_PATH));
 // Allow all URI's; handle by react router
-app.get("*", function (req, res) {
+app.get("*", express_basic_auth_1["default"]({ challenge: true, users: config_1["default"].users, realm: "ibox" }), function (req, res) {
     res.sendFile(path_1["default"].join(PUBLIC_PATH, "/index.html"));
 });
 (function () { return __awaiter(void 0, void 0, void 0, function () {
@@ -62,6 +65,7 @@ app.get("*", function (req, res) {
                 return [4 /*yield*/, IBDB_1["default"].connect(config_1["default"])];
             case 1:
                 _a.sent();
+                logger_1["default"].log(config_1["default"]);
                 server = app.listen(PORT, function () {
                     logger_1["default"].log("\n---------------------------------------");
                     logger_1["default"].log("Idiot Box Server running on Port " + PORT);
