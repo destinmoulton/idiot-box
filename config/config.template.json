@@ -14,5 +14,6 @@
         "client_id": "",
         "client_secret": ""
     },
-    "users": { "username": "password" }
+    "users": { "username": "password" },
+    "port": 3000
 }
