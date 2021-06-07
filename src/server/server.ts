@@ -10,8 +10,6 @@ import logger from "./logger";
 
 import config from "./config";
 
-const PORT = 3000;
-
 const PUBLIC_PATH = path.resolve(__dirname, "../public");
 
 // Enable http basic auth
@@ -30,9 +28,9 @@ app.get(
 (async () => {
     try {
         await ibdb.connect(config);
-        let server = app.listen(PORT, () => {
+        let server = app.listen(config.port, () => {
             logger.log("\n---------------------------------------");
-            logger.log("Idiot Box Server running on Port " + PORT);
+            logger.log("Idiot Box Server running on Port " + config.port);
             logger.log("---------------------------------------");
         });
         setupSocketIO(server);

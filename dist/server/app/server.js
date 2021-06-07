@@ -47,7 +47,6 @@ var IBDB_1 = __importDefault(require("./db/IBDB"));
 var io_1 = require("./socket.io/io");
 var logger_1 = __importDefault(require("./logger"));
 var config_1 = __importDefault(require("./config"));
-var PORT = 3000;
 var PUBLIC_PATH = path_1["default"].resolve(__dirname, "../public");
 // Enable http basic auth
 app.use(express_basic_auth_1["default"]({ challenge: true, users: config_1["default"].users, realm: "ibox" }));
@@ -65,9 +64,9 @@ app.get("*", express_basic_auth_1["default"]({ challenge: true, users: config_1[
                 return [4 /*yield*/, IBDB_1["default"].connect(config_1["default"])];
             case 1:
                 _a.sent();
-                server = app.listen(PORT, function () {
+                server = app.listen(config_1["default"].port, function () {
                     logger_1["default"].log("\n---------------------------------------");
-                    logger_1["default"].log("Idiot Box Server running on Port " + PORT);
+                    logger_1["default"].log("Idiot Box Server running on Port " + config_1["default"].port);
                     logger_1["default"].log("---------------------------------------");
                 });
                 io_1.setupSocketIO(server);
