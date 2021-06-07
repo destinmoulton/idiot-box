@@ -30,7 +30,6 @@ app.get(
 (async () => {
     try {
         await ibdb.connect(config);
-        logger.log(config);
         let server = app.listen(PORT, () => {
             logger.log("\n---------------------------------------");
             logger.log("Idiot Box Server running on Port " + PORT);

@@ -65,7 +65,6 @@ app.get("*", express_basic_auth_1["default"]({ challenge: true, users: config_1[
                 return [4 /*yield*/, IBDB_1["default"].connect(config_1["default"])];
             case 1:
                 _a.sent();
-                logger_1["default"].log(config_1["default"]);
                 server = app.listen(PORT, function () {
                     logger_1["default"].log("\n---------------------------------------");
                     logger_1["default"].log("Idiot Box Server running on Port " + PORT);
