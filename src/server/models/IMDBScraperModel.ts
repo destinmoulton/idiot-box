@@ -6,7 +6,7 @@ export default class IMDBScraperModel {
     _posterSelector: string;
     _imdbPath: string;
     constructor() {
-        this._posterSelector = "div.ipc-poster > div.ipc-media-poster > img";
+        this._posterSelector = "div.ipc-poster > div.ipc-media--poster > img";
         this._imdbPath = "https://www.imdb.com/title/";
     }
 

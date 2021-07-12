@@ -8,7 +8,7 @@ var cheerio_1 = __importDefault(require("cheerio"));
 var random_useragent_1 = __importDefault(require("random-useragent"));
 var IMDBScraperModel = /** @class */ (function () {
     function IMDBScraperModel() {
-        this._posterSelector = "div.ipc-poster > div.ipc-media-poster > img";
+        this._posterSelector = "div.ipc-poster > div.ipc-media--poster > img";
         this._imdbPath = "https://www.imdb.com/title/";
     }
     IMDBScraperModel.prototype.getPosterURL = function (imdbID) {
