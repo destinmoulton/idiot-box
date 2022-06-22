@@ -46,7 +46,7 @@
         "express": "^4.17.1",
         "express-basic-auth": "^1.2.0",
         "fs-extra": "^8.1.0",
-        "got": "^11.8.1",
+        "got": "^11.8.5",
         "gulp": "^4.0.2",
         "gulp-sass": "^4.1.0",
         "gulp-watch": "^5.0.1",
