@@ -52,7 +52,7 @@
         "gulp-watch": "^5.0.1",
         "lodash": "^4.17.21",
         "mkdirp": "^0.5.5",
-        "moment": "^2.29.1",
+        "moment": "^2.29.4",
         "node-fetch": "^2.6.1",
         "node-omxplayer": "^0.6.1",
         "random-useragent": "^0.3.1",
