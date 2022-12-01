@@ -1,22 +1,27 @@
-import ibdb from "../../db/IBDB";
-import FilesModel from "../../models/db/FilesModel";
-import FileToMovieModel from "../../models/db/FileToMovieModel";
-import GenresModel from "../../models/db/GenresModel";
-import MovieAPI from "../../models/MovieAPI";
-import MovieToGenreModel from "../../models/db/MovieToGenreModel";
-import MoviesModel from "../../models/db/MoviesModel";
-const filesModel = new FilesModel(ibdb);
-const fileToMovieModel = new FileToMovieModel(ibdb);
-const genresModel = new GenresModel(ibdb);
-const movieToGenreModel = new MovieToGenreModel(ibdb, genresModel);
-const moviesModel = new MoviesModel(ibdb, movieToGenreModel);
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const IBDB_1 = __importDefault(require("../../db/IBDB"));
+const FilesModel_1 = __importDefault(require("../../models/db/FilesModel"));
+const FileToMovieModel_1 = __importDefault(require("../../models/db/FileToMovieModel"));
+const GenresModel_1 = __importDefault(require("../../models/db/GenresModel"));
+const MovieAPI_1 = __importDefault(require("../../models/MovieAPI"));
+const MovieToGenreModel_1 = __importDefault(require("../../models/db/MovieToGenreModel"));
+const MoviesModel_1 = __importDefault(require("../../models/db/MoviesModel"));
+const filesModel = new FilesModel_1.default(IBDB_1.default);
+const fileToMovieModel = new FileToMovieModel_1.default(IBDB_1.default);
+const genresModel = new GenresModel_1.default(IBDB_1.default);
+const movieToGenreModel = new MovieToGenreModel_1.default(IBDB_1.default, genresModel);
+const moviesModel = new MoviesModel_1.default(IBDB_1.default, movieToGenreModel);
 const movieAPIModels = {
     filesModel,
     fileToMovieModel,
     movieToGenreModel,
     moviesModel,
 };
-const movieAPI = new MovieAPI(movieAPIModels);
+const movieAPI = new MovieAPI_1.default(movieAPIModels);
 const movies = {
     movie: {
         delete: {
@@ -45,5 +50,5 @@ const movies = {
         },
     },
 };
-export default movies;
+exports.default = movies;
 //# sourceMappingURL=movies.api.js.map

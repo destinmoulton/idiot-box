@@ -1,4 +1,6 @@
-export default class FilesModel {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class FilesModel {
     _ibdb;
     _tableName;
     constructor(ibdb) {
@@ -64,4 +66,5 @@ export default class FilesModel {
         return await this._ibdb.delete(where, this._tableName);
     }
 }
+exports.default = FilesModel;
 //# sourceMappingURL=FilesModel.js.map

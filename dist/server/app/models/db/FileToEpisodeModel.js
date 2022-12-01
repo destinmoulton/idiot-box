@@ -1,4 +1,6 @@
-export default class FileToEpisodeModel {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class FileToEpisodeModel {
     _ibdb;
     _tableName;
     constructor(ibdb) {
@@ -76,4 +78,5 @@ export default class FileToEpisodeModel {
         return await this._ibdb.delete(where, this._tableName);
     }
 }
+exports.default = FileToEpisodeModel;
 //# sourceMappingURL=FileToEpisodeModel.js.map

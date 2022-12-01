@@ -1,4 +1,5 @@
-export {};
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //import traktConfig from './config/trakt.config';
 //const trakt = new Trakt(traktConfig);
 /**

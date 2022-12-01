@@ -1,6 +1,11 @@
-import ibdb from "../../db/IBDB";
-import SettingsModel from "../../models/db/SettingsModel";
-const settingsModel = new SettingsModel(ibdb);
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const IBDB_1 = __importDefault(require("../../db/IBDB"));
+const SettingsModel_1 = __importDefault(require("../../models/db/SettingsModel"));
+const settingsModel = new SettingsModel_1.default(IBDB_1.default);
 const settings = {
     all: {
         get: {
@@ -35,5 +40,5 @@ const settings = {
         },
     },
 };
-export default settings;
+exports.default = settings;
 //# sourceMappingURL=settings.api.js.map

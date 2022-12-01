@@ -1,4 +1,6 @@
-export default class MovieToGenreModel {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class MovieToGenreModel {
     _ibdb;
     _genresModel;
     _tableName;
@@ -62,4 +64,5 @@ export default class MovieToGenreModel {
         return 0;
     }
 }
+exports.default = MovieToGenreModel;
 //# sourceMappingURL=MovieToGenreModel.js.map

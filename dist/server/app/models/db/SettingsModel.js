@@ -1,4 +1,6 @@
-export default class SettingsModel {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class SettingsModel {
     _ibdb;
     _tableName;
     constructor(db) {
@@ -65,4 +67,5 @@ export default class SettingsModel {
         return await this._ibdb.delete(where, this._tableName);
     }
 }
+exports.default = SettingsModel;
 //# sourceMappingURL=SettingsModel.js.map

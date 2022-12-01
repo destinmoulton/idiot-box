@@ -1,5 +1,7 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const logger = require("../logger");
-export default class IDModel {
+class IDModel {
     _filesModel;
     _filesystemModel;
     _fileToEpisodeModel;
@@ -189,4 +191,5 @@ export default class IDModel {
         }
     }
 }
+exports.default = IDModel;
 //# sourceMappingURL=IDModel.js.map

@@ -1,4 +1,6 @@
-export default class GenresModel {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class GenresModel {
     _ibdb;
     _tableName;
     constructor(ibdb) {
@@ -35,4 +37,5 @@ export default class GenresModel {
         return await this._ibdb.getRow(where, this._tableName);
     }
 }
+exports.default = GenresModel;
 //# sourceMappingURL=GenresModel.js.map

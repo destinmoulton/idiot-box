@@ -1,8 +1,14 @@
-import fs from "fs";
-import _ from "lodash";
-import { open } from "sqlite";
-import sqlite3 from "sqlite3";
-import error from "../error";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.IBDB = void 0;
+const fs_1 = __importDefault(require("fs"));
+const lodash_1 = __importDefault(require("lodash"));
+const sqlite_1 = require("sqlite");
+const sqlite3_1 = __importDefault(require("sqlite3"));
+const error_1 = __importDefault(require("../error"));
 class IBDB {
     _db;
     _isConnected;
@@ -14,9 +20,9 @@ class IBDB {
     }
     async connect(config) {
         let filename = "";
-        if (_.has(config, "paths.db.sqlite")) {
-            if (!fs.existsSync(config.paths.db.sqlite)) {
-                error("IBDB :: connect :: File does not exist.");
+        if (lodash_1.default.has(config, "paths.db.sqlite")) {
+            if (!fs_1.default.existsSync(config.paths.db.sqlite)) {
+                (0, error_1.default)("IBDB :: connect :: File does not exist.");
                 throw new Error(`IBDB :: connect :: File does not exist. ${config.paths.db.sqlite}`);
             }
             filename = config.paths.db.sqlite;
@@ -25,9 +31,9 @@ class IBDB {
             throw new Error("IBDB :: connect :: No filename config is set.");
         }
         try {
-            this._db = await open({
+            this._db = await (0, sqlite_1.open)({
                 filename: filename,
-                driver: sqlite3.Database,
+                driver: sqlite3_1.default.Database,
             });
             this._isConnected = true;
         }
@@ -132,7 +138,7 @@ class IBDB {
         this._paramCount = 0;
     }
 }
+exports.IBDB = IBDB;
 let ibdb = new IBDB();
-export default ibdb;
-export { IBDB };
+exports.default = ibdb;
 //# sourceMappingURL=IBDB.js.map

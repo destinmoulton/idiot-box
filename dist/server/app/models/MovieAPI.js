@@ -1,6 +1,11 @@
-import fs from "fs";
-import path from "path";
-import config from "../config";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
+const config_1 = __importDefault(require("../config"));
 class MovieAPI {
     _filesModel;
     _fileToMovieModel;
@@ -74,20 +79,20 @@ class MovieAPI {
         if (movie.image_filename === "") {
             return true;
         }
-        const imagepaths = config.paths.images;
-        const fullPath = path.join(imagepaths.base, imagepaths.movies, movie.image_filename);
-        if (!fs.existsSync(fullPath)) {
+        const imagepaths = config_1.default.paths.images;
+        const fullPath = path_1.default.join(imagepaths.base, imagepaths.movies, movie.image_filename);
+        if (!fs_1.default.existsSync(fullPath)) {
             return true;
         }
-        const info = fs.statSync(fullPath);
+        const info = fs_1.default.statSync(fullPath);
         if (info.isDirectory) {
             return true;
         }
-        return fs.unlinkSync(fullPath);
+        return fs_1.default.unlinkSync(fullPath);
     }
     async updateStatusTags(movieID, statusTags) {
         return await this._moviesModel.updateStatusTags(movieID, statusTags);
     }
 }
-export default MovieAPI;
+exports.default = MovieAPI;
 //# sourceMappingURL=MovieAPI.js.map

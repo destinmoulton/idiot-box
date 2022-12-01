@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 class Logger {
     log(...args) {
         console.log(...args);
@@ -9,5 +11,5 @@ class Logger {
         console.info(...args);
     }
 }
-export default new Logger();
+exports.default = new Logger();
 //# sourceMappingURL=logger.js.map

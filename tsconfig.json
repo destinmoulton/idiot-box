@@ -6,7 +6,7 @@
         "sourceMap": true,
         "moduleResolution": "Node16",
         "target": "ES2022",
-        "module": "ES2022"
+        "module": "Node16"
     },
     "include": ["./src/server/**/*"]
 }

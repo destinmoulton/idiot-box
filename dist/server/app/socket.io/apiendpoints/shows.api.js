@@ -1,22 +1,27 @@
-import ibdb from "../../db/IBDB";
-import EpisodeAPI from "../../models/EpisodeAPI";
-import FilesModel from "../../models/db/FilesModel";
-import FileToEpisodeModel from "../../models/db/FileToEpisodeModel";
-import ShowsAPI from "../../models/ShowsAPI";
-import ShowsModel from "../../models/db/ShowsModel";
-import ShowSeasonsModel from "../../models/db/ShowSeasonsModel";
-import ShowSeasonEpisodesModel from "../../models/db/ShowSeasonEpisodesModel";
-const filesModel = new FilesModel(ibdb);
-const fileToEpisodeModel = new FileToEpisodeModel(ibdb);
-const showsModel = new ShowsModel(ibdb);
-const showSeasonsModel = new ShowSeasonsModel(ibdb);
-const showSeasonEpisodesModel = new ShowSeasonEpisodesModel(ibdb);
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const IBDB_1 = __importDefault(require("../../db/IBDB"));
+const EpisodeAPI_1 = __importDefault(require("../../models/EpisodeAPI"));
+const FilesModel_1 = __importDefault(require("../../models/db/FilesModel"));
+const FileToEpisodeModel_1 = __importDefault(require("../../models/db/FileToEpisodeModel"));
+const ShowsAPI_1 = __importDefault(require("../../models/ShowsAPI"));
+const ShowsModel_1 = __importDefault(require("../../models/db/ShowsModel"));
+const ShowSeasonsModel_1 = __importDefault(require("../../models/db/ShowSeasonsModel"));
+const ShowSeasonEpisodesModel_1 = __importDefault(require("../../models/db/ShowSeasonEpisodesModel"));
+const filesModel = new FilesModel_1.default(IBDB_1.default);
+const fileToEpisodeModel = new FileToEpisodeModel_1.default(IBDB_1.default);
+const showsModel = new ShowsModel_1.default(IBDB_1.default);
+const showSeasonsModel = new ShowSeasonsModel_1.default(IBDB_1.default);
+const showSeasonEpisodesModel = new ShowSeasonEpisodesModel_1.default(IBDB_1.default);
 const episodeAPIConfig = {
     filesModel,
     fileToEpisodeModel,
     showSeasonEpisodesModel,
 };
-const episodeAPI = new EpisodeAPI(episodeAPIConfig);
+const episodeAPI = new EpisodeAPI_1.default(episodeAPIConfig);
 const showsAPIConfig = {
     filesModel,
     fileToEpisodeModel,
@@ -24,7 +29,7 @@ const showsAPIConfig = {
     showSeasonEpisodesModel,
     showSeasonsModel,
 };
-const showsAPI = new ShowsAPI(showsAPIConfig);
+const showsAPI = new ShowsAPI_1.default(showsAPIConfig);
 const shows = {
     show: {
         get_for_slug: {
@@ -101,5 +106,5 @@ const shows = {
         },
     },
 };
-export default shows;
+exports.default = shows;
 //# sourceMappingURL=shows.api.js.map

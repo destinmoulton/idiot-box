@@ -1,5 +1,10 @@
-import moment from "moment";
-export default class ShowsModel {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const moment_1 = __importDefault(require("moment"));
+class ShowsModel {
     _ibdb;
     _tableName;
     constructor(ibdb) {
@@ -11,12 +16,12 @@ export default class ShowsModel {
             title: apiData.title,
             year: apiData.year,
             overview: apiData.overview,
-            first_aired: moment(apiData.first_aired).format("X"),
+            first_aired: (0, moment_1.default)(apiData.first_aired).format("X"),
             runtime: apiData.runtime,
             network: apiData.network,
             status: apiData.status,
             rating: apiData.rating,
-            updated_at: moment(apiData.updated_at).format("X"),
+            updated_at: (0, moment_1.default)(apiData.updated_at).format("X"),
             slug: apiData.ids.slug,
             trakt_id: apiData.ids.trakt,
             tvdb_id: apiData.ids.tvdb,
@@ -63,4 +68,5 @@ export default class ShowsModel {
         return await this._ibdb.delete(where, this._tableName);
     }
 }
+exports.default = ShowsModel;
 //# sourceMappingURL=ShowsModel.js.map

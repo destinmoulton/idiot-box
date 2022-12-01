@@ -1,4 +1,6 @@
-export default class EpisodeAPI {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class EpisodeAPI {
     _filesModel;
     _fileToEpisodeModel;
     _showSeasonEpisodesModel;
@@ -39,4 +41,5 @@ export default class EpisodeAPI {
         return episode;
     }
 }
+exports.default = EpisodeAPI;
 //# sourceMappingURL=EpisodeAPI.js.map

@@ -1,14 +1,22 @@
-import bus from './eventBus';
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.doesErrorExist = void 0;
+const eventBus_1 = __importDefault(require("./eventBus"));
 let errors = [];
-bus.on("error", (msg) => {
+eventBus_1.default.on("error", (msg) => {
     errors.push(msg);
     //logger.error("ERROR::"+msg);
 });
-export default function error(message) {
+function error(message) {
     errors.push(message);
-    bus.emit("error", message);
+    eventBus_1.default.emit("error", message);
 }
-export function doesErrorExist(msg) {
+exports.default = error;
+function doesErrorExist(msg) {
     return errors.includes(msg);
 }
+exports.doesErrorExist = doesErrorExist;
 //# sourceMappingURL=error.js.map

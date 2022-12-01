@@ -1,21 +1,26 @@
-import ibdb from "../../db/IBDB";
-import FilesystemModel from "../../models/FilesystemModel";
-import FilesModel from "../../models/db/FilesModel";
-import FileToEpisodeModel from "../../models/db/FileToEpisodeModel";
-import FileToMovieModel from "../../models/db/FileToMovieModel";
-import GenresModel from "../../models/db/GenresModel";
-import MoviesModel from "../../models/db/MoviesModel";
-import MovieToGenreModel from "../../models/db/MovieToGenreModel";
-import SettingsModel from "../../models/db/SettingsModel";
-import ShowSeasonEpisodesModel from "../../models/db/ShowSeasonEpisodesModel";
-const settingsModel = new SettingsModel(ibdb);
-const filesModel = new FilesModel(ibdb);
-const fileToEpisodeModel = new FileToEpisodeModel(ibdb);
-const fileToMovieModel = new FileToMovieModel(ibdb);
-const genresModel = new GenresModel(ibdb);
-const movieToGenreModel = new MovieToGenreModel(ibdb, genresModel);
-const moviesModel = new MoviesModel(ibdb, movieToGenreModel);
-const showSeasonEpisodesModel = new ShowSeasonEpisodesModel(ibdb);
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const IBDB_1 = __importDefault(require("../../db/IBDB"));
+const FilesystemModel_1 = __importDefault(require("../../models/FilesystemModel"));
+const FilesModel_1 = __importDefault(require("../../models/db/FilesModel"));
+const FileToEpisodeModel_1 = __importDefault(require("../../models/db/FileToEpisodeModel"));
+const FileToMovieModel_1 = __importDefault(require("../../models/db/FileToMovieModel"));
+const GenresModel_1 = __importDefault(require("../../models/db/GenresModel"));
+const MoviesModel_1 = __importDefault(require("../../models/db/MoviesModel"));
+const MovieToGenreModel_1 = __importDefault(require("../../models/db/MovieToGenreModel"));
+const SettingsModel_1 = __importDefault(require("../../models/db/SettingsModel"));
+const ShowSeasonEpisodesModel_1 = __importDefault(require("../../models/db/ShowSeasonEpisodesModel"));
+const settingsModel = new SettingsModel_1.default(IBDB_1.default);
+const filesModel = new FilesModel_1.default(IBDB_1.default);
+const fileToEpisodeModel = new FileToEpisodeModel_1.default(IBDB_1.default);
+const fileToMovieModel = new FileToMovieModel_1.default(IBDB_1.default);
+const genresModel = new GenresModel_1.default(IBDB_1.default);
+const movieToGenreModel = new MovieToGenreModel_1.default(IBDB_1.default, genresModel);
+const moviesModel = new MoviesModel_1.default(IBDB_1.default, movieToGenreModel);
+const showSeasonEpisodesModel = new ShowSeasonEpisodesModel_1.default(IBDB_1.default);
 const filesystemConstructionModels = {
     filesModel,
     fileToEpisodeModel,
@@ -24,7 +29,7 @@ const filesystemConstructionModels = {
     settingsModel,
     showSeasonEpisodesModel,
 };
-const filesystemModel = new FilesystemModel(filesystemConstructionModels);
+const filesystemModel = new FilesystemModel_1.default(filesystemConstructionModels);
 const filesystem = {
     dir: {
         get: {
@@ -51,5 +56,5 @@ const filesystem = {
         },
     },
 };
-export default filesystem;
+exports.default = filesystem;
 //# sourceMappingURL=filesystem.api.js.map

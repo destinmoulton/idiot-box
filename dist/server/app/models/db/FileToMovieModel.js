@@ -1,4 +1,6 @@
-export default class FileToMovieModel {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class FileToMovieModel {
     _ibdb;
     _tableName;
     constructor(ibdb) {
@@ -44,4 +46,5 @@ export default class FileToMovieModel {
         return await this._ibdb.delete(where, this._tableName);
     }
 }
+exports.default = FileToMovieModel;
 //# sourceMappingURL=FileToMovieModel.js.map

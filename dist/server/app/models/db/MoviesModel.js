@@ -1,4 +1,6 @@
-export default class MoviesModel {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class MoviesModel {
     _ibdb;
     _tableName;
     _movieToGenreModel;
@@ -106,4 +108,5 @@ export default class MoviesModel {
         return await this._ibdb.delete(where, this._tableName);
     }
 }
+exports.default = MoviesModel;
 //# sourceMappingURL=MoviesModel.js.map

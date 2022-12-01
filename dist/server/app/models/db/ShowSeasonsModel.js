@@ -1,5 +1,10 @@
-import moment from "moment";
-export default class ShowSeasonsModel {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const moment_1 = __importDefault(require("moment"));
+class ShowSeasonsModel {
     _ibdb;
     _tableName;
     constructor(ibdb) {
@@ -15,7 +20,7 @@ export default class ShowSeasonsModel {
             aired_episodes: apiData.aired_episodes,
             title: apiData.title,
             overview: apiData.overview,
-            first_aired: moment(apiData.first_aired).format("X"),
+            first_aired: (0, moment_1.default)(apiData.first_aired).format("X"),
             trakt_id: apiData.ids.trakt,
             tvdb_id: apiData.ids.tvdb,
             tmdb_id: apiData.ids.tmdb,
@@ -93,4 +98,5 @@ export default class ShowSeasonsModel {
         }
     }
 }
+exports.default = ShowSeasonsModel;
 //# sourceMappingURL=ShowSeasonsModel.js.map

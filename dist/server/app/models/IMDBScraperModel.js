@@ -1,8 +1,13 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
 let got;
 import("got").then((g) => got = g);
-import cheerio from "cheerio";
-import randomUseragent from "random-useragent";
-export default class IMDBScraperModel {
+const cheerio_1 = __importDefault(require("cheerio"));
+const random_useragent_1 = __importDefault(require("random-useragent"));
+class IMDBScraperModel {
     _posterSelector;
     _imdbPath;
     constructor() {
@@ -15,7 +20,7 @@ export default class IMDBScraperModel {
         const options = {
             retry: 0,
             headers: {
-                "user-agent": randomUseragent.getRandom((ua) => {
+                "user-agent": random_useragent_1.default.getRandom((ua) => {
                     return (parseFloat(ua.browserVersion) >= 20 &&
                         ua.browserName === "Firefox");
                 }),
@@ -26,7 +31,7 @@ export default class IMDBScraperModel {
             },
         };
         return got.get(url, options).then((resp) => {
-            const $ = cheerio.load(resp.body);
+            const $ = cheerio_1.default.load(resp.body);
             const imageURL = $(this._posterSelector).attr("src");
             return {
                 imageURL,
@@ -38,4 +43,5 @@ export default class IMDBScraperModel {
         return this._imdbPath + imdbID;
     }
 }
+exports.default = IMDBScraperModel;
 //# sourceMappingURL=IMDBScraperModel.js.map

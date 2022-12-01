@@ -1,7 +1,12 @@
-import fs from "fs";
-import path from "path";
-import mkdirp from "mkdirp";
-export default class FilesystemModel {
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
+const mkdirp_1 = __importDefault(require("mkdirp"));
+class FilesystemModel {
     _filesModel;
     _fileToEpisodeModel;
     _fileToMovieModel;
@@ -17,10 +22,10 @@ export default class FilesystemModel {
         this._showSeasonEpisodesModel = models.showSeasonEpisodesModel;
     }
     async getDirList(basePath, fullPath) {
-        if (!fs.existsSync(fullPath)) {
+        if (!fs_1.default.existsSync(fullPath)) {
             throw new Error(`FilesystemModel :: getDirList :: ${fullPath} does not exist.`);
         }
-        const contents = fs.readdirSync(fullPath);
+        const contents = fs_1.default.readdirSync(fullPath);
         let res = [];
         for (const filename of contents) {
             res.push(await this._collateFileInformation(basePath, fullPath, filename));
@@ -29,7 +34,7 @@ export default class FilesystemModel {
     }
     async _collateFileInformation(basePath, fullPath, filename) {
         const subpath = fullPath.slice(basePath.length + 1);
-        const info = fs.statSync(path.join(fullPath, filename));
+        const info = fs_1.default.statSync(path_1.default.join(fullPath, filename));
         const isDirectory = info.isDirectory();
         const fileData = {
             name: filename,
@@ -114,24 +119,24 @@ export default class FilesystemModel {
      */
     async moveInSetDir(sourceInfo, destInfo, destDirType) {
         const sourceSetting = await this._settingsModel.getSingleByID(sourceInfo.setting_id);
-        const fullSourcePath = path.join(sourceSetting.value, sourceInfo.subpath, sourceInfo.filename);
-        if (!fs.existsSync(fullSourcePath)) {
+        const fullSourcePath = path_1.default.join(sourceSetting.value, sourceInfo.subpath, sourceInfo.filename);
+        if (!fs_1.default.existsSync(fullSourcePath)) {
             throw new Error(`FilesystemModel :: moveInSetDir() :: source path ${fullSourcePath} does not exist`);
         }
         const destSetting = await this._settingsModel.getSingle("directories", destDirType);
         const baseDestDir = destSetting.value;
-        if (!fs.existsSync(baseDestDir)) {
+        if (!fs_1.default.existsSync(baseDestDir)) {
             throw new Error(`FilesystemModel :: moveInSetDir() :: destination path ${baseDestDir} does not exist`);
         }
-        const destPath = path.join(baseDestDir, destInfo.subpath);
-        if (!fs.existsSync(destPath)) {
-            if (!mkdirp.sync(destPath)) {
+        const destPath = path_1.default.join(baseDestDir, destInfo.subpath);
+        if (!fs_1.default.existsSync(destPath)) {
+            if (!mkdirp_1.default.sync(destPath)) {
                 throw new Error(`FilesystemModel :: moveInSetDir() :: unable to make the destination dir ${destPath}`);
             }
         }
-        const fullDestPath = path.join(destPath, destInfo.filename);
-        fs.renameSync(fullSourcePath, fullDestPath);
-        if (!fs.existsSync(fullDestPath)) {
+        const fullDestPath = path_1.default.join(destPath, destInfo.filename);
+        fs_1.default.renameSync(fullSourcePath, fullDestPath);
+        if (!fs_1.default.existsSync(fullDestPath)) {
             throw new Error(`FilesystemModel :: moveInSetDir() :: unable to move file '${fullSourcePath}' to '${fullDestPath}'`);
         }
         return {
@@ -169,33 +174,33 @@ export default class FilesystemModel {
      */
     directMoveSingle(sourcePath, destPath, sourceName, destName) {
         return new Promise((resolve, reject) => {
-            const fullSource = path.join(sourcePath, sourceName);
-            if (!fs.existsSync(fullSource)) {
+            const fullSource = path_1.default.join(sourcePath, sourceName);
+            if (!fs_1.default.existsSync(fullSource)) {
                 reject(`FilesystemModel :: directMoveSingle() :: source does not exist '${fullSource}'`);
             }
-            const fullDest = path.join(destPath, destName);
-            fs.renameSync(fullSource, fullDest);
-            if (!fs.existsSync(fullDest)) {
+            const fullDest = path_1.default.join(destPath, destName);
+            fs_1.default.renameSync(fullSource, fullDest);
+            if (!fs_1.default.existsSync(fullDest)) {
                 reject(`FilesystemModel :: directMoveSingle() :: unable to rename '${fullSource}' to ${fullDest}`);
             }
             resolve(fullDest);
         });
     }
     async trash(sourcePath, filenames) {
-        if (!fs.existsSync(sourcePath)) {
+        if (!fs_1.default.existsSync(sourcePath)) {
             throw new Error(`FilesystemModel :: trash() :: sourcePath: ${sourcePath} does not exist.`);
         }
         const row = await this._settingsModel.getSingle("directories", "Trash");
         const trashPath = row.value;
-        if (!fs.existsSync(trashPath)) {
+        if (!fs_1.default.existsSync(trashPath)) {
             throw new Error(`FilesystemModel :: trash() :: trash directory: ${trashPath} does not exist.`);
         }
         let succeeded = [];
         let failures = [];
         filenames.forEach((filename) => {
-            const origFilePath = path.join(sourcePath, filename);
-            const trashFilePath = path.join(trashPath, filename);
-            fs.renameSync(origFilePath, trashFilePath);
+            const origFilePath = path_1.default.join(sourcePath, filename);
+            const trashFilePath = path_1.default.join(trashPath, filename);
+            fs_1.default.renameSync(origFilePath, trashFilePath);
             succeeded.push(filename);
         });
         return {
@@ -204,4 +209,5 @@ export default class FilesystemModel {
         };
     }
 }
+exports.default = FilesystemModel;
 //# sourceMappingURL=FilesystemModel.js.map

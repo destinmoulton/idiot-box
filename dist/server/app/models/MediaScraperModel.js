@@ -1,9 +1,14 @@
-import fs from "fs";
-import path from "path";
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 let fetch;
 import("node-fetch").then((f) => fetch = f);
-import config from "../config";
-export default class MediaScraperModel {
+const config_1 = __importDefault(require("../config"));
+class MediaScraperModel {
     _trakt;
     _settingsModel;
     constructor(traktInstance, settingsModel) {
@@ -62,9 +67,9 @@ export default class MediaScraperModel {
             origFileExt;
         const camelCaseType = typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
         const res = await fetch(fileURL, {});
-        const imagepaths = config.paths.images;
-        const finalPath = path.join(imagepaths.base, imagepaths[typeOfMedia], destFilename);
-        const dest = fs.createWriteStream(finalPath);
+        const imagepaths = config_1.default.paths.images;
+        const finalPath = path_1.default.join(imagepaths.base, imagepaths[typeOfMedia], destFilename);
+        const dest = fs_1.default.createWriteStream(finalPath);
         res.body.pipe(dest);
         return destFilename;
     }
@@ -77,4 +82,5 @@ export default class MediaScraperModel {
         return newThumbFilename.replace(/[^\.a-zA-Z0-9]/g, "");
     }
 }
+exports.default = MediaScraperModel;
 //# sourceMappingURL=MediaScraperModel.js.map
