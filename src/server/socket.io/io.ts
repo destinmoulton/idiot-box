@@ -1,5 +1,5 @@
 import http from 'http';
-import socketio from 'socket.io';
+import { Server } from 'socket.io';
 
 import logger from '../logger';
 
@@ -9,7 +9,8 @@ import serverIOListeners from './server.io';
 
 let io = {}
 export function setupSocketIO(server){
-    io = socketio.listen(server, { path: '/socket.io'});
+    //io = Server.listen(server, { path: '/socket.io'});
+    io = new Server(server, { path: '/socket.io'});
     setupListeners(io);
 }
 

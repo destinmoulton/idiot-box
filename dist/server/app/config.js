@@ -1,13 +1,8 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-exports.__esModule = true;
-var fs_1 = __importDefault(require("fs"));
-var path_1 = __importDefault(require("path"));
-var lodash_1 = __importDefault(require("lodash"));
-var configFile = path_1["default"].resolve(__dirname, "../../../config/config.json");
-var CONFIG_OBJECT_PATHS = [
+import fs from "fs";
+import path from "path";
+import has from "lodash";
+const configFile = path.resolve(__dirname, "../../../config/config.json");
+const CONFIG_OBJECT_PATHS = [
     "paths.images.base",
     "paths.images.shows",
     "paths.images.movies",
@@ -16,30 +11,29 @@ var CONFIG_OBJECT_PATHS = [
     "trakt.client_id",
     "trakt.client_secret",
 ];
-if (!fs_1["default"].existsSync(configFile)) {
-    console.error("config.ts :: The config file does not exist. " + configFile);
-    throw new Error("config.ts :: The config file does not exist. " + configFile);
+if (!fs.existsSync(configFile)) {
+    console.error(`config.ts :: The config file does not exist. ${configFile}`);
+    throw new Error(`config.ts :: The config file does not exist. ${configFile}`);
 }
-var conf = null;
+let conf = null;
 try {
-    var rawfile = fs_1["default"].readFileSync(configFile, "utf-8");
+    let rawfile = fs.readFileSync(configFile, "utf-8");
     conf = JSON.parse(rawfile);
     validateJSON(conf);
-    doesFileExist(path_1["default"].join(conf.paths.images.base, conf.paths.images.shows));
-    doesFileExist(path_1["default"].join(conf.paths.images.base, conf.paths.images.movies));
+    doesFileExist(path.join(conf.paths.images.base, conf.paths.images.shows));
+    doesFileExist(path.join(conf.paths.images.base, conf.paths.images.movies));
     doesFileExist(conf.paths.db.migrations);
     doesFileExist(conf.paths.db.sqlite);
 }
 catch (err) {
     throw err;
 }
-exports["default"] = conf;
+export default conf;
 function validateJSON(configJSON) {
-    for (var _i = 0, CONFIG_OBJECT_PATHS_1 = CONFIG_OBJECT_PATHS; _i < CONFIG_OBJECT_PATHS_1.length; _i++) {
-        var propPath = CONFIG_OBJECT_PATHS_1[_i];
+    for (const propPath of CONFIG_OBJECT_PATHS) {
         try {
-            if (!lodash_1["default"](configJSON, propPath)) {
-                throw new Error("config.ts :: config error :: " + propPath + " is not set");
+            if (!has(configJSON, propPath)) {
+                throw new Error(`config.ts :: config error :: ${propPath} is not set`);
             }
         }
         catch (err) {
@@ -48,8 +42,8 @@ function validateJSON(configJSON) {
     }
 }
 function doesFileExist(path) {
-    if (!fs_1["default"].existsSync(path)) {
-        throw new Error("config.ts :: config path " + path + " does not exist in filesystem");
+    if (!fs.existsSync(path)) {
+        throw new Error(`config.ts :: config path ${path} does not exist in filesystem`);
     }
 }
 //# sourceMappingURL=config.js.map

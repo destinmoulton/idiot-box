@@ -1,45 +1,41 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-exports.__esModule = true;
-var got_1 = __importDefault(require("got"));
-var cheerio_1 = __importDefault(require("cheerio"));
-var random_useragent_1 = __importDefault(require("random-useragent"));
-var IMDBScraperModel = /** @class */ (function () {
-    function IMDBScraperModel() {
+let got;
+import("got").then((g) => got = g);
+import cheerio from "cheerio";
+import randomUseragent from "random-useragent";
+export default class IMDBScraperModel {
+    _posterSelector;
+    _imdbPath;
+    constructor() {
         this._posterSelector = "div.ipc-poster > div.ipc-media__img > img";
         this._imdbPath = "https://www.imdb.com/title/";
+        // Dynamically load got (ecmascript)
     }
-    IMDBScraperModel.prototype.getPosterURL = function (imdbID) {
-        var _this = this;
-        var url = this._buildImdbPath(imdbID);
-        var options = {
+    getPosterURL(imdbID) {
+        const url = this._buildImdbPath(imdbID);
+        const options = {
             retry: 0,
             headers: {
-                "user-agent": random_useragent_1["default"].getRandom(function (ua) {
+                "user-agent": randomUseragent.getRandom((ua) => {
                     return (parseFloat(ua.browserVersion) >= 20 &&
                         ua.browserName === "Firefox");
                 }),
                 accept: "text/html",
                 "accept-language": "en-US,en;q=0.9",
                 "cache-control": "no-cache",
-                pragma: "no-cache"
-            }
+                pragma: "no-cache",
+            },
         };
-        return got_1["default"].get(url, options).then(function (resp) {
-            var $ = cheerio_1["default"].load(resp.body);
-            var imageURL = $(_this._posterSelector).attr("src");
+        return got.get(url, options).then((resp) => {
+            const $ = cheerio.load(resp.body);
+            const imageURL = $(this._posterSelector).attr("src");
             return {
-                imageURL: imageURL,
-                url: url
+                imageURL,
+                url,
             };
         });
-    };
-    IMDBScraperModel.prototype._buildImdbPath = function (imdbID) {
+    }
+    _buildImdbPath(imdbID) {
         return this._imdbPath + imdbID;
-    };
-    return IMDBScraperModel;
-}());
-exports["default"] = IMDBScraperModel;
+    }
+}
 //# sourceMappingURL=IMDBScraperModel.js.map

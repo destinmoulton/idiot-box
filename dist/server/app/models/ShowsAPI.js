@@ -1,239 +1,94 @@
-"use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t, g;
-    return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() { return this; }), g;
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [op[0] & 2, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
-            }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
-    }
-};
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-exports.__esModule = true;
-var fs_1 = __importDefault(require("fs"));
-var path_1 = __importDefault(require("path"));
-var config_1 = __importDefault(require("../config"));
-var ShowsAPI = /** @class */ (function () {
-    function ShowsAPI(models) {
+import fs from "fs";
+import path from "path";
+import config from "../config";
+class ShowsAPI {
+    _filesModel;
+    _fileToEpisodeModel;
+    _showsModel;
+    _showSeasonsModel;
+    _showSeasonEpisodesModel;
+    constructor(models) {
         this._filesModel = models.filesModel;
         this._fileToEpisodeModel = models.fileToEpisodeModel;
         this._showsModel = models.showsModel;
         this._showSeasonEpisodesModel = models.showSeasonEpisodesModel;
         this._showSeasonsModel = models.showSeasonsModel;
     }
-    ShowsAPI.prototype.getAllShowsWithSeasonLockedInfo = function () {
-        return __awaiter(this, void 0, void 0, function () {
-            var shows, res, _i, shows_1, show, _a, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0: return [4 /*yield*/, this._showsModel.getAll()];
-                    case 1:
-                        shows = _c.sent();
-                        res = [];
-                        _i = 0, shows_1 = shows;
-                        _c.label = 2;
-                    case 2:
-                        if (!(_i < shows_1.length)) return [3 /*break*/, 5];
-                        show = shows_1[_i];
-                        _b = (_a = res).push;
-                        return [4 /*yield*/, this._getSeasonLockedInfo(show)];
-                    case 3:
-                        _b.apply(_a, [_c.sent()]);
-                        _c.label = 4;
-                    case 4:
-                        _i++;
-                        return [3 /*break*/, 2];
-                    case 5: return [2 /*return*/, res];
-                }
-            });
+    async getAllShowsWithSeasonLockedInfo() {
+        const shows = await this._showsModel.getAll();
+        const res = [];
+        for (const show of shows) {
+            res.push(await this._getSeasonLockedInfo(show));
+        }
+        return res;
+    }
+    async _getSeasonLockedInfo(show) {
+        const seasons = await this._showSeasonsModel.getSeasonsForShow(show.id);
+        const newShow = Object.assign({}, show);
+        let countLocked = 0;
+        let countUnLocked = 0;
+        seasons.forEach((season) => {
+            if (season.locked === 1) {
+                countLocked++;
+            }
+            else {
+                countUnLocked++;
+            }
         });
-    };
-    ShowsAPI.prototype._getSeasonLockedInfo = function (show) {
-        return __awaiter(this, void 0, void 0, function () {
-            var seasons, newShow, countLocked, countUnLocked;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this._showSeasonsModel.getSeasonsForShow(show.id)];
-                    case 1:
-                        seasons = _a.sent();
-                        newShow = Object.assign({}, show);
-                        countLocked = 0;
-                        countUnLocked = 0;
-                        seasons.forEach(function (season) {
-                            if (season.locked === 1) {
-                                countLocked++;
-                            }
-                            else {
-                                countUnLocked++;
-                            }
-                        });
-                        newShow["num_seasons_locked"] = countLocked;
-                        newShow["num_seasons_unlocked"] = countUnLocked;
-                        return [2 /*return*/, newShow];
-                }
-            });
+        newShow["num_seasons_locked"] = countLocked;
+        newShow["num_seasons_unlocked"] = countUnLocked;
+        return newShow;
+    }
+    async getEpisodesBetweenTimestamps(startUnixTimestamp, endUnixTimestamp) {
+        const episodes = await this._showSeasonEpisodesModel.getBetweenUnixTimestamps(startUnixTimestamp, endUnixTimestamp);
+        if (episodes.length === 0) {
+            return [];
+        }
+        let res = [];
+        for (const episode of episodes) {
+            res.push(await this._collateShowIntoEpisode(episode));
+        }
+        return res;
+    }
+    async _collateShowIntoEpisode(originalEpisode) {
+        const show = await this._showsModel.getSingle(originalEpisode.show_id);
+        originalEpisode["show_info"] = show;
+        return originalEpisode;
+    }
+    async deleteSingleShow(showID) {
+        await this._removeEpisodes(showID);
+        await this._showSeasonsModel.deleteAllForShow(showID);
+        await this._removeShowThumbnail(showID);
+        return await this._showsModel.deleteSingle(showID);
+    }
+    async _removeShowThumbnail(showID) {
+        const show = await this._showsModel.getSingle(showID);
+        if (show.image_filename === "") {
+            return true;
+        }
+        const imagepaths = config.paths.images;
+        const fullPath = path.join(imagepaths.base, imagepaths.shows, show.image_filename);
+        if (!fs.existsSync(fullPath)) {
+            return true;
+        }
+        const info = fs.statSync(fullPath);
+        if (info.isDirectory) {
+            return true;
+        }
+        return fs.unlinkSync(fullPath);
+    }
+    async _removeEpisodes(showID) {
+        const episodes = await this._showSeasonEpisodesModel.getEpisodesForShow(showID);
+        episodes.forEach(async (episode) => {
+            await this._removeFileAssociations(episode.id);
         });
-    };
-    ShowsAPI.prototype.getEpisodesBetweenTimestamps = function (startUnixTimestamp, endUnixTimestamp) {
-        return __awaiter(this, void 0, void 0, function () {
-            var episodes, res, _i, episodes_1, episode, _a, _b;
-            return __generator(this, function (_c) {
-                switch (_c.label) {
-                    case 0: return [4 /*yield*/, this._showSeasonEpisodesModel.getBetweenUnixTimestamps(startUnixTimestamp, endUnixTimestamp)];
-                    case 1:
-                        episodes = _c.sent();
-                        if (episodes.length === 0) {
-                            return [2 /*return*/, []];
-                        }
-                        res = [];
-                        _i = 0, episodes_1 = episodes;
-                        _c.label = 2;
-                    case 2:
-                        if (!(_i < episodes_1.length)) return [3 /*break*/, 5];
-                        episode = episodes_1[_i];
-                        _b = (_a = res).push;
-                        return [4 /*yield*/, this._collateShowIntoEpisode(episode)];
-                    case 3:
-                        _b.apply(_a, [_c.sent()]);
-                        _c.label = 4;
-                    case 4:
-                        _i++;
-                        return [3 /*break*/, 2];
-                    case 5: return [2 /*return*/, res];
-                }
-            });
-        });
-    };
-    ShowsAPI.prototype._collateShowIntoEpisode = function (originalEpisode) {
-        return __awaiter(this, void 0, void 0, function () {
-            var show;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this._showsModel.getSingle(originalEpisode.show_id)];
-                    case 1:
-                        show = _a.sent();
-                        originalEpisode["show_info"] = show;
-                        return [2 /*return*/, originalEpisode];
-                }
-            });
-        });
-    };
-    ShowsAPI.prototype.deleteSingleShow = function (showID) {
-        return __awaiter(this, void 0, void 0, function () {
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this._removeEpisodes(showID)];
-                    case 1:
-                        _a.sent();
-                        return [4 /*yield*/, this._showSeasonsModel.deleteAllForShow(showID)];
-                    case 2:
-                        _a.sent();
-                        return [4 /*yield*/, this._removeShowThumbnail(showID)];
-                    case 3:
-                        _a.sent();
-                        return [4 /*yield*/, this._showsModel.deleteSingle(showID)];
-                    case 4: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    ShowsAPI.prototype._removeShowThumbnail = function (showID) {
-        return __awaiter(this, void 0, void 0, function () {
-            var show, imagepaths, fullPath, info;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this._showsModel.getSingle(showID)];
-                    case 1:
-                        show = _a.sent();
-                        if (show.image_filename === "") {
-                            return [2 /*return*/, true];
-                        }
-                        imagepaths = config_1["default"].paths.images;
-                        fullPath = path_1["default"].join(imagepaths.base, imagepaths.shows, show.image_filename);
-                        if (!fs_1["default"].existsSync(fullPath)) {
-                            return [2 /*return*/, true];
-                        }
-                        info = fs_1["default"].statSync(fullPath);
-                        if (info.isDirectory) {
-                            return [2 /*return*/, true];
-                        }
-                        return [2 /*return*/, fs_1["default"].unlinkSync(fullPath)];
-                }
-            });
-        });
-    };
-    ShowsAPI.prototype._removeEpisodes = function (showID) {
-        return __awaiter(this, void 0, void 0, function () {
-            var episodes;
-            var _this = this;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this._showSeasonEpisodesModel.getEpisodesForShow(showID)];
-                    case 1:
-                        episodes = _a.sent();
-                        episodes.forEach(function (episode) { return __awaiter(_this, void 0, void 0, function () {
-                            return __generator(this, function (_a) {
-                                switch (_a.label) {
-                                    case 0: return [4 /*yield*/, this._removeFileAssociations(episode.id)];
-                                    case 1:
-                                        _a.sent();
-                                        return [2 /*return*/];
-                                }
-                            });
-                        }); });
-                        return [4 /*yield*/, this._showSeasonEpisodesModel.deleteAllForShow(showID)];
-                    case 2: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    ShowsAPI.prototype._removeFileAssociations = function (episodeID) {
-        return __awaiter(this, void 0, void 0, function () {
-            var fileToEpisode;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
-                    case 0: return [4 /*yield*/, this._fileToEpisodeModel.getSingleForEpisode(episodeID)];
-                    case 1:
-                        fileToEpisode = _a.sent();
-                        return [4 /*yield*/, this._filesModel.deleteSingle(fileToEpisode.file_id)];
-                    case 2:
-                        _a.sent();
-                        return [4 /*yield*/, this._fileToEpisodeModel.deleteSingle(fileToEpisode.file_id, episodeID)];
-                    case 3: return [2 /*return*/, _a.sent()];
-                }
-            });
-        });
-    };
-    return ShowsAPI;
-}());
-exports["default"] = ShowsAPI;
+        return await this._showSeasonEpisodesModel.deleteAllForShow(showID);
+    }
+    async _removeFileAssociations(episodeID) {
+        const fileToEpisode = await this._fileToEpisodeModel.getSingleForEpisode(episodeID);
+        await this._filesModel.deleteSingle(fileToEpisode.file_id);
+        return await this._fileToEpisodeModel.deleteSingle(fileToEpisode.file_id, episodeID);
+    }
+}
+export default ShowsAPI;
 //# sourceMappingURL=ShowsAPI.js.map

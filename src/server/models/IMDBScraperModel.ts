@@ -1,4 +1,5 @@
-import got from "got";
+let got;
+import("got").then((g)=>got = g);
 import cheerio from "cheerio";
 import randomUseragent from "random-useragent";
 
@@ -8,6 +9,7 @@ export default class IMDBScraperModel {
     constructor() {
         this._posterSelector = "div.ipc-poster > div.ipc-media__img > img";
         this._imdbPath = "https://www.imdb.com/title/";
+        // Dynamically load got (ecmascript)
     }
 
     getPosterURL(imdbID) {

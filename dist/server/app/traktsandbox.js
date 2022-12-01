@@ -1,5 +1,4 @@
-"use strict";
-exports.__esModule = true;
+export {};
 //import traktConfig from './config/trakt.config';
 //const trakt = new Trakt(traktConfig);
 /**

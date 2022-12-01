@@ -1,6 +1,8 @@
 import fs from "fs";
 import path from "path";
-import fetch from "node-fetch";
+
+let fetch;
+import("node-fetch").then((f)=>fetch = f);
 import trakt from "trakt.tv";
 
 import logger from "../logger";
