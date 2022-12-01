@@ -9,9 +9,9 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-} from "@material-ui/core";
-import ArrowUpwardIcon from "@material-ui/icons/ArrowUpward";
-import FolderIcon from "@material-ui/icons/Folder";
+} from "@mui/material";
+import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
+import FolderIcon from "@mui/icons-material/Folder";
 
 import FileDetails from "./FileDetails";
 

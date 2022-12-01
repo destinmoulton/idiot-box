@@ -1,6 +1,6 @@
 import React from "react";
 
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress } from "@mui/material";
 const Spinner = () => {
     return (
         <div className="ib-filebrowser-spin-box">

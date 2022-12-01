@@ -1,6 +1,6 @@
 import React from "react";
 
-import { CircularProgress, Grid, Paper } from "@material-ui/core";
+import { CircularProgress, Grid, Paper } from "@mui/material";
 
 const IdiotBoxLoading = () => {
     return (

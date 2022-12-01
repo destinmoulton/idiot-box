@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Button, CircularProgress, TextField } from "@material-ui/core";
+import { Button, CircularProgress, TextField } from "@mui/material";
 
 import MovieNameLib from "../../../lib/MovieName.lib";
 

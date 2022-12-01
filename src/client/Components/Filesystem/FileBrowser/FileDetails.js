@@ -2,8 +2,8 @@ import PropTypes from "prop-types";
 import React from "react";
 
 //import PlayButton from "../PlayButton";
-import LocalOfferIcon from "@material-ui/icons/LocalOffer";
-import VideocamIcon from "@material-ui/icons/Videocam";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import VideocamIcon from "@mui/icons-material/Videocam";
 
 import Regex from "../../../lib/Regex.lib";
 const FileDetails = ({

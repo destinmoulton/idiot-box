@@ -8,7 +8,7 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-} from "@material-ui/core";
+} from "@mui/material";
 
 import DialogModal from "../../shared/DialogModal";
 const HelpModal = ({ isVisible, onClose }) => {

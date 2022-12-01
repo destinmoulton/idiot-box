@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { IconButton } from "@material-ui/core";
+import { IconButton } from "@mui/material";
 
 import TopBar from "./FileBrowser/TopBar";
 import BrowserTable from "./FileBrowser/BrowserTable";

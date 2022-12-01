@@ -4,9 +4,9 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { truncate } from "lodash";
 
-import { Card, CardContent, Grid } from "@material-ui/core";
-import EventAvailableIcon from "@material-ui/icons/EventAvailable";
-import EventBusyIcon from "@material-ui/icons/EventBusy";
+import { Card, CardContent, Grid } from "@mui/material";
+import EventAvailableIcon from "@mui/icons-material/EventAvailable";
+import EventBusyIcon from "@mui/icons-material/EventBusy";
 
 import { linksReplaceCodesForEpisode } from "../lib/links.lib";
 import { callAPI } from "../actions/api.actions";

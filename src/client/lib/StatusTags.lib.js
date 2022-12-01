@@ -3,9 +3,9 @@
  *
  * Encode and decode status_tags column.
  */
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import StarBorderIcon from "@material-ui/icons/StarBorder";
-import StarIcon from "@material-ui/icons/Star";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import StarIcon from "@mui/icons-material/Star";
 export class StatusTagsLib {
     decodeTags(tagString) {
         if (tagString == null) return [];

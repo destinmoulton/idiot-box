@@ -2,9 +2,9 @@ import React from "react";
 
 import { Link } from "react-router-dom";
 
-import { Grid } from "@material-ui/core";
-import LockIcon from "@material-ui/icons/Lock";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
+import { Grid } from "@mui/material";
+import LockIcon from "@mui/icons-material/Lock";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
 
 import { getCurrentBreakpoint } from "../../lib/breakpoints.lib";
 export default (props) => {

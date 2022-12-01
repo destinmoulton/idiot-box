@@ -15,12 +15,12 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-} from "@material-ui/core";
-import CheckIcon from "@material-ui/icons/Check";
-import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import LockIcon from "@material-ui/icons/Lock";
-import LockOpenIcon from "@material-ui/icons/LockOpen";
+} from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import LockIcon from "@mui/icons-material/Lock";
+import LockOpenIcon from "@mui/icons-material/LockOpen";
 import moment from "moment";
 
 import PlayButton from "../../PlayButton";

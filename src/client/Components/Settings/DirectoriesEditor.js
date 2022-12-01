@@ -11,16 +11,16 @@ import {
     TableHead,
     TableRow,
     TextField,
-} from "@material-ui/core";
+} from "@mui/material";
 
-import EditIcon from "@material-ui/icons/Edit";
-import FolderIcon from "@material-ui/icons/Folder";
-import SaveIcon from "@material-ui/icons/Save";
+import EditIcon from "@mui/icons-material/Edit";
+import FolderIcon from "@mui/icons-material/Folder";
+import SaveIcon from "@mui/icons-material/Save";
 import DirectorySelectorModal from "./DirectorySelectorModal";
 
 import { deleteSetting, saveSetting } from "../../actions/settings.actions";
 import { callAPI } from "../../actions/api.actions";
-import { InputAdornment } from "@material-ui/core";
+import { InputAdornment } from "@mui/material";
 
 const DEFAULT_INITIAL_DIR = "/";
 const BLANK_DATA = {

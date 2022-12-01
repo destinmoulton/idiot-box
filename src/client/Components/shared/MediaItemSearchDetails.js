@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Button, Grid, CircularProgress } from "@material-ui/core";
+import { Button, Grid, CircularProgress } from "@mui/material";
 
 import { callAPI } from "../../actions/api.actions";
 

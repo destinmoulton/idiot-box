@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 
-import { Grid, Modal, Button } from "@material-ui/core";
-import CloseIcon from "@material-ui/icons/Close";
+import { Grid, Modal, Button } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 const DialogModal = ({
     children,

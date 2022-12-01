@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { Grid } from "@material-ui/core";
+import { Grid } from "@mui/material";
 
 import DirectoriesEditor from "./DirectoriesEditor";
 import Links from "./Links";

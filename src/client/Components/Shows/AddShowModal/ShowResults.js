@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Button, Grid, TextField, CircularProgress } from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
+import { Button, Grid, TextField, CircularProgress } from "@mui/material";
+import SearchIcon from "@mui/icons-material/Search";
 
 import MediaItemSearchDetails from "../../shared/MediaItemSearchDetails";
 

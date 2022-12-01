@@ -14,14 +14,14 @@ import {
     SwipeableDrawer,
     Toolbar,
     Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 
-import ListIcon from "@material-ui/icons/List";
-import MenuIcon from "@material-ui/icons/Menu";
-import MovieIcon from "@material-ui/icons/Movie";
-import NewReleasesIcon from "@material-ui/icons/NewReleases";
-import SettingsIcon from "@material-ui/icons/Settings";
-import TvIcon from "@material-ui/icons/Tv";
+import ListIcon from "@mui/icons-material/List";
+import MenuIcon from "@mui/icons-material/Menu";
+import MovieIcon from "@mui/icons-material/Movie";
+import NewReleasesIcon from "@mui/icons-material/NewReleases";
+import SettingsIcon from "@mui/icons-material/Settings";
+import TvIcon from "@mui/icons-material/Tv";
 
 const navbarItems = [
     { path: "/newepisodes", title: "New Episodes", icon: <NewReleasesIcon /> },

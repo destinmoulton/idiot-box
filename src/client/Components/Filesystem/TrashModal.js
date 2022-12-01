@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Button } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { Button } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 
 import DialogModal from "../shared/DialogModal";
 class TrashModal extends Component {

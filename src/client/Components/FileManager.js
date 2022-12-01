@@ -2,12 +2,12 @@ import _ from "lodash";
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Button, ButtonGroup, Tabs, Tab } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
-import LabelOffIcon from "@material-ui/icons/LabelOff";
-import LocalOfferIcon from "@material-ui/icons/LocalOffer";
-import TextRotationNoneIcon from "@material-ui/icons/TextRotationNone";
-import VideocamIcon from "@material-ui/icons/Videocam";
+import { Button, ButtonGroup, Tabs, Tab } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
+import LabelOffIcon from "@mui/icons-material/LabelOff";
+import LocalOfferIcon from "@mui/icons-material/LocalOffer";
+import TextRotationNoneIcon from "@mui/icons-material/TextRotationNone";
+import VideocamIcon from "@mui/icons-material/Videocam";
 
 import FileBrowser from "./Filesystem/FileBrowser";
 import IDFileModal from "./ID/IDFileModal";

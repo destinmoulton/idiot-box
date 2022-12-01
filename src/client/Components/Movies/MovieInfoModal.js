@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Button, Grid } from "@material-ui/core";
-import DeleteIcon from "@material-ui/icons/Delete";
+import { Button, Grid } from "@mui/material";
+import DeleteIcon from "@mui/icons-material/Delete";
 import StatusTagIcons from "./StatusTagIcons";
 
 import DialogModal from "../shared/DialogModal";

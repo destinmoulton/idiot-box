@@ -1,8 +1,8 @@
 import PropTypes from "prop-types";
 import React from "react";
 
-import { Button } from "@material-ui/core";
-import SaveIcon from "@material-ui/icons/Save";
+import { Button } from "@mui/material";
+import SaveIcon from "@mui/icons-material/Save";
 
 import DialogModal from "../shared/DialogModal";
 import FileBrowser from "../Filesystem/FileBrowser";

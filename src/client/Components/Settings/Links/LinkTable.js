@@ -8,9 +8,9 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-} from "@material-ui/core";
+} from "@mui/material";
 
-import AddIcon from "@material-ui/icons/Add";
+import AddIcon from "@mui/icons-material/Add";
 
 import LinkEditorRow from "./LinkEditorRow";
 import LinkRegularRow from "./LinkRegularRow";

@@ -1,10 +1,10 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 
-import { Button } from "@material-ui/core";
+import { Button } from "@mui/material";
 
 import DialogModal from "../shared/DialogModal";
-import SaveIcon from "@material-ui/icons/Save";
+import SaveIcon from "@mui/icons-material/Save";
 import FileBrowser from "./FileBrowser";
 
 class MoveRenameModal extends Component {
@@ -132,7 +132,7 @@ class MoveRenameModal extends Component {
                     title="Move or Rename"
                     isVisible={isVisible}
                     onClose={onCancel}
-                    width={400}
+                    width={600}
                     footer={[
                         <Button
                             variant="contained"

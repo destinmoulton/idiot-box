@@ -4,7 +4,6 @@ const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
     .BundleAnalyzerPlugin;
 
 module.exports = {
-    devtool: "source-map",
     entry: "./src/client/App.js",
     output: {
         path: path.join(__dirname, "dist/server/public/js/idiotbox"),
@@ -19,10 +18,6 @@ module.exports = {
                     loader: "babel-loader",
                     options: {
                         presets: ["@babel/env", "@babel/react"],
-                        plugins: [
-                            "@babel/plugin-proposal-class-properties",
-                            "@babel/plugin-proposal-object-rest-spread",
-                        ],
                     },
                 },
             },
@@ -34,7 +29,7 @@ module.exports = {
         moment: "moment",
         react: "React",
         "react-dom": "ReactDOM",
-        "@material-ui/core": "MaterialUI",
+        "@mui/material": "MaterialUI",
     },
     plugins: [
         /**

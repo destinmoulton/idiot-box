@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { Button, Grid, TextField, CircularProgress } from "@material-ui/core";
+import { Button, Grid, TextField, CircularProgress } from "@mui/material";
 
 import AddShowModal from "./AddShowModal/AddShowModal";
 import ShowListThumbInfo from "./ShowListThumbInfo";

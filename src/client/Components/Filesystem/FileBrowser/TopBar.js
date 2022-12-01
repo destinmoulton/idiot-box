@@ -1,7 +1,7 @@
 import React from "react";
 
-import { IconButton, Grid } from "@material-ui/core";
-import CachedIcon from "@material-ui/icons/Cached";
+import { IconButton, Grid } from "@mui/material";
+import CachedIcon from "@mui/icons-material/Cached";
 const TopBar = ({ handleClickReload, path }) => {
     return (
         <Grid container className="ib-filebrowser-topbar">

@@ -7,9 +7,9 @@ import {
     AccordionSummary,
     AccordionDetails,
     Button,
-} from "@material-ui/core";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+} from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DialogModal from "../shared/DialogModal";
 import ArchiveSingleEpisode from "./ArchiveSingleEpisode";
 import EpisodeIDSelector from "./EpisodeIDSelector";
