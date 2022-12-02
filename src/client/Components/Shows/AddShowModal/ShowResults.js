@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React, {Component} from "react";
 
-import { Button, Grid, TextField, CircularProgress } from "@mui/material";
+import {Button, Grid, TextField, CircularProgress} from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
 import MediaItemSearchDetails from "../../shared/MediaItemSearchDetails";
@@ -33,7 +33,7 @@ class ShowResults extends Component {
     }
 
     _handleSelectMovie(show, imageURL) {
-        const { callAPI } = this.props;
+        const {callAPI} = this.props;
 
         this.setState({
             isIDing: true,
@@ -50,7 +50,7 @@ class ShowResults extends Component {
     }
 
     _idShowComplete(recd) {
-        const { onAddShowComplete } = this.props;
+        const {onAddShowComplete} = this.props;
 
         onAddShowComplete();
     }
@@ -66,8 +66,8 @@ class ShowResults extends Component {
     }
 
     _getSearchResultsFromServer() {
-        const { currentSearchString } = this.state;
-        const { callAPI } = this.props;
+        const {currentSearchString} = this.state;
+        const {callAPI} = this.props;
 
         const options = {
             search_string: currentSearchString,
@@ -88,7 +88,7 @@ class ShowResults extends Component {
     }
 
     _buildSearchResults() {
-        const { currentSearchString, shows } = this.state;
+        const {currentSearchString, shows} = this.state;
 
         let showList = [];
         let count = 0;
@@ -108,20 +108,24 @@ class ShowResults extends Component {
 
         return (
             <Grid container>
-                <Grid item xs={12} className="ib-showmodal-search-topbar">
+                <Grid item
+                      xs={12}
+                      className="ib-showmodal-search-topbar"
+                      key={"search-topbar"}
+                >
                     <TextField
                         onChange={this._handleChangeSearchInput.bind(this)}
                         // onSearch={this._handleSearchPress.bind(this)}
                         value={currentSearchString}
                         variant="outlined"
                         size="small"
-                        style={{ width: "250px" }}
+                        style={{width: "250px"}}
                     />
                     <Button
                         size="small"
                         variant="outlined"
                         onClick={this._handleSearchPress.bind(this)}
-                        startIcon={<SearchIcon />}
+                        startIcon={<SearchIcon/>}
                     >
                         Search
                     </Button>
@@ -134,6 +138,7 @@ class ShowResults extends Component {
                     alignContent="center"
                     justify="center"
                     spacing={2}
+                    key={"show-list"}
                 >
                     {showList}
                 </Grid>
@@ -144,15 +149,15 @@ class ShowResults extends Component {
     _buildAddingShow() {
         return (
             <div className="ib-spinner-container">
-                <CircularProgress />
-                <br />
+                <CircularProgress/>
+                <br/>
                 Adding show. This could take a while...
             </div>
         );
     }
 
     render() {
-        const { isIDing } = this.state;
+        const {isIDing} = this.state;
 
         let contents = this._buildAddingShow();
 

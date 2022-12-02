@@ -1,7 +1,6 @@
 import PropTypes from "prop-types";
-import React, { Component } from "react";
-
-import { Button, Grid } from "@mui/material";
+import React, {Component} from "react";
+import {Button, Grid} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import SeasonTabs from "./SeasonTabs";
@@ -21,22 +20,37 @@ class ShowInfo extends Component {
     }
 
     _getShowInfo() {
-        const { callAPI } = this.props;
+        const {callAPI} = this.props;
 
         this.setState({
             isLoadingShow: true,
         });
-        const params = {
-            slug: this.props.match.params.slug,
+        const opts = {
+            slug: this._getShowSlugFromURI()
         };
 
         callAPI(
             "shows.show.get_for_slug",
-            params,
+            opts,
             this._showInfoReceived.bind(this),
             false
         );
     }
+
+    _getShowSlugFromURI() {
+        const uri_els = window.location.pathname.split("/");
+        return uri_els[1];
+    }
+
+    _getShowSeasonNumberFromURI() {
+        const uri_els = window.location.pathname.split("/");
+        if (uri_els.length > 2) {
+            // the last uri param is the season
+            return uri_els[2];
+        }
+        return -1;
+    }
+
 
     _showInfoReceived(show) {
         this.setState({
@@ -46,8 +60,8 @@ class ShowInfo extends Component {
     }
 
     _deleteShow() {
-        const { callAPI } = this.props;
-        const { show } = this.state;
+        const {callAPI} = this.props;
+        const {show} = this.state;
 
         const params = {
             show_id: show.id,
@@ -70,7 +84,7 @@ class ShowInfo extends Component {
     }
 
     _handlePressDelete() {
-        const { show } = this.state;
+        const {show} = this.state;
 
         if (confirm(`Really delete ${show.title}`)) {
             this._deleteShow();
@@ -78,7 +92,7 @@ class ShowInfo extends Component {
     }
 
     _buildShowInfo() {
-        const { show } = this.state;
+        const {show} = this.state;
 
         return (
             <Grid container className="ib-show-info-container">
@@ -107,7 +121,7 @@ class ShowInfo extends Component {
                             onClick={this._handlePressDelete.bind(this)}
                             size="small"
                         >
-                            <DeleteIcon />
+                            <DeleteIcon/>
                             Delete Show
                         </Button>
                     </h4>
@@ -118,15 +132,16 @@ class ShowInfo extends Component {
     }
 
     render() {
-        const { isLoadingShow, show } = this.state;
+        const {isLoadingShow, show} = this.state;
 
         const showInfo = this._buildShowInfo();
-
+        const seasonNumber = this._getShowSeasonNumberFromURI();
         let seasonsBar = "";
         if (!isLoadingShow) {
             seasonsBar = (
                 <SeasonTabs
                     show={show}
+                    seasonNumber={seasonNumber}
                     callAPI={this.props.callAPI}
                     settings={this.props.settings}
                     history={this.props.history}

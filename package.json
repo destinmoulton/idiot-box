@@ -5,7 +5,7 @@
     "main": "index.js",
     "scripts": {
         "clean-server": "rm -rf dist/server/app/*",
-        "compile-react": "webpack --config webpack.config.js -d --watch --no-devtool",
+        "compile-react": "webpack --config webpack.config.js --watch",
         "compile-server": "npm run clean-server && tsc --watch ",
         "profile": "webpack --profile --json > stats.json",
         "start-server": "pm2 start pm2.config.json",

@@ -1,9 +1,11 @@
 var path = require("path");
-var webpack = require("webpack");
-const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
-    .BundleAnalyzerPlugin;
+//var webpack = require("webpack");
+//const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+//    .BundleAnalyzerPlugin;
 
 module.exports = {
+    mode: "development",
+    devtool: "eval-source-map",
     entry: "./src/client/App.js",
     output: {
         path: path.join(__dirname, "dist/server/public/js/idiotbox"),

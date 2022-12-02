@@ -1,18 +1,18 @@
-import React, { Component } from "react";
+import React, {Component} from "react";
 
-import { Grid, Modal, Button } from "@mui/material";
+import {Grid, Modal, Button} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 const DialogModal = ({
-    children,
-    title,
-    isVisible,
-    onClose,
-    footer,
-    minWidth = 200,
-    width = 400,
-    minHeight = 200,
-}) => {
+                         children,
+                         title,
+                         isVisible,
+                         onClose,
+                         footer,
+                         minWidth = 200,
+                         width = 400,
+                         minHeight = 200,
+                     }) => {
     const windowWidth = window.innerWidth;
     const windowHeight = window.innerHeight;
 
@@ -43,12 +43,12 @@ const DialogModal = ({
                 style={style}
             >
                 <Grid item xs={12}>
-                    <div className="ib-dialogmodal-title">
+                    <div key="title" className="ib-dialogmodal-title">
                         {title}
-                        <Button startIcon={<CloseIcon />} onClick={onClose} />
+                        <Button startIcon={<CloseIcon/>} onClick={onClose}/>
                     </div>
-                    <div style={mobileModalStyle}>{children}</div>
-                    <div className="ib-dialogmodal-footer">{footer}</div>
+                    <div key="children" style={mobileModalStyle}>{children}</div>
+                    <div key="footer" className="ib-dialogmodal-footer">{footer}</div>
                 </Grid>
             </Grid>
         </Modal>

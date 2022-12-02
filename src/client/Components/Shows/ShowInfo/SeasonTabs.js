@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
-import React, { Component } from "react";
-
-import { CircularProgress, Grid, Tabs, Tab } from "@mui/material";
+import React, {Component} from "react";
+import {useNavigate} from "react-router-dom";
+import {CircularProgress, Grid, Tabs, Tab} from "@mui/material";
 import LockIcon from "@mui/icons-material/Lock";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 
@@ -25,10 +25,10 @@ class SeasonTabs extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.match.params.season_number !== undefined) {
-            if (prevProps.match.params.season_number !== undefined) {
-                const prevSeasonNum = prevProps.match.params.season_number;
-                const thisSeasonNum = this.props.match.params.season_number;
+        if (this.props.seasonNumber !== -1) {
+            if (prevProps.seasonNumber !== -1) {
+                const prevSeasonNum = prevProps.seasonNumber;
+                const thisSeasonNum = this.props.seasonNumber;
                 if (prevSeasonNum !== thisSeasonNum) {
                     this._parseActiveSeason(this.props);
                 }
@@ -38,13 +38,13 @@ class SeasonTabs extends Component {
         }
     }
 
-    _parseActiveSeason(props) {
-        const { match } = props;
-        const { activeSeasonNum, seasons } = this.state;
 
-        if (match.params.season_number !== undefined) {
-            if (match.params.season_number !== activeSeasonNum) {
-                const seasonNumber = parseInt(match.params.season_number);
+    _parseActiveSeason(props) {
+        const {activeSeasonNum, seasons} = this.state;
+        const season_number = props.seasonNumber;
+        if (season_number !== -1) {
+            if (season_number !== activeSeasonNum) {
+                const seasonNumber = parseInt(season_number);
                 let activeSeason = {};
                 seasons.forEach((season) => {
                     if (season.season_number === seasonNumber) {
@@ -57,10 +57,11 @@ class SeasonTabs extends Component {
                 });
             }
         }
+
     }
 
     _getSeasons() {
-        const { callAPI, show } = this.props;
+        const {callAPI, show} = this.props;
 
         this.setState({
             isLoadingSeasons: true,
@@ -79,7 +80,7 @@ class SeasonTabs extends Component {
     }
 
     _seasonsReceived(seasons) {
-        const { activeSeasonNum } = this.state;
+        const {activeSeasonNum} = this.state;
         let activeSeason = {};
         seasons.forEach((season) => {
             if (season.season_number === activeSeasonNum) {
@@ -95,13 +96,13 @@ class SeasonTabs extends Component {
     }
 
     _handleClickTab(seasonNumber) {
-        const { history, show } = this.props;
-        history.push("/show/" + show.slug + "/" + seasonNumber);
+        const {history, show} = this.props;
+        history("/show/" + show.slug + "/" + seasonNumber);
     }
 
     _handleToggleSingleSeasonLock(newLockStatus) {
-        const { callAPI } = this.props;
-        const { activeSeason } = this.state;
+        const {callAPI} = this.props;
+        const {activeSeason} = this.state;
 
         const params = {
             season_id: activeSeason.id,
@@ -115,9 +116,10 @@ class SeasonTabs extends Component {
             false
         );
     }
+
     _handleToggleAllSeasonsLock(newLockStatus) {
-        const { callAPI, show } = this.props;
-        const { activeSeason } = this.state;
+        const {callAPI, show} = this.props;
+        const {activeSeason} = this.state;
 
         const params = {
             show_id: show.id,
@@ -133,13 +135,13 @@ class SeasonTabs extends Component {
     }
 
     _buildSeasonTabs() {
-        const { activeSeasonNum, seasons } = this.state;
+        const {activeSeasonNum, seasons} = this.state;
         const tabpanes = seasons.map((season, index) => {
             let lockIcon = "";
             if (season.locked === 1) {
-                lockIcon = <LockIcon />;
+                lockIcon = <LockIcon/>;
             } else {
-                lockIcon = <LockOpenIcon />;
+                lockIcon = <LockOpenIcon/>;
             }
 
             const tabTitle = (
@@ -171,12 +173,12 @@ class SeasonTabs extends Component {
     }
 
     render() {
-        const { activeSeason, activeSeasonNum, isLoadingSeasons } = this.state;
-        const { callAPI, settings, show } = this.props;
+        const {activeSeason, activeSeasonNum, isLoadingSeasons} = this.state;
+        const {callAPI, settings, show} = this.props;
 
         let seasonBar = "";
         if (isLoadingSeasons) {
-            seasonBar = <CircularProgress />;
+            seasonBar = <CircularProgress/>;
         } else {
             seasonBar = this._buildSeasonTabs();
         }
@@ -216,6 +218,7 @@ class SeasonTabs extends Component {
 
 SeasonTabs.propTypes = {
     callAPI: PropTypes.func.isRequired,
+    seasonNumber: PropTypes.string,
     settings: PropTypes.object.isRequired,
     show: PropTypes.object.isRequired,
 };
