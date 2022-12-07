@@ -39,14 +39,15 @@ class ShowInfo extends Component {
 
     _getShowSlugFromURI() {
         const uri_els = window.location.pathname.split("/");
-        return uri_els[1];
+        console.log("_getShowSlugFromURI()::uri_els=", uri_els);
+        return uri_els[2];
     }
 
     _getShowSeasonNumberFromURI() {
         const uri_els = window.location.pathname.split("/");
-        if (uri_els.length > 2) {
+        if (uri_els.length > 3) {
             // the last uri param is the season
-            return uri_els[2];
+            return uri_els[3];
         }
         return -1;
     }
@@ -137,6 +138,7 @@ class ShowInfo extends Component {
         const showInfo = this._buildShowInfo();
         const seasonNumber = this._getShowSeasonNumberFromURI();
         let seasonsBar = "";
+
         if (!isLoadingShow) {
             seasonsBar = (
                 <SeasonTabs

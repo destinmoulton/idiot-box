@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React, {Component} from "react";
 
 import {
     Accordion,
@@ -55,11 +55,12 @@ class EpisodesTable extends Component {
     }
 
     _getEpisodes(seasonNum) {
-        const { callAPI, show } = this.props;
+        const {callAPI, show} = this.props;
 
         this.setState({
             isLoadingEpisodes: true,
         });
+
 
         const options = {
             show_id: show.id,
@@ -82,8 +83,8 @@ class EpisodesTable extends Component {
     }
 
     _changeSelectedEpisodeWatchedStatus(newWatchedStatus) {
-        const { selectedEpisodeKeys } = this.state;
-        const { activeSeasonNum, callAPI } = this.props;
+        const {selectedEpisodeKeys} = this.state;
+        const {activeSeasonNum, callAPI} = this.props;
 
         this.setState({
             isLoadingEpisodes: true,
@@ -137,14 +138,14 @@ class EpisodesTable extends Component {
     }
 
     _episodeTableRows() {
-        const { directories } = this.props.settings;
+        const {directories} = this.props.settings;
 
-        const { episodes } = this.state;
+        const {episodes} = this.state;
         let output = [];
         episodes.forEach((ep) => {
-            let watchedIcon = <CheckIcon />;
+            let watchedIcon = <CheckIcon/>;
             if (ep.watched) {
-                watchedIcon = <CheckBoxOutlineBlankIcon />;
+                watchedIcon = <CheckBoxOutlineBlankIcon/>;
             }
             let airedDate = moment
                 .unix(ep.first_aired)
@@ -164,9 +165,9 @@ class EpisodesTable extends Component {
                 <TableRow key={ep.id}>
                     <TableCell>{ep.episode_number}</TableCell>
                     <TableCell>{watchedIcon}</TableCell>
-                    <TableCell style={{ width: "60%" }}>
+                    <TableCell style={{width: "60%"}}>
                         <Accordion>
-                            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <AccordionSummary expandIcon={<ExpandMoreIcon/>}>
                                 <strong>{ep.title}</strong>
                             </AccordionSummary>
                             <AccordionDetails>{ep.overview}</AccordionDetails>
@@ -181,7 +182,7 @@ class EpisodesTable extends Component {
     }
 
     _buildEpisodesList() {
-        const { episodes } = this.state;
+        const {episodes} = this.state;
 
         let episodeList = [];
 
@@ -203,8 +204,8 @@ class EpisodesTable extends Component {
     }
 
     _buildButtons() {
-        const { season } = this.props;
-        const { selectedEpisodeKeys } = this.state;
+        const {season} = this.props;
+        const {selectedEpisodeKeys} = this.state;
 
         let toggleLockButton = null;
         if (season.locked) {
@@ -214,7 +215,7 @@ class EpisodesTable extends Component {
                     variant="contained"
                     disableElevation
                     onClick={this._handleToggleSingleSeasonLock.bind(this, 0)}
-                    startIcon={<LockOpenIcon />}
+                    startIcon={<LockOpenIcon/>}
                 >
                     Unlock This Season
                 </Button>
@@ -226,7 +227,7 @@ class EpisodesTable extends Component {
                     variant="contained"
                     disableElevation
                     onClick={this._handleToggleSingleSeasonLock.bind(this, 1)}
-                    startIcon={<LockIcon />}
+                    startIcon={<LockIcon/>}
                 >
                     Lock This Season
                 </Button>
@@ -263,14 +264,14 @@ class EpisodesTable extends Component {
                     <Button
                         size="small"
                         onClick={this._handleToggleAllSeasonsLock.bind(this, 0)}
-                        startIcon={<LockOpenIcon />}
+                        startIcon={<LockOpenIcon/>}
                     >
                         Unlock All Seasons
                     </Button>
                     <Button
                         size="small"
                         onClick={this._handleToggleAllSeasonsLock.bind(this, 1)}
-                        startIcon={<LockIcon />}
+                        startIcon={<LockIcon/>}
                     >
                         Lock All Seasons
                     </Button>
@@ -281,15 +282,15 @@ class EpisodesTable extends Component {
     }
 
     render() {
-        const { activeSeasonNum } = this.props;
-        const { selectedSeasonNum, isLoadingEpisodes } = this.state;
+        const {activeSeasonNum} = this.props;
+        const {selectedSeasonNum, isLoadingEpisodes} = this.state;
 
         let episodeList = "";
         if (selectedSeasonNum > -1) {
             if (isLoadingEpisodes) {
                 episodeList = (
                     <div id="ib-loading-box">
-                        <CircularProgress />
+                        <CircularProgress/>
                     </div>
                 );
             } else {
