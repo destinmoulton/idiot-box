@@ -218,7 +218,7 @@ class SeasonTabs extends Component {
 
 SeasonTabs.propTypes = {
     callAPI: PropTypes.func.isRequired,
-    seasonNumber: PropTypes.string,
+    seasonNumber: PropTypes.number,
     settings: PropTypes.object.isRequired,
     show: PropTypes.object.isRequired,
 };

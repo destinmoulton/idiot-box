@@ -107,7 +107,7 @@ class ShowResults extends Component {
         });
 
         return (
-            <Grid container>
+            <Grid container key={"show-results-grid"}>
                 <Grid item
                       xs={12}
                       className="ib-showmodal-search-topbar"
