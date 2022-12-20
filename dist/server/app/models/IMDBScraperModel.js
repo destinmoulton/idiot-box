@@ -3,8 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-let got;
-import("got").then((g) => got = g);
+const axios_1 = __importDefault(require("axios"));
 const cheerio_1 = __importDefault(require("cheerio"));
 const random_useragent_1 = __importDefault(require("random-useragent"));
 class IMDBScraperModel {
@@ -30,8 +29,8 @@ class IMDBScraperModel {
                 pragma: "no-cache",
             },
         };
-        return got.get(url, options).then((resp) => {
-            const $ = cheerio_1.default.load(resp.body);
+        return axios_1.default.get(url, options).then((resp) => {
+            const $ = cheerio_1.default.load(resp.data);
             const imageURL = $(this._posterSelector).attr("src");
             return {
                 imageURL,
