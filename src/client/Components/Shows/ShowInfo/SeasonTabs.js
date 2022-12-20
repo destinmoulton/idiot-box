@@ -25,7 +25,6 @@ class SeasonTabs extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        console.log("SeasonTabs::componentDidUpdate() uriParams", this.props.uriParams);
         const {season_number} = this.props.uriMatch.params;
         if (season_number) {
             const old_season_number = prevProps.uriMatch.params.season_number;
