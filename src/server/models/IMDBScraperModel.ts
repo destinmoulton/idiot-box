@@ -1,11 +1,11 @@
-let got;
-import("got").then((g)=>got = g);
+import axios from "axios";
 import cheerio from "cheerio";
 import randomUseragent from "random-useragent";
 
 export default class IMDBScraperModel {
     _posterSelector: string;
     _imdbPath: string;
+
     constructor() {
         this._posterSelector = "div.ipc-poster > div.ipc-media__img > img";
         this._imdbPath = "https://www.imdb.com/title/";
@@ -29,8 +29,8 @@ export default class IMDBScraperModel {
                 pragma: "no-cache",
             },
         };
-        return got.get(url, options).then((resp) => {
-            const $ = cheerio.load(resp.body);
+        return axios.get(url, options).then((resp) => {
+            const $ = cheerio.load(resp.data);
             const imageURL = $(this._posterSelector).attr("src");
             return {
                 imageURL,
