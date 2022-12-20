@@ -1,8 +1,8 @@
 import _ from "lodash";
 import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React, {Component} from "react";
 
-import { Button, ButtonGroup, Tabs, Tab } from "@mui/material";
+import {Button, ButtonGroup, Tabs, Tab} from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import LabelOffIcon from "@mui/icons-material/LabelOff";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
@@ -17,6 +17,7 @@ import TrashModal from "./Filesystem/TrashModal";
 import UntagModal from "./ID/UntagModal";
 
 import Regex from "../lib/Regex.lib";
+
 class FileManager extends Component {
     constructor(props) {
         super(props);
@@ -52,12 +53,12 @@ class FileManager extends Component {
     }
 
     _parseURL() {
-        const { settings, match } = this.props;
+        const {settings, uriMatch} = this.props;
         const settingDirectories = settings.directories;
 
-        let settingKey = match.params.setting_key;
+        let settingKey = uriMatch.params.setting_key;
 
-        const newSubpath = match.params.subpath;
+        const newSubpath = uriMatch.params.subpath;
 
         let subpath = "";
         if (newSubpath !== undefined) {
@@ -86,7 +87,7 @@ class FileManager extends Component {
     }
 
     _handleChangeDirectory(newDir, dirList) {
-        const { currentPathInfo, currentToplevelDirectory } = this.state;
+        const {currentPathInfo, currentToplevelDirectory} = this.state;
         const subpath = newDir.slice(currentToplevelDirectory.length + 1);
 
         this.setState({
@@ -107,7 +108,7 @@ class FileManager extends Component {
                     "/" +
                     encodeURIComponent(newSubpath),
             };
-            this.props.history.push(location);
+            this.props.history(location);
         }
     }
 
@@ -123,7 +124,7 @@ class FileManager extends Component {
      * @param {object} item
      */
     _handleSelectionChangeSingle(item) {
-        const { selectedRows } = this.state;
+        const {selectedRows} = this.state;
 
         if (selectedRows.has(item)) {
             selectedRows.delete(item);
@@ -135,6 +136,7 @@ class FileManager extends Component {
             selectedRows,
         });
     }
+
     /**
      * Handle checking/unchecking multiple items
      *
@@ -231,7 +233,7 @@ class FileManager extends Component {
     }
 
     _handleClickIDMultipleEpisodes() {
-        const { dirList } = this.state;
+        const {dirList} = this.state;
 
         const filenamesToID = [...this.state.selectedRows];
 
@@ -269,7 +271,7 @@ class FileManager extends Component {
     }
 
     _handleSelectVideos() {
-        const { dirList } = this.state;
+        const {dirList} = this.state;
 
         let selected = new Set();
         dirList.forEach((item) => {
@@ -284,7 +286,7 @@ class FileManager extends Component {
     }
 
     _handleClickUntag(evt) {
-        const { dirList } = this.state;
+        const {dirList} = this.state;
 
         let filenamesToUntag = [];
         if (evt.currentTarget.tagName === "BUTTON") {
@@ -335,7 +337,7 @@ class FileManager extends Component {
                 title: "",
                 dataIndex: "",
                 render: (text, record) => {
-                    const { assocData } = record;
+                    const {assocData} = record;
 
                     let tagAction = "";
                     if (Regex.isVideoFile(record.name)) {
@@ -348,7 +350,7 @@ class FileManager extends Component {
                                         record.name
                                     )}
                                 >
-                                    <Icon type="tag" />
+                                    <Icon type="tag"/>
                                 </a>
                             );
                         }
@@ -377,7 +379,7 @@ class FileManager extends Component {
                                 onClick={this._handleClickTrash.bind(this)}
                                 data-item-name={record.name}
                             >
-                                <Icon type="delete" />
+                                <Icon type="delete"/>
                             </a>
                             &nbsp;{tagAction}
                             {untagAction}
@@ -416,7 +418,7 @@ class FileManager extends Component {
                     <ButtonGroup>
                         <Button
                             type="primary"
-                            startIcon={<VideocamIcon />}
+                            startIcon={<VideocamIcon/>}
                             size="small"
                             onClick={this._handleSelectVideos.bind(this)}
                         >
@@ -426,7 +428,7 @@ class FileManager extends Component {
                     &nbsp;
                     <ButtonGroup>
                         <Button
-                            startIcon={<LocalOfferIcon />}
+                            startIcon={<LocalOfferIcon/>}
                             size="small"
                             disabled={buttonDisabled}
                             onClick={this._handleClickIDMultipleEpisodes.bind(
@@ -436,7 +438,7 @@ class FileManager extends Component {
                             ID
                         </Button>
                         <Button
-                            startIcon={<LabelOffIcon />}
+                            startIcon={<LabelOffIcon/>}
                             size="small"
                             disabled={buttonDisabled}
                             onClick={this._handleClickUntag.bind(this)}
@@ -446,7 +448,7 @@ class FileManager extends Component {
                     </ButtonGroup>
                     <ButtonGroup>
                         <Button
-                            startIcon={<TextRotationNoneIcon />}
+                            startIcon={<TextRotationNoneIcon/>}
                             size="small"
                             disabled={buttonDisabled}
                             onClick={this._handleClickMoveRename.bind(this)}
@@ -454,7 +456,7 @@ class FileManager extends Component {
                             Move or Rename
                         </Button>
                         <Button
-                            startIcon={<DeleteIcon />}
+                            startIcon={<DeleteIcon/>}
                             size="small"
                             disabled={buttonDisabled}
                             onClick={this._handleClickTrash.bind(this)}
@@ -531,13 +533,14 @@ class FileManager extends Component {
     }
 
     _handleClickTab(directory) {
-        const { history } = this.props;
+        const {history} = this.props;
         //const { currentToplevelDirectory } = this.state;
-        history.push("/filemanager/" + directory);
+        history("/filemanager/" + directory);
     }
+
     _buildDirectoryMenu() {
         const settingDirectories = this.props.settings.directories;
-        const { currentToplevelDirectory } = this.state;
+        const {currentToplevelDirectory} = this.state;
 
         const menuList = [];
         settingDirectories.forEach((dir) => {
@@ -565,7 +568,7 @@ class FileManager extends Component {
     }
 
     render() {
-        const { currentToplevelDirectory } = this.state;
+        const {currentToplevelDirectory} = this.state;
 
         let directoryMenu = "";
         let output = "";

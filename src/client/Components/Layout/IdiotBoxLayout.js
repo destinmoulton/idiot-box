@@ -40,16 +40,29 @@ const IdiotBoxLayout = (props) => {
                         }
                     />
                     <Route
-                        path="/filemanager/:setting_key?/:subpath?"
-                        element={
-                            <FileManager
-                                callAPI={props.callAPI}
-                                settings={props.settings}
-                                serverInfo={props.server}
-                                history={useNavigate()}
-                            />
-                        }
-                    />
+                        path="filemanager"
+                    >
+                        <Route path=":setting_key/:subpath"
+                               element={
+                                   <FileManager
+                                       callAPI={props.callAPI}
+                                       settings={props.settings}
+                                       serverInfo={props.server}
+                                       history={useNavigate()}
+                                       uriMatch={useMatch("filemanager/:setting_key/:subpath")}
+                                   />
+                               }/>
+                        <Route path=":setting_key"
+                               element={
+                                   <FileManager
+                                       callAPI={props.callAPI}
+                                       settings={props.settings}
+                                       serverInfo={props.server}
+                                       history={useNavigate()}
+                                       uriMatch={useMatch("filemanager/:setting_key")}
+                                   />
+                               }/>
+                    </Route>
                     <Route
                         path="/movies"
                         element={
@@ -60,7 +73,7 @@ const IdiotBoxLayout = (props) => {
                             />
                         }
                     />
-                    <Route path="/settings" component={Settings}/>
+                    <Route path="/settings" element={<Settings/>}/>
                     <Route
                         path="/shows"
                         element={
