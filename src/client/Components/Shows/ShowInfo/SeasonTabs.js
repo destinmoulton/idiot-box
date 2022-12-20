@@ -25,11 +25,12 @@ class SeasonTabs extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (this.props.seasonNumber !== -1) {
-            if (prevProps.seasonNumber !== -1) {
-                const prevSeasonNum = prevProps.seasonNumber;
-                const thisSeasonNum = this.props.seasonNumber;
-                if (prevSeasonNum !== thisSeasonNum) {
+        console.log("SeasonTabs::componentDidUpdate() uriParams", this.props.uriParams);
+        const {season_number} = this.props.uriMatch.params;
+        if (season_number) {
+            const old_season_number = prevProps.uriMatch.params.season_number;
+            if (old_season_number) {
+                if (old_season_number !== season_number) {
                     this._parseActiveSeason(this.props);
                 }
             } else {
@@ -41,8 +42,8 @@ class SeasonTabs extends Component {
 
     _parseActiveSeason(props) {
         const {activeSeasonNum, seasons} = this.state;
-        const season_number = props.seasonNumber;
-        if (season_number !== -1) {
+        const season_number = props.uriMatch.params.season_number;
+        if (season_number !== undefined) {
             if (season_number !== activeSeasonNum) {
                 const seasonNumber = parseInt(season_number);
                 let activeSeason = {};
@@ -218,7 +219,6 @@ class SeasonTabs extends Component {
 
 SeasonTabs.propTypes = {
     callAPI: PropTypes.func.isRequired,
-    seasonNumber: PropTypes.number,
     settings: PropTypes.object.isRequired,
     show: PropTypes.object.isRequired,
 };

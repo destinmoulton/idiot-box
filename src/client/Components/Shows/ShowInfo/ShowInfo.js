@@ -22,6 +22,8 @@ class ShowInfo extends Component {
     _getShowInfo() {
         const {callAPI} = this.props;
 
+        console.log("ShowInfo :: _getShowInfo() uriMatch", this.props.uriMatch);
+
         this.setState({
             isLoadingShow: true,
         });
@@ -39,7 +41,6 @@ class ShowInfo extends Component {
 
     _getShowSlugFromURI() {
         const uri_els = window.location.pathname.split("/");
-        console.log("_getShowSlugFromURI()::uri_els=", uri_els);
         return uri_els[2];
     }
 
@@ -136,18 +137,18 @@ class ShowInfo extends Component {
         const {isLoadingShow, show} = this.state;
 
         const showInfo = this._buildShowInfo();
-        const seasonNumber = this._getShowSeasonNumberFromURI();
+        //const seasonNumber = this._getShowSeasonNumberFromURI();
         let seasonsBar = "";
 
         if (!isLoadingShow) {
             seasonsBar = (
                 <SeasonTabs
                     show={show}
-                    seasonNumber={seasonNumber}
+                    //seasonNumber={seasonNumber}
                     callAPI={this.props.callAPI}
                     settings={this.props.settings}
                     history={this.props.history}
-                    match={this.props.match}
+                    uriMatch={this.props.uriMatch}
                 />
             );
         }

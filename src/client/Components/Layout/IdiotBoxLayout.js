@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {connect} from "react-redux";
-import {Route, Routes, useNavigate} from "react-router-dom";
+import {Route, Routes, useNavigate, useParams, useMatch} from "react-router-dom";
 import {Container, Grid} from "@mui/material";
 import {callAPI} from "../../actions/api.actions";
 
@@ -69,24 +69,28 @@ const IdiotBoxLayout = (props) => {
                         }
                     />
                     <Route
-                        path="/show/:slug"
+                        path="show"
                     >
-                        <Route path=":season_number"
-                               element={
-                                   <ShowInfo
-                                       settings={props.settings}
-                                       callAPI={props.callAPI}
-                                       history={useNavigate()}
-                                   />
-                               }/>
-                        <Route path=""
-                               element={
-                                   <ShowInfo
-                                       settings={props.settings}
-                                       callAPI={props.callAPI}
-                                       history={useNavigate()}
-                                   />
-                               }/>
+                        <Route
+                            path=":slug/:season_number"
+                            element={
+                                <ShowInfo
+                                    settings={props.settings}
+                                    callAPI={props.callAPI}
+                                    history={useNavigate()}
+                                    uriMatch={useMatch("show/:slug/:season_number")}
+                                />
+                            }/>
+                        <Route
+                            path=":slug"
+                            element={
+                                <ShowInfo
+                                    settings={props.settings}
+                                    callAPI={props.callAPI}
+                                    history={useNavigate()}
+                                    uriMatch={useMatch("show/:slug")}
+                                />
+                            }/>
                     </Route>
                 </Routes>
             </Container>
