@@ -1,8 +1,7 @@
 import fs from "fs";
 import path from "path";
 
-let fetch;
-import("node-fetch").then((f)=>fetch = f);
+import axios from "axios";
 import trakt from "trakt.tv";
 
 import logger from "../logger";
@@ -80,7 +79,7 @@ export default class MediaScraperModel {
         const camelCaseType =
             typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
 
-        const res = await fetch(fileURL, {});
+        const res = await axios.get(fileURL, {responseType: "stream"});
         const imagepaths = config.paths.images;
 
         const finalPath = path.join(
@@ -89,7 +88,7 @@ export default class MediaScraperModel {
             destFilename
         );
         const dest = fs.createWriteStream(finalPath);
-        res.body.pipe(dest);
+        res.data.pipe(dest);
         return destFilename;
     }
 

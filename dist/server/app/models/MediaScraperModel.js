@@ -5,8 +5,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
 const path_1 = __importDefault(require("path"));
-let fetch;
-import("node-fetch").then((f) => fetch = f);
+const axios_1 = __importDefault(require("axios"));
 const config_1 = __importDefault(require("../config"));
 class MediaScraperModel {
     _trakt;
@@ -66,11 +65,11 @@ class MediaScraperModel {
             "." +
             origFileExt;
         const camelCaseType = typeOfMedia[0].toUpperCase() + typeOfMedia.slice(1);
-        const res = await fetch(fileURL, {});
+        const res = await axios_1.default.get(fileURL, { responseType: "stream" });
         const imagepaths = config_1.default.paths.images;
         const finalPath = path_1.default.join(imagepaths.base, imagepaths[typeOfMedia], destFilename);
         const dest = fs_1.default.createWriteStream(finalPath);
-        res.body.pipe(dest);
+        res.data.pipe(dest);
         return destFilename;
     }
     _sanitizeThumbFilename(originalFilename) {
