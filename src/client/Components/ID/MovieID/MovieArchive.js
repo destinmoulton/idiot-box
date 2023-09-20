@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React, {Component} from "react";
 
-import { Button, CircularProgress, TextField } from "@mui/material";
+import {Button, CircularProgress, TextField} from "@mui/material";
 
 import MovieNameLib from "../../../lib/MovieName.lib";
 
@@ -19,7 +19,7 @@ class MovieArchive extends Component {
     }
 
     componentWillMount() {
-        const { currentFilename, movie } = this.props;
+        const {currentFilename, movie} = this.props;
         this.setState({
             newMovieDirectory: this.movieNameLib.getMovieTitleAndYear(movie),
             newMovieFilename: this.movieNameLib.getMovieFilename(
@@ -38,7 +38,7 @@ class MovieArchive extends Component {
             movieImageURL,
         } = this.props;
 
-        const { newMovieDirectory, newMovieFilename } = this.state;
+        const {newMovieDirectory, newMovieFilename} = this.state;
 
         this.setState({
             isIDing: true,
@@ -67,7 +67,7 @@ class MovieArchive extends Component {
     }
 
     _idMovieComplete(recd) {
-        const { onIDComplete } = this.props;
+        const {onIDComplete} = this.props;
 
         onIDComplete();
     }
@@ -84,10 +84,10 @@ class MovieArchive extends Component {
         });
     }
 
-    _buildEpisodeForm() {
-        const { newMovieDirectory, newMovieFilename } = this.state;
+    _buildMovieForm() {
+        const {newMovieDirectory, newMovieFilename} = this.state;
 
-        const { movie } = this.props;
+        const {movie} = this.props;
 
         return (
             <div>
@@ -97,14 +97,14 @@ class MovieArchive extends Component {
                 </div>
                 <div className="ib-idmodal-archivesingle-form-box">
                     <label>Directory:</label>
-                    <br />
+                    <br/>
                     <input
                         name="movie-archive-single-directory"
                         onChange={this._handleChangeDirectory.bind(this)}
                         value={newMovieDirectory}
                     />
                     <label>Filename:</label>
-                    <br />
+                    <br/>
                     <input
                         name="movie-archive-single-filename"
                         onChange={this._handleChangeFilename.bind(this)}
@@ -124,19 +124,19 @@ class MovieArchive extends Component {
     }
 
     render() {
-        const { isIDing } = this.state;
+        const {isIDing} = this.state;
 
         let contents = "";
         if (isIDing) {
             contents = (
                 <div className="ib-spinner-container">
-                    <CircularProgress />
-                    <br />
+                    <CircularProgress/>
+                    <br/>
                     Adding Movie...
                 </div>
             );
         } else {
-            contents = this._buildEpisodeForm();
+            contents = this._buildMovieForm();
         }
 
         return <div>{contents}</div>;
