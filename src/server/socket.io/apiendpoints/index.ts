@@ -1,3 +1,4 @@
+import files from "./files.api";
 import filesystem from "./filesystem.api";
 import id from "./id.api";
 import imdb from "./imdb.api";
@@ -8,6 +9,7 @@ import shows from "./shows.api";
 //import videoplayer from './videoplayer.api';
 
 const endpoints = {
+    files,
     filesystem,
     id,
     imdb,
