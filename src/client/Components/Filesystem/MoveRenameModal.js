@@ -1,9 +1,10 @@
 import PropTypes from "prop-types";
-import React, { Component } from "react";
+import React, {Component} from "react";
 
-import { Button } from "@mui/material";
+import {Box, Button, Tabs, Tab, CustomTabPanel} from "@mui/material";
 
 import DialogModal from "../shared/DialogModal";
+import TabPanel from "../shared/TabPanel";
 import SaveIcon from "@mui/icons-material/Save";
 import FileBrowser from "./FileBrowser";
 
@@ -12,6 +13,7 @@ class MoveRenameModal extends Component {
         super(props);
 
         this.state = {
+            selectedTab: 0,
             destinationPath: "",
             isRenaming: false,
             itemsRenaming: {},
@@ -19,9 +21,9 @@ class MoveRenameModal extends Component {
     }
 
     componentDidUpdate(prevProps) {
-        const { isVisible } = this.props;
+        const {isVisible} = this.props;
         if (isVisible && isVisible !== prevProps.isVisible) {
-            const { itemsToRename } = this.props;
+            const {itemsToRename} = this.props;
 
             let itemsRenaming = {};
             itemsToRename.forEach((item) => {
@@ -39,8 +41,8 @@ class MoveRenameModal extends Component {
     }
 
     _performRename() {
-        const { callAPI, initialPath } = this.props;
-        const { destinationPath, itemsRenaming: itemsRenaming } = this.state;
+        const {callAPI, initialPath} = this.props;
+        const {destinationPath, itemsRenaming: itemsRenaming} = this.state;
 
         this.setState({
             isRenaming: true,
@@ -61,7 +63,7 @@ class MoveRenameModal extends Component {
     }
 
     _renameComplete() {
-        const { onRenameComplete } = this.props;
+        const {onRenameComplete} = this.props;
 
         this.setState({
             isRenaming: false,
@@ -77,7 +79,7 @@ class MoveRenameModal extends Component {
     }
 
     _handleChangeFilename(originalFilename, evt) {
-        const { itemsRenaming: itemsRenaming } = this.state;
+        const {itemsRenaming: itemsRenaming} = this.state;
 
         itemsRenaming[originalFilename] = evt.target.value;
 
@@ -86,9 +88,16 @@ class MoveRenameModal extends Component {
         });
     }
 
+    _handleChangeTab(newValue) {
+
+        this.setState({
+            selectedTab: newValue
+        });
+    }
+
     _buildRenameInputs() {
-        const { itemsToRename } = this.props;
-        const { itemsRenaming: itemsRenaming } = this.state;
+        const {itemsToRename} = this.props;
+        const {itemsRenaming: itemsRenaming} = this.state;
 
         let inputList = [];
         itemsToRename.forEach((item) => {
@@ -108,6 +117,15 @@ class MoveRenameModal extends Component {
 
         return inputList;
     }
+
+
+    a11yProps(index) {
+        return {
+            id: `moverenamemodal-tab-${index}`,
+            'aria-controls': `moverenamemodal-tabpanel-${index}`,
+        };
+    }
+
     render() {
         const {
             callAPI,
@@ -116,6 +134,10 @@ class MoveRenameModal extends Component {
             onCancel,
             serverInfo,
         } = this.props;
+
+        const {
+            selectedTab
+        } = this.state;
 
         const posDim = {
             modalTop: 30,
@@ -148,7 +170,7 @@ class MoveRenameModal extends Component {
                             color="primary"
                             size="small"
                             onClick={this._handleClickRename.bind(this)}
-                            startIcon={<SaveIcon />}
+                            startIcon={<SaveIcon/>}
                         >
                             Move or Rename
                         </Button>,
@@ -156,25 +178,38 @@ class MoveRenameModal extends Component {
                 >
                     <div
                         className="ib-moverename-dirsel-box"
-                        style={{ height: posDim.fileBrowserHeight }}
+                        style={{height: posDim.fileBrowserHeight}}
                     >
-                        <h4>Destination Directory</h4>
-                        <FileBrowser
-                            basePath={initialPath}
-                            callAPI={callAPI}
-                            enableCheckboxes={false}
-                            enableSize={false}
-                            lockToBasePath={false}
-                            onChangeDirectory={this._handleChangeDirectory.bind(
-                                this
-                            )}
-                            serverInfo={serverInfo}
-                            showDirectories={true}
-                            showFiles={false}
-                        />
+
+                        <Box>
+                            <Tabs value={selectedTab} onChange={this._handleChangeTab.bind(this)}
+                                  aria-label="Rename Tabs">
+                                <Tab label="Browser" {...this.a11yProps(0)}/>
+                                <Tab label="Recent" {...this.a11yProps(1)}/>
+                            </Tabs>
+                        </Box>
+                        <TabPanel value={selectedTab} index={0}>
+                            <h4>Destination Directory</h4>
+                            <FileBrowser
+                                basePath={initialPath}
+                                callAPI={callAPI}
+                                enableCheckboxes={false}
+                                enableSize={false}
+                                lockToBasePath={false}
+                                onChangeDirectory={this._handleChangeDirectory.bind(
+                                    this
+                                )}
+                                serverInfo={serverInfo}
+                                showDirectories={true}
+                                showFiles={false}
+                            />
+                        </TabPanel>
+                        <TabPanel value={selectedTab} index={1}>
+                            <h4>Recent Directories</h4>
+                        </TabPanel>
                     </div>
                     <div className="ib-moverename-inputs-container">
-                        <h4>Items to Rename</h4>
+                        <h4>Items to Move or Rename</h4>
                         {inputBoxes}
                     </div>
                 </DialogModal>
