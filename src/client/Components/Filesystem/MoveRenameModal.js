@@ -7,6 +7,7 @@ import DialogModal from "../shared/DialogModal";
 import TabPanel from "../shared/TabPanel";
 import SaveIcon from "@mui/icons-material/Save";
 import FileBrowser from "./FileBrowser";
+import RecentDirectories from "./RecentDirectories";
 
 class MoveRenameModal extends Component {
     constructor(props) {
@@ -88,8 +89,7 @@ class MoveRenameModal extends Component {
         });
     }
 
-    _handleChangeTab(newValue) {
-
+    _handleChangeTab(evt, newValue) {
         this.setState({
             selectedTab: newValue
         });
@@ -136,7 +136,8 @@ class MoveRenameModal extends Component {
         } = this.props;
 
         const {
-            selectedTab
+            selectedTab,
+            destinationPath
         } = this.state;
 
         const posDim = {
@@ -182,34 +183,53 @@ class MoveRenameModal extends Component {
                     >
 
                         <Box>
-                            <Tabs value={selectedTab} onChange={this._handleChangeTab.bind(this)}
-                                  aria-label="Rename Tabs">
-                                <Tab label="Browser" {...this.a11yProps(0)}/>
-                                <Tab label="Recent" {...this.a11yProps(1)}/>
+                            <Tabs value={selectedTab}
+                                  onChange={this._handleChangeTab.bind(this)}
+                                  aria-label="Rename Tabs"
+                                  size="small">
+                                <Tab label="Browser"
+                                     value={0}
+                                     key={0}
+                                     {...this.a11yProps(0)}/>
+                                <Tab label="Recent"
+                                     value={1}
+                                     key={1}
+                                     {...this.a11yProps(1)}/>
                             </Tabs>
                         </Box>
                         <TabPanel value={selectedTab} index={0}>
-                            <h4>Destination Directory</h4>
-                            <FileBrowser
-                                basePath={initialPath}
-                                callAPI={callAPI}
-                                enableCheckboxes={false}
-                                enableSize={false}
-                                lockToBasePath={false}
-                                onChangeDirectory={this._handleChangeDirectory.bind(
-                                    this
-                                )}
-                                serverInfo={serverInfo}
-                                showDirectories={true}
-                                showFiles={false}
-                            />
+                            <div>
+                                <h4>Destination Directory</h4>
+                                <FileBrowser
+                                    basePath={initialPath}
+                                    callAPI={callAPI}
+                                    enableCheckboxes={false}
+                                    enableSize={false}
+                                    lockToBasePath={false}
+                                    onChangeDirectory={this._handleChangeDirectory.bind(
+                                        this
+                                    )}
+                                    serverInfo={serverInfo}
+                                    showDirectories={true}
+                                    showFiles={false}
+                                />
+                            </div>
                         </TabPanel>
                         <TabPanel value={selectedTab} index={1}>
-                            <h4>Recent Directories</h4>
+                            <div>
+                                <h4>Recent Directories</h4>
+                                <RecentDirectories callAPI={callAPI}
+                                                   onChangeDirectory={this._handleChangeDirectory.bind(this)}/>
+                            </div>
                         </TabPanel>
                     </div>
                     <div className="ib-moverename-inputs-container">
                         <h4>Items to Move or Rename</h4>
+                        <label for="moverename-destination">Destination:</label>
+                        <input name="moverename-destination"
+                               style={{width: "400px"}}
+                               disabled={true}
+                               value={destinationPath}/>
                         {inputBoxes}
                     </div>
                 </DialogModal>
