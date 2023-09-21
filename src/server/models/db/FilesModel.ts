@@ -1,8 +1,9 @@
-import { IBDB } from "../../db/IBDB";
+import {IBDB} from "../../db/IBDB";
 
 export default class FilesModel {
     _ibdb: IBDB;
     _tableName: string;
+
     constructor(ibdb) {
         this._ibdb = ibdb;
 
@@ -87,5 +88,16 @@ export default class FilesModel {
         };
 
         return await this._ibdb.delete(where, this._tableName);
+    }
+
+
+    /**
+     * Get the recently used/added directories
+     *
+     * @param limit Number of directories
+     */
+    async getRecentDirs(limit) {
+        const query = "SELECT * FROM files GROUP BY subpath ORDER BY id DESC LIMIT 0,?";
+        return await this._ibdb.queryAll(query, [limit]);
     }
 }
