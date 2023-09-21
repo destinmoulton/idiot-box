@@ -1,13 +1,23 @@
 import PropTypes from "prop-types";
 import React, {Component} from "react";
 
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+} from "@mui/material";
+
 import Spinner from "./FileBrowser/Spinner";
 
 class RecentDirectories extends Component {
 
     INITIAL_STATE = {
         isLoading: false,
-        dirs: []
+        dirs: [],
+        selectedPath: ""
     };
 
     constructor(props) {
@@ -40,17 +50,31 @@ class RecentDirectories extends Component {
     }
 
     _renderRecentDirs() {
+        const {selectedPath} = this.state;
+
         const {dirs} = this.state;
         let rows = [];
         for (const dir of dirs) {
+            const selected = dir.path === selectedPath;
 
             rows.push(
-                <li>
-                    {dir.subpath}
-                </li>
+                <TableRow
+                    onClick={this._handleClickDirectory.bind(this, dir.path)}
+                    selected={selected}
+                    style={{cursor: "pointer"}}
+                >
+                    <TableCell>
+                        {dir.path}
+                    </TableCell>
+                </TableRow>
             )
         }
         return rows;
+    }
+
+    _handleClickDirectory(dir) {
+        this.setState({selectedPath: dir});
+        this.props.onChangeDirectory(dir);
     }
 
     render() {
@@ -59,8 +83,23 @@ class RecentDirectories extends Component {
         if (isLoading) {
             return <Spinner/>;
         }
+        const rows = this._renderRecentDirs();
         return (
-            <ul>{this._renderRecentDirs()}</ul>
+            <TableContainer>
+                <Table className="ib-filemanager-table">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell
+                                align="left"
+                                className="filemanager-name-column"
+                            >
+                                Directory
+                            </TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>{rows}</TableBody>
+                </Table>
+            </TableContainer>
         )
     }
 }
